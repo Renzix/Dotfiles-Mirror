@@ -1,0 +1,14 @@
+Updating C/C++ dependencies...
+
+Downloading package 'C/C++ language components (Linux / x86_64)' (7493 KB) .................... Done!
+Downloading package 'ClangFormat (Linux / x86_64)' (744 KB) .................... Done!
+Downloading package 'Mono Framework Assemblies' (4751 KB) .................... Done!
+Downloading package 'Mono Runtime (Linux / x86_64)' (1450 KB) .................... Done!
+
+Installing package 'C/C++ language components (Linux / x86_64)'
+Installing package 'ClangFormat (Linux / x86_64)'
+Installing package 'Mono Framework Assemblies'
+Installing package 'Mono Runtime (Linux / x86_64)'
+
+Finished installing dependencies
+
