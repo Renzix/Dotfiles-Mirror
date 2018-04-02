@@ -1,0 +1,29 @@
+#!/bin/bash
+sxhkd &
+
+#VARS
+export BSPWMC=".config/bspwm"
+
+#monitor stuff
+bspc monitor DVI-D-0 -d I II III
+bspc monitor HDMI-0 -d IV V VI
+
+#bspc rules
+bspc config click_to_focus true
+
+#DE stuff
+/usr/lib/xfce4/notifyd/xfce4-notifyd &
+xfce4-panel -d &
+
+#Wallpaper
+if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
+	${BSPWMC}/setwallpaper.sh 
+else
+	feh --bg-max ${BSPWMC}/wallpaper.png
+fi
+
+#multiple programs
+compton -b &
+#xfce4-terminal &
+
+
