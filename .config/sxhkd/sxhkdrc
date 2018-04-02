@@ -1,0 +1,58 @@
+### Apps ###
+
+#Terminal
+super + Return
+	xfce4-terminal
+
+#Web Browser
+super + i
+	firefox
+
+#Music Client
+super + m
+	spotify
+	
+### Movement ###
+
+# Focus Window
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+#Focus Desktop
+super + {_,shift + }{1-6}
+	bspc {desktop -f,node -d} '^{1-6}'
+
+### DE Stuff ###
+
+#WhiskerMenu
+Super_L
+	xfce4-popup-whiskermenu
+
+#Raise Audio
+XF86AudioRaiseVolume
+	amixer -D pulse sset Master 5%+
+
+#Lower Audio
+XF86AudioLowerVolume
+	amixer -D pulse sset Master 5%-
+
+#Switch Audio
+XF86AudioMute
+	~/.config/sxhkd/ca.sh
+
+#Window Type
+super + {t,shift + t,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+#Close/Kill
+super + {_,shift + }w
+	bspc node -{c,k}
+
+#Reload sxhkdrc
+super + Escape
+	pkill -USR1 -x sxhkd
+
+#Exit bspwm
+super + alt + Escape
+	bspc quit
+
