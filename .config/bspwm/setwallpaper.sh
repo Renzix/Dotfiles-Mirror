@@ -29,6 +29,12 @@ numMon=$(xrandr | grep -w connected | wc -l)
 monWall=()
 for ((m=0;numMon>m;m++)); do 
 	monWall[m]=$(find $HOME/Pictures/wallpaper -type f | shuf -n 1); 
+	if [[ m==0 ]]; then
+		continue
+	fi
+	if [[ monWall[m]!=monWall[m-1] ]]; then
+		((m-=1));
+	fi
 done
 
 ### Scaling wallpaper ###

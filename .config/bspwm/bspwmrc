@@ -23,6 +23,7 @@ else
 fi
 
 #multiple programs
+ibus-daemon -drx
 compton -b &
 #xfce4-terminal &
 
