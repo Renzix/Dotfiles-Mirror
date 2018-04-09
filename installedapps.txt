@@ -1,0 +1,26 @@
+Warning this is not exact packages names
+
+### WINDOW MANAGER STUFF ###
+sxhkd
+bspwm
+xfce4-panel
+xfce4-whiskermenu
+lxappearence
+
+## APPS ###
+firefox
+kdenlive
+k3b
+feh
+libreoffice
+visual studio code
+discord
+steam
+hexchat
+vlc
+spotify
+
+### Other Utils ###
+pavucontrol
+imagemagick
+wine
