@@ -1,19 +1,23 @@
-Warning this is not exact packages names
+Warning this is not exact a list of packages names just a bunch of apps i
+might install so i dont forget/can install everything i need on new install
 
-### WINDOW MANAGER STUFF ###
-sxhkd
-bspwm
-xfce4-panel
-xfce4-whiskermenu
+### DE'S ###
+XFCE
+BUDGIE
+
+### WINDOW MANAGER ###
+QTile
 lxappearence
+thunar
+xfce4-terminal or termite
+feh
 
 ## APPS ###
 firefox
 kdenlive
 k3b
-feh
 libreoffice
-visual studio code
+visual studio code or atom
 discord
 steam
 hexchat
@@ -24,3 +28,4 @@ spotify
 pavucontrol
 imagemagick
 wine
+trash-cli

@@ -21,6 +21,11 @@
             "label": "Ctrl+Shift+T",
             "isNative": true
         },
+        "workbench.action.openRecent": {
+            "id": "workbench.action.openRecent",
+            "label": "Ctrl+R",
+            "isNative": true
+        },
         "workbench.action.files.save": {
             "id": "workbench.action.files.save",
             "label": "Ctrl+S",
@@ -442,14 +447,23 @@
     "windowsState": {
         "openedWindows": [],
         "lastActiveWindow": {
-            "backupPath": "/home/genzix/.config/Code/Backups/1522645212170",
+            "folderPath": "/home/genzix/.config/qtile",
+            "backupPath": "/home/genzix/.config/Code/Backups/59343ec31905a1b6ff911675a9c0378e",
             "uiState": {
                 "mode": 0,
-                "x": 0,
-                "y": 29,
-                "width": 1920,
-                "height": 1002
+                "x": 7,
+                "y": 55,
+                "width": 1906,
+                "height": 1018
             }
         }
+    },
+    "pickerWorkingDir": "/home/genzix/.config",
+    "openedPathsList": {
+        "workspaces": [
+            "/home/genzix/.config/qtile",
+            "/home/genzix/.config/qtile"
+        ],
+        "files": []
     }
 }
