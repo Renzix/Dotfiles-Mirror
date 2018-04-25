@@ -5,27 +5,26 @@ might install so i dont forget/can install everything i need on new install
 XFCE
 BUDGIE
 
-### WINDOW MANAGER ###
+### WINDOW MANAGER'S ###
 QTile
-lxappearence
-thunar
-xfce4-terminal or termite
-feh
+BSPWM
 
-## APPS ###
-firefox
-kdenlive
-k3b
+### APPS ###
+xfce4-terminal or termite
+thunar or pcmanfm
+lxappearence
+feh
+firefox or chromium
+vlc
+pavucontrol
 libreoffice
-visual studio code or atom
+vs-code or atom
 discord
 steam
 hexchat
-vlc
 spotify
-
-### Other Utils ###
-pavucontrol
+kdenlive
+k3b
 imagemagick
 wine
 trash-cli

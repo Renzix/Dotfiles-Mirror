@@ -7,7 +7,7 @@ export BSPWMC=".config/bspwm"
 #monitor stuff
 bspc monitor DVI-D-0 -d I II III
 bspc monitor HDMI-0 -d IV V VI
-bspc monitor DP-4 -d VII VIII IX
+bspc monitor DP-4 -d VII VIII
 
 #bspc rules
 bspc config click_to_focus true
@@ -15,6 +15,9 @@ bspc config click_to_focus true
 #DE stuff
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 xfce4-panel -d &
+
+bspc rule -a Thunar state=floating
+bspc rule -a Gimp-2.8 state=floating
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then

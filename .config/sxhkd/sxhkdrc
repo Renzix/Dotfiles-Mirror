@@ -11,6 +11,10 @@ super + i
 #Music Client
 super + m
 	spotify
+
+#Volume Stuff
+super + a
+	pavucontrol
 	
 ### Movement ###
 
@@ -19,14 +23,18 @@ super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
 #Focus Desktop
-super + {_,shift + }{1-6}
-	bspc {desktop -f,node -d} '^{1-6}'
+super + {_,shift + }{1-8}
+	bspc {desktop -f,node -d} '^{1-8}'
+
+#Next Desktop/Monitor
+super + {_, alt+}  {Left, Right}
+	bspc {desktop,monitor} -f {prev,next}
 
 ### DE Stuff ###
 
 #WhiskerMenu
-Super_L
-	xfce4-popup-whiskermenu
+super + @space
+	rofi -show run
 
 #Raise Audio
 XF86AudioRaiseVolume

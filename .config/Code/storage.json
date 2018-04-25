@@ -447,8 +447,8 @@
     "windowsState": {
         "openedWindows": [],
         "lastActiveWindow": {
-            "folderPath": "/home/genzix/.config/qtile",
-            "backupPath": "/home/genzix/.config/Code/Backups/59343ec31905a1b6ff911675a9c0378e",
+            "folderPath": "/home/genzix/Computer/Bash/music",
+            "backupPath": "/home/genzix/.config/Code/Backups/af7abc40d651c6fe8dad2091da080526",
             "uiState": {
                 "mode": 0,
                 "x": 7,
@@ -458,12 +458,16 @@
             }
         }
     },
-    "pickerWorkingDir": "/home/genzix/.config",
+    "pickerWorkingDir": "/home/genzix/Computer/Bash",
     "openedPathsList": {
         "workspaces": [
-            "/home/genzix/.config/qtile",
+            "/home/genzix/Computer/Bash/music",
+            "/home/genzix/Computer/Bash/music",
+            "/home/genzix/Computer/Web/renzix.pro",
             "/home/genzix/.config/qtile"
         ],
-        "files": []
+        "files": [
+            "/home/genzix/Computer/Web/renzix.pro/index.php"
+        ]
     }
 }
