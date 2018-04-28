@@ -14,7 +14,10 @@ bspc config click_to_focus true
 
 #DE stuff
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
-xfce4-panel -d &
+#xfce4-panel -d &
+$HOME/.config/polybar/launch.sh
+#nextcloud
+nextcloud -u fenzix -p $(cat nextcloud.pass)
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
@@ -25,6 +28,7 @@ if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
 else
 	feh --bg-max ${BSPWMC}/wallpaper.png
 fi
+
 
 #multiple programs
 ibus-daemon -drx
