@@ -5,8 +5,8 @@ super + Return
 	xfce4-terminal
 
 #Web Browser
-super + i
-	firefox
+super + {_,shift+ }i
+	{brave-bin --no-sandbox,firefox}
 
 #Music Client
 super + m

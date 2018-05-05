@@ -14,9 +14,11 @@ bspc config click_to_focus true
 
 #DE stuff
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
-#xfce4-panel -d &
-$HOME/.config/polybar/launch.sh
-#nextcloud
+tint2 -c $HOME/.config/tint2/testing1 &
+tint2 -c $HOME/.config/tint2/testing2 &
+plank &
+orage -t &
+#mailspring -b &
 nextcloud -u fenzix -p $(cat nextcloud.pass)
 
 bspc rule -a Thunar state=floating

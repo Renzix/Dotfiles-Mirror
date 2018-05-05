@@ -2,29 +2,37 @@ Warning this is not exact a list of packages names just a bunch of apps i
 might install so i dont forget/can install everything i need on new install
 
 ### DE'S ###
-XFCE
-BUDGIE
+xfce
+budgie
 
 ### WINDOW MANAGER'S ###
-QTile
-BSPWM
+qtile
+bspwm
+openbox
 
-### APPS ###
+### CORE APPS (minimal wm)###
 xfce4-terminal or termite
 thunar or pcmanfm
 lxappearence
 feh
-firefox or chromium
+brave
 vlc
 pavucontrol
-libreoffice
-vs-code or atom
-discord
-steam
-hexchat
+vs-code
+evolution
+xfce4-taskmanager
+plank+tint2/polybar
+
+### Prob want ###
 spotify
-kdenlive
-k3b
-imagemagick
 wine
-trash-cli
+libreoffice
+discord
+audacity
+
+## MIGHT WANT ###
+steam
+k3b
+kdenlive
+discord
+obs
