@@ -15,7 +15,7 @@ xfce4-terminal or termite
 thunar or pcmanfm
 lxappearence
 feh
-brave
+brave/chromium or firefox
 vlc
 pavucontrol
 vs-code

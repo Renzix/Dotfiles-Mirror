@@ -18,11 +18,12 @@ tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
 plank &
 orage -t &
-#mailspring -b &
+evolution &
 nextcloud -u fenzix -p $(cat nextcloud.pass)
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
+bspc rule -a evolution desktop=III
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then

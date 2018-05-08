@@ -38,7 +38,7 @@ done
 
 ### Scaling wallpaper ###
 for ((i=0;${numMon}>i;i++)); do
-	convert ${monWall[$i]} -resize ${WallpaperLArr[$i]}x${WallpaperLArr[$i]} ${WDIR}/D${i}.png
+	convert ${monWall[$i]} -resize ${WallpaperLArr[${i}]}x${WallpaperHArr[${i}]}! ${WDIR}/D${i}.png
 	sleep 1
 done
 
