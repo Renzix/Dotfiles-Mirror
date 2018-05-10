@@ -17,9 +17,7 @@ bspc config click_to_focus true
 tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
 plank &
-orage -t &
-evolution &
-nextcloud -u fenzix -p $(cat nextcloud.pass)
+nextcloud -u fenzix -p $(cat nextcloud.pass) &
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
@@ -27,14 +25,14 @@ bspc rule -a evolution desktop=III
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
-	${BSPWMC}/../setwallpaper.sh 
+	${BSPWMC}/../setwallpaper.sh &
 else
-	feh --bg-max ${BSPWMC}/wallpaper.png
+	feh --bg-max ${BSPWMC}/wallpaper.png &
 fi
 
 
 #multiple programs
-ibus-daemon -drx
+ibus-daemon -drx &
 compton -b &
 #xfce4-terminal &
 

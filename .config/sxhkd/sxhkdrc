@@ -6,7 +6,7 @@ super + Return
 
 #Web Browser
 super + {_,shift+ }i
-	{brave-bin --no-sandbox,firefox}
+	{brave-bin --no-sandbox, chromium}
 
 #Music Client
 super + m
