@@ -17,4 +17,3 @@ fi
 
 # Put your fun stuff here.
 neofetch
-alias vim=nvim

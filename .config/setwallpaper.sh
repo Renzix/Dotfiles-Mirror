@@ -2,6 +2,7 @@
 
 ### GET RANDOM WALLPAPER FROM $HOME/Pictures/wallpaper/*, CHANGES RES AND COMBINES THEM ###
 
+
 export XAUTHORITY=/home/genzix/.Xauthority
 HOME=/home/genzix
 
@@ -39,7 +40,6 @@ done
 ### Scaling wallpaper ###
 for ((i=0;${numMon}>i;i++)); do
 	convert ${monWall[$i]} -resize ${WallpaperLArr[${i}]}x${WallpaperHArr[${i}]}! ${WDIR}/D${i}.png
-	sleep 1
 done
 
 ### Creating Background ###
@@ -50,7 +50,6 @@ for mon in ${WallpaperLArr[@]}; do
 	composite -geometry +${ofset}+0 ${WDIR}/D${i}.png $Wallpaper $Wallpaper 
 	((ofset+=${mon}))
 	((i+=1))
-	sleep 1
 done 
 feh --bg-max $Wallpaper
 rm -r ${WDIR} &

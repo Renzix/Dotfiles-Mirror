@@ -66,4 +66,4 @@ super + alt + Escape
 
 #Poweroff/reboot
 super + shift + Escape
-	bspc quit; poweroff
+	bspc quit; shutdown -h now
