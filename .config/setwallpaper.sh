@@ -2,7 +2,6 @@
 
 ### GET RANDOM WALLPAPER FROM $HOME/Pictures/wallpaper/*, CHANGES RES AND COMBINES THEM ###
 
-
 export XAUTHORITY=/home/genzix/.Xauthority
 HOME=/home/genzix
 
@@ -28,7 +27,7 @@ numMon=$(xrandr | grep -w connected | wc -l)
 ### RANDOMLY SET WALLPAPER FROM PICTURES ###
 monWall=()
 for ((m=0;numMon>m;m++)); do 
-	monWall[m]=$(find $HOME/Pictures/wallpaper -type f | shuf -n 1); 
+	monWall[m]=$(find /usr/share/backgrounds -type f | shuf -n 1); 
 	if [[ m==0 ]]; then
 		continue
 	fi

@@ -17,11 +17,9 @@ bspc config click_to_focus true
 tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
 plank &
-nextcloud -u fenzix -p $(cat nextcloud.pass) &
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
-bspc rule -a evolution desktop=III
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
@@ -34,6 +32,11 @@ fi
 #multiple programs
 ibus-daemon -drx &
 compton -b &
-#xfce4-terminal &
+
+#cuz fk optimum
+wpa_gui -t &
+
+#for java
+wmname LG3D
 
 
