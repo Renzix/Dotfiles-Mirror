@@ -16,7 +16,6 @@ bspc config click_to_focus true
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
-plank &
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating

@@ -4,6 +4,10 @@
 super + Return
 	xfce4-terminal
 
+#Evil
+super + e
+    xfce4-terminal -e "evil"
+
 #Web Browser
 super + {_,shift+ }i
 	{brave-bin --no-sandbox, chromium}
