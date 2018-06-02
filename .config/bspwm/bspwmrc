@@ -19,6 +19,7 @@ tint2 -c $HOME/.config/tint2/testing2 &
 
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
+bspc rule -a Emacs state=tiled
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
@@ -33,7 +34,7 @@ ibus-daemon -drx &
 compton -b &
 
 #cuz fk optimum
-wpa_gui -t &
+#wpa_gui -t &
 
 #for java
 wmname LG3D

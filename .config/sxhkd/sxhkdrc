@@ -6,7 +6,7 @@ super + Return
 
 #Evil
 super + e
-    xfce4-terminal -e "evil"
+  emacs
 
 #Web Browser
 super + {_,shift+ }i
