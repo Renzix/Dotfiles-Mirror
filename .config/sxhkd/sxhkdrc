@@ -1,12 +1,12 @@
 ### Apps ###
 
 #Terminal
-super + Return
-	xfce4-terminal
+super +{_, shift +} Return
+  {alacritty,xfce4-terminal}
 
-#Evil
-super + e
-  emacs
+#Editor
+super +{_, shift +} e
+  {emacsclient -ca "", subl}
 
 #Web Browser
 super + {_,shift+ }i

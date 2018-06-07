@@ -3,35 +3,36 @@ might install so i dont forget/can install everything i need on new install
 
 ### DE'S ###
 xfce
-budgie
+budgie/gnome
 
 ### WINDOW MANAGER'S ###
-qtile
 bspwm
 openbox
 
 ### CORE APPS (minimal wm)###
-xfce4-terminal or termite
-thunar or pcmanfm
+Alacritty/Xfce4-Terminal 
+Pcmanfm/Thunar
 lxappearence
 feh
-brave/chromium or firefox
+brave/firefox
 vlc
 pavucontrol
-vs-code
+Spacemacs/Sublime
+neovim
 evolution
-xfce4-taskmanager
+htop
 plank+tint2/polybar
+neofetch
 
 ### Prob want ###
 spotify
 wine
-libreoffice
-discord
-audacity
+libreoffice/wps office
 
-## MIGHT WANT ###
+## GOOD APPS ###
 steam
+audacity
+krita
 k3b
 kdenlive
 discord
