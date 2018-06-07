@@ -28,6 +28,7 @@ neofetch
 spotify
 wine
 libreoffice/wps office
+xfce4-taskmanager
 
 ## GOOD APPS ###
 steam
