@@ -2,39 +2,33 @@ Warning this is not exact a list of packages names just a bunch of apps i
 might install so i dont forget/can install everything i need on new install
 
 ### DE'S ###
-xfce
-budgie/gnome
+xfce (lightweight)
+budgie/gnome/Cinnamon (not lightweight)
 
 ### WINDOW MANAGER'S ###
 bspwm
 openbox
 
-### CORE APPS (minimal wm)###
-Alacritty/Xfce4-Terminal 
-Pcmanfm/Thunar
-lxappearence
-feh
-brave/firefox
-vlc
-pavucontrol
-Spacemacs/Sublime
-neovim
-evolution
-htop
-plank+tint2/polybar
-neofetch
-
-### Prob want ###
-spotify
-wine
-libreoffice/wps office
-xfce4-taskmanager
-
-## GOOD APPS ###
-steam
-audacity
-krita
-k3b
-kdenlive
-discord
-obs
+Primary Terminal: Xfce4-Terminal 
+Secondary Terminal: Alacritty
+Files Viewer: Pcmanfm/Thunar
+Apperence Changer: lxappearence
+Wallpaper: feh
+Web Browser: Brave/Firefox/Chromium/Midori
+Video Player: vlc/mpv
+Audio Control: pavucontrol
+Text Editors: Spacemacs/Sublime/neovim
+Email: evolution
+Task Viewer: htop/xfce4-taskmanager
+Window Openers: plank/tint2/polybar/xfce4-panel/rofi
+GOD: neofetch
+Music: spotify/lollypop
+Emulation: wine
+Office: libreoffice/wps office
+Games: steam
+Recording Audio: audacity
+Image Stuff: krita/GIMP
+DVD Burning: k3b
+Video Making: kdenlive
+Chat: discord/Hexchat
+Desktop Recording: obs
