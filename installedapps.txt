@@ -14,21 +14,22 @@ Secondary Terminal: Alacritty
 Files Viewer: Pcmanfm/Thunar
 Apperence Changer: lxappearence
 Wallpaper: feh
-Web Browser: Brave/Firefox/Chromium/Midori
+Web Browser: Brave/Firefox/Chromium
 Video Player: vlc/mpv
 Audio Control: pavucontrol
 Text Editors: Spacemacs/Sublime/neovim
 Email: evolution
 Task Viewer: htop/xfce4-taskmanager
-Window Openers: plank/tint2/polybar/xfce4-panel/rofi
+Application Openers: plank/tint2/polybar/xfce4-panel/rofi
 GOD: neofetch
-Music: spotify/lollypop
+Downloaded Music: lollypop
+Streamed Music: Spotify
 Emulation: wine
 Office: libreoffice/wps office
 Games: steam
-Recording Audio: audacity
-Image Stuff: krita/GIMP
+Image editing: krita/GIMP/inkscape
 DVD Burning: k3b
 Video Making: kdenlive
 Chat: discord/Hexchat
-Desktop Recording: obs
+Computer Recording: obs
+Recording Audio: audacity

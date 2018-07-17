@@ -1,1 +1,2 @@
 #include "/usr/share/rofi/themes//Monokai.theme"
+rofi.theme: /usr/share/rofi/themes/Pop-Dark.rasi

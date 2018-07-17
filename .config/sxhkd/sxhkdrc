@@ -2,7 +2,7 @@
 
 #Terminal
 super +{_, shift +} Return
-  {alacritty,xfce4-terminal}
+  {xfce4-terminal,alacritty}
 
 #Editor
 super +{_, shift +} e
@@ -10,7 +10,7 @@ super +{_, shift +} e
 
 #Web Browser
 super + {_,shift+ }i
-	{brave-bin --no-sandbox, chromium}
+	{brave-bin --no-sandbox, firefox}
 
 #Music Client
 super + m

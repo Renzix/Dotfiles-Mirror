@@ -6,8 +6,8 @@ export BSPWMC=".config/bspwm"
 
 #monitor stuff
 bspc monitor DVI-D-0 -d I II III
-bspc monitor HDMI-0 -d IV V VI
-bspc monitor DP-4 -d VII VIII
+bspc monitor DP-2 -d IV V VI
+bspc monitor DP-5 -d VII VIII
 
 #bspc rules
 bspc config click_to_focus true
@@ -30,8 +30,9 @@ fi
 
 
 #multiple programs
-ibus-daemon -drx &
+#ibus-daemon -drx &
 compton -b &
+emacsclient -ca "" &
 
 #cuz fk optimum
 #wpa_gui -t &
