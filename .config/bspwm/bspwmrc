@@ -20,6 +20,7 @@ tint2 -c $HOME/.config/tint2/testing2 &
 bspc rule -a Thunar state=floating
 bspc rule -a Gimp-2.8 state=floating
 bspc rule -a Emacs state=tiled
+bspc rule Ezix state=floating
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
@@ -33,6 +34,7 @@ fi
 #ibus-daemon -drx &
 compton -b &
 emacsclient -ca "" &
+redshift-gtk &
 
 #cuz fk optimum
 #wpa_gui -t &
