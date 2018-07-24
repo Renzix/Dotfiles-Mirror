@@ -3,19 +3,18 @@ might install so i dont forget/can install everything i need on new install
 
 ### DE'S ###
 xfce (lightweight)
-budgie/gnome/Cinnamon (not lightweight)
+budgie/gnome(not lightweight)
 
 ### WINDOW MANAGER'S ###
 bspwm
-openbox
 
 Primary Terminal: Xfce4-Terminal 
-Secondary Terminal: Alacritty
+Secondary Terminal: st
 Files Viewer: Pcmanfm/Thunar
 Apperence Changer: lxappearence
 Wallpaper: feh
 Web Browser: Brave/Firefox/Chromium
-Video Player: vlc/mpv
+Video Player: vlc
 Audio Control: pavucontrol
 Text Editors: Spacemacs/Sublime/neovim
 Email: evolution

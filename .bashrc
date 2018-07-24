@@ -50,6 +50,12 @@ alias gc="git commit -a -m $@"
 alias gp="git push $@"
 
 #Other
+alias qu="cd /etc/portage/"
+alias ht="htop"
+
+## Environment vars
+export BSPC=".config/bspwm/bspwmrc"
+export SXHKD=".config/sxhkd/sxhkdrc"
 
 ## Other Stuff
 
