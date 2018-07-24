@@ -6,11 +6,11 @@ super +{_, shift +} Return
 
 #Editor
 super +{_, shift +} e
-  {emacsclient -ca "", subl}
+  {emacsclient -ca "" , subl}
 
 #Web Browser
 super + {_,shift+ }i
-	{brave-bin --no-sandbox, firefox}
+	{brave-bin --no-sandbox, env GTK_THEME=Adwaita:light firefox}
 
 #Music Client
 super + m

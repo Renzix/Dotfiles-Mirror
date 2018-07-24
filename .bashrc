@@ -25,6 +25,27 @@ neofetch
 #    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 #fi
 
+# LS aliases
+alias l="ls"
+alias la="ls -a"
+alias ll="ls -lh"
+
+#Wine aliases
 alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
 alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Battle.net/Battle.net\ Launcher.exe"
 alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
+
+#Text Editors
+alias vi="nvim $@"
+alias em="emacsclient -nw -a \"\" $@"
+alias sl="subl $@"
+
+#System Shutdown stuff
+alias rb="reboot"
+alias sd="shutdown -h now"
+
+#git
+alias gc="git commit -a -m $@"
+alias gp="git push $@"
+
+#Other aliases

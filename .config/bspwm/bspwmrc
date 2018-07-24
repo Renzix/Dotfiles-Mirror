@@ -33,7 +33,7 @@ fi
 #multiple programs
 #ibus-daemon -drx &
 compton -b &
-emacsclient -ca "" &
+emacs --daemon
 redshift-gtk &
 
 #cuz fk optimum
