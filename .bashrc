@@ -52,6 +52,7 @@ alias gp="git push $@"
 #Other
 alias qu="cd /etc/portage/"
 alias ht="htop"
+alias dd="dd status=progress $@"
 
 ## Environment vars
 export BSPC=".config/bspwm/bspwmrc"
