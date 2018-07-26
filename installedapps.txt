@@ -16,7 +16,7 @@ Wallpaper: feh
 Web Browser: Brave/Firefox/Chromium
 Video Player: vlc
 Audio Control: pavucontrol
-Text Editors: Spacemacs/Sublime/neovim
+Text Editors: Emacs/Sublime/neovim
 Email: evolution
 Task Viewer: htop/xfce4-taskmanager
 Application Openers: plank/tint2/polybar/xfce4-panel/rofi
@@ -29,6 +29,6 @@ Games: steam
 Image editing: krita/GIMP/inkscape
 DVD Burning: k3b
 Video Making: kdenlive
-Chat: discord/Hexchat
+Chat: discord/emacs
 Computer Recording: obs
 Recording Audio: audacity
