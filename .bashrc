@@ -37,9 +37,9 @@ alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Ba
 alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
 
 #Text Editors
-alias vi="nvim $@"
-alias em="emacsclient -nw -a \"\" $@"
-alias sl="subl $@"
+alias v="nvim $@"
+alias e="emacsclient -nw -a \"\" $@"
+alias s="subl $@"
 
 #System Shutdown stuff
 alias rb="sudo reboot"
@@ -50,8 +50,8 @@ alias gc="git commit -a -m $@"
 alias gp="git push $@"
 
 #Other
-alias qu="cd /etc/portage/"
-alias ht="htop"
+alias c="cd $@"
+alias t="htop $@"
 alias dd="dd status=progress $@"
 
 ## Environment vars
