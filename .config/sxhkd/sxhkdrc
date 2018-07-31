@@ -69,5 +69,5 @@ super + alt + Escape
 	bspc quit
 
 #Poweroff/reboot
-super + shift + {Escape, r}
-	bspc quit ; {sudo shutdown -h now, sudo reboot}
+super + shift + Escape
+	bspc quit ; sudo shutdown -h now

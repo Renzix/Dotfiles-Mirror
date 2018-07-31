@@ -14,16 +14,7 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
-
 # Put your fun stuff here.
-## Powerline shell visual which i dont use
-#function _update_ps1() {
-#    PS1=$(/home/genzix/.local/bin/powerline-shell $?)
-#}
-
-#if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
-#    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
-#fi
 
 ## Aliases
 #LS
@@ -37,9 +28,10 @@ alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Ba
 alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
 
 #Text Editors
-alias v="nvim $@"
-alias e="emacsclient -nw -a \"\" $@"
-alias s="subl $@"
+alias vi="nvim $@"
+alias em="emacsclient -nw -a \"\" $@"
+alias sb="subl $@"
+alias mc="micro $@"
 
 #System Shutdown stuff
 alias rb="sudo reboot"
@@ -50,8 +42,7 @@ alias gc="git commit -a -m $@"
 alias gp="git push $@"
 
 #Other
-alias c="cd $@"
-alias t="htop $@"
+alias ht="htop $@"
 alias dd="dd status=progress $@"
 
 ## Environment vars
