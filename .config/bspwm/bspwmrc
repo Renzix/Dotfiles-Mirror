@@ -5,15 +5,16 @@ sxhkd &
 export BSPWMC=".config/bspwm"
 
 #monitor stuff
-bspc monitor DVI-D-0 -d I II III
-bspc monitor DP-2 -d IV V VI
-bspc monitor DP-5 -d VII VIII
+bspc monitor DP-2 -d I II III
+bspc monitor DVI-D-0 -d IV V VI
+bspc monitor DP-5 -d VII VIII IX
 
 #bspc rules
 bspc config click_to_focus true
 
 #DE stuff
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
+#xfce4-panel -d &
 tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
 
