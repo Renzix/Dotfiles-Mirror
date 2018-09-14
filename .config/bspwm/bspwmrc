@@ -1,5 +1,5 @@
 #!/bin/bash
-sxhkd &
+sxhkd -c /home/genzix/.config/sxhkd/sxhkdrc_bspwm &
 
 #VARS
 export BSPWMC=".config/bspwm"
@@ -12,15 +12,16 @@ bspc monitor DP-5 -d VII VIII IX
 #bspc rules
 bspc config click_to_focus true
 
-#DE stuff
+#DE like stuff
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 #xfce4-panel -d &
 tint2 -c $HOME/.config/tint2/testing1 &
 tint2 -c $HOME/.config/tint2/testing2 &
 
 bspc rule -a Thunar state=floating
-bspc rule -a Gimp-2.8 state=floating
 bspc rule -a Emacs state=tiled
+bspc rule -a Google-chrome state=tiled
+bspc rule -a Rudditor state=floating
 
 #Wallpaper
 if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
@@ -30,9 +31,9 @@ else
 fi
 
 
-#multiple programs that i might not use cuz i am a CPU/Memory freak
+#multiple programs that i might not use cuz BLOAT or im lazy
 #ibus-daemon -drx &
-#compton -b &
+compton -b &
 #redshift-gtk &
 
 #cuz fk optimum routers
@@ -41,4 +42,5 @@ fi
 #for java
 wmname LG3D
 
-
+emacs --daemon="ed" &
+emacs --daemon="irc" &

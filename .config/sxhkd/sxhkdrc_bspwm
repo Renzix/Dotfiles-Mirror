@@ -1,22 +1,27 @@
 ### Apps ###
 
-#Terminal
+# Terminal
 super +{_, shift +} Return
-  {xfce4-terminal,st}
+  {urxvt, urxvt -e "$HOME/.config/sxhkd/shellchooser.sh"}
+  
 
-#Editor
+# Editor
 super +{_, shift +} e
-  {emacsclient -ca "" , subl}
+  {emacsclient -cs "ed" , emacsclient -cs "irc"}
 
-#Web Browser
-super + {_,shift+ }i
-	{brave-bin --no-sandbox, env GTK_THEME=Adwaita:light firefox}
+# Web Browser
+super + {_,shift +} i
+	GTK_THEME=Adwaita:light {firefox, $($HOME/.config/sxhkd/random_choice.py firefox google-chrome-stable vivaldi opera-beta brave-bin falkon epiphany)}
 
-#Music Client
+# Music Client
 super + m
 	spotify
 
-#Volume Stuff
+# Email
+super + p
+  google-chrome-stable -app=https://mail.protonmail.com/login
+
+# Volume Stuff
 super + a
 	pavucontrol
 	
@@ -26,48 +31,46 @@ super + a
 super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
-#Focus Desktop
+# Focus Desktop
 super + {_,shift + }{1-9}
 	bspc {desktop -f,node -d} '^{1-9}'
 
-#Next Desktop/Monitor
+# Next Desktop/Monitor
 super + {_, alt+}  {Left, Right}
 	bspc {desktop,monitor} -f {prev,next}
 
 ### DE Stuff ###
 
-#WhiskerMenu
-super + @space
-	rofi -show run
+# App finder
+super + {_,shift +} @space
+	rofi {-show run, -modi twitchy:rofi-twitchy -show twitchy}
 
-#Raise Audio
+# Raise Audio
 XF86AudioRaiseVolume
 	amixer -D pulse sset Master 5%+
 
-#Lower Audio
+# Lower Audio
 XF86AudioLowerVolume
 	amixer -D pulse sset Master 5%-
 
-#Switch Audio
+# Switch Audio
 XF86AudioMute
 	~/.config/sxhkd/ca.sh
 
-#Window Type
+# Window Type
 super + {t,shift + t,s,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
-#Close/Kill
+# Close/Kill
 super + {_,shift + }w
 	bspc node -{c,k}
 
-#Reload sxhkdrc
+# Reload sxhkdrc
 super + Escape
 	pkill -USR1 -x sxhkd
 
-#Exit bspwm
+# Exit bspwm
 super + alt + Escape
 	bspc quit
 
-#Poweroff/reboot
-super + shift + Escape
-	bspc quit ; sudo shutdown -h now
+#floating mode?

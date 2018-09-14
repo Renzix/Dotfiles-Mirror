@@ -29,7 +29,7 @@ alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/
 
 #Text Editors
 alias vi="nvim $@"
-alias em="emacsclient -nw -a \"\" $@"
+alias ff="emacsclient -nw -a \"\" $@"
 alias sb="subl $@"
 alias mc="micro $@"
 
@@ -45,10 +45,18 @@ alias gp="git push $@"
 alias ht="htop $@"
 alias dd="dd status=progress $@"
 
+tw(){
+    streamlink twitch.tv/$1 best
+}
+
 ## Environment vars
 export BSPC=".config/bspwm/bspwmrc"
 export SXHKD=".config/sxhkd/sxhkdrc"
 
 ## Other Stuff
+# For pywal :ree:
+(cat ~/.cache/wal/sequences &)
+# For tty pywal :ree:
+source ~/.cache/wal/colors-tty.sh
 
 neofetch
