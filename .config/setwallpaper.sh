@@ -27,7 +27,7 @@ numMon=$(xrandr | grep -w connected | wc -l)
 ### RANDOMLY SET WALLPAPER FROM PICTURES ###
 monWall=()
 for ((m=0;numMon>m;m++)); do 
-	monWall[m]=$(find $HOME/Media/Pictures/Wallpaper -type f | shuf -n 1); 
+	monWall[m]=$(find $HOME/Media/Pictures/Wallpaper | shuf -n 1); 
 	if [[ m==0 ]]; then
 		continue
 	fi
@@ -53,7 +53,6 @@ done
 # feh --bg-max $Wallpaper
 $HOME/.local/bin/wal -c
 $HOME/.local/bin/wal -i $Wallpaper
-$HOME/.local/bin/wal -g
 
 xrdb $HOME/.Xresources
 rm -r ${WDIR}

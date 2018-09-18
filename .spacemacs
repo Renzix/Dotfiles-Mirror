@@ -320,7 +320,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   ;;@INFO keybinds
   (spacemacs/set-leader-keys "'" 'eshell)
-  (spacemacs/set-leader-keys "\"" 'shell)
+  (spacemacs/set-leader-keys "\"" 'term)
   (spacemacs/declare-prefix "fd" "System Files")
   (spacemacs/declare-prefix "fds" "shxkdrc")
   (spacemacs/set-leader-keys "fds" (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm")))

@@ -2,12 +2,12 @@
 
 # Terminal
 super +{_, shift +} Return
-  {urxvt, urxvt -e "$HOME/.config/sxhkd/shellchooser.sh"}
+  {alacritty, urxvt}
   
 
 # Editor
 super +{_, shift +} e
-  {emacsclient -cs "ed" , emacsclient -cs "irc"}
+  {emacs, alacritty -e "vim"}
 
 # Web Browser
 super + {_,shift +} i
