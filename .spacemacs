@@ -343,7 +343,7 @@ you should place your code here."
 					                                       'erc-open-ssl-stream
 					                                     'open-network-stream)))
  	               (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-  (erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "oauth:ttb2db6haxfoy8j32ecx1vqge7lql6")
+  (erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "")
   (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
   (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
