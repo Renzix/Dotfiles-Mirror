@@ -146,7 +146,7 @@
 	               (call-interactively 'erc)
 	             (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
  	               (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "oauth:n4um1shlxi6f84zswzutfhx7c1azd5")
+(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "")
 (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
 
 ;; @programming
