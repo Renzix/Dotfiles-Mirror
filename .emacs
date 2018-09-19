@@ -12,6 +12,9 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(when (not package-archive-contents)
+    (package-refresh-contents))
+
 (eval-when-compile
   (require 'use-package))
 
@@ -61,58 +64,25 @@
   (interactive)
   (setq erc-modified-channels-alist nil)
   (erc-modified-channels-update))
-(global-set-key (kbd "C-c r") 'reset-erc-track-mode)
+(global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
 
 
 
 ; @require
 (require 'evil)
 (require 'evil-leader)
+(require 'linum-relative)
 (require 'helm)
 (require 'company)
-(require 'racer)
+(require 'projectile)
+;(require 'eclim)
 (require 'autopair)
+(require 'racer)
 (require 'rust-mode)
 (require 'org)
 (require 'erc)
-
-; @visual
-(load-theme 'apropospriate-dark t)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-; @evil-mode
-(evil-mode t)
-
-; @evil-leader
-; @key-misc
-(global-evil-leader-mode)
-(evil-leader/set-leader "<SPC>" )
-(evil-leader/set-key "<SPC>" 'helm-M-x)
-(evil-leader/set-key "'" 'eshell)
-(evil-leader/set-key "\"" 'term "/bin/bash")
-; @key-buffers
-(evil-leader/set-key (kbd "b b") 'helm-buffers-list)
-(evil-leader/set-key (kbd "b d") 'kill-this-buffer)
-(evil-leader/set-key (kbd "b N") 'switch-to-prev-buffer)
-(evil-leader/set-key (kbd "b n") 'switch-to-next-buffer)
-; @key-files
-(evil-leader/set-key (kbd "f f") 'helm-find-files)
-(evil-leader/set-key (kbd "f S") 'sudo-edit)
-(evil-leader/set-key (kbd "f d") 'delete-file-and-buffer)
-(evil-leader/set-key (kbd "f r") 'rename-file-and-buffer)
-(evil-leader/set-key (kbd "f s") 'save-buffer)
-(evil-leader/set-key (kbd "f e e") (lambda() (interactive) (find-file "/home/genzix/.emacs")))
-(evil-leader/set-key (kbd "f e b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc")))
-(evil-leader/set-key (kbd "f e s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm")))
-(evil-leader/set-key (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf")))
-; @key-quit
-(evil-leader/set-key (kbd "q q") 'save-buffers-kill-emacs)
-(evil-leader/set-key (kbd "q a") 'kill-emacs)
-(evil-leader/set-key (kbd "q r") 'restart-emacs)
-; modes for leader @TODO(renzix): make a helm buffer for each major mode i use
-;(evil-leader/set-key-for-mode 'emacs-lisp-mode (kbd "m")
+(require 'magit)
+(require 'evil-magit)
 
 ; @text
 (setq default-major-mode 'text-mode)
@@ -125,9 +95,15 @@
 (setq helm-display-header-line nil)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (helm-mode t)
+(helm-linum-relative-mode)
 
 ; @org
 (setq org-log-done t)
+(eval-after-load 'org '(require 'org-pdfview))
+
+(add-to-list 'org-file-apps 
+             '("\\.pdf\\'" . (lambda (file link)
+                                     (org-pdfview-open link))))
 
 ; @erc
 
@@ -146,12 +122,14 @@
 	               (call-interactively 'erc)
 	             (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
  	               (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "")
+(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "oauth:n4um1shlxi6f84zswzutfhx7c1azd5")
 (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
 
 ;; @programming
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "TAB") #'company-ident-or-complete-common)
+(add-hook 'text-mode-hook 'linum-relative-mode)
+(add-hook 'prog-mode-hook 'linum-relative-mode)
 
 ; @c/cpp
 (add-to-list 'company-backends 'company-c-headers)
@@ -159,20 +137,87 @@
 ; @Rust
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
 (setq rust-format-on-save t)
 
 ; @Python
-(eval-after-load "company"
- '(add-to-list 'company-backends 'company-anaconda))
+(add-to-list 'company-backends 'company-anaconda)
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
 
-; @config
+; @Java
+;(setq eclimd-autostart t)
+
+;(defun my-java-mode-hook ()
+;    (eclim-mode t))
+;(add-hook 'java-mode-hook 'my-java-mode-hook)
+;(company-emacs-eclim-setup)
+
+; @visual
+(load-theme 'apropospriate-dark t)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+; @evil-mode
+(evil-mode t)
+
+; @evil-leader/@which-key
+; @key-misc
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>" )
+(evil-leader/set-key
+  "<SPC>" 'helm-M-x
+  "'" 'eshell
+  "\"" 'term)
+; @key-buffers
+(which-key-add-key-based-replacements
+  "<SPC> b" "Buffer"
+  "<SPC> f" "Files"
+  "<SPC> m" "Major-Mode"
+  "<SPC> q" "Quit")
+(evil-leader/set-key
+  (kbd "b b") 'helm-buffers-list
+  (kbd "b d") 'kill-this-buffer
+  (kbd "b N") 'switch-to-prev-buffer
+  (kbd "b n") 'switch-to-next-buffer)
+; @key-files
+(evil-leader/set-key
+  (kbd "f f") 'helm-find-files
+  (kbd "f S") 'sudo-edit
+  (kbd "f d") 'delete-file-and-buffer
+  (kbd "f r") 'rename-file-and-buffer
+  (kbd "f s") 'save-buffer
+  (kbd "f e e") (lambda() (interactive) (find-file "/home/genzix/.emacs"))
+  (kbd "f e b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc"))
+  (kbd "f e s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm"))
+  (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf")))
+; @key-quit
+(evil-leader/set-key
+  (kbd "q q") 'save-buffers-kill-emacs
+  (kbd "q a") 'kill-emacs
+  (kbd "q r") 'restart-emacs)
+; @TODO(renzix): make a helm buffer for each major mode i use
+; @key-rust-major
+(evil-leader/set-key-for-mode 'rust-mode
+  (kbd "m f") 'cargo-process-fmt
+  (kbd "m r") 'cargo-process-run
+  (kbd "m d") 'cargo-process-doc
+  (kbd "m o") 'cargo-process-doc-open
+  (kbd "m t") 'cargo-process-test
+  (kbd "m c") 'cargo-process-check
+  (kbd "m R") 'cargo-process-clean
+  (kbd "m n") 'cargo-process-new
+  (kbd "m u") 'cargo-process-update
+  (kbd "m b") 'cargo-process-build)
+
+; @config misc
 (setq inhibit-startup-screen t)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 (autopair-global-mode t)
 (setq initial-buffer-choice 'eshell)
 (setq explicit-shell-file-name "/bin/bash")
+(which-key-mode)
 
 ; @system
 (custom-set-variables
@@ -185,7 +230,7 @@
     ("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" "0c32e4f0789f567a560be625f239ee9ec651e524e46a4708eb4aba3b9cdc89c5" default)))
  '(package-selected-packages
    (quote
-    (company-anaconda restart-emacs helm-tramp python-mode company-c-headers helm-company company-racer auto-complete autopair apropospriate-theme company-lsp racer rust-mode zenburn-theme helm use-package evil-visual-mark-mode))))
+    (evil-magit which-key helm-descbinds org-pdfview magit helm-make cargo helm-ag-r helm-ag helm-projectile web-mode linum-relative company-emacs-eclim company-anaconda restart-emacs helm-tramp python-mode company-c-headers helm-company company-racer auto-complete autopair apropospriate-theme company-lsp racer rust-mode zenburn-theme helm use-package evil-visual-mark-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

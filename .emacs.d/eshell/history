@@ -16,90 +16,18 @@ cls
 ls
 ls
 ls
-htop
+ff .emacs
 ls
 ls
-man ff
-sudo emerge -auDN --with-bdeps=y --keep-going @world
-sudo emerge --depclean
 ls
-cd Computer/
 ls
-cd c
-ls
-ff mylang/
-cd Computer/python/
-ls
-ff hello.py 
-cd Computer/python/
-ls
-ff hello.py 
-sudo (jedi:setup)
-(jedi:setup)
-((sudo edit)jedi:setup)
-((sudo edit) jedi:setup)
-sudo emerge -a jedi
-cd Computer/python/
-ls
-ff hello.py 
-cd ~/.emacs
-cd ~/.emacs.d/
-ls
-cd elpa/
-ls
-ls | grep jedi
-cd jedi-core-20170121.1410/
-ls
-ff jedi-core.el
-pip install --user git+https://github.com/davidhalter/jedi.git@dev#egg=jedi
-cd /usr/bin/python
-ls
-cd /bin/ls
-cd /bin/
-ls
-cd /usr/bin/
-ls
-ls |grep python
-ff python
-eix jedi
-ls
-cd .emacs.d
-ls
-cd .python-environments/
-ls
-rm -r default/
-ls
-eix epc
-pip install --user epc
-pip install --user jedi
-pip2 install --user jedi
-pip2 install --user epc
-cd Computer/
-ls
-cd python/
-ls
-ff hello.py 
-cd ../../.emacs.d/
-ls
-cd anaconda-mode/
-ls
-cd 0.1.12/
-ls
-sudo pip install --upgrade jedi
-pip install --upgrade --user jedi
-cd Computer/python/
-ls
-ff hello.py 
-ls
-cp .emacs Dotfiles/
+ff Computer/rust/hello.rs
 cd Dotfiles/
 ls
-git add .emacs 
-git commit -am "Added evil .emacs"
-git push
-git pull
-git pull
-git push
-git pull
+exit
+als
+cd ..
 ls
+cd genzix/
 ls
+exit
