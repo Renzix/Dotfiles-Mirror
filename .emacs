@@ -19,8 +19,8 @@
   (require 'use-package))
 
 
-; @pre-require mainly functions that should be in emacs already which i may or maynot
-; have copied XDDDDDDDDDDDDDDDDDDDDDDDD
+; @pre-require mainly functions that should be in emacs already which i
+; may or may not have copied XDDDDDDDDDDDDDDDDDDDDDDDD
 (defun kill-other-buffers ()
   "Kill all other buffers."
   (interactive)
@@ -66,6 +66,68 @@
   (erc-modified-channels-update))
 (global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
 
+(defun buf-move-up ()
+  "Swap the current buffer and the buffer above the split.
+If there is no split, ie now window above the current one, an
+error is signaled."
+;;  "Switches between the current buffer, and the buffer above the
+;;  split, if possible."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'up))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No window above this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(defun buf-move-down ()
+"Swap the current buffer and the buffer under the split.
+If there is no split, ie now window under the current one, an
+error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'down))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (or (null other-win) 
+            (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
+        (error "No window under this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(defun buf-move-left ()
+"Swap the current buffer and the buffer on the left of the split.
+If there is no split, ie now window on the left of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'left))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No left split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(defun buf-move-right ()
+"Swap the current buffer and the buffer on the right of the split.
+If there is no split, ie now window on the right of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'right))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No right split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
 
 
 ; @require
@@ -105,8 +167,7 @@
              '("\\.pdf\\'" . (lambda (file link)
                                      (org-pdfview-open link))))
 
-; @erc
-
+; @erc pretty much makes it so i can join erc with certian reqs
 (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
 (setq erc-kill-buffer-on-part t)
 (setq erc-kill-queries-on-quit t)
@@ -122,7 +183,7 @@
 	               (call-interactively 'erc)
 	             (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
  	               (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "oauth:n4um1shlxi6f84zswzutfhx7c1azd5")
+(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "")
 (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
 
 ;; @programming
@@ -145,7 +206,7 @@
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
 
-; @Java
+; @Java @TODO Add java support???
 ;(setq eclimd-autostart t)
 
 ;(defun my-java-mode-hook ()
@@ -169,18 +230,31 @@
 (evil-leader/set-key
   "<SPC>" 'helm-M-x
   "'" 'eshell
-  "\"" 'term)
-; @key-buffers
+  "\"" 'term
+  )
+; @which-key
 (which-key-add-key-based-replacements
   "<SPC> b" "Buffer"
+  "<SPC> w" "Window"
   "<SPC> f" "Files"
   "<SPC> m" "Major-Mode"
   "<SPC> q" "Quit")
+; @key-buffers
 (evil-leader/set-key
   (kbd "b b") 'helm-buffers-list
   (kbd "b d") 'kill-this-buffer
   (kbd "b N") 'switch-to-prev-buffer
   (kbd "b n") 'switch-to-next-buffer)
+; @key-window
+(evil-leader/set-key
+  (kbd "w h") 'windmove-left
+  (kbd "w j") 'windmove-down
+  (kbd "w k") 'windmove-up
+  (kbd "w l") 'windmove-right
+  (kbd "w n") 'buf-move-left
+  (kbd "w m") 'buf-move-down
+  (kbd "w ,") 'buf-move-up
+  (kbd "w .") 'buf-move-right)
 ; @key-files
 (evil-leader/set-key
   (kbd "f f") 'helm-find-files

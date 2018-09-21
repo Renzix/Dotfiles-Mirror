@@ -16,18 +16,14 @@ cls
 ls
 ls
 ls
-ff .emacs
+cd Computer/rust/
 ls
+ff hello.rs
+cd  Computer/rust/
 ls
+ff hello.rs
+cd Computer/rust/
 ls
-ls
+ff hello.rs
 ff Computer/rust/hello.rs
-cd Dotfiles/
-ls
-exit
-als
-cd ..
-ls
-cd genzix/
-ls
-exit
+ff Computer/rust/hello.rs
