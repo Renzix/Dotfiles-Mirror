@@ -188,7 +188,8 @@ one, an error is signaled."
 
 ;; @programming
 (add-hook 'after-init-hook 'global-company-mode)
-(global-set-key (kbd "TAB") #'company-ident-or-complete-common)
+(global-set-key (kbd "<tab>") 'company-indent-or-complete-common)
+(setq tab-always-indent 'complete)
 (add-hook 'text-mode-hook 'linum-relative-mode)
 (add-hook 'prog-mode-hook 'linum-relative-mode)
 
@@ -223,10 +224,12 @@ one, an error is signaled."
 ; @evil-mode
 (evil-mode t)
 
+; @TODO(renzix): Maybe change to general.el so i can use multiple leader keys http://blog.binchen.org/posts/use-general-el-to-provide-multiple-leader-key-in-evil-mode.html???
 ; @evil-leader/@which-key
 ; @key-misc
 (global-evil-leader-mode)
-(evil-leader/set-leader "<SPC>" )
+(evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
+(evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
   "<SPC>" 'helm-M-x
   "'" 'eshell
@@ -272,7 +275,7 @@ one, an error is signaled."
   (kbd "q a") 'kill-emacs
   (kbd "q r") 'restart-emacs)
 ; @TODO(renzix): make a helm buffer for each major mode i use
-; @key-rust-major
+; @key-major-rust
 (evil-leader/set-key-for-mode 'rust-mode
   (kbd "m f") 'cargo-process-fmt
   (kbd "m r") 'cargo-process-run

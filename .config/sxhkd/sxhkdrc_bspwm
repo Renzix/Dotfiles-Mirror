@@ -2,7 +2,7 @@
 
 # Terminal
 super +{_, shift +} Return
-  {alacritty, urxvt}
+  {alacritty -e "ion", urxvt}
   
 
 # Editor

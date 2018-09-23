@@ -16,14 +16,4 @@ cls
 ls
 ls
 ls
-cd Computer/rust/
-ls
-ff hello.rs
-cd  Computer/rust/
-ls
-ff hello.rs
-cd Computer/rust/
-ls
-ff hello.rs
-ff Computer/rust/hello.rs
-ff Computer/rust/hello.rs
+exit
