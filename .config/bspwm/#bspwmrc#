@@ -1,0 +1,46 @@
+#!/bin/bash
+sxhkd -c /home/genzix/.config/sxhkd/sxhkdrc_bspwm &
+
+#VARS
+export BSPWMC=".config/bspwm"
+
+#monitor stuff
+bspc monitor DP-2 -d I II III
+bspc monitor DVI-D-0 -d IV V VI
+bspc monitor DP-5 -d VII VIII IX
+
+#bspc rules
+bspc config click_to_focus true
+
+#DE like stuff
+/usr/lib/xfce4/notifyd/xfce4-notifyd &
+#xfce4-panel -d &
+tint2 -c $HOME/.config/tint2/testing1 &
+tint2 -c $HOME/.config/tint2/testing2 &
+
+bspc rule -a Thunar state=floating
+bspc rule -a Emacs state=tiled
+bspc rule -a Google-chrome state=tiled
+bspc rule -a Rudditor state=floating
+
+#Wallpaper
+if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
+	${BSPWMC}/../setwallpaper.sh &
+else
+	feh --bg-max ${BSPWMC}/wallpaper.png &
+fi
+
+# Keybindings
+xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape' #remap caps lock to escape
+
+
+#multiple programs that i might not use cuz BLOAT or im lazy
+#ibus-daemon -drx &
+compton -b &
+#redshift-gtk &
+
+#cuz fk optimum routers
+#wpa_gui -t &
+
+#for java
+wmname LG3D
