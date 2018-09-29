@@ -31,12 +31,12 @@ else
 fi
 
 # Keybindings
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape' #remap caps lock to escape
+setxkbmap -option caps:swapescape #Switch caps and escape
 
 #multiple programs that i might not use cuz BLOAT or im lazy
 #ibus-daemon -drx &
-compton -b &
-#redshift-gtk &
+compton -b
+redshift-gtk &
 
 #cuz fk optimum routers
 #wpa_gui -t &

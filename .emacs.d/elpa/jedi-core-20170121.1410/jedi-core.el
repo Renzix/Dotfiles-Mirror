@@ -1121,7 +1121,7 @@ what jedi can do."
 
 ;;; Virtualenv setup
 (defvar jedi:install-server--command
-  `("pip" "install" "--upgrade" "--user" ,(convert-standard-filename jedi:source-dir)))
+  `("pip" "install" "--upgrade" ,(convert-standard-filename jedi:source-dir)))
 
 ;;;###autoload
 (defun jedi:install-server ()
@@ -1192,7 +1192,7 @@ See also:
     (setq-default jedi:server-command (jedi:-env-server-command))))
 
 (defcustom jedi:install-python-jedi-dev-command
-  '("pip" "install" "--upgrade" "--user"
+  '("pip" "install" "--upgrade"
     "git+https://github.com/davidhalter/jedi.git@dev#egg=jedi")
   "Pip command to be used for `jedi:install-python-jedi-dev'."
   :group 'jedi)

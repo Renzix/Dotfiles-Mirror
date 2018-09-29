@@ -1,1 +1,1 @@
-alias ff find-file $1
+alias emacs find-file $1

@@ -1,96 +1,29 @@
-ls
-cd ..
-ls
-cd ls
-ls
-ff cd Computer/
-ls
-cd Computer/
-ls
-alias find-file ff
-ls
-ls .eshell
-cat ~/.eshell
+alias emacs 'find-file $*'
+emacs hello
+alias emacs 'find-file $1'
+emacs ree
 clear
-cls
+alias clear recenter 0
+clear
+clear
+recenter
+recenter 1
+clear
 ls
 ls
 ls
 ls
+erase-buffer
+clear
+ff Computer/python/hello.py
+emacs Computer/python/hello.py 
+emacs Computer/python/hello.py
+ff Computer/c/hello.c
+emacs Computer/c/hello.c
 exit
-rm .xonshrc 
+cd Computer/rust/re/src/
 ls
-ff .config/sxhkd/sxhkdrc_bspwm
-ls
-echo (add 4 5)
-echo (+ 4 5)
-(+ 4 5)
-(+ 4 5) > ree
-ls
-cat ree 
-rm ree 
-ls
-eix ion
-ls
-which ion
-ls
-cd Computer/
-ls
-cd re
-ls
-cd rust/
-ls
-cd re/
-ls
-ls | grep toml
-ls | egrep toml
-calc-eval 4 2
-(calc-eval 4 2)
-(calc-eval + 4 2)
-(calc-eval  5+2)
-man calc-eval
-(calc-eval (4+3))
-calc 5+3
-(calc 5+3)
-vc-dir .
-ls -a
-git add src/*
-git add *
-ls
-git commit -am "Did stuff"
-magit-commit
-ls
-magit-push
-(defun foo () (print hello))
-foo
-(foo)
-(defun foo () (message hello))
-foo
-(defun foo () '(message hello))
-foo
-(defun foo () (message "Hello"))
-foo
-(defun foo () (print "Hello"))
-foo
-(defun foo () (princ "Hello"))
-foo
-(defun foo () (princ "bar"))
-foo
-(defun foo () (message "bar"))
-foo
-foo
-(defun foo () (printc "bar"))
-(defun foo () (princ "bar"))
-foo
-foo
-(- 5 7)
-(abs (- 5 7))
-(message "hi")
-(message "hi")
-(message "hi")
-(message "hi")
-(message "hi")
-(princ "hi")
-ff Computer/rust/re/src/main.rs
-ff Downloads/
-ff .profile
+ff main.rs 
+emacs main.rs 
+emacs Downloads/ree.txt
+slime

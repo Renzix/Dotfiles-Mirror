@@ -168,6 +168,10 @@ is selected interactively by mode in `minor-mode-map-alist'.
 
 ;;;***
 
+;;;### (autoloads nil nil ("which-key-pkg.el") (0 0 0 0))
+
+;;;***
+
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t

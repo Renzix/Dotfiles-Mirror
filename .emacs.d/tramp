@@ -1,4 +1,4 @@
-;; -*- emacs-lisp -*- <18/09/17 16:09:13 /home/genzix/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <18/09/28 15:55:17 /home/genzix/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
 ;; You can delete it, forcing Tramp to reapply the checks.
 
@@ -20,24 +20,7 @@
   ("perl-file-spec" t)
   ("perl-cwd-realpath" t)
   ("perl" "\\perl")
-  ("env-u-option" t))
- ((tramp-file-name "sudo" "root" nil "localhost" nil nil nil)
-  ("uname" "Linux 4.14.65-gentoo")
-  ("locale" "LC_ALL=en_US.utf8")
-  ("test" "test")
-  ("remote-path"
-   ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin" "/opt/bin"))
-  ("remote-shell" "/bin/sh")
-  ("readlink" "\\readlink")
-  ("stat" "env QUOTING_STYLE=locale \\stat")
-  ("file-exists" "test -e")
-  ("case-insensitive" nil)
-  ("perl-file-spec" t)
-  ("perl-cwd-realpath" t)
-  ("perl" "\\perl")
-  ("git" "\\git")
-  ("id" "/usr/bin/id")
-  ("gid-string" "root")
   ("env-u-option" t)
-  ("gid-integer" 0)
-  ("uid-integer" 0)))
+  ("tmpdir" "/sudo:root@gentoo-home:/tmp")
+  ("touch-t" t)
+  ("touch" "\\touch")))
