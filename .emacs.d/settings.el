@@ -122,6 +122,11 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+(defun get-string-from-file (filePath)
+  "Return filePath's file content."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (buffer-string)))
 
 (use-package helm
   :ensure t
@@ -197,12 +202,19 @@ one, an error is signaled."
       (t
    (evil-god-state)))
   )
-(defun evil-god-state-bail ()
+(defun evil-god-state-normal ()
   "Stop current God command and exit God state."
   (interactive)
   (evil-stop-execute-in-god-state)
   (evil-god-stop-hook)
   (evil-normal-state))
+
+(defun evil-god-state-insert ()
+  "Stop current God command and exit God state."
+  (interactive)
+  (evil-stop-execute-in-god-state)
+  (evil-god-stop-hook)
+  (evil-insert-state))
 
 (linum-mode)
 (linum-relative-global-mode)
@@ -232,9 +244,11 @@ one, an error is signaled."
   "<SPC> f e s" "sxhkdrc"
   "<SPC> f e b" "bspwmrc"
   "<SPC> f e m" "make.conf")
-(evil-define-key 'normal global-map (kbd "<escape>") 'evil-start-god-state)
+(evil-define-key 'normal global-map (kbd "\\") 'evil-start-god-state)
+(evil-define-key 'insert global-map (kbd "\\") 'evil-start-god-state)
 (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-(evil-define-key 'emacs global-map (kbd "<escape>") 'evil-god-state-bail) 
+(evil-define-key 'emacs global-map (kbd "<escape>") 'evil-god-state-normal) 
+(evil-define-key 'emacs global-map (kbd "i") 'evil-god-state-insert) 
 
 ;; Some other keybinds 
 ;; Kill-buffer C-x k
@@ -250,18 +264,10 @@ one, an error is signaled."
   (kbd "C-f C-e C-b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc"))
   (kbd "C-f C-e C-s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm"))
   (kbd "C-f C-e C-m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-  (kbd "C-b C-b") 'helm-list-buffers
-  (kbd "C-b C-N") 'switch-to-prev-buffer
+  (kbd "C-b C-b") 'helm-buffers-list
+  (kbd "C-b C-S-N") 'switch-to-prev-buffer
   (kbd "C-b C-n") 'switch-to-next-buffer
   (kbd "C-b C-k") 'kill-this-buffer
-  (kbd "C-l C-h") 'windmove-left ;; @TODO(renzix): Fix this to make it C-w or something
-  (kbd "C-l C-j") 'windmove-down
-  (kbd "C-l C-k") 'windmove-up
-  (kbd "C-l C-l") 'windmove-right
-  (kbd "C-l C-H") 'buf-move-left
-  (kbd "C-l C-J") 'buf-move-down
-  (kbd "C-l C-K") 'buf-move-up
-  (kbd "C-l C-L") 'buf-move-right
   (kbd "C-q C-q") 'save-buffers-kill-emacs 
   (kbd "C-q C-a") 'kill-emacs
   (kbd "C-q C-r") 'restart-emacs)
@@ -269,7 +275,17 @@ one, an error is signaled."
   :states '(normal)
   :prefix "SPC"
   (kbd "'") 'eshell
-  (kbd "\"") 'term)
+  (kbd "\"") 'term
+  "SPC" 'async-shell-command)
+
+(use-package helm-projectile)
+(general-define-key
+  :states '(emacs)
+  (kbd "C-p C-p") 'helm-projectile-switch-project
+  (kbd "C-p C-f") 'helm-projectile-find-file
+  (kbd "C-p C-b") 'helm-projectile-switch-to-buffer
+  (kbd "C-p C-g") 'helm-projectile-rg
+  (kbd "C-p C-a") 'helm-projectile-ag)
 
 (use-package company
   :ensure t
@@ -295,16 +311,16 @@ one, an error is signaled."
   :states '(normal)
   :keymaps 'rust-mode-map
   :prefix "," 
-  (kbd "f") 'cargo-process-fmt
-  (kbd "r") 'cargo-process-run
-  (kbd "d") 'cargo-process-doc
-  (kbd "o") 'cargo-process-doc-open
-  (kbd "t") 'cargo-process-test
-  (kbd "c") 'cargo-process-check
-  (kbd "R") 'cargo-process-clean
-  (kbd "n") 'cargo-process-new
-  (kbd "u") 'cargo-process-update
-  (kbd "b") 'cargo-process-build)
+    (kbd "f") 'cargo-process-fmt
+    (kbd "r") 'cargo-process-run
+    (kbd "d") 'cargo-process-doc
+    (kbd "o") 'cargo-process-doc-open
+    (kbd "t") 'cargo-process-test
+    (kbd "c") 'cargo-process-check
+    (kbd "R") 'cargo-process-clean
+    (kbd "n") 'cargo-process-new
+    (kbd "u") 'cargo-process-update
+    (kbd "b") 'cargo-process-build)
 
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
@@ -324,6 +340,10 @@ one, an error is signaled."
       'irony-completion-at-point-async))
     (add-hook 'irony-mode-hook 'my-irony-mode-hook)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+ (general-define-key ;;C/CPP keys
+   :states '(normal)
+   :keymaps 'irony-mode-map
+   :prefix ",")
 
 (use-package autopair
   :config (autopair-global-mode t))
@@ -343,7 +363,7 @@ one, an error is signaled."
 	       (call-interactively 'erc)
 	     (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
 	       (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil "")
+(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
 (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
 
 (setq default-major-mode 'text-mode)

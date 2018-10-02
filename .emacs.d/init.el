@@ -29,7 +29,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (slime-company slime god-mode python-mode helm-tramp company-anaconda company-racer company-c-headers company-web web-mode restart-emacs helm helm-core company racer cargo autopair which-key general org-evil monitor apropospriate-theme use-package evil auto-package-update))))
+    (ctags-update makefile-executor projectile-ripgrep helm-projectile magit evil-magit slime-company slime god-mode python-mode helm-tramp company-anaconda company-racer company-c-headers company-web web-mode restart-emacs helm helm-core company racer cargo autopair which-key general org-evil monitor apropospriate-theme use-package evil auto-package-update))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

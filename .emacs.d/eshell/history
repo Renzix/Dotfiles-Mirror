@@ -27,3 +27,74 @@ ff main.rs
 emacs main.rs 
 emacs Downloads/ree.txt
 slime
+cd Dotfiles/
+ls
+cp ../.emacs.d/ .
+cp -r ../.emacs.d/ .
+ls
+cd ..
+ls
+cd .emacs.d/
+ls
+rm -r .python-environments/default/lib64/
+cd ..
+ls
+cd Dotfiles/
+ls
+cp -r ../.emacs.d/ .
+cd ..
+ls
+cd .emacs.d/
+ls
+rm -r .python-environments/default/lib/
+rm -r .python-environments/default/
+cd ..
+ls
+cd Dotfiles/
+cp -r ../.emacs.d/ .
+ls
+rm -r .emacd.d
+rm -r .emacs.d
+cp -r ../.emacs.d/ .
+ls -a
+rm .emacs.d/
+rm .emacs
+ls
+ping www.google.com
+cd Dotfiles/
+ls
+ls
+emacs .emacs.d/settings.org
+exit
+ls
+clear
+ls
+clear
+cls
+:ree:
+ls
+cd Computer/
+ls
+cd rust/
+ls
+cd  re
+ls
+emacs src/main.rs
+ls
+ls
+cd .emacs.d/
+ls
+rm init.el~
+ls
+rm settings.el~
+ls
+rm \#init.el\# 
+ls
+rm \#settings.org\# 
+ls
+cd ..
+ls
+exit
+emacs .config/twitch-oauth
+ff .config/twitch-oauth
+em .config/twitch-oauth
