@@ -257,6 +257,7 @@ one, an error is signaled."
 #+END_SRC
 ** Linum Relative
    #+BEGIN_SRC emacs-lisp
+   (use-package linum-relative)
    (linum-mode)
    (linum-relative-global-mode)
    (setq linum-relative-current-symbol "")
@@ -331,6 +332,10 @@ one, an error is signaled."
 	(kbd "C-p C-b") 'helm-projectile-switch-to-buffer
 	(kbd "C-p C-g") 'helm-projectile-rg
 	(kbd "C-p C-a") 'helm-projectile-ag)
+    #+END_SRC
+** Magit
+    #+BEGIN_SRC emacs-lisp
+    (use-package evil-magit)
     #+END_SRC
 ** Company
     #+BEGIN_SRC emacs-lisp
