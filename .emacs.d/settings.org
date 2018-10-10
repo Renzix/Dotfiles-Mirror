@@ -442,6 +442,15 @@ one, an error is signaled."
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
 * Post Config
+** Backups
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t)
+#+END_SRC
 ** Misc
    #+BEGIN_SRC emacs-lisp
    (setq inhibit-startup-screen t)
