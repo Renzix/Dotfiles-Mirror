@@ -2,12 +2,12 @@
 
 # Terminal
 super +{_, shift +} Return
-  {alacritty -e "xonsh", urxvt}
+  {urxvt -e "ion", urxvt}
   
 
 # Editor
 super +{_, shift +} e
-  {emacs, alacritty -e "vim"}
+  {emacsclient -ca "", emacs}
 
 # Web Browser
 super + {_,shift +} i

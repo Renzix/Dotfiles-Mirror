@@ -153,9 +153,11 @@ one, an error is signaled."
 * Evil/God Mode
 ** Settings
    #+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config (evil-mode t))
-(use-package god-mode)
+       (use-package evil
+     :config (evil-mode t))
+   (use-package god-mode)
+   (setq evil-default-state 'normal)
+; Cursor!!!
    #+END_SRC
 ** Evil-god-mode
 #+BEGIN_SRC emacs-lisp
@@ -235,6 +237,24 @@ one, an error is signaled."
   (evil-insert-state))
 
 #+END_SRC
+** Changing states
+#+BEGIN_SRC emacs-lisp
+; redefine emacs state to intercept the escape key like insert-state does:
+(evil-define-state emacs
+  "Emacs state that can be exited with the escape key."
+  :tag " <EE> "
+  :message "-- EMACS WITH ESCAPE --"
+  :input-method t
+  ;; :intercept-esc nil)
+  )
+
+(defadvice evil-insert-state (around emacs-state-instead-of-insert-state activate)
+  (evil-emacs-state))
+;  (load-theme 'monokai t))
+  
+;(add-hook 'evil-normal-state-entry-hook (lambda () (load-theme 'apropospriate-dark t)))
+  
+#+END_SRC
 ** Linum Relative
    #+BEGIN_SRC emacs-lisp
    (linum-mode)
@@ -271,7 +291,6 @@ one, an error is signaled."
      (evil-define-key 'insert global-map (kbd "\\") 'evil-start-god-state)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
      (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-god-state-normal) 
-     (evil-define-key 'emacs global-map (kbd "i") 'evil-god-state-insert) 
      
      ;; Some other keybinds 
      ;; Kill-buffer C-x k
@@ -392,6 +411,7 @@ one, an error is signaled."
 (setq erc-kill-queries-on-quit t)
 (setq erc-kill-server-buffer-on-quit t)
 
+
 (defmacro erc-connect (command server port nick ssl pass)
   "Create interactive command `command', for connecting to an IRC server. The
    command uses interactive mode if passed an argument."
@@ -404,6 +424,15 @@ one, an error is signaled."
 	       (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
 (erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
 (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
+(general-define-key
+  :states '(normal)
+  :keymaps 'erc-mode-map
+  :prefix ","
+  (kbd "b") 'erc-switch-to-buffer
+  (kbd "q") 'erc-quit-server
+  (kbd "p") 'erc-part-from-channel
+  (kbd "j") 'erc-join-channel
+  (kbd ",") 'erc-track-switch-buffer)
    #+END_SRC
 
 ** Text
@@ -417,5 +446,29 @@ one, an error is signaled."
    #+BEGIN_SRC emacs-lisp
    (setq inhibit-startup-screen t)
    (setq initial-buffer-choice 'eshell)
-   #+END_SRC
+; Theme stuff for emacs --daemon idk why it works 
+(defvar my:theme 'apropospriate-dark)
+(defvar my:theme-window-loaded nil)
+(defvar my:theme-terminal-loaded nil)
 
+(if (daemonp)
+    (add-hook 'after-make-frame-functions(lambda (frame)
+                       (select-frame frame)
+                       (if (window-system frame)
+                           (unless my:theme-window-loaded
+                             (if my:theme-terminal-loaded
+                                 (enable-theme my:theme)
+                               (load-theme my:theme t))
+                             (setq my:theme-window-loaded t))
+                         (unless my:theme-terminal-loaded
+                           (if my:theme-window-loaded
+                               (enable-theme my:theme)
+                             (load-theme my:theme t))
+                           (setq my:theme-terminal-loaded t)))))
+
+  (progn
+    (load-theme my:theme t)
+    (if (display-graphic-p)
+        (setq my:theme-window-loaded t)
+      (setq my:theme-terminal-loaded t))))
+   #+END_SRC
