@@ -12,8 +12,9 @@
 
 ;; Load use-package, used for loading packages
 (require 'use-package)
+(setq use-package-always-ensure t)
 
-(require 'org-evil)
+(use-package org-evil)
 (org-babel-load-file
   (expand-file-name "settings.org"
 		    user-emacs-directory))
@@ -27,9 +28,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
-    (ctags-update makefile-executor projectile-ripgrep helm-projectile magit evil-magit slime-company slime god-mode python-mode helm-tramp company-anaconda company-racer company-c-headers company-web web-mode restart-emacs helm helm-core company racer cargo autopair which-key general org-evil monitor apropospriate-theme use-package evil auto-package-update))))
+    (autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
