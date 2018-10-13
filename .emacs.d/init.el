@@ -14,6 +14,11 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(use-package magit)
+(setq default-directory (concat (getenv "HOME") "/Dotfiles/"))
+(magit-pull-from-upstream default-directory)
+(setq default-directory (getenv "HOME"))
+
 (use-package org-evil)
 (org-babel-load-file
   (expand-file-name "settings.org"
@@ -31,7 +36,7 @@
  '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
-    (autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))))
+    (powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

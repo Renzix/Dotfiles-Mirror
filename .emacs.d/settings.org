@@ -356,26 +356,26 @@ one, an error is signaled."
 #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
-   (add-hook 'rust-mode-hook #'racer-mode)
-   (add-hook 'racer-mode-hook #'eldoc-mode)
-   (add-hook 'rust-mode-hook 'cargo-minor-mode)
-   (setq rust-format-on-save t)
+     (add-hook 'rust-mode-hook #'racer-mode)
+     (add-hook 'racer-mode-hook #'eldoc-mode)
+     (add-hook 'rust-mode-hook 'cargo-minor-mode)
+     (setq rust-format-on-save t)
   
-   (general-define-key
-     :states '(normal)
-     :keymaps 'rust-mode-map
-     :prefix "," 
-     (kbd "f") 'cargo-process-fmt
-     (kbd "r") 'cargo-process-run
-     (kbd "d") 'cargo-process-doc
-     (kbd "o") 'cargo-process-doc-open
-     (kbd "t") 'cargo-process-test
-     (kbd "c") 'cargo-process-check
-     (kbd "R") 'cargo-process-clean
-     (kbd "n") 'cargo-process-new
-     (kbd "u") 'cargo-process-update
-     (kbd "b") 'cargo-process-build)
-  #+END_SRC
+     (general-define-key
+       :states '(normal)
+       :keymaps 'rust-mode-map
+       :prefix "," 
+       (kbd "f") 'cargo-process-fmt
+       (kbd "r") 'cargo-process-run
+       (kbd "d") 'cargo-process-doc
+       (kbd "o") 'cargo-process-doc-open
+       (kbd "t") 'cargo-process-test
+       (kbd "c") 'cargo-process-check
+       (kbd "R") 'cargo-process-clean
+       (kbd "n") 'cargo-process-new
+       (kbd "u") 'cargo-process-update
+       (kbd "b") 'cargo-process-build)
+    #+END_SRC
 ** Python
     #+BEGIN_SRC emacs-lisp
       (add-hook 'python-mode-hook 'anaconda-mode)
@@ -386,30 +386,33 @@ one, an error is signaled."
 	  :prefix "," 
 	  (kbd "d") 'python-eldoc-get-doc
 	  (kbd "l") 'python-check)
-
     #+END_SRC
 ** C/CPP 
-  #+BEGIN_SRC emacs-lisp
-  (use-package irony
-    :ensure t
-    :defer t
-    :init
-      (add-hook 'c++-mode-hook 'irony-mode)
-      (add-hook 'c-mode-hook 'irony-mode)
-      (add-hook 'objc-mode-hook 'irony-mode)
-    :config
-      (defun my-irony-mode-hook ()
-      (define-key irony-mode-map [remap completion-at-point]
-        'irony-completion-at-point-async)
-      (define-key irony-mode-map [remap complete-symbol]
-        'irony-completion-at-point-async))
-      (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-      (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-   (general-define-key ;;C/CPP keys
-     :states '(normal)
-     :keymaps 'irony-mode-map
-     :prefix ",")
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package irony
+	:ensure t
+	:defer t
+	:init
+	  (add-hook 'c++-mode-hook 'irony-mode)
+	  (add-hook 'c-mode-hook 'irony-mode)
+	  (add-hook 'objc-mode-hook 'irony-mode)
+	:config
+	  (defun my-irony-mode-hook ()
+	  (define-key irony-mode-map [remap completion-at-point]
+	    'irony-completion-at-point-async)
+	  (define-key irony-mode-map [remap complete-symbol]
+	    'irony-completion-at-point-async))
+	  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+	  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+       (general-define-key ;;C/CPP keys
+	 :states '(normal)
+	 :keymaps 'irony-mode-map
+	 :prefix ",")
+     #+END_SRC
+** Powershell
+    #+BEGIN_SRC emacs-lisp
+      (use-package powershell) ;; If im in windows XDDDDDD
+    #+END_SRC
 ** Misc Programming
    #+BEGIN_SRC emacs-lisp
    (use-package autopair
