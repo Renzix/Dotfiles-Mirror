@@ -345,37 +345,44 @@ one, an error is signaled."
         company-show-numbers            t
         company-tooltip-limit           20
         company-dabbrev-downcase        nil
-        company-backends                '((company-irony company-gtags company-anaconda company-racer)))
+        company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp)))
       :bind ("<tab>" . company-indent-or-complete-common))
     (setq tab-always-indent 'complete)
 #+END_SRC
 ** Rust
-  #+BEGIN_SRC emacs-lisp
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-  (add-hook 'rust-mode-hook 'cargo-minor-mode)
-  (setq rust-format-on-save t)
+   #+BEGIN_SRC emacs-lisp
+   (add-hook 'rust-mode-hook #'racer-mode)
+   (add-hook 'racer-mode-hook #'eldoc-mode)
+   (add-hook 'rust-mode-hook 'cargo-minor-mode)
+   (setq rust-format-on-save t)
   
-  (general-define-key
-    :states '(normal)
-    :keymaps 'rust-mode-map
-    :prefix "," 
-      (kbd "f") 'cargo-process-fmt
-      (kbd "r") 'cargo-process-run
-      (kbd "d") 'cargo-process-doc
-      (kbd "o") 'cargo-process-doc-open
-      (kbd "t") 'cargo-process-test
-      (kbd "c") 'cargo-process-check
-      (kbd "R") 'cargo-process-clean
-      (kbd "n") 'cargo-process-new
-      (kbd "u") 'cargo-process-update
-      (kbd "b") 'cargo-process-build)
+   (general-define-key
+     :states '(normal)
+     :keymaps 'rust-mode-map
+     :prefix "," 
+     (kbd "f") 'cargo-process-fmt
+     (kbd "r") 'cargo-process-run
+     (kbd "d") 'cargo-process-doc
+     (kbd "o") 'cargo-process-doc-open
+     (kbd "t") 'cargo-process-test
+     (kbd "c") 'cargo-process-check
+     (kbd "R") 'cargo-process-clean
+     (kbd "n") 'cargo-process-new
+     (kbd "u") 'cargo-process-update
+     (kbd "b") 'cargo-process-build)
   #+END_SRC
 ** Python
-  #+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-  #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'python-mode-hook 'anaconda-mode)
+      (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+      (general-define-key
+	  :states '(normal)
+	  :keymaps 'python-mode-map
+	  :prefix "," 
+	  (kbd "d") 'python-eldoc-get-doc
+	  (kbd "l") 'python-check)
+
+    #+END_SRC
 ** C/CPP 
   #+BEGIN_SRC emacs-lisp
   (use-package irony
@@ -405,35 +412,35 @@ one, an error is signaled."
    #+END_SRC
 * Normal Tasks
 ** ERC
-   #+BEGIN_SRC emacs-lisp
-(setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
-(setq erc-kill-buffer-on-part t)
-(setq erc-kill-queries-on-quit t)
-(setq erc-kill-server-buffer-on-quit t)
+    #+BEGIN_SRC emacs-lisp
+    (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
+    (setq erc-kill-buffer-on-part t)
+    (setq erc-kill-queries-on-quit t)
+    (setq erc-kill-server-buffer-on-quit t)
 
 
-(defmacro erc-connect (command server port nick ssl pass)
-  "Create interactive command `command', for connecting to an IRC server. The
-   command uses interactive mode if passed an argument."
-  (fset command
-	`(lambda (arg)
-	   (interactive "p")
-	   (if (not (= 1 arg))
-	       (call-interactively 'erc)
-	     (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
-	       (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-(erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
-(erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
-(general-define-key
-  :states '(normal)
-  :keymaps 'erc-mode-map
-  :prefix ","
-  (kbd "b") 'erc-switch-to-buffer
-  (kbd "q") 'erc-quit-server
-  (kbd "p") 'erc-part-from-channel
-  (kbd "j") 'erc-join-channel
-  (kbd ",") 'erc-track-switch-buffer)
-   #+END_SRC
+    (defmacro erc-connect (command server port nick ssl pass)
+    "Create interactive command `command', for connecting to an IRC server. The
+    command uses interactive mode if passed an argument."
+      (fset command
+        `(lambda (arg)
+	(interactive "p")
+	(if (not (= 1 arg))
+	  (call-interactively 'erc)
+	  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
+	    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
+    (erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
+    (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
+    (general-define-key
+      :states '(normal)
+      :keymaps 'erc-mode-map
+      :prefix ","
+      (kbd "b") 'erc-switch-to-buffer
+      (kbd "q") 'erc-quit-server
+      (kbd "p") 'erc-part-from-channel
+      (kbd "j") 'erc-join-channel
+      (kbd ",") 'erc-track-switch-buffer)
+    #+END_SRC
 
 ** Text
    #+BEGIN_SRC emacs-lisp
@@ -443,41 +450,46 @@ one, an error is signaled."
    #+END_SRC
 * Post Config
 ** Backups
-#+BEGIN_SRC emacs-lisp
-(setq backup-directory-alist `(("." . "~/.saves")))
-(setq backup-by-copying t)
-(setq delete-old-versions t
-  kept-new-versions 6
-  kept-old-versions 2
-  version-control t)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+    (setq backup-directory-alist `(("." . "~/.saves")))
+    (setq backup-by-copying t)
+    (setq delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
+    #+END_SRC
+** Screenshots
+    #+BEGIN_SRC emacs-lisp
+    ;;TODO(renzix): Make screenshot utility in elisp
+    #+END_SRC
 ** Misc
-   #+BEGIN_SRC emacs-lisp
-   (setq inhibit-startup-screen t)
-   (setq initial-buffer-choice 'eshell)
-; Theme stuff for emacs --daemon idk why it works 
-(defvar my:theme 'apropospriate-dark)
-(defvar my:theme-window-loaded nil)
-(defvar my:theme-terminal-loaded nil)
+    #+BEGIN_SRC emacs-lisp
+    (setq inhibit-startup-screen t)
+    (setq initial-buffer-choice 'eshell)
+    ; Theme stuff for emacs --daemon idk why it works 
+    (defvar my:theme 'apropospriate-dark)
+    (defvar my:theme-window-loaded nil)
+    (defvar my:theme-terminal-loaded nil)
 
-(if (daemonp)
-    (add-hook 'after-make-frame-functions(lambda (frame)
-                       (select-frame frame)
-                       (if (window-system frame)
-                           (unless my:theme-window-loaded
-                             (if my:theme-terminal-loaded
-                                 (enable-theme my:theme)
-                               (load-theme my:theme t))
-                             (setq my:theme-window-loaded t))
-                         (unless my:theme-terminal-loaded
-                           (if my:theme-window-loaded
-                               (enable-theme my:theme)
-                             (load-theme my:theme t))
-                           (setq my:theme-terminal-loaded t)))))
+    (if (daemonp)
+      (add-hook 'after-make-frame-functions(lambda (frame)
+      (select-frame frame)
+      (if (window-system frame)
+        (unless my:theme-window-loaded
+        (if my:theme-terminal-loaded
+          (enable-theme my:theme)
+ 	 (load-theme my:theme t))
+        (setq my:theme-window-loaded t))
+        (unless my:theme-terminal-loaded
+          (if my:theme-window-loaded
+            (enable-theme my:theme)
+            (load-theme my:theme t))
+          (setq my:theme-terminal-loaded t)))))
 
-  (progn
-    (load-theme my:theme t)
-    (if (display-graphic-p)
+    (progn
+      (load-theme my:theme t)
+      (if (display-graphic-p)
         (setq my:theme-window-loaded t)
-      (setq my:theme-terminal-loaded t))))
-   #+END_SRC
+        (setq my:theme-terminal-loaded t))))
+    (setq org-src-tab-acts-natively t)
+    #+END_SRC
