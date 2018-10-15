@@ -291,7 +291,7 @@ one, an error is signaled."
      (evil-define-key 'normal global-map (kbd "\\") 'evil-start-god-state)
      (evil-define-key 'insert global-map (kbd "\\") 'evil-start-god-state)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-god-state-normal) 
+     (evil-define-key 'emacs global-map (kbd "ESC") 'evil-god-state-normal) 
      
      ;; Some other keybinds 
      ;; Kill-buffer C-x k
