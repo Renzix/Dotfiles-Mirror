@@ -2,6 +2,7 @@
 (defconst emacs-start-time (current-time))
 ;; initalize all ELPA packages
 (require 'package)
+(require 'use-package)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
@@ -10,8 +11,9 @@
 					  emacs-start-time))))
   (message "Loaded packages in %.3fs" elapsed))
 
+(when (not package-archive-contents)
+    (package-refresh-contents))
 ;; Load use-package, used for loading packages
-(require 'use-package)
 (setq use-package-always-ensure t)
 
 (use-package org-evil)
