@@ -1,142 +1,142 @@
 * Display
 ** Themes
    #+BEGIN_SRC emacs-lisp
-(use-package apropospriate-theme
-  :ensure t
-  :config (load-theme 'apropospriate-dark t))
+     (use-package apropospriate-theme
+       :ensure t
+       :config (load-theme 'apropospriate-dark t))
    #+END_SRC
 ** Default Display
    #+BEGIN_SRC emacs-lisp
-   (menu-bar-mode -1)
-   (tool-bar-mode -1)
-   (scroll-bar-mode -1)
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (scroll-bar-mode -1)
    #+END_SRC
 * Pre Config
 ** General
    #+BEGIN_SRC emacs-lisp
-(use-package general
-  :defer -1
-  :config (general-evil-setup t))
+     (use-package general
+       :defer -1
+       :config (general-evil-setup t))
    #+END_SRC
 ** Functions
    #+BEGIN_SRC emacs-lisp
-   (defun eshell/clear ()
-   "Clear the eshell buffer."
-     (let ((inhibit-read-only t))
-       (erase-buffer)
-       (eshell-send-input)))
-   (defun kill-other-buffers ()
-   "Kill all other buffers."
-     (interactive)
-     (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+     (defun eshell/clear ()
+       "Clear the eshell buffer."
+       (let ((inhibit-read-only t))
+	 (erase-buffer)
+	 (eshell-send-input)))
+     (defun kill-other-buffers ()
+       "Kill all other buffers."
+       (interactive)
+       (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
-(defun rename-file-and-buffer (new-name)
-  "Renames both current buffer and file it's visiting to NEW-NAME."
-  (interactive "sNew name: ")
-  (let ((name (buffer-name))
-	(filename (buffer-file-name)))
-    (if (not filename)
-	(message "Buffer '%s' is not visiting a file!" name)
-      (if (get-buffer new-name)
-	  (message "A buffer named '%s' already exists!" new-name)
-	(progn
-	  (rename-file filename new-name 1)
-	  (rename-buffer new-name)
-	  (set-visited-file-name new-name)
-	  (set-buffer-modified-p nil))))))
+     (defun rename-file-and-buffer (new-name)
+       "Renames both current buffer and file it's visiting to NEW-NAME."
+       (interactive "sNew name: ")
+       (let ((name (buffer-name))
+	     (filename (buffer-file-name)))
+	 (if (not filename)
+	     (message "Buffer '%s' is not visiting a file!" name)
+	   (if (get-buffer new-name)
+	       (message "A buffer named '%s' already exists!" new-name)
+	     (progn
+	       (rename-file filename new-name 1)
+	       (rename-buffer new-name)
+	       (set-visited-file-name new-name)
+	       (set-buffer-modified-p nil))))))
 
-(defun delete-file-and-buffer ()
-  "Kill the current buffer and deletes the file it is visiting."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (when filename
-      (if (vc-backend filename)
-	  (vc-delete-file filename)
-	(progn
-	  (delete-file filename)
-	  (message "Deleted file %s" filename)
-	  (kill-buffer))))))
+     (defun delete-file-and-buffer ()
+       "Kill the current buffer and deletes the file it is visiting."
+       (interactive)
+       (let ((filename (buffer-file-name)))
+	 (when filename
+	   (if (vc-backend filename)
+	       (vc-delete-file filename)
+	     (progn
+	       (delete-file filename)
+	       (message "Deleted file %s" filename)
+	       (kill-buffer))))))
 
-(defun sudo-edit (&optional arg)
-  (interactive "P")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:"
-			 (ido-read-file-name "Find file(as root): ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+     (defun sudo-edit (&optional arg)
+       (interactive "P")
+       (if (or arg (not buffer-file-name))
+	   (find-file (concat "/sudo:root@localhost:"
+			      (ido-read-file-name "Find file(as root): ")))
+	 (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-(defun reset-erc-track-mode ()
-  (interactive)
-  (setq erc-modified-channels-alist nil)
-  (erc-modified-channels-update))
-(global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
+     (defun reset-erc-track-mode ()
+       (interactive)
+       (setq erc-modified-channels-alist nil)
+       (erc-modified-channels-update))
+     (global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
 
-(defun buf-move-up ()
-  "Swap the current buffer and the buffer above the split.
-If there is no split, ie now window above the current one, an
-error is signaled."
-  ;;  "Switches between the current buffer, and the buffer above the
-  ;;  split, if possible."
-  (interactive)
-  (let* ((other-win (windmove-find-other-window 'up))
-	 (buf-this-buf (window-buffer (selected-window))))
-    (if (null other-win)
-	(error "No window above this one")
-      ;; swap top with this one
-      (set-window-buffer (selected-window) (window-buffer other-win))
-      ;; move this one to top
-      (set-window-buffer other-win buf-this-buf)
-      (select-window other-win))))
+     (defun buf-move-up ()
+       "Swap the current buffer and the buffer above the split.
+     If there is no split, ie now window above the current one, an
+     error is signaled."
+       ;;  "Switches between the current buffer, and the buffer above the
+       ;;  split, if possible."
+       (interactive)
+       (let* ((other-win (windmove-find-other-window 'up))
+	      (buf-this-buf (window-buffer (selected-window))))
+	 (if (null other-win)
+	     (error "No window above this one")
+	   ;; swap top with this one
+	   (set-window-buffer (selected-window) (window-buffer other-win))
+	   ;; move this one to top
+	   (set-window-buffer other-win buf-this-buf)
+	   (select-window other-win))))
 
-(defun buf-move-down ()
-  "Swap the current buffer and the buffer under the split.
-If there is no split, ie now window under the current one, an
-error is signaled."
-  (interactive)
-  (let* ((other-win (windmove-find-other-window 'down))
-	 (buf-this-buf (window-buffer (selected-window))))
-    (if (or (null other-win) 
-	    (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
-	(error "No window under this one")
-      ;; swap top with this one
-      (set-window-buffer (selected-window) (window-buffer other-win))
-      ;; move this one to top
-      (set-window-buffer other-win buf-this-buf)
-      (select-window other-win))))
+     (defun buf-move-down ()
+       "Swap the current buffer and the buffer under the split.
+     If there is no split, ie now window under the current one, an
+     error is signaled."
+       (interactive)
+       (let* ((other-win (windmove-find-other-window 'down))
+	      (buf-this-buf (window-buffer (selected-window))))
+	 (if (or (null other-win) 
+		 (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
+	     (error "No window under this one")
+	   ;; swap top with this one
+	   (set-window-buffer (selected-window) (window-buffer other-win))
+	   ;; move this one to top
+	   (set-window-buffer other-win buf-this-buf)
+	   (select-window other-win))))
 
-(defun buf-move-left ()
-  "Swap the current buffer and the buffer on the left of the split.
-If there is no split, ie now window on the left of the current
-one, an error is signaled."
-  (interactive)
-  (let* ((other-win (windmove-find-other-window 'left))
-	 (buf-this-buf (window-buffer (selected-window))))
-    (if (null other-win)
-	(error "No left split")
-      ;; swap top with this one
-      (set-window-buffer (selected-window) (window-buffer other-win))
-      ;; move this one to top
-      (set-window-buffer other-win buf-this-buf)
-      (select-window other-win))))
+     (defun buf-move-left ()
+       "Swap the current buffer and the buffer on the left of the split.
+     If there is no split, ie now window on the left of the current
+     one, an error is signaled."
+       (interactive)
+       (let* ((other-win (windmove-find-other-window 'left))
+	      (buf-this-buf (window-buffer (selected-window))))
+	 (if (null other-win)
+	     (error "No left split")
+	   ;; swap top with this one
+	   (set-window-buffer (selected-window) (window-buffer other-win))
+	   ;; move this one to top
+	   (set-window-buffer other-win buf-this-buf)
+	   (select-window other-win))))
 
-(defun buf-move-right ()
-  "Swap the current buffer and the buffer on the right of the split.
-If there is no split, ie now window on the right of the current
-one, an error is signaled."
-  (interactive)
-  (let* ((other-win (windmove-find-other-window 'right))
-	 (buf-this-buf (window-buffer (selected-window))))
-    (if (null other-win)
-	(error "No right split")
-      ;; swap top with this one
-      (set-window-buffer (selected-window) (window-buffer other-win))
-      ;; move this one to top
-      (set-window-buffer other-win buf-this-buf)
-      (select-window other-win))))
-(defun get-string-from-file (filePath)
-  "Return filePath's file content."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (buffer-string)))
+     (defun buf-move-right ()
+       "Swap the current buffer and the buffer on the right of the split.
+     If there is no split, ie now window on the right of the current
+     one, an error is signaled."
+       (interactive)
+       (let* ((other-win (windmove-find-other-window 'right))
+	      (buf-this-buf (window-buffer (selected-window))))
+	 (if (null other-win)
+	     (error "No right split")
+	   ;; swap top with this one
+	   (set-window-buffer (selected-window) (window-buffer other-win))
+	   ;; move this one to top
+	   (set-window-buffer other-win buf-this-buf)
+	   (select-window other-win))))
+     (defun get-string-from-file (filePath)
+       "Return filePath's file content."
+       (with-temp-buffer
+	 (insert-file-contents filePath)
+	 (buffer-string)))
    #+END_SRC
 * Helm
 ** Init
@@ -150,129 +150,45 @@ one, an error is signaled."
        (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
        (helm-mode t))
    #+END_SRC
-* Evil/God Mode
+* Evil Mode
 ** Settings
    #+BEGIN_SRC emacs-lisp
-       (use-package evil
-     :config (evil-mode t))
-   (use-package god-mode)
-   (setq evil-default-state 'normal)
-; Cursor!!!
+     (use-package evil
+       :config (evil-mode t))
    #+END_SRC
-** Evil-god-mode
-#+BEGIN_SRC emacs-lisp
-(evil-define-state god
-  "God state."
-  :tag " <G> "
-  :message "-- GOD MODE --"
-  :entry-hook (evil-god-start-hook)
-  :exit-hook (evil-god-stop-hook)
-  :input-method t
-  :intercept-esc nil)
-(defun evil-god-start-hook ()
-  "Run before entering `evil-god-state'."
-  (evil-emacs-state 1)
-  (god-local-mode 1))
-
-(defun evil-god-stop-hook ()
-  "Run before exiting `evil-god-state'."
-  (evil-emacs-state -1)
-  (god-local-mode -1))
-
-(defun evil-god-fix-last-command ()
-  "Change `last-command' to be the command before `evil-execute-in-god-state'."
-  (setq last-command evil-god-last-command))
-
- (defun evil-stop-execute-in-god-state ()
-  "Switch back to previous evil state."
-  (unless (or (eq this-command #'evil-execute-in-god-state)
-              (eq this-command #'universal-argument)
-              (eq this-command #'universal-argument-minus)
-              (eq this-command #'universal-argument-more)
-              (eq this-command #'universal-argument-other-key)
-              (eq this-command #'digit-argument)
-              (eq this-command #'negative-argument)
-              (minibufferp))
-    (remove-hook 'pre-command-hook 'evil-god-fix-last-command)
-    (remove-hook 'post-command-hook 'evil-stop-execute-in-god-state)
-    (when (buffer-live-p evil-execute-in-god-state-buffer)
-      (with-current-buffer evil-execute-in-god-state-buffer
-        (if (and (eq evil-previous-state 'visual)
-                 (not (use-region-p)))
-            (progn
-              (evil-change-to-previous-state)
-              (evil-exit-visual-state))
-          (evil-change-to-previous-state))))
-	  (setq evil-execute-in-god-state-buffer nil))) 
-
-(defvar evil-execute-in-god-state-buffer nil)
-(defvar evil-god-last-command nil)
-	  
-(defun evil-start-god-state () "Execute commands in god state"
-  (interactive)
-  (setq evil-execute-in-god-state-buffer (current-buffer))
-  (setq evil-god-last-command last-command)
-  (cond
-  ((evil-visual-state-p)
-   (let ((mrk (mark))
-    (pnt (point)))
-      (evil-god-state)
-      (set-mark mrk)
-      (goto-char pnt)))
-      (t
-   (evil-god-state)))
-  )
-(defun evil-god-state-normal ()
-  "Stop current God command and exit God state."
-  (interactive)
-  (evil-stop-execute-in-god-state)
-  (evil-god-stop-hook)
-  (evil-normal-state))
-
-(defun evil-god-state-insert ()
-  "Stop current God command and exit God state."
-  (interactive)
-  (evil-stop-execute-in-god-state)
-  (evil-god-stop-hook)
-  (evil-insert-state))
-
-#+END_SRC
 ** Changing states
-#+BEGIN_SRC emacs-lisp
-; redefine emacs state to intercept the escape key like insert-state does:
-(evil-define-state emacs
-  "Emacs state that can be exited with the escape key."
-  :tag " <EE> "
-  :message "-- EMACS WITH ESCAPE --"
-  :input-method t
-  ;; :intercept-esc nil)
-  )
+   #+BEGIN_SRC emacs-lisp
+					     ; redefine emacs state to intercept the escape key like insert-state does:
+     (evil-define-state emacs
+       "Emacs state that can be exited with the escape key."
+       :tag " <EE> "
+       :message "-- EMACS WITH ESCAPE --"
+       :input-method t
+       ;; :intercept-esc nil)
+       )
 
-(defadvice evil-insert-state (around emacs-state-instead-of-insert-state activate)
-  (evil-emacs-state))
-;  (load-theme 'monokai t))
-  
-;(add-hook 'evil-normal-state-entry-hook (lambda () (load-theme 'apropospriate-dark t)))
-  
-#+END_SRC
+     (defadvice evil-insert-state (around emacs-state-instead-of-insert-state activate)
+       (evil-emacs-state))
+
+   #+END_SRC
 ** Linum Relative
    #+BEGIN_SRC emacs-lisp
-   (use-package linum-relative)
-   (linum-mode)
-   (linum-relative-global-mode)
-   (setq linum-relative-current-symbol "")
-   (set-face-attribute 'linum nil :height 100)
-   (set-face-attribute 'linum-relative-current-face nil :height 100)
-   (defun linum-update-window-scale-fix (win)
-   "fix linum for scaled text"
-     (set-window-margins win
-       (ceiling (* (if (boundp 'text-scale-mode-step)
-         (expt text-scale-mode-step
-           text-scale-mode-amount) 1)
-       (if (car (window-margins))
-         (car (window-margins)) 1)
-       ))))
-   (advice-add #'linum-update-window :after #'linum-update-window-scale-fix)
+     (use-package linum-relative)
+     (linum-mode)
+     (linum-relative-global-mode)
+     (setq linum-relative-current-symbol "")
+     (set-face-attribute 'linum nil :height 100)
+     (set-face-attribute 'linum-relative-current-face nil :height 100)
+     (defun linum-update-window-scale-fix (win)
+       "fix linum for scaled text"
+       (set-window-margins win
+			   (ceiling (* (if (boundp 'text-scale-mode-step)
+					   (expt text-scale-mode-step
+						 text-scale-mode-amount) 1)
+				       (if (car (window-margins))
+					   (car (window-margins)) 1)
+				       ))))
+     (advice-add #'linum-update-window :after #'linum-update-window-scale-fix)
    #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
@@ -288,158 +204,148 @@ one, an error is signaled."
        "<SPC> f e s" "sxhkdrc"
        "<SPC> f e b" "bspwmrc"
        "<SPC> f e m" "make.conf")
-     (evil-define-key 'normal global-map (kbd "\\") 'evil-start-god-state)
-     (evil-define-key 'insert global-map (kbd "\\") 'evil-start-god-state)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-god-state-normal) 
-     
+     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
+
      ;; Some other keybinds 
      ;; Kill-buffer C-x k
      (general-define-key
-       :states '(emacs)
-       (kbd "M-x") 'helm-M-x
-       (kbd "C-f C-f") 'helm-find-files
-       (kbd "C-f C-S") 'sudo-edit
-       (kbd "C-f C-d") 'delete-file-and-buffer
-       (kbd "C-f C-r") 'rename-file-and-buffer
-       (kbd "C-f C-s") 'save-buffer
-       (kbd "C-f C-e C-e") (lambda() (interactive) (find-file "/home/genzix/.emacs.d/settings.org"))
-       (kbd "C-f C-e C-b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc"))
-       (kbd "C-f C-e C-s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm"))
-       (kbd "C-f C-e C-m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-       (kbd "C-b C-b") 'helm-buffers-list
-       (kbd "C-b C-S-N") 'switch-to-prev-buffer
-       (kbd "C-b C-n") 'switch-to-next-buffer
-       (kbd "C-b C-k") 'kill-this-buffer
-       (kbd "C-q C-q") 'save-buffers-kill-emacs 
-       (kbd "C-q C-a") 'kill-emacs
-       (kbd "C-q C-r") 'restart-emacs)
-     (general-define-key
-       :states '(normal)
-       :prefix "SPC"
-       (kbd "'") 'eshell
-       (kbd "\"") 'term
-       "SPC" 'async-shell-command)
+      :states 'normal
+      :prefix "SPC"
+      (kbd "'") 'eshell
+      (kbd "\"") 'term
+;      (kbd "SPC") 'async-shell-command
+      (kbd "f f") 'helm-find-files
+      (kbd "f S") 'sudo-edit
+      (kbd "f d") 'delete-file-and-buffer
+      (kbd "f r") 'rename-file-and-buffer
+      (kbd "f s") 'save-buffer
+      (kbd "f e e") (lambda() (interactive) (find-file "/home/genzix/.emacs.d/settings.org"))
+      (kbd "f e b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc"))
+      (kbd "f e s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm"))
+      (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
+      (kbd "b b") 'helm-buffers-list
+      (kbd "b N") 'switch-to-prev-buffer
+      (kbd "b n") 'switch-to-next-buffer
+      (kbd "b k") 'kill-this-buffer
+      (kbd "q q") 'save-buffers-kill-emacs 
+      (kbd "q a") 'kill-emacs
+      (kbd "q r") 'restart-emacs)
    #+END_SRC
 * Programming
 ** Projectile
-    #+BEGIN_SRC emacs-lisp
-      (use-package helm-projectile)
-      (general-define-key
-        :states '(emacs)
-	(kbd "C-p C-p") 'helm-projectile-switch-project
-	(kbd "C-p C-f") 'helm-projectile-find-file
-	(kbd "C-p C-b") 'helm-projectile-switch-to-buffer
-	(kbd "C-p C-g") 'helm-projectile-rg
-	(kbd "C-p C-a") 'helm-projectile-ag)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package helm-projectile)
+     (general-define-key
+      :states '(emacs)
+      (kbd "C-p C-p") 'helm-projectile-switch-project
+      (kbd "C-p C-f") 'helm-projectile-find-file
+      (kbd "C-p C-b") 'helm-projectile-switch-to-buffer
+      (kbd "C-p C-g") 'helm-projectile-rg
+      (kbd "C-p C-a") 'helm-projectile-ag)
+   #+END_SRC
 ** Magit
-    #+BEGIN_SRC emacs-lisp
-    (use-package evil-magit)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package evil-magit)
+   #+END_SRC
 ** Company
-    #+BEGIN_SRC emacs-lisp
-    (use-package company
-      :ensure t
-      :defer t
-      :init (add-hook 'after-init-hook 'global-company-mode)
-      :config
-      (use-package company-irony :ensure t :defer t)
-      (setq company-idle-delay        2
-        company-minimum-prefix-length   2
-        company-show-numbers            t
-        company-tooltip-limit           20
-        company-dabbrev-downcase        nil
-        company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp)))
-      :bind ("<tab>" . company-indent-or-complete-common))
-    (setq tab-always-indent 'complete)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package company
+       :ensure t
+       :defer t
+       :init (add-hook 'after-init-hook 'global-company-mode)
+       :config
+       (use-package company-irony :ensure t :defer t)
+       (setq company-idle-delay        2
+	     company-minimum-prefix-length   2
+	     company-show-numbers            t
+	     company-tooltip-limit           20
+	     company-dabbrev-downcase        nil
+	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp)))
+       :bind ("<tab>" . company-indent-or-complete-common))
+     (setq tab-always-indent 'complete)
+   #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
      (add-hook 'rust-mode-hook 'cargo-minor-mode)
      (setq rust-format-on-save t)
-  
+
      (general-define-key
-       :states '(normal)
-       :keymaps 'rust-mode-map
-       :prefix "," 
-       (kbd "f") 'cargo-process-fmt
-       (kbd "r") 'cargo-process-run
-       (kbd "d") 'cargo-process-doc
-       (kbd "o") 'cargo-process-doc-open
-       (kbd "t") 'cargo-process-test
-       (kbd "c") 'cargo-process-check
-       (kbd "R") 'cargo-process-clean
-       (kbd "n") 'cargo-process-new
-       (kbd "u") 'cargo-process-update
-       (kbd "b") 'cargo-process-build)
-    #+END_SRC
+      :states '(normal)
+      :keymaps 'rust-mode-map
+      :prefix "," 
+      (kbd "f") 'cargo-process-fmt
+      (kbd "r") 'cargo-process-run
+      (kbd "d") 'cargo-process-doc
+      (kbd "o") 'cargo-process-doc-open
+      (kbd "t") 'cargo-process-test
+      (kbd "c") 'cargo-process-check
+      (kbd "R") 'cargo-process-clean
+      (kbd "n") 'cargo-process-new
+      (kbd "u") 'cargo-process-update
+      (kbd "b") 'cargo-process-build)
+   #+END_SRC
 ** Python
-    #+BEGIN_SRC emacs-lisp
-      (add-hook 'python-mode-hook 'anaconda-mode)
-      (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-      (general-define-key
-	  :states '(normal)
-	  :keymaps 'python-mode-map
-	  :prefix "," 
-	  (kbd "d") 'python-eldoc-get-doc
-	  (kbd "l") 'python-check)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'python-mode-hook 'anaconda-mode)
+     (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+     (general-define-key
+      :states '(normal)
+      :keymaps 'python-mode-map
+      :prefix "," 
+      (kbd "d") 'python-eldoc-get-doc
+      (kbd "l") 'python-check)
+   #+END_SRC
 ** C/CPP 
-    #+BEGIN_SRC emacs-lisp
-      (use-package irony
-	:ensure t
-	:defer t
-	:init
-	  (add-hook 'c++-mode-hook 'irony-mode)
-	  (add-hook 'c-mode-hook 'irony-mode)
-	  (add-hook 'objc-mode-hook 'irony-mode)
-	:config
-	  (defun my-irony-mode-hook ()
-	  (define-key irony-mode-map [remap completion-at-point]
-	    'irony-completion-at-point-async)
-	  (define-key irony-mode-map [remap complete-symbol]
-	    'irony-completion-at-point-async))
-	  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-	  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-       (general-define-key ;;C/CPP keys
-	 :states '(normal)
-	 :keymaps 'irony-mode-map
-	 :prefix ",")
-     #+END_SRC
-** Powershell
-    #+BEGIN_SRC emacs-lisp
-      (use-package powershell) ;; If im in windows XDDDDDD
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package irony
+       :ensure t
+       :defer t
+       :init
+       (add-hook 'c++-mode-hook 'irony-mode)
+       (add-hook 'c-mode-hook 'irony-mode)
+       (add-hook 'objc-mode-hook 'irony-mode)
+       :config
+       (defun my-irony-mode-hook ()
+	 (define-key irony-mode-map [remap completion-at-point]
+	   'irony-completion-at-point-async)
+	 (define-key irony-mode-map [remap complete-symbol]
+	   'irony-completion-at-point-async))
+       (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+     (general-define-key ;;C/CPP keys
+      :states '(normal)
+      :keymaps 'irony-mode-map
+      :prefix ",")
+   #+END_SRC
 ** Misc Programming
    #+BEGIN_SRC emacs-lisp
-   (use-package autopair
-     :config (autopair-global-mode t))
+     (use-package autopair
+       :config (autopair-global-mode t))
    #+END_SRC
 * Normal Tasks
 ** ERC
-    #+BEGIN_SRC emacs-lisp
-    (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
-    (setq erc-kill-buffer-on-part t)
-    (setq erc-kill-queries-on-quit t)
-    (setq erc-kill-server-buffer-on-quit t)
+   #+BEGIN_SRC emacs-lisp
+     (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
+     (setq erc-kill-buffer-on-part t)
+     (setq erc-kill-queries-on-quit t)
+     (setq erc-kill-server-buffer-on-quit t)
 
-
-    (defmacro erc-connect (command server port nick ssl pass)
-    "Create interactive command `command', for connecting to an IRC server. The
-    command uses interactive mode if passed an argument."
-      (fset command
-        `(lambda (arg)
-	(interactive "p")
-	(if (not (= 1 arg))
-	  (call-interactively 'erc)
-	  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
-	    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-    (erc-connect erc-twitch "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
-    (erc-connect erc-discord "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
-    (general-define-key
+     (defmacro erc-connect (command server port nick ssl pass)
+       "Create interactive command `command', for connecting to an IRC server. The
+     command uses interactive mode if passed an argument."
+       (fset command
+	     `(lambda (arg)
+		(interactive "p")
+		(if (not (= 1 arg))
+		    (call-interactively 'erc)
+		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
+		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
+     (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
+     (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
+     (general-define-key
       :states '(normal)
       :keymaps 'erc-mode-map
       :prefix ","
@@ -448,56 +354,56 @@ one, an error is signaled."
       (kbd "p") 'erc-part-from-channel
       (kbd "j") 'erc-join-channel
       (kbd ",") 'erc-track-switch-buffer)
-    #+END_SRC
+   #+END_SRC
 
 ** Text
    #+BEGIN_SRC emacs-lisp
-(setq default-major-mode 'text-mode)
-(add-hook 'text-mode-hook 'text-mode-hook-identify)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+     (setq default-major-mode 'text-mode)
+     (add-hook 'text-mode-hook 'text-mode-hook-identify)
+     (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
 * Post Config
 ** Backups
-    #+BEGIN_SRC emacs-lisp
-    (setq backup-directory-alist `(("." . "~/.saves")))
-    (setq backup-by-copying t)
-    (setq delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq backup-directory-alist `(("." . "~/.saves")))
+     (setq backup-by-copying t)
+     (setq delete-old-versions t
+	   kept-new-versions 6
+	   kept-old-versions 2
+	   version-control t)
+   #+END_SRC
 ** Screenshots
-    #+BEGIN_SRC emacs-lisp
-    ;;TODO(renzix): Make screenshot utility in elisp
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     ;;TODO(renzix): Make screenshot utility in elisp
+   #+END_SRC
 ** Misc
-    #+BEGIN_SRC emacs-lisp
-    (setq inhibit-startup-screen t)
-    (setq initial-buffer-choice 'eshell)
-    ; Theme stuff for emacs --daemon idk why it works 
-    (defvar my:theme 'apropospriate-dark)
-    (defvar my:theme-window-loaded nil)
-    (defvar my:theme-terminal-loaded nil)
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-screen t)
+     (setq initial-buffer-choice 'eshell)
+					     ; Theme stuff for emacs --daemon idk why it works 
+     (defvar my:theme 'apropospriate-dark)
+     (defvar my:theme-window-loaded nil)
+     (defvar my:theme-terminal-loaded nil)
 
-    (if (daemonp)
-      (add-hook 'after-make-frame-functions(lambda (frame)
-      (select-frame frame)
-      (if (window-system frame)
-        (unless my:theme-window-loaded
-        (if my:theme-terminal-loaded
-          (enable-theme my:theme)
- 	 (load-theme my:theme t))
-        (setq my:theme-window-loaded t))
-        (unless my:theme-terminal-loaded
-          (if my:theme-window-loaded
-            (enable-theme my:theme)
-            (load-theme my:theme t))
-          (setq my:theme-terminal-loaded t)))))
+     (if (daemonp)
+	 (add-hook 'after-make-frame-functions(lambda (frame)
+						(select-frame frame)
+						(if (window-system frame)
+						    (unless my:theme-window-loaded
+						      (if my:theme-terminal-loaded
+							  (enable-theme my:theme)
+							(load-theme my:theme t))
+						      (setq my:theme-window-loaded t))
+						  (unless my:theme-terminal-loaded
+						    (if my:theme-window-loaded
+							(enable-theme my:theme)
+						      (load-theme my:theme t))
+						    (setq my:theme-terminal-loaded t)))))
 
-    (progn
-      (load-theme my:theme t)
-      (if (display-graphic-p)
-        (setq my:theme-window-loaded t)
-        (setq my:theme-terminal-loaded t))))
-    (setq org-src-tab-acts-natively t)
-    #+END_SRC
+       (progn
+	 (load-theme my:theme t)
+	 (if (display-graphic-p)
+	     (setq my:theme-window-loaded t)
+	   (setq my:theme-terminal-loaded t))))
+     (setq org-src-tab-acts-natively t)
+   #+END_SRC

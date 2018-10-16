@@ -14,11 +14,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(use-package magit)
-(setq default-directory (concat (getenv "HOME") "/Dotfiles/"))
-(magit-pull-from-upstream default-directory)
-(setq default-directory (getenv "HOME"))
-
 (use-package org-evil)
 (org-babel-load-file
   (expand-file-name "settings.org"
