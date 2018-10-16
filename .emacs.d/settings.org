@@ -195,56 +195,30 @@
    #+BEGIN_SRC emacs-lisp
 	  (use-package which-key)
 	  (which-key-mode)
-	  (which-key-add-key-based-replacements
-	    "<SPC> b" "Buffer"
-	    "<SPC> w" "Window"
-	    "<SPC> f" "Files"
-	    "<SPC> q" "Quit"
-	    "<SPC> f e" "Config Files"
-	    "<SPC> f e e" ".emacs"
-	    "<SPC> f e s" "sxhkdrc"
-	    "<SPC> f e b" "bspwmrc"
-	    "<SPC> f e m" "make.conf")
 	  (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
 	  (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
-
+          (evil-ex-define-cmd "bb" 'helm-buffers-list)
+          (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
+          (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
+          (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
+          (evil-ex-define-cmd "ps" 'helm-projectile-rg)
 	  ;; Some other keybinds 
 	  ;; Kill-buffer C-x k
 	  (general-define-key
 	   :states 'normal
-	   :prefix "SPC"
+	   :prefix "\\"
 	   (kbd "'") 'eshell
 	   (kbd "\"") 'term
-     ;      (kbd "SPC") 'async-shell-command
-	   (kbd "f f") 'helm-find-files
-	   (kbd "f S") 'sudo-edit
-	   (kbd "f d") 'delete-file-and-buffer
-	   (kbd "f r") 'rename-file-and-buffer
-	   (kbd "f s") 'save-buffer
-	   (kbd "f e e") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master") (find-file (concat HOME "/.emacs.d/settings.org")))))
-	   (kbd "f e i") (lambda() (interactive) (magit-pull-from-upstream (concat HOME "/Dotfiles")) (find-file (concat HOME "/.emacs.d/init.el")))
-	   (kbd "f e b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
-	   (kbd "f e s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
-	   (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-	   (kbd "b b") 'helm-buffers-list
-	   (kbd "b N") 'switch-to-prev-buffer
-	   (kbd "b n") 'switch-to-next-buffer
-	   (kbd "b k") 'kill-this-buffer
-	   (kbd "q q") 'save-buffers-kill-emacs 
-	   (kbd "q a") 'kill-emacs
-	   (kbd "q r") 'restart-emacs)
+	   (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org"))))
+	   (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
+	   (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
+	   (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
+	   (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf"))))
    #+END_SRC
 * Programming
 ** Projectile
    #+BEGIN_SRC emacs-lisp
      (use-package helm-projectile)
-     (general-define-key
-      :states '(emacs)
-      (kbd "C-p C-p") 'helm-projectile-switch-project
-      (kbd "C-p C-f") 'helm-projectile-find-file
-      (kbd "C-p C-b") 'helm-projectile-switch-to-buffer
-      (kbd "C-p C-g") 'helm-projectile-rg
-      (kbd "C-p C-a") 'helm-projectile-ag)
    #+END_SRC
 ** Magit
    #+BEGIN_SRC emacs-lisp
@@ -264,7 +238,7 @@
 	     company-tooltip-limit           20
 	     company-dabbrev-downcase        nil
 	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp)))
-       :bind ("<tab>" . company-indent-or-complete-common))
+       :bind ("TAB" . company-indent-or-complete-common))
      (setq tab-always-indent 'complete)
    #+END_SRC
 ** Rust
@@ -373,10 +347,6 @@
 	   kept-new-versions 6
 	   kept-old-versions 2
 	   version-control t)
-   #+END_SRC
-** Screenshots
-   #+BEGIN_SRC emacs-lisp
-     ;;TODO(renzix): Make screenshot utility in elisp
    #+END_SRC
 ** Misc
    #+BEGIN_SRC emacs-lisp
