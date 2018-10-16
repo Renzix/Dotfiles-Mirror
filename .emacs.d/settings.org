@@ -17,6 +17,7 @@
      (use-package general
        :defer -1
        :config (general-evil-setup t))
+     (defvar HOME (getenv "HOME"))
    #+END_SRC
 ** Functions
    #+BEGIN_SRC emacs-lisp
@@ -192,45 +193,46 @@
    #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
-     (use-package which-key)
-     (which-key-mode)
-     (which-key-add-key-based-replacements
-       "<SPC> b" "Buffer"
-       "<SPC> w" "Window"
-       "<SPC> f" "Files"
-       "<SPC> q" "Quit"
-       "<SPC> f e" "Config Files"
-       "<SPC> f e e" ".emacs"
-       "<SPC> f e s" "sxhkdrc"
-       "<SPC> f e b" "bspwmrc"
-       "<SPC> f e m" "make.conf")
-     (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
+	  (use-package which-key)
+	  (which-key-mode)
+	  (which-key-add-key-based-replacements
+	    "<SPC> b" "Buffer"
+	    "<SPC> w" "Window"
+	    "<SPC> f" "Files"
+	    "<SPC> q" "Quit"
+	    "<SPC> f e" "Config Files"
+	    "<SPC> f e e" ".emacs"
+	    "<SPC> f e s" "sxhkdrc"
+	    "<SPC> f e b" "bspwmrc"
+	    "<SPC> f e m" "make.conf")
+	  (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
+	  (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
 
-     ;; Some other keybinds 
-     ;; Kill-buffer C-x k
-     (general-define-key
-      :states 'normal
-      :prefix "SPC"
-      (kbd "'") 'eshell
-      (kbd "\"") 'term
-;      (kbd "SPC") 'async-shell-command
-      (kbd "f f") 'helm-find-files
-      (kbd "f S") 'sudo-edit
-      (kbd "f d") 'delete-file-and-buffer
-      (kbd "f r") 'rename-file-and-buffer
-      (kbd "f s") 'save-buffer
-      (kbd "f e e") (lambda() (interactive) (find-file "/home/genzix/.emacs.d/settings.org"))
-      (kbd "f e b") (lambda() (interactive) (find-file "/home/genzix/.config/bspwm/bspwmrc"))
-      (kbd "f e s") (lambda() (interactive) (find-file "/home/genzix/.config/sxhkd/sxhkdrc_bspwm"))
-      (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-      (kbd "b b") 'helm-buffers-list
-      (kbd "b N") 'switch-to-prev-buffer
-      (kbd "b n") 'switch-to-next-buffer
-      (kbd "b k") 'kill-this-buffer
-      (kbd "q q") 'save-buffers-kill-emacs 
-      (kbd "q a") 'kill-emacs
-      (kbd "q r") 'restart-emacs)
+	  ;; Some other keybinds 
+	  ;; Kill-buffer C-x k
+	  (general-define-key
+	   :states 'normal
+	   :prefix "SPC"
+	   (kbd "'") 'eshell
+	   (kbd "\"") 'term
+     ;      (kbd "SPC") 'async-shell-command
+	   (kbd "f f") 'helm-find-files
+	   (kbd "f S") 'sudo-edit
+	   (kbd "f d") 'delete-file-and-buffer
+	   (kbd "f r") 'rename-file-and-buffer
+	   (kbd "f s") 'save-buffer
+	   (kbd "f e e") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master") (find-file (concat HOME "/.emacs.d/settings.org")))))
+	   (kbd "f e i") (lambda() (interactive) (magit-pull-from-upstream (concat HOME "/Dotfiles")) (find-file (concat HOME "/.emacs.d/init.el")))
+	   (kbd "f e b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
+	   (kbd "f e s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
+	   (kbd "f e m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
+	   (kbd "b b") 'helm-buffers-list
+	   (kbd "b N") 'switch-to-prev-buffer
+	   (kbd "b n") 'switch-to-next-buffer
+	   (kbd "b k") 'kill-this-buffer
+	   (kbd "q q") 'save-buffers-kill-emacs 
+	   (kbd "q a") 'kill-emacs
+	   (kbd "q r") 'restart-emacs)
    #+END_SRC
 * Programming
 ** Projectile
