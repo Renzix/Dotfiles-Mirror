@@ -193,27 +193,28 @@
    #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
-	  (use-package which-key)
-	  (which-key-mode)
-	  (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-	  (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
-          (evil-ex-define-cmd "bb" 'helm-buffers-list)
-          (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
-          (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
-          (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
-          (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-	  ;; Some other keybinds 
-	  ;; Kill-buffer C-x k
-	  (general-define-key
-	   :states 'normal
-	   :prefix "\\"
-	   (kbd "'") 'eshell
-	   (kbd "\"") 'term
-	   (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org"))))
-	   (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
-	   (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
-	   (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
-	   (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf"))))
+     (use-package which-key)
+     (which-key-mode)
+     (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
+     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
+     (evil-ex-define-cmd "bb" 'helm-buffers-list)
+     (evil-ex-define-cmd "bk" 'kill-buffer)
+     (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
+     (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
+     (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
+     (evil-ex-define-cmd "ps" 'helm-projectile-rg)
+     ;; Some other keybinds 
+     ;; Kill-buffer C-x k
+     (general-define-key
+      :states 'normal
+      :prefix "\\"
+      (kbd "'") 'eshell
+      (kbd "\"") 'term
+      (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
+      (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
+      (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
+      (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
+      (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf"))))
    #+END_SRC
 * Programming
 ** Projectile
@@ -243,6 +244,11 @@
    #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
+
+     (use-package rust-mode)
+     (use-package cargo)
+     (use-package racer)
+     (use-package company-racer)
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
      (add-hook 'rust-mode-hook 'cargo-minor-mode)
