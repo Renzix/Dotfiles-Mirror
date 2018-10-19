@@ -24,8 +24,6 @@ bspc rule -a Google-chrome state=tiled
 bspc rule -a Rudditor state=floating
 
 #Wallpaper
-if [ ! -f "${BSPWMC}/wallpaper.png" ]; then
-	${BSPWMC}/../setwallpaper.sh &
 else
 	feh --bg-max ${BSPWMC}/wallpaper.png &
 fi

@@ -18,6 +18,7 @@
        :defer -1
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
+     (defvar WM t)
    #+END_SRC
 ** Functions
    #+BEGIN_SRC emacs-lisp
@@ -139,6 +140,41 @@
 	 (insert-file-contents filePath)
 	 (buffer-string)))
    #+END_SRC
+** EXWM
+   #+name: EXWM
+   #+BEGIN_SRC emacs-lisp
+     (if WM (progn
+	      (use-package xelb)
+	      (use-package exwm)
+	      (setq exwm-workspace-number 9)
+	      (use-package exwm-randr)
+	      (setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DVI-D-0" 3 "DVI-D-0" 4 "DP-2" 5 "DP-2" 6 "DP-2" 7 "DP-5" 8 "DP-5" 9 "DP-5"))
+	      (add-hook 'exwm-randr-screen-change-hook
+			(lambda() 
+			  (start-process-shell-command
+			   "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-2 --auto")
+			  (start-process-shell-command
+			   "xrandr" nil "xrandr --output DP-2 --left-of DP-5 --auto")))
+	      (exwm-randr-enable)))
+     (setq exwm-input-global-keys
+	   `(([?\s-r] . exwm-reset)
+	     ([?\s-w] . exwm-workspace-switch)
+	     ,@(mapcar (lambda (i)
+			 `(,(kbd (format "s-%d" i)) .
+			   (lambda ()
+			     (interactive)
+			     (exwm-workspace-switch-create ,i))))
+		       (number-sequence 0 9))
+	     ,@(mapcar (lambda (i)
+			 `(,(kbd (format "S-s-%d" i)) .
+			   (lambda ()
+			     (interactive)
+			     (exwm-workspace-move ,i))))
+		       (number-sequence 0 9))))
+     ;;Gets rid of Async displaybuffer
+     (add-to-list 'display-buffer-alist
+		  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+   #+END_SRC
 * Helm
 ** Init
    #+BEGIN_SRC emacs-lisp
@@ -196,7 +232,8 @@
      (use-package which-key)
      (which-key-mode)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-     (evil-define-key 'emacs global-map (kbd "<escape>") 'evil-normal-state) 
+     (evil-define-key 'normal global-map (kbd "SPC") 'async-shell-command)
+     (evil-define-key 'emacs global-map (kbd "ESC") 'evil-normal-state) 
      (evil-ex-define-cmd "bb" 'helm-buffers-list)
      (evil-ex-define-cmd "bk" 'kill-buffer)
      (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
@@ -214,7 +251,8 @@
       (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
       (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
       (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
-      (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf"))))
+      (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
+      (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
    #+END_SRC
 * Programming
 ** Projectile
