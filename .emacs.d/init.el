@@ -32,7 +32,7 @@
  '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
-    (powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))))
+    (elcord exwm-randr powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

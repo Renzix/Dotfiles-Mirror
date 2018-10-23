@@ -18,7 +18,7 @@
        :defer -1
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
-     (defvar WM t)
+     (defvar WM nil)
    #+END_SRC
 ** Functions
    #+BEGIN_SRC emacs-lisp
@@ -74,8 +74,8 @@
 
      (defun buf-move-up ()
        "Swap the current buffer and the buffer above the split.
-     If there is no split, ie now window above the current one, an
-     error is signaled."
+      If there is no split, ie now window above the current one, an
+      error is signaled."
        ;;  "Switches between the current buffer, and the buffer above the
        ;;  split, if possible."
        (interactive)
@@ -91,8 +91,8 @@
 
      (defun buf-move-down ()
        "Swap the current buffer and the buffer under the split.
-     If there is no split, ie now window under the current one, an
-     error is signaled."
+      If there is no split, ie now window under the current one, an
+      error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'down))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -107,8 +107,8 @@
 
      (defun buf-move-left ()
        "Swap the current buffer and the buffer on the left of the split.
-     If there is no split, ie now window on the left of the current
-     one, an error is signaled."
+      If there is no split, ie now window on the left of the current
+      one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'left))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -122,15 +122,15 @@
 
      (defun buf-move-right ()
        "Swap the current buffer and the buffer on the right of the split.
-     If there is no split, ie now window on the right of the current
-     one, an error is signaled."
+      If there is no split, ie now window on the right of the current
+      one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'right))
 	      (buf-this-buf (window-buffer (selected-window))))
+	 (error "No right split")
+	 ;; swap top with this one
 	 (if (null other-win)
-	     (error "No right split")
-	   ;; swap top with this one
-	   (set-window-buffer (selected-window) (window-buffer other-win))
+	     (set-window-buffer (selected-window) (window-buffer other-win))
 	   ;; move this one to top
 	   (set-window-buffer other-win buf-this-buf)
 	   (select-window other-win))))
@@ -139,42 +139,112 @@
        (with-temp-buffer
 	 (insert-file-contents filePath)
 	 (buffer-string)))
+     (defun app-launcher (command)
+       "Launches an application in your PATH.
+      Can show completions at point for COMMAND using helm or ido"
+       (interactive (list (read-shell-command "$ ")))
+       (start-process-shell-command command nil command))
    #+END_SRC
 ** EXWM
    #+name: EXWM
    #+BEGIN_SRC emacs-lisp
-     (if WM (progn
-	      (use-package xelb)
-	      (use-package exwm)
-	      (setq exwm-workspace-number 9)
-	      (use-package exwm-randr)
-	      (setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DVI-D-0" 3 "DVI-D-0" 4 "DP-2" 5 "DP-2" 6 "DP-2" 7 "DP-5" 8 "DP-5" 9 "DP-5"))
-	      (add-hook 'exwm-randr-screen-change-hook
-			(lambda() 
-			  (start-process-shell-command
-			   "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-2 --auto")
-			  (start-process-shell-command
-			   "xrandr" nil "xrandr --output DP-2 --left-of DP-5 --auto")))
-	      (exwm-randr-enable)))
-     (setq exwm-input-global-keys
-	   `(([?\s-r] . exwm-reset)
-	     ([?\s-w] . exwm-workspace-switch)
-	     ,@(mapcar (lambda (i)
-			 `(,(kbd (format "s-%d" i)) .
-			   (lambda ()
-			     (interactive)
-			     (exwm-workspace-switch-create ,i))))
-		       (number-sequence 0 9))
-	     ,@(mapcar (lambda (i)
-			 `(,(kbd (format "S-s-%d" i)) .
-			   (lambda ()
-			     (interactive)
-			     (exwm-workspace-move ,i))))
-		       (number-sequence 0 9))))
+     ;;use https://pastebin.com/ba2WKNFS
+     (if (boundp 'WM) (progn
+			;;setup initial
+			(use-package xelb)
+			(use-package exwm)
+			(exwm-enable)
+			(setq exwm-workspace-number 3)
+			(require 'exwm-randr)
+			(setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DP-3" 3 "DP-4"))
+			(add-hook 'exwm-randr-screen-change-hook
+				  (lambda() 
+				    (start-process-shell-command
+				     "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-3 --auto")
+				    (start-process-shell-command
+				     "xrandr" nil "xrandr --output DP-3 --left-of DP-4 --auto")))
+			(exwm-randr-enable)))
+
+     ;;Useful functions
+     (defun exwm-bind-command (key command &rest bindings)
+       (while key
+	 (exwm-input-set-key (kbd key)
+			     `(lambda ()
+				(interactive)
+				(start-process-shell-command ,command nil ,command)))
+	 (setq key     (pop bindings)
+	       command (pop bindings))))
+
+     (defun exwm-input-line-mode ()
+       "Set exwm window to line-mode and show mode line"
+       (call-interactively #'exwm-input-grab-keyboard)
+       (exwm-layout-show-mode-line))
+
+     (defun exwm-input-char-mode ()
+       "Set exwm window to char-mode and hide mode line"
+       (call-interactively #'exwm-input-release-keyboard)
+       (exwm-layout-hide-mode-line))
+
+     (defun exwm-input-toggle-mode ()
+       "Toggle between line- and char-mode"
+       (with-current-buffer (window-buffer)
+	 (when (eq major-mode 'exwm-mode)
+	   (if (equal (second (second mode-line-process)) "line")
+	       (exwm-input-char-mode)
+	     (exwm-input-line-mode)))))
+
+     (exwm-input-set-key (kbd "s-i")
+			 (lambda () (interactive)
+			   (exwm-input-toggle-mode)))
+     (defvar exwm-app-launcher--prompt "$ "
+       "Prompt for the EXWM application launcher")
+     (defun exwm-application-launcher (command)
+       "Launches an application in your PATH.
+      Can show completions at point for COMMAND using helm or ido"
+       (interactive (list (read-shell-command exwm-app-launcher--prompt)))
+       (start-process-shell-command command nil command))
+     ;;Misc
+     ;; Rename buffer to window title
+     (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
+     (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
+
+     ;;Applications @TODO(renzix): Fix this
+     (exwm-bind-command "<s-return>" "urxvt")
+     (exwm-bind-command "s-i" "firefox")
+     ;;Keybindings
+     ;;Workspace keys
+     (dotimes (i 10)
+       (exwm-input-set-key (kbd (format "s-%d" i))
+			   `(lambda ()
+			      (interactive)
+			      (exwm-workspace-switch-create ,i))))
+
+     (exwm-input-set-key (kbd "s-S-w") 'exwm-workspace-move-window)
+     (exwm-input-set-key (kbd "s-C-w") 'exwm-workspace-swap)
+     (exwm-input-set-key (kbd "s-SPC") #'exwm-application-launcher)
+     (exwm-input-set-key (kbd "s-r") 'exwm-reset)
+     (exwm-input-set-key (kbd "s-w") 'exwm-workspace-switch)
+     (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
+     (exwm-input-set-key (kbd "s-q") 'kill-emacs)
+     (exwm-input-set-key (kbd "s-;") 'helm-M-x)
+     (exwm-input-set-key (kbd "s-:") 'evil-ex)
+     (exwm-input-set-key (kbd "s-b") #'helm-mini)
+     ;; Focusing windows
+     (exwm-input-set-key (kbd "s-h") #'evil-window-left)
+     (exwm-input-set-key (kbd "s-j") #'evil-window-down)
+     (exwm-input-set-key (kbd "s-k") #'evil-window-up)
+     (exwm-input-set-key (kbd "s-l") #'evil-window-right)
+     ;; Moving Windows
+     (exwm-input-set-key (kbd "s-H") #'evil-window-move-far-left)
+     (exwm-input-set-key (kbd "s-J") #'evil-window-move-very-bottom)
+     (exwm-input-set-key (kbd "s-K") #'evil-window-move-very-top)
+     (exwm-input-set-key (kbd "s-L") #'evil-window-move-far-right)
+     ;;(kbd "s-k") (lambda () (interactive) (exwm-input-toggle-keyboard))
      ;;Gets rid of Async displaybuffer
      (add-to-list 'display-buffer-alist
 		  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
    #+END_SRC
+
 * Helm
 ** Init
    #+BEGIN_SRC emacs-lisp
@@ -232,7 +302,7 @@
      (use-package which-key)
      (which-key-mode)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
-     (evil-define-key 'normal global-map (kbd "SPC") 'async-shell-command)
+     (evil-define-key 'normal global-map (kbd "SPC") 'app-launcher)
      (evil-define-key 'emacs global-map (kbd "ESC") 'evil-normal-state) 
      (evil-ex-define-cmd "bb" 'helm-buffers-list)
      (evil-ex-define-cmd "bk" 'kill-buffer)
@@ -240,6 +310,7 @@
      (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
+     (evil-ex-define-cmd "ee" 'helm-find-files)
      ;; Some other keybinds 
      ;; Kill-buffer C-x k
      (general-define-key
@@ -355,7 +426,7 @@
 
      (defmacro erc-connect (command server port nick ssl pass)
        "Create interactive command `command', for connecting to an IRC server. The
-     command uses interactive mode if passed an argument."
+      command uses interactive mode if passed an argument."
        (fset command
 	     `(lambda (arg)
 		(interactive "p")
@@ -381,6 +452,11 @@
      (setq default-major-mode 'text-mode)
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
+   #+END_SRC
+** Discord
+   #+BEGIN_SRC emacs-lisp
+     (use-package elcord)
+     (setq elcord-mode t)
    #+END_SRC
 * Post Config
 ** Backups
