@@ -154,15 +154,15 @@
 			(use-package xelb)
 			(use-package exwm)
 			(exwm-enable)
-			(setq exwm-workspace-number 3)
+			(setq exwm-workspace-number 4)
 			(require 'exwm-randr)
-			(setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DP-3" 3 "DP-4"))
+			(setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DP-4" 3 "DP-3"))
 			(add-hook 'exwm-randr-screen-change-hook
 				  (lambda() 
 				    (start-process-shell-command
-				     "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-3 --auto")
+				     "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-4 --auto")
 				    (start-process-shell-command
-				     "xrandr" nil "xrandr --output DP-3 --left-of DP-4 --auto")))
+				     "xrandr" nil "xrandr --output DP-3 --right-of DP-4 --auto")))
 			(exwm-randr-enable)))
 
      ;;Useful functions
@@ -435,7 +435,7 @@
 		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
 		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
      (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
-     (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat gnus-home-directory ".config/twitch-oauth")))
+     (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
      (general-define-key
       :states '(normal)
       :keymaps 'erc-mode-map
@@ -455,6 +455,7 @@
    #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
+     ;; For Rich presence
      (use-package elcord)
      (setq elcord-mode t)
    #+END_SRC
