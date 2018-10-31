@@ -499,4 +499,5 @@
 	     (setq my:theme-window-loaded t)
 	   (setq my:theme-terminal-loaded t))))
      (setq org-src-tab-acts-natively t)
+     (toggle-frame-maximized)
    #+END_SRC
