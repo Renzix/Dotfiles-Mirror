@@ -1,0 +1,77 @@
+ls
+exit
+exit
+ls
+brew search gitkracken
+brew search gitkracken
+brew
+ls
+mkdir Computer
+ls
+cd Computer/
+ls
+mkdir python
+mv ../Downloads/test.py python/
+cd python/
+ls
+chmod +x test.py 
+ls
+./test.py 
+which python3
+which python
+em test.py 
+ls
+cd Computer/
+ls
+cd python/
+ls
+./test.py 
+ls
+em test.py 
+./test.py 
+./test.py 
+ls
+./test.py 
+python --version
+brew cask install python3
+./test.py 
+ls
+cd Documents/
+ls
+ls
+mkdir phil
+ls
+cd phil/
+ls
+em notes1.org
+ls
+ls
+cd Documents/
+ls
+mkdir antro
+cd antro/
+ls
+em notes1.org
+cd Documents/
+ls
+cd antro/
+em notes1.org 
+(current-active-maps)
+ls
+cd ..
+ls
+mv antro/ anthro
+ls
+cd anthro/
+ls
+ls
+cd an
+ls
+em notes1.org 
+ls
+cd Downloads/
+cd ../Dotfiles/
+ls
+cd .emacs.d/
+ls
+em settings.org 

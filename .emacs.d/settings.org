@@ -311,7 +311,8 @@
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
      (evil-ex-define-cmd "ee" 'helm-find-files)
-     ;; Some other keybinds 
+     (evil-ex-define-cmd "q" 'kill-this-buffer)
+     (evil-ex-define-cmd "qe" 'evil-quit)
      ;; Kill-buffer C-x k
      (general-define-key
       :states 'normal
