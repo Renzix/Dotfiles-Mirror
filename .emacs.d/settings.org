@@ -307,10 +307,13 @@
      (evil-ex-define-cmd "bb" 'helm-buffers-list)
      (evil-ex-define-cmd "bk" 'kill-buffer)
      (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
+     (evil-ex-define-cmd "pc" 'projectile-compile-project)
+     (evil-ex-define-cmd "pt" 'projectile-test-project)
      (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-     (evil-ex-define-cmd "ee" 'helm-find-files)
+     (evil-ex-define-cmd "em" 'helm-find-files)
+     (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
      ;; Some other keybinds 
      ;; Kill-buffer C-x k
      (general-define-key
@@ -329,6 +332,11 @@
 ** Projectile
    #+BEGIN_SRC emacs-lisp
      (use-package helm-projectile)
+     (projectile-mode +1)
+     (general-define-key
+      :states '(normal)
+      :prefix "\\"
+      (kbd "\\") 'projectile-command-map)
    #+END_SRC
 ** Magit
    #+BEGIN_SRC emacs-lisp
@@ -353,7 +361,6 @@
    #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
-
      (use-package rust-mode)
      (use-package cargo)
      (use-package racer)
@@ -415,6 +422,25 @@
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
        :config (autopair-global-mode t))
+     (use-package comment-tags)
+     (autoload 'comment-tags-mode "comment-tags-mode")
+     (setq comment-tags-keymap-prefix (kbd "C-c t"))
+     (with-eval-after-load "comment-tags"
+       (setq comment-tags-keyword-faces
+	     `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
+	       ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
+	       ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
+	       ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
+	       ("KLUDGE" . ,(list :weight 'bold :foreground "#E8B71A"))
+	       ("XXX" . ,(list :weight 'bold :foreground "#F7EAC8"))
+	       ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
+	       ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
+       (setq comment-tags-comment-start-only t
+	     comment-tags-require-colon t
+	     comment-tags-case-sensitive t
+	     comment-tags-show-faces t
+	     comment-tags-lighter nil))
+     (add-hook 'prog-mode-hook 'comment-tags-mode)
    #+END_SRC
 * Normal Tasks
 ** ERC
