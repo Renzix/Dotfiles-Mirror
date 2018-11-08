@@ -310,9 +310,12 @@
      (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-     (evil-ex-define-cmd "ee" 'helm-find-files)
-     (evil-ex-define-cmd "q" 'kill-this-buffer)
-     (evil-ex-define-cmd "qe" 'evil-quit)
+     (evil-ex-define-cmd "e" 'helm-find-files)
+     (evil-ex-define-cmd "ee" 'evil-edit)
+     (evil-ex-define-cmd "q" 'kill-buffer-and-window)
+     (evil-ex-define-cmd "qb" 'kill-this-buffer)
+     (evil-ex-define-cmd "qe" 'kill-emacs)
+     (evil-ex-define-cmd "qw" 'evil-window-delete)
      ;; Kill-buffer C-x k
      (general-define-key
       :states 'normal
