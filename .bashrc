@@ -18,6 +18,7 @@ fi
 
 ## Aliases
 #LS
+alias ls="exa"
 alias l="ls"
 alias la="ls -a"
 alias ll="ls -lh"
