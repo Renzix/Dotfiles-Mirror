@@ -263,21 +263,6 @@
      (use-package evil
        :config (evil-mode t))
    #+END_SRC
-** Changing states
-   #+BEGIN_SRC emacs-lisp
-					     ; redefine emacs state to intercept the escape key like insert-state does:
-     (evil-define-state emacs
-       "Emacs state that can be exited with the escape key."
-       :tag " <EE> "
-       :message "-- EMACS WITH ESCAPE --"
-       :input-method t
-       ;; :intercept-esc nil)
-       )
-
-     (defadvice evil-insert-state (around emacs-state-instead-of-insert-state activate)
-       (evil-emacs-state))
-
-   #+END_SRC
 ** Linum Relative
    #+BEGIN_SRC emacs-lisp
      (use-package linum-relative)
@@ -297,13 +282,33 @@
 				       ))))
      (advice-add #'linum-update-window :after #'linum-update-window-scale-fix)
    #+END_SRC
+** Evil-Window-State
+   #+BEGIN_SRC emacs-lisp
+     ;; First define window-mode-map
+     (evil-define-state buffer
+       "Buffer state. Moves and opens windows"
+       :tag " <B> "
+       :message " -- BUFFER -- "
+       :exit-hook (evil-buffer-stop-hook))
+     (defun buffer-mode ()
+       (interactive)
+       ;; Put into window-mode-map
+       (evil-window-map)
+     )
+
+     (defun evil-buffer-stop-hook ()
+       ;; Exit window-mode-map
+       (evil-window-map)
+       )
+   #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
      (use-package which-key)
      (which-key-mode)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
      (evil-define-key 'normal global-map (kbd "SPC") 'app-launcher)
-     (evil-define-key 'emacs global-map (kbd "ESC") 'evil-normal-state) 
+     (evil-define-key 'buffer global-map (kbd "ESC") 'normal-mode)
+     (evil-define-key 'normal global-map (kbd "\\") 'buffer-mode)
      (evil-ex-define-cmd "bb" 'helm-buffers-list)
      (evil-ex-define-cmd "bk" 'kill-buffer)
      (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
@@ -312,28 +317,22 @@
      (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-<<<<<<< HEAD
-<<<<<<< HEAD
      (evil-ex-define-cmd "em" 'helm-find-files)
      (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
      ;; Some other keybinds 
-=======
      (evil-ex-define-cmd "ee" 'helm-find-files)
      (evil-ex-define-cmd "q" 'kill-this-buffer)
      (evil-ex-define-cmd "qe" 'evil-quit)
->>>>>>> 894a35e050cad29e53cab322db9cf9fc1c7a8ffd
-=======
      (evil-ex-define-cmd "e" 'helm-find-files)
      (evil-ex-define-cmd "ee" 'evil-edit)
      (evil-ex-define-cmd "q" 'kill-buffer-and-window)
      (evil-ex-define-cmd "qb" 'kill-this-buffer)
      (evil-ex-define-cmd "qe" 'kill-emacs)
      (evil-ex-define-cmd "qw" 'evil-window-delete)
->>>>>>> 43d1b4cf5423d4d71108bd4225a2b8319f3ff65b
      ;; Kill-buffer C-x k
      (general-define-key
       :states 'normal
-      :prefix "\\"
+      :prefix "|"
       (kbd "'") 'eshell
       (kbd "\"") 'term
       (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
@@ -350,7 +349,7 @@
      (projectile-mode +1)
      (general-define-key
       :states '(normal)
-      :prefix "\\"
+      :prefix "|"
       (kbd "\\") 'projectile-command-map)
    #+END_SRC
 ** Magit
