@@ -294,7 +294,7 @@
        (interactive)
        ;; Put into window-mode-map
        (evil-window-map)
-     )
+       )
 
      (defun evil-buffer-stop-hook ()
        ;; Exit window-mode-map
@@ -317,10 +317,8 @@
      (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
      (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
      (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-     (evil-ex-define-cmd "em" 'helm-find-files)
      (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
      ;; Some other keybinds 
-     (evil-ex-define-cmd "ee" 'helm-find-files)
      (evil-ex-define-cmd "q" 'kill-this-buffer)
      (evil-ex-define-cmd "qe" 'evil-quit)
      (evil-ex-define-cmd "e" 'helm-find-files)
@@ -330,6 +328,7 @@
      (evil-ex-define-cmd "qe" 'kill-emacs)
      (evil-ex-define-cmd "qw" 'evil-window-delete)
      ;; Kill-buffer C-x k
+     ;; WINDOW MODE BINDINGS
      (general-define-key
       :states 'normal
       :prefix "|"
@@ -341,6 +340,10 @@
       (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
       (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
       (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
+     ;; INSERT MODE BINDINGS
+     (general-define-key
+      :states 'normal
+      (kbd "C-b") 'helm-find-files)
    #+END_SRC
 * Programming
 ** Projectile
