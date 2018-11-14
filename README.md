@@ -10,7 +10,7 @@ write a really good vimrc that does NOT depend on a plugin manager as
 i use emacs for stuff that does.
 
 ```bash
-# echo "Hello World"
+\# echo "Hello World"
 ```
 
 ```
