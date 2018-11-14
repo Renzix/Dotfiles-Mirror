@@ -1,3 +1,4 @@
+//@TODO(renzix): Clean up  litterally everything
 * Display
 ** Themes
    #+BEGIN_SRC emacs-lisp
@@ -19,6 +20,7 @@
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
      (defvar WM nil)
+     (setq warning-minimum-level :emergency)
    #+END_SRC
 ** Functions
    #+BEGIN_SRC emacs-lisp
@@ -501,6 +503,22 @@
      ;; For Rich presence
      (use-package elcord)
      (setq elcord-mode t)
+   #+END_SRC
+** Org
+   #+BEGIN_SRC emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((org . t)
+	(latex . t)
+	(emacs-lisp . t)
+	(sql . t)))
+     (general-define-key
+      :states '(normal)
+      :keymaps 'org-mode-map
+      :prefix ","
+      (kbd ",") 'org-export-dispatch
+      (kbd "t") 'org-time-stamp)
+
    #+END_SRC
 * Post Config
 ** Backups

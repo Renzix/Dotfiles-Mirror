@@ -8,3 +8,11 @@ a nice conky and change my tint2 to another bar like lemonbar or
 polybar(although i hate trying to find good fonts). Also possibly
 write a really good vimrc that does NOT depend on a plugin manager as
 i use emacs for stuff that does.
+
+```bash
+# echo "Hello World"
+```
+
+```
+echo "hello world"
+```
