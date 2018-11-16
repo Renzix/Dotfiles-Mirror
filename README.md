@@ -9,10 +9,3 @@ polybar(although i hate trying to find good fonts). Also possibly
 write a really good vimrc that does NOT depend on a plugin manager as
 i use emacs for stuff that does.
 
-```bash
-\# emerge -a hello
-```
-
-```
-echo "hello world"
-```
