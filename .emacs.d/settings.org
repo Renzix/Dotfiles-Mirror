@@ -1,4 +1,5 @@
-//@TODO(renzix): Clean up  litterally everything
+//@TODO(renzix): Clean up  litterally everything and actually make
+this good
 * Display
 ** Themes
    #+BEGIN_SRC emacs-lisp
