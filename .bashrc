@@ -18,10 +18,10 @@ fi
 
 ## Aliases
 #LS
+alias l="ls --color=auto"
 alias ls="exa"
-alias l="ls"
-alias la="ls -a"
-alias ll="ls -lh"
+alias la="exa -a"
+alias ll='exa -lhANF --si --color --hyperlink --group-directories-first --time-style="+[%d/%m/%Y %I:%M:%S %p %Z]"'
 
 #Wine
 alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
@@ -49,11 +49,5 @@ alias dd="dd status=progress $@"
 ## Environment vars
 export BSPC=".config/bspwm/bspwmrc"
 export SXHKD=".config/sxhkd/sxhkdrc"
-
-## Other Stuff
-# For pywal :ree:
-(cat ~/.cache/wal/sequences &)
-# For tty pywal :ree:
-source ~/.cache/wal/colors-tty.sh
 
 neofetch

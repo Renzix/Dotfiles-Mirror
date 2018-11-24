@@ -148,106 +148,6 @@ this good
        (interactive (list (read-shell-command "$ ")))
        (start-process-shell-command command nil command))
    #+END_SRC
-** EXWM
-   #+name: EXWM
-   #+BEGIN_SRC emacs-lisp
-     ;;use https://pastebin.com/ba2WKNFS
-     (if (boundp 'WM) (progn
-			;;setup initial
-			(use-package xelb)
-			(use-package exwm)
-			(exwm-enable)
-			(setq exwm-workspace-number 4)
-			(require 'exwm-randr)
-			(setq exwm-randr-workspace-output-plist '(1 "DVI-D-0" 2 "DP-4" 3 "DP-3"))
-			(add-hook 'exwm-randr-screen-change-hook
-				  (lambda() 
-				    (start-process-shell-command
-				     "xrandr" nil "xrandr --output DVI-D-0 --left-of DP-4 --auto")
-				    (start-process-shell-command
-				     "xrandr" nil "xrandr --output DP-3 --right-of DP-4 --auto")))
-			(exwm-randr-enable)))
-
-     ;;Useful functions
-     (defun exwm-bind-command (key command &rest bindings)
-       (while key
-	 (exwm-input-set-key (kbd key)
-			     `(lambda ()
-				(interactive)
-				(start-process-shell-command ,command nil ,command)))
-	 (setq key     (pop bindings)
-	       command (pop bindings))))
-
-     (defun exwm-input-line-mode ()
-       "Set exwm window to line-mode and show mode line"
-       (call-interactively #'exwm-input-grab-keyboard)
-       (exwm-layout-show-mode-line))
-
-     (defun exwm-input-char-mode ()
-       "Set exwm window to char-mode and hide mode line"
-       (call-interactively #'exwm-input-release-keyboard)
-       (exwm-layout-hide-mode-line))
-
-     (defun exwm-input-toggle-mode ()
-       "Toggle between line- and char-mode"
-       (with-current-buffer (window-buffer)
-	 (when (eq major-mode 'exwm-mode)
-	   (if (equal (second (second mode-line-process)) "line")
-	       (exwm-input-char-mode)
-	     (exwm-input-line-mode)))))
-
-     (exwm-input-set-key (kbd "s-i")
-			 (lambda () (interactive)
-			   (exwm-input-toggle-mode)))
-     (defvar exwm-app-launcher--prompt "$ "
-       "Prompt for the EXWM application launcher")
-     (defun exwm-application-launcher (command)
-       "Launches an application in your PATH.
-      Can show completions at point for COMMAND using helm or ido"
-       (interactive (list (read-shell-command exwm-app-launcher--prompt)))
-       (start-process-shell-command command nil command))
-     ;;Misc
-     ;; Rename buffer to window title
-     (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
-     (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
-
-     ;;Applications @TODO(renzix): Fix this
-     (exwm-bind-command "<s-return>" "urxvt")
-     (exwm-bind-command "s-i" "firefox")
-     ;;Keybindings
-     ;;Workspace keys
-     (dotimes (i 10)
-       (exwm-input-set-key (kbd (format "s-%d" i))
-			   `(lambda ()
-			      (interactive)
-			      (exwm-workspace-switch-create ,i))))
-
-     (exwm-input-set-key (kbd "s-S-w") 'exwm-workspace-move-window)
-     (exwm-input-set-key (kbd "s-C-w") 'exwm-workspace-swap)
-     (exwm-input-set-key (kbd "s-SPC") #'exwm-application-launcher)
-     (exwm-input-set-key (kbd "s-r") 'exwm-reset)
-     (exwm-input-set-key (kbd "s-w") 'exwm-workspace-switch)
-     (exwm-input-set-key (kbd "s-f") #'exwm-layout-toggle-fullscreen)
-     (exwm-input-set-key (kbd "s-q") 'kill-emacs)
-     (exwm-input-set-key (kbd "s-;") 'helm-M-x)
-     (exwm-input-set-key (kbd "s-:") 'evil-ex)
-     (exwm-input-set-key (kbd "s-b") #'helm-mini)
-     ;; Focusing windows
-     (exwm-input-set-key (kbd "s-h") #'evil-window-left)
-     (exwm-input-set-key (kbd "s-j") #'evil-window-down)
-     (exwm-input-set-key (kbd "s-k") #'evil-window-up)
-     (exwm-input-set-key (kbd "s-l") #'evil-window-right)
-     ;; Moving Windows
-     (exwm-input-set-key (kbd "s-H") #'evil-window-move-far-left)
-     (exwm-input-set-key (kbd "s-J") #'evil-window-move-very-bottom)
-     (exwm-input-set-key (kbd "s-K") #'evil-window-move-very-top)
-     (exwm-input-set-key (kbd "s-L") #'evil-window-move-far-right)
-     ;;(kbd "s-k") (lambda () (interactive) (exwm-input-toggle-keyboard))
-     ;;Gets rid of Async displaybuffer
-     (add-to-list 'display-buffer-alist
-		  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
-   #+END_SRC
-
 * Helm
 ** Init
    #+BEGIN_SRC emacs-lisp
@@ -521,6 +421,10 @@ this good
       (kbd "t") 'org-time-stamp)
 
    #+END_SRC
+** KDE Connect
+#+BEGIN_SRC emacs-lisp
+(use-package kdeconnect)
+#+END_SRC
 * Post Config
 ** Backups
    #+BEGIN_SRC emacs-lisp
