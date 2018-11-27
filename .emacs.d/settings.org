@@ -1,5 +1,3 @@
-//@TODO(renzix): Clean up  litterally everything and actually make
-this good
 * Display
   Makes emacs look good by theme and gets rid of toolbar stuff
 ** Themes
@@ -193,7 +191,7 @@ this good
 				       ))))
      (advice-add #'linum-update-window :after #'linum-update-window-scale-fix)
    #+END_SRC
-** Evil-Window-State
+** Evil-Buffer-State
    Attempt at making a new emacs state which i need to finish
    @TODO(renzix): Make this work
    #+BEGIN_SRC emacs-lisp
@@ -204,24 +202,34 @@ this good
        :message "-- BUFFER --"
        :entry-hook (evil-buffer-start-hook)
        :exit-hook (evil-buffer-stop-hook)
-(evil-define-key 'buffer global-map (kbd "q") 'delete-window
+       (evil-define-key 'buffer global-map 
+	 (kbd "q") 'delete-window
+	 (kbd "Q") 'kill-emacs
 	 (kbd "h") 'evil-window-left
 	 (kbd "j") 'evil-window-down
 	 (kbd "k") 'evil-window-up
 	 (kbd "l") 'evil-window-right
 	 (kbd "b") 'helm-buffers-list
-	 (kbd "p") 'helm-projectile-switch-project
 	 (kbd "d") 'delete-file-and-buffer
-	 (kbd "e") 'helm-find-files)
-         (kbd "H") 'evil-window-move-far-left
-         (kbd "L") 'evil-window-move-far-right
-         (kbd "J") 'evil-window-move-very-bottom
-         (kbd "K") 'evil-window-move-very-top)
+	 (kbd "e") 'helm-find-files
+	 (kbd "H") 'evil-window-move-far-left
+	 (kbd "L") 'evil-window-move-far-right
+	 (kbd "J") 'evil-window-move-very-bottom
+	 (kbd "K") 'evil-window-move-very-top
+	 (kbd "v") 'evil-window-vsplit
+	 (kbd "s") 'evil-window-split
+	 (kbd "-") 'evil-window-decrease-height
+	 (kbd "=") 'evil-window-increase-height
+	 (kbd "_") 'evil-window-decrease-width
+	 (kbd "+") 'evil-window-increase-width
+	 (kbd "'") 'eshell
+	 (kbd "\"") 'term
+	 (kbd "p") 'projectile-command-map))
 
      (defun evil-buffer-start-hook ()
        ;; Put into window-mode-map
        (message "Entering buffer mode"))
-       
+
      (defun evil-buffer-stop-hook ()
        ;; Exit window-mode-map
        (message "Exiting buffer mode"))
@@ -232,8 +240,10 @@ this good
      (use-package which-key)
      (which-key-mode)
      (evil-define-key 'normal global-map (kbd ";") 'helm-M-x)
+     (evil-define-key 'buffer global-map (kbd ";") 'helm-M-x)
      (evil-define-key 'normal global-map (kbd "SPC") 'app-launcher)
      (evil-define-key 'buffer global-map (kbd "ESC") 'normal-mode)
+     (evil-define-key 'buffer global-map (kbd ":") 'evil-command-window-mode)
      (evil-define-key 'normal global-map (kbd "\\") 'evil-buffer-state)
      (evil-ex-define-cmd "bb" 'helm-buffers-list)
      (evil-ex-define-cmd "bk" 'kill-buffer)
@@ -256,10 +266,8 @@ this good
      ;; Kill-buffer C-x k
      ;; WINDOW MODE BINDINGS
      (general-define-key
-      :states 'normal
+      :states '(normal buffer)
       :prefix "|"
-      (kbd "'") 'eshell
-      (kbd "\"") 'term
       (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
       (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
       (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
@@ -275,17 +283,14 @@ this good
 ** Projectile
    #+BEGIN_SRC emacs-lisp
      (use-package helm-projectile)
-     (projectile-mode +1)
-     (general-define-key
-      :states '(normal)
-      :prefix "|"
-      (kbd "\\") 'projectile-command-map)
+     (projectile-mode t)
    #+END_SRC
 ** Magit
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
    #+END_SRC
 ** Company
+   @TODO(renzix): Fix this
    #+BEGIN_SRC emacs-lisp
      (use-package company
        :ensure t
@@ -314,7 +319,7 @@ this good
      (setq rust-format-on-save t)
 
      (general-define-key
-      :states '(normal)
+      :states '(normal buffer)
       :keymaps 'rust-mode-map
       :prefix "," 
       (kbd "f") 'cargo-process-fmt
@@ -333,7 +338,7 @@ this good
      (add-hook 'python-mode-hook 'anaconda-mode)
      (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
      (general-define-key
-      :states '(normal)
+      :states '(normal buffer)
       :keymaps 'python-mode-map
       :prefix "," 
       (kbd "d") 'python-eldoc-get-doc
@@ -356,12 +361,14 @@ this good
 	   'irony-completion-at-point-async))
        (add-hook 'irony-mode-hook 'my-irony-mode-hook)
        (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-     (general-define-key ;;C/CPP keys
-      :states '(normal)
-      :keymaps 'irony-mode-map
-      :prefix ",")
+     ;;(general-define-key ;;C/CPP keys
+     ;; :states '(normal buffer)
+     ;; :keymaps 'irony-mode-map
+     ;; :prefix ",")
    #+END_SRC
 ** Misc Programming
+   @TODO(renzix): Make comments work idk why im writing this cuz im
+   gonna delete this once i fix it anyway
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
        :config (autopair-global-mode t))
@@ -387,6 +394,7 @@ this good
    #+END_SRC
 * Normal Tasks
 ** ERC
+   @TODO(renzix): Possibly change from ERC to something newer/better
    #+BEGIN_SRC emacs-lisp
      (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
      (setq erc-kill-buffer-on-part t)
@@ -406,7 +414,7 @@ this good
      (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
      (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
      (general-define-key
-      :states '(normal)
+      :states '(normal buffer)
       :keymaps 'erc-mode-map
       :prefix ","
       (kbd "b") 'erc-switch-to-buffer
@@ -417,12 +425,14 @@ this good
    #+END_SRC
 
 ** Text
+   @TODO(renzix): Add spellcheck and autocorrect???
    #+BEGIN_SRC emacs-lisp
      (setq default-major-mode 'text-mode)
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
 ** Discord
+   @TODO(renzix): make this work possibly?
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
@@ -437,7 +447,7 @@ this good
 	(emacs-lisp . t)
 	(sql . t)))
      (general-define-key
-      :states '(normal)
+      :states '(normal buffer)
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
@@ -462,7 +472,7 @@ this good
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
      (setq initial-buffer-choice 'eshell)
-					     ; Theme stuff for emacs --daemon idk why it works 
+     ;; Theme stuff for emacs --daemon idk why it works  @TODO(renzix): Make this work
      (defvar my:theme 'apropospriate-dark)
      (defvar my:theme-window-loaded nil)
      (defvar my:theme-terminal-loaded nil)
@@ -488,5 +498,4 @@ this good
 	     (setq my:theme-window-loaded t)
 	   (setq my:theme-terminal-loaded t))))
      (setq org-src-tab-acts-natively t)
-     (toggle-frame-maximized)
    #+END_SRC
