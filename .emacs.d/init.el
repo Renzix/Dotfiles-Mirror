@@ -4,11 +4,11 @@
 (require 'package)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(package-initialize)
-(setq package-enable-at-startup nil)
-(let ((elapsed (float-time (time-subtract (current-time)
-					  emacs-start-time))))
-  (message "Loaded packages in %.3fs" elapsed))
+;;(package-initialize)
+;;(setq package-enable-at-startup nil)
+;;(let ((elapsed (float-time (time-subtract (current-time)
+;;					  emacs-start-time))))
+;;  (message "Loaded packages in %.3fs" elapsed))
 
 (require 'use-package)
 ;; Load use-package, used for loading packages
