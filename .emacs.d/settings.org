@@ -176,95 +176,75 @@
 ** Init
    #+BEGIN_SRC emacs-lisp
      (use-package evil
-       :config (evil-mode t))
+       :config 
+       (evil-mode t)
+       (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more useful
+       )
    #+END_SRC
-** Evil-Movement-State
-   Attempt at making a new emacs state which i need to finish
-   @TODO(renzix): Make this work
-   #+BEGIN_SRC emacs-lisp :exports none
-     ;; First define window-mode-map
-     (evil-define-state movement
-       "Movement state. Moves and opens windows"
-       :tag " <MV> "
-       :message "-- MOVEMENT --"
-       :input-method t
-       :entry-hook (evil-movement-start-hook)
-       :exit-hook (evil-movement-stop-hook)
-        (evil-define-key 'movement global-map 
-          (kbd "q") 'delete-window
-          (kbd "Q") 'kill-emacs
-          (kbd "h") 'evil-window-left
-          (kbd "j") 'evil-window-down
-          (kbd "k") 'evil-window-up
-          (kbd "l") 'evil-window-right
-          (kbd "b") 'helm-buffers-list
-          (kbd "d") 'delete-file-and-buffer
-          (kbd "e") 'helm-find-files
-          (kbd "H") 'evil-window-move-far-left
-          (kbd "L") 'evil-window-move-far-right
-          (kbd "J") 'evil-window-move-very-bottom
-          (kbd "K") 'evil-window-move-very-top
-          (kbd "v") 'evil-window-vsplit
-          (kbd "s") 'evil-window-split
-          (kbd "-") 'evil-window-decrease-height
-          (kbd "=") 'evil-window-increase-height
-          (kbd "_") 'evil-window-decrease-width
-          (kbd "+") 'evil-window-increase-width
-          (kbd "'") 'eshell
-          (kbd "\"") 'term
-          (kbd "p") 'projectile-command-map))
-
-      (defun evil-movement-start-hook ()
-       ;; Put into window-mode-map
-       (message "Entering movement mode"))
-
-     (defun evil-movement-stop-hook ()
-       ;; Exit window-mode-map
-       (message "Exiting movement mode"))
-   #+END_SRC
-** Keybindings
-   Keybindings for evil
+** Motion-State
+   I originally made a new state called Movement state but then
+   relized i can just use Motion state as it has no keybinds anyway
+   and inherits most of normal state
    #+BEGIN_SRC emacs-lisp
-     (use-package which-key)
-     (which-key-mode)
-     (evil-define-key '(normal movement) global-map (kbd ";") 'helm-M-x)
-     (evil-define-key '(normal movement) global-map (kbd "SPC") 'app-launcher)
-     (evil-define-key 'movement global-map (kbd "ESC") 'normal-mode)
-     (evil-define-key 'movement global-map (kbd ":") 'evil-command-window-mode)
-     (evil-define-key 'normal global-map (kbd "\\") 'evil-movement-state)
-     (evil-ex-define-cmd "bb" 'helm-buffers-list)
-     (evil-ex-define-cmd "bk" 'kill-buffer)
-     (evil-ex-define-cmd "pp" 'helm-projectile-switch-project)
-     (evil-ex-define-cmd "pc" 'projectile-compile-project)
-     (evil-ex-define-cmd "pt" 'projectile-test-project)
-     (evil-ex-define-cmd "pf" 'helm-projectile-find-file)
-     (evil-ex-define-cmd "pb" 'helm-projectile-switch-to-buffer)
-     (evil-ex-define-cmd "ps" 'helm-projectile-rg)
-     (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
-     ;; Some other keybinds 
-     (evil-ex-define-cmd "q" 'kill-this-buffer)
-     (evil-ex-define-cmd "qe" 'evil-quit)
-     (evil-ex-define-cmd "e" 'helm-find-files)
-     (evil-ex-define-cmd "ee" 'evil-edit)
-     (evil-ex-define-cmd "q" 'kill-buffer-and-window)
-     (evil-ex-define-cmd "qb" 'kill-this-buffer)
-     (evil-ex-define-cmd "qe" 'kill-emacs)
-     (evil-ex-define-cmd "qw" 'evil-window-delete)
-     ;; Kill-buffer C-x k
-     ;; WINDOW MODE BINDINGS
+     (defvar my-evil-prev-state nil "Previous buffer state for motion state on everything")
+     (add-hook 'evil-motion-entry-hook 
+	       '(lambda ()
+		  (setq prev-buffer-state "reee")))
+     (evil-define-key '(normal insert) global-map (kbd "`") 'evil-motion-state) ;
+     (evil-define-key '(normal insert) global-map (kbd "~") 'evil-motion-state) ;; Make this for a single command uwu
+     (evil-define-key 'motion global-map 
+       (kbd "ESC") 'evil-change-to-previous-state
+       (kbd "`") (lambda () (interactive) (insert 96)) ;; insert `
+       (kbd "~") (lambda () (interactive) (insert 126)) ;; insert ~
+       (kbd "q") 'delete-window
+       (kbd "Q") 'kill-emacs
+       (kbd "h") 'evil-window-left
+       (kbd "j") 'evil-window-down
+       (kbd "k") 'evil-window-up
+       (kbd "l") 'evil-window-right
+       (kbd "b") 'helm-buffers-list
+       (kbd "d") 'delete-file-and-buffer
+       (kbd "e") 'helm-find-files
+       (kbd "H") 'evil-window-move-far-left
+       (kbd "L") 'evil-window-move-far-right
+       (kbd "J") 'evil-window-move-very-bottom
+       (kbd "K") 'evil-window-move-very-top
+       (kbd "v") 'evil-window-vsplit
+       (kbd "s") 'evil-window-split
+       (kbd "-") 'evil-window-decrease-height
+       (kbd "=") 'evil-window-increase-height
+       (kbd "_") 'evil-window-decrease-width
+       (kbd "+") 'evil-window-increase-width
+       (kbd "'") 'eshell
+       (kbd "\"") 'term
+       (kbd "p") 'projectile-command-map)
+
      (general-define-key
-      :states '(normal movement)
-      :prefix "|"
+      :states '(motion)
+      :prefix "]" ;;@TODO(renzix): Find a better prefix???
       (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
       (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
       (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
       (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
       (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
       (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
-     ;; INSERT MODE BINDINGS
-     (general-define-key
-      :states 'normal
-      (kbd "C-b") 'helm-find-files)
+
+   #+END_SRC
+** Insert-State
+   For super simple editing of files without effort
+   #+BEGIN_SRC emacs-lisp
+;;     (general-define-key
+;;      :states 'insert
+;;      (kbd "C-n") 'previous-buffer)
+   #+END_SRC
+** Keybindings
+   Keybindings for evil
+   #+BEGIN_SRC emacs-lisp
+     (use-package which-key)
+     (which-key-mode)
+     (evil-define-key '(normal motion) global-map (kbd ";") 'helm-M-x)
+     (evil-define-key '(normal motion) global-map (kbd "SPC") 'app-launcher)
+     (evil-define-key '(normal motion) global-map (kbd "gc") 'comment-line)
    #+END_SRC
 * Programming
 ** Projectile
@@ -322,8 +302,11 @@
    #+END_SRC
 ** Python
    #+BEGIN_SRC emacs-lisp
-     (add-hook 'python-mode-hook 'anaconda-mode)
-     (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+     (use-package anaconda-mode
+       :config 
+       (add-hook 'python-mode-hook 'anaconda-mode)
+       (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+     (use-package company-anaconda)
      (general-define-key
       :states '(normal)
       :keymaps 'python-mode-map
@@ -349,7 +332,7 @@
        (add-hook 'irony-mode-hook 'my-irony-mode-hook)
        (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
      ;;(general-define-key ;;C/CPP keys
-     ;; :states '(normal movement)
+     ;; :states '(normal motion)
      ;; :keymaps 'irony-mode-map
      ;; :prefix ",")
    #+END_SRC
@@ -426,18 +409,23 @@
    #+END_SRC
 ** Org
    #+BEGIN_SRC emacs-lisp
+     (setq org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
       'org-babel-load-languages
       '((org . t)
 	(latex . t)
 	(emacs-lisp . t)
-	(sql . t)))
+	(sql . t)
+	(python . t)))
      (general-define-key
-      :states '(normal movement)
+      :states '(normal motion)
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
-      (kbd "t") 'org-time-stamp)
+      (kbd "t") 'org-time-stamp
+      (kbd "s") 'org-babel-execute-src-block
+      (kbd "e") 'org-babel-execute-buffer
+      (kbd "'") 'org-edit-special)
 
    #+END_SRC
 ** KDE Connect
