@@ -186,8 +186,10 @@
    make motion-state better but it failed cuz motion state inherits
    all normal states keys. This means if i edit it is annoying
    #+BEGIN_SRC emacs-lisp
-     (evil-define-key '(normal insert) global-map (kbd "`") 'evil-execute-in-movement-state) ;
-     (evil-define-key '(normal insert) global-map (kbd "~") 'evil-movement-state) ;; Make this for a single command uwu
+     (general-define-key 
+       :states '(normal insert motion)
+       (kbd "`") 'evil-execute-in-movement-state ;; @TODO(renzix): Make this work as expected. Toggles ALL buffers as movement mode
+       (kbd "~") 'evil-movement-state)
 
      (evil-define-state movement
        "Movement state. Moves and opens windows"
@@ -200,8 +202,8 @@
        (general-define-key
 	:states 'movement
 	(kbd "ESC") 'evil-normal-state
-	(kbd "`") (lambda () (interactive) (insert 96)) ;; insert `
-	(kbd "~") (lambda () (interactive) (insert 126)) ;; insert ~
+	(kbd "`") (lambda () (interactive) (insert 96))  ;; inserts `
+	(kbd "~") (lambda () (interactive) (insert 126)) ;; inserts ~
 	(kbd "q") 'delete-window
 	(kbd "Q") 'kill-emacs
 	(kbd "h") 'evil-window-left
@@ -282,11 +284,12 @@
 
      (general-define-key
       :states '(movement)
-      :prefix "]" ;;@TODO(renzix): Find a better prefix???
+      :prefix "c"
       (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
       (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
       (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
       (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
+      (kbd "h") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/herbstluftwm/autostart"))))
       (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
       (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
 
