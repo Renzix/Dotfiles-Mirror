@@ -1,0 +1,19 @@
+! Clear modifiers i am modifying 
+! lock = caps_lock, mod1 = alt, mod3 = hyper, mod4 = super
+clear control
+clear lock
+clear mod3
+clear mod4
+clear shift
+
+! Puts keys with certain codes
+keycode 66  = Control_R
+keycode 23  = Hyper_L
+keycode 50  = Shift_L
+
+! Refreshes the modifier keys
+add Control = Control_L Control_R
+add mod3    = Hyper_L Hyper_R
+add mod4    = Super_L Super_R
+add shift   = Shift_L Shift_R
+add lock    = Caps_Lock
