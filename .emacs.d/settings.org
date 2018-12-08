@@ -497,11 +497,11 @@
      (use-package kdeconnect)
    #+END_SRC
 ** Nix OS
-#+BEING_SRC emacs-lisp
-(use-package nix-mode)
-(use-package helm-nixos-options)
-(use-package company-nixos-options)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package nix-mode)
+     (use-package helm-nixos-options)
+     (use-package company-nixos-options)
+   #+END_SRC
 * Post Config
 ** Backups
    #+BEGIN_SRC emacs-lisp
