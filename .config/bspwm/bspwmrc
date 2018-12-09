@@ -23,10 +23,7 @@ bspc rule -a Emacs state=tiled
 bspc rule -a Google-chrome state=tiled
 bspc rule -a Rudditor state=floating
 
-#Wallpaper
-else
-	feh --bg-max ${BSPWMC}/wallpaper.png &
-fi
+feh --bg-max ${BSPWMC}/wallpaper.png &
 
 # Keybindings
 setxkbmap -option caps:swapescape #Switch caps and escape
