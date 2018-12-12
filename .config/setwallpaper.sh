@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### GET RANDOM WALLPAPER FROM $HOME/Pictures/wallpaper/*, CHANGES RES AND COMBINES THEM ###
 

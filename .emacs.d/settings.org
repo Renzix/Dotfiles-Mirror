@@ -187,9 +187,9 @@
    all normal states keys. This means if i edit it is annoying
    #+BEGIN_SRC emacs-lisp
      (general-define-key 
-       :states '(normal insert motion)
-       (kbd "`") 'evil-execute-in-movement-state ;; @TODO(renzix): Make this work as expected. Toggles ALL buffers as movement mode
-       (kbd "~") 'evil-movement-state)
+      :states '(normal insert motion)
+      (kbd "`") 'evil-execute-in-movement-state ;; @TODO(renzix): Make this work as expected. Toggles ALL buffers as movement mode
+      (kbd "~") 'evil-movement-state)
 
      (evil-define-state movement
        "Movement state. Moves and opens windows"
@@ -335,7 +335,7 @@
 	     company-show-numbers            t
 	     company-tooltip-limit           20
 	     company-dabbrev-downcase        nil
-	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp)))
+	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp company-nixos-options)))
        :bind ("TAB" . company-indent-or-complete-common))
      (setq tab-always-indent 'complete)
    #+END_SRC
@@ -446,7 +446,7 @@
 		    (call-interactively 'erc)
 		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
 		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-     (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
+     (erc-connect discord-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
      (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
      (general-define-key
       :states '(normal)
@@ -491,6 +491,7 @@
       (kbd "s") 'org-babel-execute-src-block
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
+     (use-package ox-pandoc)
 
    #+END_SRC
 ** KDE Connect
@@ -502,6 +503,16 @@
      (use-package nix-mode)
      (use-package helm-nixos-options)
      (use-package company-nixos-options)
+     (general-define-key
+      :states '(normal)
+      :keymaps 'nix-mode-map
+      :prefix "," 
+      (kbd "s") 'helm-nixos-options)
+(general-define-key
+      :states '(normal)
+      :keymaps 'nix-mode-map
+      (kbd "TAB") 'company-nixos-options)
+
    #+END_SRC
 * Post Config
 ** Backups
