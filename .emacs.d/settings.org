@@ -188,8 +188,9 @@
    #+BEGIN_SRC emacs-lisp
      (general-define-key 
       :states '(normal insert motion)
-      (kbd "`") 'evil-execute-in-movement-state ;; @TODO(renzix): Make this work as expected. Toggles ALL buffers as movement mode
-      (kbd "~") 'evil-movement-state)
+      (kbd "`") 'evil-execute-in-movement-state 
+     ;; @TODO(renzix): Make a movement state which toggles all buffers
+     ;;(kbd "~") 'evil-movement-state)
 
      (evil-define-state movement
        "Movement state. Moves and opens windows"
@@ -321,30 +322,11 @@
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
    #+END_SRC
-** Company
-   @TODO(renzix): Fix this
-   #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :ensure t
-       :defer t
-       :init (add-hook 'after-init-hook 'global-company-mode)
-       :config
-       (use-package company-irony :ensure t :defer t)
-       (setq company-idle-delay        2
-	     company-minimum-prefix-length   2
-	     company-show-numbers            t
-	     company-tooltip-limit           20
-	     company-dabbrev-downcase        nil
-	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp company-nixos-options)))
-       :bind ("TAB" . company-indent-or-complete-common))
-     (setq tab-always-indent 'complete)
-   #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
      (use-package rust-mode)
      (use-package cargo)
      (use-package racer)
-     (use-package company-racer)
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
      (add-hook 'rust-mode-hook 'cargo-minor-mode)
@@ -371,7 +353,6 @@
        :config 
        (add-hook 'python-mode-hook 'anaconda-mode)
        (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
-     (use-package company-anaconda)
      (general-define-key
       :states '(normal)
       :keymaps 'python-mode-map
@@ -381,6 +362,7 @@
    #+END_SRC
 ** C/CPP 
    #+BEGIN_SRC emacs-lisp
+     (use-package company-c-headers)
      (use-package irony
        :ensure t
        :defer t
@@ -401,16 +383,34 @@
      ;; :keymaps 'irony-mode-map
      ;; :prefix ",")
    #+END_SRC
+** Company
+   @TODO(renzix): Switch from company to autocomplete for fuzzy matching???
+   #+BEGIN_SRC emacs-lisp
+     (use-package company
+       :ensure t
+       :defer t
+       :init (add-hook 'after-init-hook 'global-company-mode)
+       :config
+       (use-package company-irony :ensure t :defer t)
+       (use-package company-racer)
+       (use-package company-anaconda)
+       (setq company-idle-delay        2
+	     company-minimum-prefix-length   2
+	     company-show-numbers            t
+	     company-tooltip-limit           20
+	     company-dabbrev-downcase        nil
+	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp company-nixos-options)))
+       :bind ("C-<tab>" . company-indent-or-complete-common))
+     (setq tab-always-indent 'complete)
+   #+END_SRC
 ** Misc Programming
    @TODO(renzix): Make comments work idk why im writing this cuz im
    gonna delete this once i fix it anyway
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
        :config (autopair-global-mode t))
-     (use-package comment-tags)
-     (autoload 'comment-tags-mode "comment-tags-mode")
-     (setq comment-tags-keymap-prefix (kbd "C-c t"))
-     (with-eval-after-load "comment-tags"
+     (use-package comment-tags
+     :config
        (setq comment-tags-keyword-faces
 	     `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
 	       ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
@@ -424,8 +424,8 @@
 	     comment-tags-require-colon t
 	     comment-tags-case-sensitive t
 	     comment-tags-show-faces t
-	     comment-tags-lighter nil))
-     (add-hook 'prog-mode-hook 'comment-tags-mode)
+	     comment-tags-lighter nil)
+     (add-hook 'prog-mode-hook 'comment-tags-mode))
    #+END_SRC
 * Normal Tasks
 ** ERC
@@ -508,10 +508,10 @@
       :keymaps 'nix-mode-map
       :prefix "," 
       (kbd "s") 'helm-nixos-options)
-(general-define-key
-      :states '(normal)
-      :keymaps 'nix-mode-map
-      (kbd "TAB") 'company-nixos-options)
+     ;; (general-define-key
+     ;;       :states '(normal)
+     ;;       :keymaps 'nix-mode-map
+     ;;       (kbd "S-TAB") 'company-indent-or-complete-common)
 
    #+END_SRC
 * Post Config
