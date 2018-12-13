@@ -188,7 +188,7 @@
    #+BEGIN_SRC emacs-lisp
      (general-define-key 
       :states '(normal insert motion)
-      (kbd "`") 'evil-execute-in-movement-state 
+      (kbd "`") 'evil-execute-in-movement-state)
      ;; @TODO(renzix): Make a movement state which toggles all buffers
      ;;(kbd "~") 'evil-movement-state)
 
