@@ -178,7 +178,7 @@
      (use-package evil
        :config 
        (evil-mode t)
-       (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more useful
+       (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more 
        )
    #+END_SRC
 ** Movement-State
@@ -204,7 +204,6 @@
 	:states 'movement
 	(kbd "ESC") 'evil-normal-state
 	(kbd "`") (lambda () (interactive) (insert 96))  ;; inserts `
-	(kbd "~") (lambda () (interactive) (insert 126)) ;; inserts ~
 	(kbd "q") 'delete-window
 	(kbd "Q") 'kill-emacs
 	(kbd "h") 'evil-window-left
@@ -410,7 +409,7 @@
      (use-package autopair
        :config (autopair-global-mode t))
      (use-package comment-tags
-     :config
+       :config
        (setq comment-tags-keyword-faces
 	     `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
 	       ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
@@ -425,20 +424,28 @@
 	     comment-tags-case-sensitive t
 	     comment-tags-show-faces t
 	     comment-tags-lighter nil)
-     (add-hook 'prog-mode-hook 'comment-tags-mode))
+       (add-hook 'prog-mode-hook 'comment-tags-mode))
    #+END_SRC
 * Normal Tasks
 ** ERC
    @TODO(renzix): Possibly change from ERC to something newer/better
    #+BEGIN_SRC emacs-lisp
+     (use-package erc-twitch)
+     (use-package erc-image)
+     (add-to-list 'erc-modules 'image)
+     (use-package erc-tweet)
+     (add-to-list 'erc-modules 'tweet)
+     (erc-twitch-enable)
+     (erc-update-modules)
      (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
+     (setq erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
      (setq erc-kill-buffer-on-part t)
      (setq erc-kill-queries-on-quit t)
      (setq erc-kill-server-buffer-on-quit t)
 
      (defmacro erc-connect (command server port nick ssl pass)
        "Create interactive command `command', for connecting to an IRC server. The
-      command uses interactive mode if passed an argument."
+		     command uses interactive mode if passed an argument."
        (fset command
 	     `(lambda (arg)
 		(interactive "p")
@@ -446,17 +453,23 @@
 		    (call-interactively 'erc)
 		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
 		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-     (erc-connect discord-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!")
+     (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!") ;;@TODO(renzix): Put this on my server i guess??
      (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
      (general-define-key
       :states '(normal)
-      :keymaps 'erc-mode-map
-      :prefix ","
+      :prefix "\\"
+      (kbd "d") 'bitlbee-erc
+      (kbd "t") 'twitch-erc
       (kbd "b") 'erc-switch-to-buffer
       (kbd "q") 'erc-quit-server
       (kbd "p") 'erc-part-from-channel
       (kbd "j") 'erc-join-channel
-      (kbd ",") 'erc-track-switch-buffer)
+      (kbd "\\") 'erc-track-switch-buffer)
+     ;;(general-define-key @TODO(renzix): Make this a search function for irc?
+     ;; :states '(normal)
+     ;; :prefix ","
+     ;; (kbd "p") 'erc-part-from-channel
+     ;; (kbd "\\") 'erc-track-switch-buffer)
    #+END_SRC
 
 ** Text
@@ -470,6 +483,8 @@
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
+     ;;(use-package emojify)
+     ;;(add-hook 'after-init-hook #'global-emojify-mode)
      (elcord-mode)
    #+END_SRC
 ** Org
