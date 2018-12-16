@@ -27,6 +27,12 @@
   Preconfiguration. For stuff before actual config like variables
 ** General
    #+BEGIN_SRC emacs-lisp
+     ;; @TODO(automatically get use-package
+
+     (use-package quelpa
+       :init '(setq quelpa-upgrade-p t
+		    quelpa-stable-p t))
+     (use-package quelpa-use-package)
      (use-package general
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
@@ -427,8 +433,15 @@
        (add-hook 'prog-mode-hook 'comment-tags-mode))
    #+END_SRC
 * Normal Tasks
+** Text
+   @TODO(renzix): Add spellcheck and autocorrect???
+   #+BEGIN_SRC emacs-lisp
+     (setq default-major-mode 'text-mode)
+     (add-hook 'text-mode-hook 'text-mode-hook-identify)
+     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+   #+END_SRC
 ** ERC
-   @TODO(renzix): Possibly change from ERC to something newer/better
+   @TODO(renzix): Maybe get rid of bitlbee cuz its rarted and frustrating
    #+BEGIN_SRC emacs-lisp
      (use-package erc-twitch)
      (use-package erc-image)
@@ -471,14 +484,6 @@
      ;; (kbd "p") 'erc-part-from-channel
      ;; (kbd "\\") 'erc-track-switch-buffer)
    #+END_SRC
-
-** Text
-   @TODO(renzix): Add spellcheck and autocorrect???
-   #+BEGIN_SRC emacs-lisp
-     (setq default-major-mode 'text-mode)
-     (add-hook 'text-mode-hook 'text-mode-hook-identify)
-     (add-hook 'text-mode-hook 'turn-on-auto-fill)
-   #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
@@ -486,6 +491,12 @@
      ;;(use-package emojify)
      ;;(add-hook 'after-init-hook #'global-emojify-mode)
      (elcord-mode)
+   #+END_SRC
+** Matrix
+   Hopefully matrix works so maybe i can bridge discord to matrix??? 
+   #+BEGIN_SRC emacs-lisp
+     ;;(use-package matrix-client ;; @TODO(renzix): Hopfully this gets fixed???
+     ;;  :quelpa (matrix-client :fetcher github :repo "jgkamat/matrix-client-el"))
    #+END_SRC
 ** Org
    #+BEGIN_SRC emacs-lisp
@@ -532,9 +543,9 @@
 * Post Config
 ** Backups
    #+BEGIN_SRC emacs-lisp
-     (setq backup-directory-alist `(("." . "~/.saves")))
-     (setq backup-by-copying t)
-     (setq delete-old-versions t
+     (setq backup-directory-alist `(("." . "~/.saves"))
+	   backup-by-copying t
+	   delete-old-versions t
 	   kept-new-versions 6
 	   kept-old-versions 2
 	   version-control t)
