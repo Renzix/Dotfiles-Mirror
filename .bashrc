@@ -21,7 +21,7 @@ fi
 alias l="ls --color=auto"
 alias ls="exa"
 alias la="exa -a"
-alias ll='exa -lhANF --si --color --hyperlink --group-directories-first --time-style="+[%d/%m/%Y %I:%M:%S %p %Z]"'
+alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
 
 #Wine
 alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
@@ -45,9 +45,5 @@ alias gp="git push $@"
 #Other
 alias ht="htop $@"
 alias dd="dd status=progress $@"
-
-## Environment vars
-export BSPC=".config/bspwm/bspwmrc"
-export SXHKD=".config/sxhkd/sxhkdrc"
 
 neofetch
