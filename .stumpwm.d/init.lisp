@@ -3,6 +3,8 @@
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
 
+;; @TODO(renzix): Maybe make this more vim like where as keys can
+;; be prefixed with n,p,r instead of postfix
 (defmacro make-program-binding (program-name window-class &optional alias)
   "Create run-or-raise and run-or-pull commands for program-name
   window-class is the windows-class
@@ -31,10 +33,10 @@
 (make-program-binding "firefox" "Firefox" "firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
 (make-program-binding "urxvt" "urxvt")
-(make-program-binding "alacritty" "Alacritty")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "spotify" "Spotify" "spotify")
 (make-program-binding "discord" "Discord") ; Make this work properly??? (discord doesn't pull properly)
+(make-program-binding "pavucontrol" "Pavucontrol")
 
 ;; Commands
 (defcommand rofi () ()
@@ -47,29 +49,30 @@
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
 (define-key *root-map* (kbd "C-`") "window-send-string `")
 (define-key *root-map* (kbd "C-~") "window-send-string ~")
+(define-key *root-map* (kbd "SPC") "rofi")
 
 ;; Opens new apps
+(define-key *root-map* (kbd "RET") |*urxvt-map*|)
+(define-key *root-map* (kbd "i") |*firefox-map*|)
+(define-key *root-map* (kbd "e") |*emacs-map*|)
+;; Extra keybinds
 (defvar *app-map*
   (make-sparse-keymap)
   "Open a bunch of different applications")
 (define-key *root-map* (kbd "o") *app-map*)
-(define-key *app-map* (kbd "i") |*firefox-map*|)
-(define-key *app-map* (kbd "e") |*emacs-map*|)
-(define-key *app-map* (kbd "t") |*thunar-map*|)
-(define-key *app-map* (kbd "RET") |*urxvt-map*|)
-(define-key *app-map* (kbd "S-RET") |*alacritty-map*|)
+(define-key *app-map* (kbd "f") |*thunar-map*|)
 (define-key *app-map* (kbd "m") |*spotify-map*|)
 (define-key *app-map* (kbd "d") |*discord-map*|)
-(define-key *app-map* (kbd "SPC") "rofi")
+(define-key *app-map* (kbd "a") |*pavucontrol-map*|)
 ;; @TODO(renzix): Make a rofi with dmenu to run/pull/new
 
-(defvar *mon-map*
+(defvar *frame-map*
   (make-sparse-keymap)
   "Simple monitor keybinds")
-(define-key *root-map* (kbd "f") *mon-map*)
-(define-key *mon-map* (kbd "1") "fselect 0")
-(define-key *mon-map* (kbd "2") "fselect 1")
-(define-key *mon-map* (kbd "3") "fselect 2")
+(define-key *root-map* (kbd "f") *frame-map*)
+(define-key *frame-map* (kbd "1") "fselect 0")
+(define-key *frame-map* (kbd "2") "fselect 1")
+(define-key *frame-map* (kbd "3") "fselect 2")
 
 ;; Moves stuff around
 (define-key *root-map* (kbd "h") "move-focus left") ; Just moves focus of windows
