@@ -18,15 +18,15 @@ fi
 
 ## Aliases
 #LS
-alias l="ls --color=auto"
-alias ls="exa"
-alias la="exa -a"
-alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
+#alias l="ls --color=auto"
+#alias ls="exa"
+#alias la="exa -a"
+#alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
 
 #Wine
-alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
-alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Battle.net/Battle.net\ Launcher.exe"
-alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
+#alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
+#alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Battle.net/Battle.net\ Launcher.exe"
+#alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
 
 #Text Editors
 alias vi="nvim $@"
