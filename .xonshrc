@@ -1,0 +1,5 @@
+# XONSH WIZARD START
+source-bash --login True "echo loading xonsh foreign shell" --overwrite-alias
+xontrib load bashisms coreutils jedi prompt_ret_code z powerline prompt_vi_mode
+# XONSH WIZARD END
+neofetch
