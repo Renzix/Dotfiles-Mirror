@@ -32,10 +32,10 @@
 
 (make-program-binding "firefox" "Firefox" "firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "urxvt" "urxvt")
+(make-program-binding "kitty ~/.local/bin/xonsh" "kitty" "kitty")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "spotify" "Spotify" "spotify")
-(make-program-binding "discord" "Discord") ; Make this work properly??? (discord doesn't pull properly)
+(make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window cl:ass
 (make-program-binding "pavucontrol" "Pavucontrol")
 
 ;; Commands
@@ -44,15 +44,13 @@
 	    (run-shell-command "rofi -show run"))
 
 ;; Modal Keybinds Stuff
-(set-prefix-key (kbd "C-`"))
-(define-key *top-map* (kbd "C-~") "command-mode")
+(set-prefix-key (kbd "C-ESC"))
+(define-key *top-map* (kbd "S-C-ESC") "command-mode") ; @KEYBIND(renzix): Make this better?
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
-(define-key *root-map* (kbd "C-`") "window-send-string `")
-(define-key *root-map* (kbd "C-~") "window-send-string ~")
 (define-key *root-map* (kbd "SPC") "rofi")
 
 ;; Opens new apps
-(define-key *root-map* (kbd "RET") |*urxvt-map*|)
+(define-key *root-map* (kbd "RET") |*kitty-map*|)
 (define-key *root-map* (kbd "i") |*firefox-map*|)
 (define-key *root-map* (kbd "e") |*emacs-map*|)
 ;; Extra keybinds

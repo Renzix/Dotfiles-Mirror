@@ -194,9 +194,9 @@
    #+BEGIN_SRC emacs-lisp
      (general-define-key 
       :states '(normal insert motion)
-      (kbd "`") 'evil-execute-in-movement-state)
+      (kbd "S-ESC") 'evil-execute-in-movement-state)
      ;; @TODO(renzix): Make a movement state which toggles all buffers
-     ;;(kbd "~") 'evil-movement-state)
+     ;;(kbd "~") 'evil-movement-state) @KEYBIND(renzix): Maybe make this better keybind
 
      (evil-define-state movement
        "Movement state. Moves and opens windows"
@@ -209,7 +209,6 @@
        (general-define-key
 	:states 'movement
 	(kbd "ESC") 'evil-normal-state
-	(kbd "`") (lambda () (interactive) (insert 96))  ;; inserts `
 	(kbd "q") 'delete-window
 	(kbd "Q") 'kill-emacs
 	(kbd "h") 'evil-window-left
