@@ -1,0 +1,15 @@
+* Emacs config
+My emacs config is pretty simple it consists of
+- init.el
+- settings.org
+
+init.el is not meant to be used and everything is supposed to be in
+settings.org
+
+It contains alot of things including
+- Evil config
+- Movement Mode (evil mode i made for other stuff)
+- c/cpp/rust/java/python support (might have some more)
+- org mode config
+- circe config (irc)
+- pretty appearence
