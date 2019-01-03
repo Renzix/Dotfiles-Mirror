@@ -331,6 +331,7 @@
      (use-package rust-mode)
      (use-package cargo)
      (use-package racer)
+     (use-package clippy)
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
      (add-hook 'rust-mode-hook 'cargo-minor-mode)
@@ -499,6 +500,24 @@
      ;;(use-package emojify)
      ;;(add-hook 'after-init-hook #'global-emojify-mode)
      (elcord-mode)
+   #+END_SRC
+** Youtube
+   #+BEGIN_SRC emacs-lisp
+     (defun youtube-dl-url (&optional url)
+       "Run 'youtube-dl' over the URL.
+     If URL is nil, use URL at point."
+       (interactive)
+       (setq url (or url (thing-at-point-url-at-point)))
+       (let ((eshell-buffer-name "*youtube-dl*")
+	     (directory (expand-file-name (or (file-directory-p "~/Media/Videos")
+					      (file-directory-p "~/Downloads")
+					      "."))))
+	 (eshell)
+	 (when (eshell-interactive-process)
+	   (eshell t))
+	 (eshell-interrupt-process)
+	 (insert (format "cd '%s' && youtube-dl " directory) url)
+	 (eshell-send-input)))
    #+END_SRC
 ** Matrix
    Hopefully matrix works so maybe i can bridge discord to matrix??? 

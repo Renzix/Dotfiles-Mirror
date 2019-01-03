@@ -2,6 +2,7 @@
 
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
+;;(run-shell-command "emacs --daemon")
 
 ;; @TODO(renzix): Maybe make this more vim like where as keys can
 ;; be prefixed with n,p,r instead of postfix
@@ -31,9 +32,11 @@
 		  (kbd "n") ,(format nil "~a" alias))))
 
 (make-program-binding "firefox" "Firefox" "firefox")
+(make-program-binding "next" "next")
 (make-program-binding "thunar" "Thunar" "thunar")
 (make-program-binding "kitty ~/.local/bin/xonsh" "kitty" "kitty")
 (make-program-binding "emacs" "Emacs")
+(make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
 (make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window cl:ass
 (make-program-binding "pavucontrol" "Pavucontrol")
@@ -45,15 +48,16 @@
 
 ;; Modal Keybinds Stuff
 (set-prefix-key (kbd "C-ESC"))
-(define-key *top-map* (kbd "S-C-ESC") "command-mode") ; @KEYBIND(renzix): Make this better?
+(define-key *top-map* (kbd "S-C-ESC") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
 (define-key *root-map* (kbd "SPC") "rofi")
 
-;; Opens new apps
+;; Keybinds for freq programs
 (define-key *root-map* (kbd "RET") |*kitty-map*|)
 (define-key *root-map* (kbd "i") |*firefox-map*|)
-(define-key *root-map* (kbd "e") |*emacs-map*|)
-;; Extra keybinds
+(define-key *root-map* (kbd "e") |*emacs_frame-map*|)
+(define-key *root-map* (kbd "E") |*emacs-map*|)
+;; Opens new apps
 (defvar *app-map*
   (make-sparse-keymap)
   "Open a bunch of different applications")
@@ -62,6 +66,7 @@
 (define-key *app-map* (kbd "m") |*spotify-map*|)
 (define-key *app-map* (kbd "d") |*discord-map*|)
 (define-key *app-map* (kbd "a") |*pavucontrol-map*|)
+(define-key *app-map* (kbd "i") |*next-map*|)
 ;; @TODO(renzix): Make a rofi with dmenu to run/pull/new
 
 (defvar *frame-map*
@@ -88,11 +93,19 @@
 (define-key *root-map* (kbd "s") "vsplit") ; idk why emacs and stumpwm are different
 (define-key *root-map* (kbd "v") "hsplit") ; But im gonna use the emacs version anyway
 (define-key *root-map* (kbd "c") "remove-split") ; close frame
-(define-key *root-map* (kbd "a") "only") ; alone (closes all other windows in frame)
+(define-key *root-map* (kbd "a") "only") ; alone (gets rid of all other windows in frame doesn't close them)
 (define-key *root-map* (kbd "d") "delete-window")
 (define-key *root-map* (kbd "D") "kill-window")
 
 ;; Emacs keybinds @TODO(renzix): Make it work
-;; (define-key *root-map* (kbd "e") *emacs-map*)
+;; (define-key *root-map* (kbd "C-e") *emacs-map*)
 
-;; Status bar @TODO(renzix): Make this work
+;; Status bar @TODO(renzix): Make this good
+(setf *mode-line-position* :bottom)
+(stumpwm:toggle-mode-line (stumpwm:current-screen)
+                          (stumpwm:current-head))
+
+(setf *screen-mode-line-format*
+      (list "%w | "
+            '(:eval (stumpwm:run-shell-command "date" t))))
+
