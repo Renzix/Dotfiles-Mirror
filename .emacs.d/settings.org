@@ -230,6 +230,7 @@
 	(kbd "+") 'evil-window-increase-width
 	(kbd "'") 'eshell
 	(kbd "\"") 'term
+	(kbd "g") 'magit-status
 	(kbd "p") 'projectile-command-map))
 
      (defun evil-movement-start-hook ()
