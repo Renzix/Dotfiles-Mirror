@@ -1,0 +1,9 @@
+#!/usr/bin/env ion
+
+if test $len(@args) -eq 1
+    echo "Script didn't receive enough arguments"
+    exit
+end
+
+mpv "https://twitch.tv/@args[1]"
+

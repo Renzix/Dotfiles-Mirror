@@ -230,7 +230,7 @@
 	(kbd "+") 'evil-window-increase-width
 	(kbd "'") 'eshell
 	(kbd "\"") 'term
-	(kbd "g") 'magit-status
+	(kbd "g:") 'magit-status
 	(kbd "p") 'projectile-command-map))
 
      (defun evil-movement-start-hook ()
@@ -315,7 +315,7 @@
      (which-key-mode)
      (evil-define-key '(normal movement) global-map (kbd ";") 'helm-M-x)
      (evil-define-key '(normal movement) global-map (kbd "SPC") 'app-launcher)
-     (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
+     (evil-define-key '(normal movement) global-map (kbd "gc") 'comment-line)
    #+END_SRC
 * Programming
 ** Projectile

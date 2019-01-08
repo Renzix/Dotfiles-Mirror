@@ -14,7 +14,7 @@
   C-keybinding p calls run-or-pull
   C-keybinding n creates a new instance of the program"
   (if (not alias)
-      (setf alias program-name))
+    (setf alias program-name))
   `(progn
      (defvar ,(intern (format nil "*~a-map*" alias)) nil)
 
@@ -38,19 +38,23 @@
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
-(make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window cl:ass
+(make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window class
 (make-program-binding "pavucontrol" "Pavucontrol")
 
 ;; Commands
 (defcommand rofi () ()
 	    "Does rofi stuff"
 	    (run-shell-command "rofi -show run"))
+(defcommand twitch () () ;; @TODO(renzix): Maybe open twitch chat in emacs frame???
+	    "Uses rofi for twitch"
+	    (run-shell-command "rofi -modi twitchy:rofi-twitchy -show twitchy"))
 
 ;; Modal Keybinds Stuff
 (set-prefix-key (kbd "C-ESC"))
 (define-key *top-map* (kbd "S-C-ESC") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
 (define-key *root-map* (kbd "SPC") "rofi")
+(define-key *root-map* (kbd "t") "twitch")
 
 ;; Keybinds for freq programs
 (define-key *root-map* (kbd "RET") |*kitty-map*|)
@@ -101,11 +105,11 @@
 ;; (define-key *root-map* (kbd "C-e") *emacs-map*)
 
 ;; Status bar @TODO(renzix): Make this good
-(setf *mode-line-position* :bottom)
-(stumpwm:toggle-mode-line (stumpwm:current-screen)
-                          (stumpwm:current-head))
+;; (setf *mode-line-position* :bottom)
+;; (stumpwm:toggle-mode-line (stumpwm:current-screen)
+;; 			  (stumpwm:current-head))
 
 (setf *screen-mode-line-format*
       (list "%w | "
-            '(:eval (stumpwm:run-shell-command "date" t))))
+	    '(:eval (stumpwm:run-shell-command "date" t))))
 
