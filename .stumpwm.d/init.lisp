@@ -1,7 +1,7 @@
 (in-package :stumpwm)
 
 ;; Autostart stuff
-(run-shell-command "setxkbmap -option caps:swapescape")
+(run-shell-command "xmodmap ~/Dotfiles/Bin/autostart/Xmodmap-chromebook")
 ;;(run-shell-command "emacs --daemon")
 
 ;; @TODO(renzix): Maybe make this more vim like where as keys can
@@ -31,10 +31,9 @@
 		  (kbd "r") ,(format nil "run-or-raise-~a" alias)
 		  (kbd "n") ,(format nil "~a" alias))))
 
-(make-program-binding "firefox" "Firefox" "firefox")
-(make-program-binding "next" "next")
+(make-program-binding "chromium-browser" "Chromium")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "kitty ~/.local/bin/xonsh" "kitty" "kitty")
+(make-program-binding "xfce4-terminal" "Xfce4 Terminal")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
@@ -57,8 +56,8 @@
 (define-key *root-map* (kbd "t") "twitch")
 
 ;; Keybinds for freq programs
-(define-key *root-map* (kbd "RET") |*kitty-map*|)
-(define-key *root-map* (kbd "i") |*firefox-map*|)
+(define-key *root-map* (kbd "RET") |*xfce4-terminal-map*|)
+(define-key *root-map* (kbd "i") |*chromium-browser-map*|)
 (define-key *root-map* (kbd "e") |*emacs_frame-map*|)
 (define-key *root-map* (kbd "E") |*emacs-map*|)
 ;; Opens new apps
@@ -70,7 +69,6 @@
 (define-key *app-map* (kbd "m") |*spotify-map*|)
 (define-key *app-map* (kbd "d") |*discord-map*|)
 (define-key *app-map* (kbd "a") |*pavucontrol-map*|)
-(define-key *app-map* (kbd "i") |*next-map*|)
 ;; @TODO(renzix): Make a rofi with dmenu to run/pull/new
 
 (defvar *frame-map*
