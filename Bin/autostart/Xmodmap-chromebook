@@ -1,0 +1,10 @@
+! Clear modifiers i am modifying 
+! lock = caps_lock, mod1 = alt, mod3 = hyper, mod4 = super
+clear mod4
+
+! Puts keys with certain codes
+keycode 133 = Escape
+keycode   9 = Super_L
+
+! Refreshes the modifier keys
+add mod4    = Super_L Super_R
