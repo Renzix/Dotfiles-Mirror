@@ -229,7 +229,7 @@
 	(kbd "_") 'evil-window-decrease-width
 	(kbd "+") 'evil-window-increase-width
 	(kbd "'") 'eshell
-	(kbd "\"") 'term
+	(kbd "\"") 'vterm
 	(kbd "g") 'magit-status
 	(kbd "p") 'projectile-command-map))
 
@@ -567,6 +567,19 @@
      ;;       :keymaps 'nix-mode-map
      ;;       (kbd "S-TAB") 'company-indent-or-complete-common)
 
+   #+END_SRC
+** Libvterm
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'load-path (concat HOME "/Projects/emacs-libvterm"))
+     (let (vterm-install)
+       (require 'vterm))
+     (setq vterm-shell "ion")
+   #+END_SRC
+** Package Management
+   #+BEGIN_SRC emacs-lisp
+     (use-package system-packages)
+     (use-package helm-system-packages
+       :after (sysetem-packages))
    #+END_SRC
 * Post Config
 ** Backups
