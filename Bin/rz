@@ -1,0 +1,12 @@
+#!/usr/bin/env ion
+
+# Setup args and variables
+# probably read from ~/.config/rz/rz.conf
+# and able to override based on args
+let server = "http://10.0.0.253/paste"
+
+# I have no idear how to do this properly
+let message = $(cat /dev/stdout ^> /dev/null)
+echo $message
+
+# curl --data-binary $message $server
