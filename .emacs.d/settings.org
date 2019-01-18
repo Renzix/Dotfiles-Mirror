@@ -28,7 +28,6 @@
 ** General
    #+BEGIN_SRC emacs-lisp
      ;; @TODO(automatically get use-package
-
      (use-package quelpa
        :init '(setq quelpa-upgrade-p t
 		    quelpa-stable-p t))
@@ -190,7 +189,10 @@
 ** Movement-State
    I made this state cuz motion state sucks. I originally tried to
    make motion-state better but it failed cuz motion state inherits
-   all normal states keys. This means if i edit it is annoying
+   all normal states keys. This makes it really annoying so i made a
+   new state called movement state. Its basically a extra command
+   state which i want to eventually activate on all buffers with a
+   toggle and have a single way to run it
    #+BEGIN_SRC emacs-lisp
      (general-define-key 
       :states '(normal insert motion)
@@ -230,7 +232,14 @@
 	(kbd "+") 'evil-window-increase-width
 	(kbd "'") 'eshell
 	(kbd "\"") 'vterm
-	(kbd "g") 'magit-status
+	(kbd "m") 'helm-system-packages
+	(kbd "g g") 'magit-status
+	(kbd "g s") 'magit-stash-popup
+	(kbd "g p") 'magit-pull-popup
+	(kbd "g P") 'magit-push-popup
+	(kbd "g C") 'magit-clone
+	(kbd "g c") 'magit-commit-popup
+	(kbd "g b") 'magit-branch-popup
 	(kbd "p") 'projectile-command-map))
 
      (defun evil-movement-start-hook ()
@@ -291,14 +300,14 @@
      (general-define-key
       :states '(movement)
       :prefix "c"
-      (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
-      (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
-      (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
-      (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
-      (kbd "h") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/herbstluftwm/autostart"))))
-      (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
-      (kbd "n") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/nixos/configuration.nix")))
-      (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
+      (kbd "c") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/settings.org")))
+      (kbd "i") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/init.el")))
+      (kbd "b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
+      (kbd "s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
+      (kbd "h") (lambda() (interactive) (find-file (concat HOME "/.config/herbstluftwm/autostart")))
+      (kbd "m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
+      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix"))
+      (kbd "d") (lambda() (interactive) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h")))
 
    #+END_SRC
 ** Insert-State
@@ -450,83 +459,15 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
-** ERC
-   @TODO(renzix): Maybe get rid of bitlbee cuz its rarted and frustrating
-   #+BEGIN_SRC emacs-lisp
-     (use-package erc-twitch)
-     (use-package erc-image)
-     (add-to-list 'erc-modules 'image)
-     (use-package erc-tweet)
-     (add-to-list 'erc-modules 'tweet)
-     (erc-twitch-enable)
-     (erc-update-modules)
-     (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
-     (setq erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
-     (setq erc-kill-buffer-on-part t)
-     (setq erc-kill-queries-on-quit t)
-     (setq erc-kill-server-buffer-on-quit t)
-
-     (defmacro erc-connect (command server port nick ssl pass)
-       "Create interactive command `command', for connecting to an IRC server. The
-		     command uses interactive mode if passed an argument."
-       (fset command
-	     `(lambda (arg)
-		(interactive "p")
-		(if (not (= 1 arg))
-		    (call-interactively 'erc)
-		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
-		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-     (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!") ;;@TODO(renzix): Put this on my server i guess??
-     (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
-     (general-define-key
-      :states '(normal)
-      :prefix "\\"
-      (kbd "d") 'bitlbee-erc
-      (kbd "t") 'twitch-erc
-      (kbd "b") 'erc-switch-to-buffer
-      (kbd "q") 'erc-quit-server
-      (kbd "p") 'erc-part-from-channel
-      (kbd "j") 'erc-join-channel
-      (kbd "\\") 'erc-track-switch-buffer)
-     ;;(general-define-key @TODO(renzix): Make this a search function for irc?
-     ;; :states '(normal)
-     ;; :prefix ","
-     ;; (kbd "p") 'erc-part-from-channel
-     ;; (kbd "\\") 'erc-track-switch-buffer)
-   #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
-     ;;(use-package emojify)
-     ;;(add-hook 'after-init-hook #'global-emojify-mode)
      (elcord-mode)
    #+END_SRC
-** Youtube
-   #+BEGIN_SRC emacs-lisp
-     (defun youtube-dl-url (&optional url)
-       "Run 'youtube-dl' over the URL.
-     If URL is nil, use URL at point."
-       (interactive)
-       (setq url (or url (thing-at-point-url-at-point)))
-       (let ((eshell-buffer-name "*youtube-dl*")
-	     (directory (expand-file-name (or (file-directory-p "~/Media/Videos")
-					      (file-directory-p "~/Downloads")
-					      "."))))
-	 (eshell)
-	 (when (eshell-interactive-process)
-	   (eshell t))
-	 (eshell-interrupt-process)
-	 (insert (format "cd '%s' && youtube-dl " directory) url)
-	 (eshell-send-input)))
-   #+END_SRC
-** Matrix
-   Hopefully matrix works so maybe i can bridge discord to matrix??? 
-   #+BEGIN_SRC emacs-lisp
-     ;;(use-package matrix-client ;; @TODO(renzix): Hopfully this gets fixed???
-     ;;  :quelpa (matrix-client :fetcher github :repo "jgkamat/matrix-client-el"))
-   #+END_SRC
 ** Org
+   Some basic configuration for org mode incluing access to executing
+   python,sql,emacs-lisp and latex. Also some keybinds
    #+BEGIN_SRC emacs-lisp
      (setq org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
@@ -549,10 +490,13 @@
 
    #+END_SRC
 ** KDE Connect
+   Simply KDE connet intergration for emacs
    #+BEGIN_SRC emacs-lisp
      (use-package kdeconnect)
    #+END_SRC
 ** Nix OS
+   Some things for nixos but might get rid of it in the future in
+   favor of helm-system-package?
    #+BEGIN_SRC emacs-lisp
      (use-package nix-mode)
      (use-package helm-nixos-options)
@@ -569,17 +513,19 @@
 
    #+END_SRC
 ** Libvterm
+   Terminal emulator based off of a real thing stollen from the neovim
+   project. its supposed to actually work.
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'load-path (concat HOME "/Projects/emacs-libvterm"))
      (let (vterm-install)
        (require 'vterm))
      (setq vterm-shell "ion")
    #+END_SRC
-** Package Management
+** System Package Management
+   This let me use emerge,apt,dnf,homebrew,macports,guixSD and
+   possibly more with helm
    #+BEGIN_SRC emacs-lisp
-     (use-package system-packages)
-     (use-package helm-system-packages
-       :after (sysetem-packages))
+     (use-package helm-system-packages)
    #+END_SRC
 * Post Config
 ** Backups
