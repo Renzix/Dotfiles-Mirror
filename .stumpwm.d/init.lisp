@@ -60,7 +60,6 @@
 (define-key *root-map* (kbd "i") |*chromium-browser-map*|)
 (define-key *root-map* (kbd "e") |*emacs_frame-map*|)
 (define-key *root-map* (kbd "E") |*emacs-map*|)
-(define-key *root-map* (kbd "TAB") "next-in-frame")
 ;; Opens new apps
 (defvar *app-map*
   (make-sparse-keymap)

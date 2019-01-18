@@ -389,18 +389,14 @@
      ;; :keymaps 'irony-mode-map
      ;; :prefix ",")
    #+END_SRC
-** Lisps
-   @TODO(renzix): Add el support and maybe scheme. also get rid of require
+** Lisp
    #+BEGIN_SRC emacs-lisp
      (setq inferior-lisp-program "/usr/bin/sbcl")
      (use-package slime)
      (use-package slime-company)
      (require 'slime-autoloads)
      (slime-setup '(slime-fancy))
-   #+END_SRC
-** Shells
-   #+BEGIN_SRC emacs-lisp
-  ;; (require 'ion-mode)
+
    #+END_SRC
 ** Company
    @TODO(renzix): Switch from company to autocomplete for fuzzy matching???
