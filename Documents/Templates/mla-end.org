@@ -1,0 +1,4 @@
+#+LATEX_HEADER: \end{workscited}
+#+LATEX_HEADER: \end{flushleft}
+#+LATEX_HEADER: \end{document}
+#+LATEX_HEADER: \}
