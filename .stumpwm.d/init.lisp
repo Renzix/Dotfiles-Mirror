@@ -58,8 +58,8 @@
 ;; Keybinds for freq programs
 (define-key *root-map* (kbd "RET") |*xfce4-terminal-map*|)
 (define-key *root-map* (kbd "i") |*chromium-browser-map*|)
-(define-key *root-map* (kbd "e") |*emacs_frame-map*|)
-(define-key *root-map* (kbd "E") |*emacs-map*|)
+(define-key *root-map* (kbd "e") |*emacs-map*|)
+(define-key *root-map* (kbd "E") |*emacs_frame-map*|)
 ;; Opens new apps
 (defvar *app-map*
   (make-sparse-keymap)

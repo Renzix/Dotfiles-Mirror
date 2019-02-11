@@ -5,7 +5,7 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
-(package-initialize)
+(package-refresh-contents)
 ;;(setq package-enable-at-startup nil)
 ;;(let ((elapsed (float-time (time-subtract (current-time)
 ;;					  emacs-start-time))))
@@ -48,7 +48,7 @@
  '(highlight-symbol-foreground-color "#E0E0E0")
  '(highlight-tail-colors '(("#7fff00007fff" . 0) ("#424242" . 100)))
  '(package-selected-packages
-   '(nord-theme slime-company rainbow-identifiers rainbow-mode emojify htmlize ox-pandoc csharp-mode kdeconnect helm-rg json-mode elcord exwm-randr powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))
+   '(pulseaudio-control nord-theme slime-company rainbow-identifiers rainbow-mode emojify htmlize ox-pandoc csharp-mode kdeconnect helm-rg json-mode elcord exwm-randr powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))
  '(pos-tip-background-color "#000000000000")
  '(pos-tip-foreground-color "#9E9E9E")
  '(tabbar-background-color "#000000000000"))

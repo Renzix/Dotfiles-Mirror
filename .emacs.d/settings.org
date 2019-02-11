@@ -13,6 +13,8 @@
      (menu-bar-mode -1)
      (tool-bar-mode -1)
      (scroll-bar-mode -1)
+     (display-battery-mode)
+     (display-time)
    #+END_SRC
 ** Lines
    Makes VI relative line numbering
@@ -211,7 +213,7 @@
        (general-define-key
 	:states 'movement
 	(kbd "ESC") 'evil-normal-state
-	(kbd "q") 'delete-window
+	(kbd "q") 'evil-window-delete
 	(kbd "Q") 'kill-emacs
 	(kbd "h") 'evil-window-left
 	(kbd "j") 'evil-window-down
@@ -219,13 +221,14 @@
 	(kbd "l") 'evil-window-right
 	(kbd "b") 'helm-buffers-list
 	(kbd "d") 'delete-file-and-buffer
-	(kbd "e") 'helm-find-files
+	(kbd "s") 'evil-save
+	(kbd "o") 'helm-find-files
 	(kbd "H") 'evil-window-move-far-left
 	(kbd "L") 'evil-window-move-far-right
 	(kbd "J") 'evil-window-move-very-bottom
 	(kbd "K") 'evil-window-move-very-top
 	(kbd "v") 'evil-window-vsplit
-	(kbd "s") 'evil-window-split
+	(kbd "h") 'evil-window-split
 	(kbd "-") 'evil-window-decrease-height
 	(kbd "=") 'evil-window-increase-height
 	(kbd "_") 'evil-window-decrease-width
@@ -240,7 +243,7 @@
 	(kbd "g C") 'magit-clone
 	(kbd "g c") 'magit-commit-popup
 	(kbd "g b") 'magit-branch-popup
-	(kbd "p") 'projectile-command-map))
+	(kbd "p") 'projectiile-command-map))
 
      (defun evil-movement-start-hook ()
        (message "Entering movement mode"))
