@@ -41,6 +41,19 @@
 ** Functions
    Useful function
    #+BEGIN_SRC emacs-lisp
+     (defun org-get-keyword (KEYWORD)
+       "get the value from a line like this
+     ,#+KEYWORD: value
+     in a file."
+       (interactive)
+       (let ((case-fold-search t)
+	     (re (format "^#\\+%s:[ \t]+\\([^\t\n]+\\)" KEYWORD)))
+	 (if (not (save-excursion
+		    (or (re-search-forward re nil t)
+			(re-search-backward re nil t))))
+	     (error (format "No line containing #+%s: value found" KEYWORD)))
+	 (match-string 1)))
+
      (defun eshell/clear ()
        "Clear the eshell buffer."
        (let ((inhibit-read-only t))
@@ -93,8 +106,8 @@
 
      (defun buf-move-up ()
        "Swap the current buffer and the buffer above the split.
-      If there is no split, ie now window above the current one, an
-      error is signaled."
+	   If there is no split, ie now window above the current one, an
+	   error is signaled."
        ;;  "Switches between the current buffer, and the buffer above the
        ;;  split, if possible."
        (interactive)
@@ -110,8 +123,8 @@
 
      (defun buf-move-down ()
        "Swap the current buffer and the buffer under the split.
-      If there is no split, ie now window under the current one, an
-      error is signaled."
+	   If there is no split, ie now window under the current one, an
+	   error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'down))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -126,8 +139,8 @@
 
      (defun buf-move-left ()
        "Swap the current buffer and the buffer on the left of the split.
-      If there is no split, ie now window on the left of the current
-      one, an error is signaled."
+	   If there is no split, ie now window on the left of the current
+	   one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'left))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -141,8 +154,8 @@
 
      (defun buf-move-right ()
        "Swap the current buffer and the buffer on the right of the split.
-      If there is no split, ie now window on the right of the current
-      one, an error is signaled."
+	   If there is no split, ie now window on the right of the current
+	   one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'right))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -160,7 +173,7 @@
 	 (buffer-string)))
      (defun app-launcher (command)
        "Launches an application in your PATH.
-      Can show completions at point for COMMAND using helm or ido"
+	   Can show completions at point for COMMAND using helm or ido"
        (interactive (list (read-shell-command "$ ")))
        (start-process-shell-command command nil command))
    #+END_SRC
@@ -291,14 +304,14 @@
      (general-define-key
       :states '(movement)
       :prefix "c"
-      (kbd "c") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/settings.org") t) ))
-      (kbd "i") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.emacs.d/init.el"))))
-      (kbd "b") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/bspwm/bspwmrc"))))
-      (kbd "s") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm"))))
-      (kbd "h") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file (concat HOME "/.config/herbstluftwm/autostart"))))
-      (kbd "m") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/make.conf")))
-      (kbd "n") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/nixos/configuration.nix")))
-      (kbd "d") (lambda() (interactive) (let ((default-directory (concat HOME "/Dotfiles"))(magit-pull-from-upstream "master")) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h"))))
+      (kbd "c") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/settings.org") t) )
+      (kbd "i") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/init.el")))
+      (kbd "b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
+      (kbd "s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
+      (kbd "h") (lambda() (interactive) (find-file (concat HOME "/.config/herbstluftwm/autostart")))
+      (kbd "m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
+      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix"))
+      (kbd "d") (lambda() (interactive) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h")))
 
    #+END_SRC
 ** Insert-State
@@ -450,75 +463,11 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
-** ERC
-   @TODO(renzix): Maybe get rid of bitlbee cuz its rarted and frustrating
-   #+BEGIN_SRC emacs-lisp
-     (use-package erc-twitch)
-     (use-package erc-image)
-     (add-to-list 'erc-modules 'image)
-     (use-package erc-tweet)
-     (add-to-list 'erc-modules 'tweet)
-     (erc-twitch-enable)
-     (erc-update-modules)
-     (setq erc-hide-list '("JOIN" "PART" "QUIT" "ROOT"))
-     (setq erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
-     (setq erc-kill-buffer-on-part t)
-     (setq erc-kill-queries-on-quit t)
-     (setq erc-kill-server-buffer-on-quit t)
-
-     (defmacro erc-connect (command server port nick ssl pass)
-       "Create interactive command `command', for connecting to an IRC server. The
-		     command uses interactive mode if passed an argument."
-       (fset command
-	     `(lambda (arg)
-		(interactive "p")
-		(if (not (= 1 arg))
-		    (call-interactively 'erc)
-		  (let ((erc-connect-function ',(if ssl 'erc-open-ssl-stream 'open-network-stream)))
-		    (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
-     (erc-connect bitlbee-erc "127.0.0.1" 6667 "Renzix" nil "Akeyla10!") ;;@TODO(renzix): Put this on my server i guess??
-     (erc-connect twitch-erc "irc.chat.twitch.tv" 6667 "TheRenzix" nil (get-string-from-file (concat HOME "/.config/twitch-oauth")))
-     (general-define-key
-      :states '(normal)
-      :prefix "\\"
-      (kbd "d") 'bitlbee-erc
-      (kbd "t") 'twitch-erc
-      (kbd "b") 'erc-switch-to-buffer
-      (kbd "q") 'erc-quit-server
-      (kbd "p") 'erc-part-from-channel
-      (kbd "j") 'erc-join-channel
-      (kbd "\\") 'erc-track-switch-buffer)
-     ;;(general-define-key @TODO(renzix): Make this a search function for irc?
-     ;; :states '(normal)
-     ;; :prefix ","
-     ;; (kbd "p") 'erc-part-from-channel
-     ;; (kbd "\\") 'erc-track-switch-buffer)
-   #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
-     ;;(use-package emojify)
-     ;;(add-hook 'after-init-hook #'global-emojify-mode)
-     (elcord-mode)
-   #+END_SRC
-** Youtube
-   #+BEGIN_SRC emacs-lisp
-     (defun youtube-dl-url (&optional url)
-       "Run 'youtube-dl' over the URL.
-     If URL is nil, use URL at point."
-       (interactive)
-       (setq url (or url (thing-at-point-url-at-point)))
-       (let ((eshell-buffer-name "*youtube-dl*")
-	     (directory (expand-file-name (or (file-directory-p "~/Media/Videos")
-					      (file-directory-p "~/Downloads")
-					      "."))))
-	 (eshell)
-	 (when (eshell-interactive-process)
-	   (eshell t))
-	 (eshell-interrupt-process)
-	 (insert (format "cd '%s' && youtube-dl " directory) url)
-	 (eshell-send-input)))
+     ;; (elcord-mode)
    #+END_SRC
 ** Matrix
    Hopefully matrix works so maybe i can bridge discord to matrix??? 
@@ -528,6 +477,9 @@
    #+END_SRC
 ** Org
    #+BEGIN_SRC emacs-lisp
+     (setq-default org-display-custom-times t)
+     (setq org-export-date-timestamp-format '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
+     (setq org-time-stamp-custom-formats '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
      (setq org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
       'org-babel-load-languages
@@ -535,6 +487,7 @@
 	(latex . t)
 	(emacs-lisp . t)
 	(sql . t)
+	(shell . t)
 	(python . t)))
      (general-define-key
       :states '(normal movement)
@@ -546,7 +499,7 @@
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
      (use-package ox-pandoc)
-
+     (use-package htmlize)
    #+END_SRC
 ** KDE Connect
    #+BEGIN_SRC emacs-lisp

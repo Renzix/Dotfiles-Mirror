@@ -5,7 +5,9 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
-(package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 ;;(setq package-enable-at-startup nil)
 ;;(let ((elapsed (float-time (time-subtract (current-time)
 ;;					  emacs-start-time))))

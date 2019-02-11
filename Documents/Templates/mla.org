@@ -1,0 +1,43 @@
+#+OPTIONS: tex:t date:t author:nil date:nil title:nil
+#+LATEX_CLASS: article
+
+#+LATEX_HEADER: \usepackage[letterpaper]{geometry}
+#+LATEX_HEADER: \usepackage{times}
+#+LATEX_HEADER: \geometry{top=1.0in, bottom=1.0in, left=1.0in, right=1.0in}
+
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \doublespace
+
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \pagestyle{fancy}
+#+LATEX_HEADER: \lhead{} 
+#+LATEX_HEADER: \chead{} 
+#+LATEX_HEADER: \rhead{Last \thepage} 
+#+LATEX_HEADER: \lfoot{} 
+#+LATEX_HEADER: \cfoot{} 
+#+LATEX_HEADER: \rfoot{} 
+#+LATEX_HEADER: \renewcommand{\headrulewidth}{0pt} 
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0pt} 
+
+#+LATEX_HEADER: \setlength\headsep{0.333in}
+
+#+LATEX_HEADER: \newcommand{\bibent}{\noindent \hangindent 40pt}
+#+LATEX_HEADER: \newenvironment{workscited}{\newpage \begin{center} Works Cited \end{center}}{\newpage }
+
+
+#+LATEX_HEADER: \begin{document}
+#+LATEX_HEADER: \begin{flushleft}
+#+MACRO: keyword (eval (org-get-keyword "$1"))
+
+{{{author}}}\\
+{{{keyword(professor)}}}\\
+{{{keyword(class)}}}\\
+{{{modification-time(%e %B %Y)}}}\\
+
+
+#+LATEX_HEADER: \begin{center}
+{{{title}}}
+#+LATEX_HEADER: \end{center}
+
+
+#+LATEX_HEADER: \setlength{\parindent}{0.5in}
