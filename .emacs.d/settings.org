@@ -37,6 +37,7 @@
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
      (defvar WM nil)
+     (load-file (concat HOME "/.emacs.d/private.el"))
    #+END_SRC
 ** Functions
    Useful function
@@ -97,12 +98,6 @@
 	   (find-file (concat "/sudo:root@localhost:"
 			      (ido-read-file-name "Find file(as root): ")))
 	 (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-     (defun reset-erc-track-mode ()
-       (interactive)
-       (setq erc-modified-channels-alist nil)
-       (erc-modified-channels-update))
-     (global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
 
      (defun buf-move-up ()
        "Swap the current buffer and the buffer above the split.
@@ -310,8 +305,7 @@
       (kbd "s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
       (kbd "h") (lambda() (interactive) (find-file (concat HOME "/.config/herbstluftwm/autostart")))
       (kbd "m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix"))
-      (kbd "d") (lambda() (interactive) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h")))
+      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix")))
 
    #+END_SRC
 ** Insert-State
@@ -469,11 +463,57 @@
      (use-package elcord)
      ;; (elcord-mode)
    #+END_SRC
-** Matrix
-   Hopefully matrix works so maybe i can bridge discord to matrix??? 
+** IRC/Circe
    #+BEGIN_SRC emacs-lisp
-     ;;(use-package matrix-client ;; @TODO(renzix): Hopfully this gets fixed???
-     ;;  :quelpa (matrix-client :fetcher github :repo "jgkamat/matrix-client-el"))
+
+     (setq circe-reduce-lurker-spam t
+	   circe-network-options
+	   '(("Freenode"
+	      :nick "Renzix"
+	      :channels ("#emacs" "#emacs-circe")
+	      :nickserv-password ,freenode-password)
+	     ("127.0.0.1"
+	      :user "Renzix"
+	      :port 6667
+	      :channels ("#home" "#techsupport" "#devnull" "#wallpapers" "#bots" "#programming" 
+			 "#anime" "#hardware" "#voice" "#ricing" "#de" "#wm" "#tools" "#feedback"
+			 "#starboard" "#modlog" "#rules" "#announcements")
+	      :pass discord-unixporn))
+	   circe-format-say "{nick:-16s} {body}"
+	   lui-time-stamp-position 'right-margin
+	   lui-time-stamp-format "%H:%M")
+     (enable-circe-color-nicks)
+     (defun my-circe-set-margin ()
+       (setq right-margin-width 5))
+     (add-hook 'lui-mode-hook 'my-circe-set-margin)
+     (defun my-circe-prompt ()
+       (lui-set-prompt
+	(concat (propertize (concat (buffer-name) ">")
+			    'face 'circe-prompt-face)
+		" ")))
+     (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
+     (setq
+      lui-time-stamp-position 'right-margin
+      lui-fill-type nil)
+
+     (add-hook 'lui-mode-hook 'my-lui-setup)
+     (defun my-lui-setup ()
+       (setq
+	fringes-outside-margins t
+	right-margin-width 5
+	word-wrap t
+	wrap-prefix "    "))
+     (use-package circe)
+     (use-package helm-circe)
+     (use-package tracking)
+     (general-define-key
+      :states '(normal movement)
+      :keymaps 'circe-mode-map
+      :prefix ","
+      (kbd ",") 'tracking-next-buffer
+      (kbd "j") 'circe-command-JOIN
+      (kbd "p") 'circe-command-PART
+      (kbd "b") 'helm-circe)
    #+END_SRC
 ** Org
    #+BEGIN_SRC emacs-lisp

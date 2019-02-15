@@ -34,7 +34,7 @@
 
 (make-program-binding "firefox" "Firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "kitty xonsh" "Kitty" "kitty")
+(make-program-binding "alacritty -e xonsh" "Alacritty" "alacritty")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
@@ -57,7 +57,7 @@
 (define-key *root-map* (kbd "t") "twitch")
 
 ;; Keybinds for freq programs
-(define-key *root-map* (kbd "RET") |*kitty-map*|)
+(define-key *root-map* (kbd "RET") |*alacritty-map*|)
 (define-key *root-map* (kbd "i") |*firefox-map*|)
 (define-key *root-map* (kbd "E") |*emacs_frame-map*|)
 (define-key *root-map* (kbd "e") |*emacs-map*|)
