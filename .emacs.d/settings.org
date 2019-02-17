@@ -238,8 +238,7 @@
 	(kbd "+") 'evil-window-increase-width
 	(kbd "'") 'eshell
 	(kbd "\"") 'vterm
-	(kbd "g") 'magit-status
-	(kbd "p") 'projectile-command-map))
+	(kbd "g") 'magit-status))
 
      (defun evil-movement-start-hook ()
        (message "Entering movement mode"))
@@ -296,6 +295,7 @@
 	 (evil-movement-state)))
        (evil-echo "Switched to Movement state for the next command ..."))
 
+     ;; @TODO(renzix): Make this into a map or function?
      (general-define-key
       :states '(movement)
       :prefix "c"
@@ -323,6 +323,10 @@
      (evil-define-key '(normal movement) global-map (kbd ";") 'helm-M-x)
      (evil-define-key '(normal movement) global-map (kbd "SPC") 'app-launcher)
      (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
+     (evil-define-key '(normal) global-map (kbd "z") 'projectile-command-map)
+     (evil-define-key '(normal) global-map (kbd "\\") 'helm-projectile-rg)
+     (evil-define-key '(normal) global-map (kbd "|") 'helm-projectile-find-file)
+     (evil-define-key '(normal) global-map (kbd "`") 'magit-status)
    #+END_SRC
 * Programming
 ** Projectile
@@ -448,6 +452,12 @@
 	     comment-tags-show-faces t
 	     comment-tags-lighter nil)
        (add-hook 'prog-mode-hook 'comment-tags-mode))
+     ;; Auto indent on save
+     (defun indent-buffer ()
+       (interactive)
+       (save-excursion
+	 (indent-region (point-min) (point-max) nil)))
+     (add-hook 'before-save-hook 'indent-buffer)
    #+END_SRC
 * Normal Tasks
 ** Text
