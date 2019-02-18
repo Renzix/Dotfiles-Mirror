@@ -3,9 +3,10 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (use-package apropospriate-theme
-       :ensure t
-       :config (load-theme 'apropospriate-dark t))
+     (use-package apropospriate-theme)
+     (use-package nord-theme);
+     ;; :config (load-theme 'nord nil))
+     (load-theme 'apropospriate-dark t)
    #+END_SRC
 ** Some Defaults
    Gets rid of default options for display
@@ -195,119 +196,6 @@
        (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more 
        )
    #+END_SRC
-** Movement-State
-   I made this state cuz motion state sucks. I originally tried to
-   make motion-state better but it failed cuz motion state inherits
-   all normal states keys. This means if i edit it is annoying
-   #+BEGIN_SRC emacs-lisp
-     (general-define-key 
-      :states '(normal insert motion)
-      (kbd "S-<escape>") 'evil-execute-in-movement-state)
-     ;; @TODO(renzix): Make a movement state which toggles all buffers
-     ;;(kbd "~") 'evil-movement-state) @KEYBIND(renzix): Maybe make this better keybind
-
-     (evil-define-state movement
-       "Movement state. Moves and opens windows"
-       :tag " <MV> "
-       :message "-- MOVEMENT --"
-       :input-method t
-       :entry-hook (evil-movement-start-hook)
-       :exit-hook (evil-movement-exit-hook)
-
-       (general-define-key
-	:states 'movement
-	(kbd "ESC") 'evil-normal-state
-	(kbd "q") 'delete-window
-	(kbd "Q") 'kill-emacs
-	(kbd "h") 'evil-window-left
-	(kbd "j") 'evil-window-down
-	(kbd "k") 'evil-window-up
-	(kbd "l") 'evil-window-right
-	(kbd "b") 'helm-buffers-list
-	(kbd "d") 'delete-file-and-buffer
-	(kbd "e") 'helm-find-files
-	(kbd "H") 'evil-window-move-far-left
-	(kbd "L") 'evil-window-move-far-right
-	(kbd "J") 'evil-window-move-very-bottom
-	(kbd "K") 'evil-window-move-very-top
-	(kbd "v") 'evil-window-vsplit
-	(kbd "s") 'evil-window-split
-	(kbd "-") 'evil-window-decrease-height
-	(kbd "=") 'evil-window-increase-height
-	(kbd "_") 'evil-window-decrease-width
-	(kbd "+") 'evil-window-increase-width
-	(kbd "'") 'eshell
-	(kbd "\"") 'vterm
-	(kbd "g") 'magit-status))
-
-     (defun evil-movement-start-hook ()
-       (message "Entering movement mode"))
-
-
-     (defun evil-movement-exit-hook ()
-       (message "Leaving movement mode"))
-
-     (defvar evil-execute-in-movement-state-buffer nil)
-
-     (defvar evil-movement-last-command nil)
-
-     (defun evil-movement-fix-last-command ()
-       "Change `last-command' to be the command before `evil-execute-in-movement-state'."
-       (setq last-command evil-movement-last-command))
-
-     (defun evil-stop-execute-in-movement-state ()
-       "Switch back to previous evil state."
-       (unless (or (eq this-command #'evil-execute-in-movement-state)
-		   (eq this-command #'universal-argument)
-		   (eq this-command #'universal-argument-minus)
-		   (eq this-command #'universal-argument-more)
-		   (eq this-command #'universal-argument-other-key)
-		   (eq this-command #'digit-argument)
-		   (eq this-command #'negative-argument)
-		   (minibufferp))
-	 (remove-hook 'pre-command-hook 'evil-movement-fix-last-command)
-	 (remove-hook 'post-command-hook 'evil-stop-execute-in-movement-state)
-	 (when (buffer-live-p evil-execute-in-movement-state-buffer)
-	   (with-current-buffer evil-execute-in-movement-state-buffer
-	     (if (and (eq evil-previous-state 'visual)
-		      (not (use-region-p)))
-		 (progn
-		   (evil-change-to-previous-state)
-		   (evil-exit-visual-state))
-	       (evil-change-to-previous-state))))
-	 (setq evil-execute-in-movement-state-buffer nil)))
-
-     (defun evil-execute-in-movement-state ()
-       "Execute the next command in movement state."
-       (interactive)
-       (add-hook 'pre-command-hook #'evil-movement-fix-last-command t)
-       (add-hook 'post-command-hook #'evil-stop-execute-in-movement-state t)
-       (setq evil-execute-in-movement-state-buffer (current-buffer))
-       (setq evil-movement-last-command last-command)
-       (cond
-	((evil-visual-state-p)
-	 (let ((mrk (mark))
-	       (pnt (point)))
-	   (evil-movement-state)
-	   (set-mark mrk)
-	   (goto-char pnt)))
-	(t
-	 (evil-movement-state)))
-       (evil-echo "Switched to Movement state for the next command ..."))
-
-     ;; @TODO(renzix): Make this into a map or function?
-     (general-define-key
-      :states '(movement)
-      :prefix "c"
-      (kbd "c") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/settings.org") t) )
-      (kbd "i") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/init.el")))
-      (kbd "b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
-      (kbd "s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
-      (kbd "h") (lambda() (interactive) (find-file (concat HOME "/.config/herbstluftwm/autostart")))
-      (kbd "m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix")))
-
-   #+END_SRC
 ** Insert-State
    For super simple editing of files without effort
    #+BEGIN_SRC emacs-lisp
@@ -320,13 +208,34 @@
    #+BEGIN_SRC emacs-lisp
      (use-package which-key)
      (which-key-mode)
-     (evil-define-key '(normal movement) global-map (kbd ";") 'helm-M-x)
-     (evil-define-key '(normal movement) global-map (kbd "SPC") 'app-launcher)
+     (evil-define-key '(normal) global-map (kbd ";") 'helm-M-x)
+     (evil-define-key '(normal) global-map (kbd "SPC") 'app-launcher)
      (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
      (evil-define-key '(normal) global-map (kbd "z") 'projectile-command-map)
      (evil-define-key '(normal) global-map (kbd "\\") 'helm-projectile-rg)
      (evil-define-key '(normal) global-map (kbd "|") 'helm-projectile-find-file)
      (evil-define-key '(normal) global-map (kbd "`") 'magit-status)
+     ;; Basic Movement @TODO(renzix): Maybe make this global period without defining what states can or cannot have this
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-h") 'evil-window-left)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-j") 'evil-window-down)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-k") 'evil-window-up)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-l") 'evil-window-right)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-v") 'evil-window-vsplit)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-s") 'evil-window-split)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-e") 'helm-find-files)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-H") 'evil-window-move-far-left)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-L") 'evil-window-move-far-right)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-=") 'evil-window-increase-height)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-_") 'evil-window-decrease-width)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-+") 'evil-window-increase-width)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-'") 'eshell)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-\"") 'vterm)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-Q") 'kill-emacs)
    #+END_SRC
 * Programming
 ** Projectile
@@ -517,7 +426,7 @@
      (use-package helm-circe)
      (use-package tracking)
      (general-define-key
-      :states '(normal movement)
+      :states '(normal)
       :keymaps 'circe-mode-map
       :prefix ","
       (kbd ",") 'tracking-next-buffer
@@ -540,7 +449,7 @@
 	(shell . t)
 	(python . t)))
      (general-define-key
-      :states '(normal movement)
+      :states '(normal)
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
