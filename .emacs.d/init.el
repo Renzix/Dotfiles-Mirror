@@ -5,7 +5,13 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
+<<<<<<< HEAD
 (package-refresh-contents)
+=======
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+>>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
 ;;(setq package-enable-at-startup nil)
 ;;(let ((elapsed (float-time (time-subtract (current-time)
 ;;					  emacs-start-time))))
@@ -18,8 +24,8 @@
 
 (use-package org-evil)
 (org-babel-load-file
-  (expand-file-name "settings.org"
-		    user-emacs-directory))
+ (expand-file-name "settings.org"
+		   user-emacs-directory))
 
 ;; Message how long it took to load everything (minus packages)
 (let ((elapsed (float-time (time-subtract (current-time)
@@ -47,8 +53,11 @@
    '("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80"))
  '(highlight-symbol-foreground-color "#E0E0E0")
  '(highlight-tail-colors '(("#7fff00007fff" . 0) ("#424242" . 100)))
+<<<<<<< HEAD
  '(package-selected-packages
    '(pulseaudio-control nord-theme slime-company rainbow-identifiers rainbow-mode emojify htmlize ox-pandoc csharp-mode kdeconnect helm-rg json-mode elcord exwm-randr powershell autopair company-irony company helm-projectile which-key linum-relative use-package org-evil helm god-mode general apropospriate-theme))
+=======
+>>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
  '(pos-tip-background-color "#000000000000")
  '(pos-tip-foreground-color "#9E9E9E")
  '(tabbar-background-color "#000000000000"))

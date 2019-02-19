@@ -3,9 +3,10 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (use-package apropospriate-theme
-       :ensure t
-       :config (load-theme 'apropospriate-dark t))
+     (use-package apropospriate-theme)
+     (use-package nord-theme);
+     ;; :config (load-theme 'nord nil))
+     (load-theme 'apropospriate-dark t)
    #+END_SRC
 ** Some Defaults
    Gets rid of default options for display
@@ -38,10 +39,24 @@
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
      (defvar WM nil)
+     (load-file (concat HOME "/.emacs.d/private.el"))
    #+END_SRC
 ** Functions
    Useful function
    #+BEGIN_SRC emacs-lisp
+     (defun org-get-keyword (KEYWORD)
+       "get the value from a line like this
+     ,#+KEYWORD: value
+     in a file."
+       (interactive)
+       (let ((case-fold-search t)
+	     (re (format "^#\\+%s:[ \t]+\\([^\t\n]+\\)" KEYWORD)))
+	 (if (not (save-excursion
+		    (or (re-search-forward re nil t)
+			(re-search-backward re nil t))))
+	     (error (format "No line containing #+%s: value found" KEYWORD)))
+	 (match-string 1)))
+
      (defun eshell/clear ()
        "Clear the eshell buffer."
        (let ((inhibit-read-only t))
@@ -86,16 +101,10 @@
 			      (ido-read-file-name "Find file(as root): ")))
 	 (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-     (defun reset-erc-track-mode ()
-       (interactive)
-       (setq erc-modified-channels-alist nil)
-       (erc-modified-channels-update))
-     (global-set-key (kbd "C-c C-r") 'reset-erc-track-mode)
-
      (defun buf-move-up ()
        "Swap the current buffer and the buffer above the split.
-      If there is no split, ie now window above the current one, an
-      error is signaled."
+	   If there is no split, ie now window above the current one, an
+	   error is signaled."
        ;;  "Switches between the current buffer, and the buffer above the
        ;;  split, if possible."
        (interactive)
@@ -111,8 +120,8 @@
 
      (defun buf-move-down ()
        "Swap the current buffer and the buffer under the split.
-      If there is no split, ie now window under the current one, an
-      error is signaled."
+	   If there is no split, ie now window under the current one, an
+	   error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'down))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -127,8 +136,8 @@
 
      (defun buf-move-left ()
        "Swap the current buffer and the buffer on the left of the split.
-      If there is no split, ie now window on the left of the current
-      one, an error is signaled."
+	   If there is no split, ie now window on the left of the current
+	   one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'left))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -142,8 +151,8 @@
 
      (defun buf-move-right ()
        "Swap the current buffer and the buffer on the right of the split.
-      If there is no split, ie now window on the right of the current
-      one, an error is signaled."
+	   If there is no split, ie now window on the right of the current
+	   one, an error is signaled."
        (interactive)
        (let* ((other-win (windmove-find-other-window 'right))
 	      (buf-this-buf (window-buffer (selected-window))))
@@ -161,7 +170,7 @@
 	 (buffer-string)))
      (defun app-launcher (command)
        "Launches an application in your PATH.
-      Can show completions at point for COMMAND using helm or ido"
+	   Can show completions at point for COMMAND using helm or ido"
        (interactive (list (read-shell-command "$ ")))
        (start-process-shell-command command nil command))
    #+END_SRC
@@ -188,6 +197,7 @@
        (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more 
        )
    #+END_SRC
+<<<<<<< HEAD
 ** Movement-State
    I made this state cuz motion state sucks. I originally tried to
    make motion-state better but it failed cuz motion state inherits
@@ -313,6 +323,8 @@
       (kbd "d") (lambda() (interactive) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h")))
 
    #+END_SRC
+=======
+>>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
 ** Insert-State
    For super simple editing of files without effort
    #+BEGIN_SRC emacs-lisp
@@ -325,9 +337,34 @@
    #+BEGIN_SRC emacs-lisp
      (use-package which-key)
      (which-key-mode)
-     (evil-define-key '(normal movement) global-map (kbd ";") 'helm-M-x)
-     (evil-define-key '(normal movement) global-map (kbd "SPC") 'app-launcher)
+     (evil-define-key '(normal) global-map (kbd ";") 'helm-M-x)
+     (evil-define-key '(normal) global-map (kbd "SPC") 'app-launcher)
      (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
+     (evil-define-key '(normal) global-map (kbd "z") 'projectile-command-map)
+     (evil-define-key '(normal) global-map (kbd "\\") 'helm-projectile-rg)
+     (evil-define-key '(normal) global-map (kbd "|") 'helm-projectile-find-file)
+     (evil-define-key '(normal) global-map (kbd "`") 'magit-status)
+     ;; Basic Movement @TODO(renzix): Maybe make this global period without defining what states can or cannot have this
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-h") 'evil-window-left)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-j") 'evil-window-down)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-k") 'evil-window-up)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-l") 'evil-window-right)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-v") 'evil-window-vsplit)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-s") 'evil-window-split)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-e") 'helm-find-files)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-H") 'evil-window-move-far-left)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-L") 'evil-window-move-far-right)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-=") 'evil-window-increase-height)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-_") 'evil-window-decrease-width)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-+") 'evil-window-increase-width)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-'") 'eshell)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-\"") 'vterm)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-Q") 'kill-emacs)
    #+END_SRC
 * Programming
 ** Projectile
@@ -453,6 +490,12 @@
 	     comment-tags-show-faces t
 	     comment-tags-lighter nil)
        (add-hook 'prog-mode-hook 'comment-tags-mode))
+     ;; Auto indent on save
+     (defun indent-buffer ()
+       (interactive)
+       (save-excursion
+	 (indent-region (point-min) (point-max) nil)))
+     (add-hook 'before-save-hook 'indent-buffer)
    #+END_SRC
 * Normal Tasks
 ** Text
@@ -466,12 +509,72 @@
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
+<<<<<<< HEAD
      (elcord-mode)
    #+END_SRC
+=======
+     ;; (elcord-mode)
+   #+END_SRC
+** IRC/Circe
+   #+BEGIN_SRC emacs-lisp
+
+     (setq circe-reduce-lurker-spam t
+	   circe-network-options
+	   '(("Freenode"
+	      :nick "Renzix"
+	      :channels ("#emacs" "#emacs-circe")
+	      :nickserv-password ,freenode-password)
+	     ("127.0.0.1"
+	      :user "Renzix"
+	      :port 6667
+	      :channels ("#home" "#techsupport" "#devnull" "#wallpapers" "#bots" "#programming" 
+			 "#anime" "#hardware" "#voice" "#ricing" "#de" "#wm" "#tools" "#feedback"
+			 "#starboard" "#modlog" "#rules" "#announcements")
+	      :pass discord-unixporn))
+	   circe-format-say "{nick:-16s} {body}"
+	   lui-time-stamp-position 'right-margin
+	   lui-time-stamp-format "%H:%M")
+     (enable-circe-color-nicks)
+     (defun my-circe-set-margin ()
+       (setq right-margin-width 5))
+     (add-hook 'lui-mode-hook 'my-circe-set-margin)
+     (defun my-circe-prompt ()
+       (lui-set-prompt
+	(concat (propertize (concat (buffer-name) ">")
+			    'face 'circe-prompt-face)
+		" ")))
+     (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
+     (setq
+      lui-time-stamp-position 'right-margin
+      lui-fill-type nil)
+
+     (add-hook 'lui-mode-hook 'my-lui-setup)
+     (defun my-lui-setup ()
+       (setq
+	fringes-outside-margins t
+	right-margin-width 5
+	word-wrap t
+	wrap-prefix "    "))
+     (use-package circe)
+     (use-package helm-circe)
+     (use-package tracking)
+     (general-define-key
+      :states '(normal)
+      :keymaps 'circe-mode-map
+      :prefix ","
+      (kbd ",") 'tracking-next-buffer
+      (kbd "j") 'circe-command-JOIN
+      (kbd "p") 'circe-command-PART
+      (kbd "b") 'helm-circe)
+   #+END_SRC
+>>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
 ** Org
    Some basic configuration for org mode incluing access to executing
    python,sql,emacs-lisp and latex. Also some keybinds
    #+BEGIN_SRC emacs-lisp
+     (setq-default org-display-custom-times t)
+     (setq org-export-date-timestamp-format '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
+     (setq org-time-stamp-custom-formats '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
      (setq org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
       'org-babel-load-languages
@@ -479,9 +582,10 @@
 	(latex . t)
 	(emacs-lisp . t)
 	(sql . t)
+	(shell . t)
 	(python . t)))
      (general-define-key
-      :states '(normal movement)
+      :states '(normal)
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
@@ -490,7 +594,7 @@
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
      (use-package ox-pandoc)
-
+     (use-package htmlize)
    #+END_SRC
 ** KDE Connect
    Simply KDE connet intergration for emacs
