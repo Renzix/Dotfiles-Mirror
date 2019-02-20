@@ -1,9 +1,8 @@
 (in-package :stumpwm)
 
 ;; Autostart stuff
-(run-shell-command "setxkbmap -option caps:swapescape")
+(run-shell-command "xmodmap ~/Dotfiles/Bin/autostart/Xmodmap-chromebook")
 ;;(run-shell-command "emacs --daemon")
-(run-shell-command "xrandr --output DVI-D-0 --left-of DP-4 --auto && xrandr --output DP-3 --right-of DP-4")
 
 ;; @TODO(renzix): Maybe make this more vim like where as keys can
 ;; be prefixed with n,p,r instead of postfix
@@ -32,9 +31,9 @@
 		  (kbd "r") ,(format nil "run-or-raise-~a" alias)
 		  (kbd "n") ,(format nil "~a" alias))))
 
-(make-program-binding "firefox" "Firefox")
+(make-program-binding "chromium-browser" "Chromium")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "alacritty -e xonsh" "Alacritty" "alacritty")
+(make-program-binding "xfce4-terminal" "Xfce4 Terminal")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
@@ -57,10 +56,10 @@
 (define-key *root-map* (kbd "t") "twitch")
 
 ;; Keybinds for freq programs
-(define-key *root-map* (kbd "RET") |*alacritty-map*|)
-(define-key *root-map* (kbd "i") |*firefox-map*|)
-(define-key *root-map* (kbd "E") |*emacs_frame-map*|)
+(define-key *root-map* (kbd "RET") |*xfce4-terminal-map*|)
+(define-key *root-map* (kbd "i") |*chromium-browser-map*|)
 (define-key *root-map* (kbd "e") |*emacs-map*|)
+(define-key *root-map* (kbd "E") |*emacs_frame-map*|)
 ;; Opens new apps
 (defvar *app-map*
   (make-sparse-keymap)
@@ -108,7 +107,7 @@
 ;; (stumpwm:toggle-mode-line (stumpwm:current-screen)
 ;; 			  (stumpwm:current-head))
 
-;; (setf *screen-mode-line-format*
-;;       (list "%w | "
-;; 	    '(:eval (stumpwm:run-shell-command "date" t))))
+(setf *screen-mode-line-format*
+      (list "%w | "
+	    '(:eval (stumpwm:run-shell-command "date" t))))
 
