@@ -15,7 +15,7 @@
   C-keybinding p calls run-or-pull
   C-keybinding n creates a new instance of the program"
   (if (not alias)
-    (setf alias program-name))
+      (setf alias program-name))
   `(progn
      (defvar ,(intern (format nil "*~a-map*" alias)) nil)
 
@@ -34,7 +34,7 @@
 
 (make-program-binding "firefox" "Firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "alacritty -e xonsh" "Alacritty" "alacritty")
+(make-program-binding "xfce4-terminal" "xfce4-terminal" "xfce4-terminal")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")

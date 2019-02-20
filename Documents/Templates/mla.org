@@ -29,15 +29,18 @@
 #+LATEX_HEADER: \begin{flushleft}
 #+MACRO: keyword (eval (org-get-keyword "$1"))
 
-{{{author}}}\\
-{{{keyword(professor)}}}\\
-{{{keyword(class)}}}\\
-{{{modification-time(%e %B %Y)}}}\\
+{{{author}}}
 
+{{{keyword(Professor)}}}
+
+{{{keyword(Class)}}}
+
+{{{modification-time(%e %B %Y)}}}
+
+#+LATEX_HEADER: \end{flushleft}
 
 #+LATEX_HEADER: \begin{center}
 {{{title}}}
 #+LATEX_HEADER: \end{center}
 
 
-#+LATEX_HEADER: \setlength{\parindent}{0.5in}

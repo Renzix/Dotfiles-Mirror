@@ -16,7 +16,4 @@ xmodmap ${DIR}/.Xmodmap
 xmodmap -e "keycode any = Escape" 
 xmodmap -e "keycode any = Caps_Lock" 
 xmodmap -e "keycode any = Tab" 
-xcape -e "Control_R=Escape" -t $TIMEOUT
-xcape -e "Shift_L=Caps_Lock" -t $TIMEOUT
-xcape -e "Hyper_L=Tab" -t $TIMEOUT
 
