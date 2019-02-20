@@ -177,7 +177,7 @@
 * Helm
   Helm stuff
 ** Init
-   Helm init
+   Helm init!
    #+BEGIN_SRC emacs-lisp
      (use-package helm
        :config 
@@ -197,143 +197,8 @@
        (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more 
        )
    #+END_SRC
-<<<<<<< HEAD
-** Movement-State
-   I made this state cuz motion state sucks. I originally tried to
-   make motion-state better but it failed cuz motion state inherits
-   all normal states keys. This makes it really annoying so i made a
-   new state called movement state. Its basically a extra command
-   state which i want to eventually activate on all buffers with a
-   toggle and have a single way to run it
-   #+BEGIN_SRC emacs-lisp
-     (general-define-key 
-      :states '(normal insert motion)
-      (kbd "S-<escape>") 'evil-execute-in-movement-state)
-     ;; @TODO(renzix): Make a movement state which toggles all buffers
-     ;;(kbd "~") 'evil-movement-state) @KEYBIND(renzix): Maybe make this better keybind
-
-     (evil-define-state movement
-       "Movement state. Moves and opens windows"
-       :tag " <MV> "
-       :message "-- MOVEMENT --"
-       :input-method t
-       :entry-hook (evil-movement-start-hook)
-       :exit-hook (evil-movement-exit-hook)
-
-       (general-define-key
-	:states 'movement
-	(kbd "ESC") 'evil-normal-state
-	(kbd "q") 'evil-window-delete
-	(kbd "Q") 'kill-emacs
-	(kbd "h") 'evil-window-left
-	(kbd "j") 'evil-window-down
-	(kbd "k") 'evil-window-up
-	(kbd "l") 'evil-window-right
-	(kbd "b") 'helm-buffers-list
-	(kbd "d") 'delete-file-and-buffer
-	(kbd "s") 'evil-save
-	(kbd "o") 'helm-find-files
-	(kbd "H") 'evil-window-move-far-left
-	(kbd "L") 'evil-window-move-far-right
-	(kbd "J") 'evil-window-move-very-bottom
-	(kbd "K") 'evil-window-move-very-top
-	(kbd "v") 'evil-window-vsplit
-	(kbd "h") 'evil-window-split
-	(kbd "-") 'evil-window-decrease-height
-	(kbd "=") 'evil-window-increase-height
-	(kbd "_") 'evil-window-decrease-width
-	(kbd "+") 'evil-window-increase-width
-	(kbd "'") 'eshell
-	(kbd "\"") 'vterm
-	(kbd "m") 'helm-system-packages
-	(kbd "g g") 'magit-status
-	(kbd "g s") 'magit-stash-popup
-	(kbd "g p") 'magit-pull-popup
-	(kbd "g P") 'magit-push-popup
-	(kbd "g C") 'magit-clone
-	(kbd "g c") 'magit-commit-popup
-	(kbd "g b") 'magit-branch-popup
-	(kbd "p") 'projectiile-command-map))
-
-     (defun evil-movement-start-hook ()
-       (message "Entering movement mode"))
-
-
-     (defun evil-movement-exit-hook ()
-       (message "Leaving movement mode"))
-
-     (defvar evil-execute-in-movement-state-buffer nil)
-
-     (defvar evil-movement-last-command nil)
-
-     (defun evil-movement-fix-last-command ()
-       "Change `last-command' to be the command before `evil-execute-in-movement-state'."
-       (setq last-command evil-movement-last-command))
-
-     (defun evil-stop-execute-in-movement-state ()
-       "Switch back to previous evil state."
-       (unless (or (eq this-command #'evil-execute-in-movement-state)
-		   (eq this-command #'universal-argument)
-		   (eq this-command #'universal-argument-minus)
-		   (eq this-command #'universal-argument-more)
-		   (eq this-command #'universal-argument-other-key)
-		   (eq this-command #'digit-argument)
-		   (eq this-command #'negative-argument)
-		   (minibufferp))
-	 (remove-hook 'pre-command-hook 'evil-movement-fix-last-command)
-	 (remove-hook 'post-command-hook 'evil-stop-execute-in-movement-state)
-	 (when (buffer-live-p evil-execute-in-movement-state-buffer)
-	   (with-current-buffer evil-execute-in-movement-state-buffer
-	     (if (and (eq evil-previous-state 'visual)
-		      (not (use-region-p)))
-		 (progn
-		   (evil-change-to-previous-state)
-		   (evil-exit-visual-state))
-	       (evil-change-to-previous-state))))
-	 (setq evil-execute-in-movement-state-buffer nil)))
-
-     (defun evil-execute-in-movement-state ()
-       "Execute the next command in movement state."
-       (interactive)
-       (add-hook 'pre-command-hook #'evil-movement-fix-last-command t)
-       (add-hook 'post-command-hook #'evil-stop-execute-in-movement-state t)
-       (setq evil-execute-in-movement-state-buffer (current-buffer))
-       (setq evil-movement-last-command last-command)
-       (cond
-	((evil-visual-state-p)
-	 (let ((mrk (mark))
-	       (pnt (point)))
-	   (evil-movement-state)
-	   (set-mark mrk)
-	   (goto-char pnt)))
-	(t
-	 (evil-movement-state)))
-       (evil-echo "Switched to Movement state for the next command ..."))
-
-     (general-define-key
-      :states '(movement)
-      :prefix "c"
-      (kbd "c") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/settings.org")))
-      (kbd "i") (lambda() (interactive) (find-file (concat HOME "/.emacs.d/init.el")))
-      (kbd "b") (lambda() (interactive) (find-file (concat HOME "/.config/bspwm/bspwmrc")))
-      (kbd "s") (lambda() (interactive) (find-file (concat HOME "/.config/sxhkd/sxhkdrc_bspwm")))
-      (kbd "h") (lambda() (interactive) (find-file (concat HOME "/.config/herbstluftwm/autostart")))
-      (kbd "m") (lambda() (interactive) (find-file "/sudo::/etc/portage/make.conf"))
-      (kbd "n") (lambda() (interactive) (find-file "/sudo::/etc/nixos/configuration.nix"))
-      (kbd "d") (lambda() (interactive) (find-file "/sudo::/etc/portage/savedconfig/x11-wm/dwm-6.1-r1.h")))
-
-   #+END_SRC
-=======
->>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
-** Insert-State
-   For super simple editing of files without effort
-   #+BEGIN_SRC emacs-lisp
-     ;;     (general-define-key
-     ;;      :states 'insert
-     ;;      (kbd "C-n") 'previous-buffer)
-   #+END_SRC
 ** Keybindings
-   Keybindings for evil
+   My keybindings for evil
    #+BEGIN_SRC emacs-lisp
      (use-package which-key)
      (which-key-mode)
@@ -356,7 +221,7 @@
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-L") 'evil-window-move-far-right)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-b") 'evil-buffer-list)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-b") 'helm-bookmarks)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
@@ -510,11 +375,7 @@
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
-<<<<<<< HEAD
      (elcord-mode)
-   #+END_SRC
-=======
-     ;; (elcord-mode)
    #+END_SRC
 ** IRC/Circe
    #+BEGIN_SRC emacs-lisp
@@ -569,7 +430,7 @@
       (kbd "p") 'circe-command-PART
       (kbd "b") 'helm-circe)
    #+END_SRC
->>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
+   >>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
 ** Org
    Some basic configuration for org mode incluing access to executing
    python,sql,emacs-lisp and latex. Also some keybinds
@@ -676,6 +537,12 @@
 	     (setq my:theme-window-loaded t)
 	   (setq my:theme-terminal-loaded t))))
      (setq org-src-tab-acts-natively t)
-     ;; Need to wait till after everything for to start uwu
+
+     ;;On save it adds buffer to bookmarks. LastSave is every time and get overridden while projectile is only 
+     ;;if in a projectile dir. the last one is every file that is saved gets added.
+     (add-hook 'after-save-hook '(lambda () (bookmark-set "LastSave" nil)))
+     (add-hook 'after-save-hook '(lambda () (if (projectile-file-exists-p (buffer-name)) (bookmark-set (concat "LastPro" (projectile-project-name)) nil))))
+     (add-hook 'after-save-hook '(lambda () (bookmark-set (buffer-name) nil)))
+
    #+END_SRC
    
