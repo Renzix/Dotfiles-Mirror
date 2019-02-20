@@ -209,7 +209,7 @@
      (use-package which-key)
      (which-key-mode)
      (evil-define-key '(normal) global-map (kbd ";") 'helm-M-x)
-     (evil-define-key '(normal) global-map (kbd "SPC") 'app-launcher)
+     (evil-define-key '(normal) global-map (kbd "SPC") 'helm-run-external-command)
      (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
      (evil-define-key '(normal) global-map (kbd "z") 'projectile-command-map)
      (evil-define-key '(normal) global-map (kbd "\\") 'helm-projectile-rg)
@@ -227,6 +227,7 @@
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-L") 'evil-window-move-far-right)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-b") 'evil-buffer-list)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
@@ -389,7 +390,8 @@
 	   circe-network-options
 	   '(("Freenode"
 	      :nick "Renzix"
-	      :channels ("#emacs" "#emacs-circe")
+	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo")
+	      :nickserv-nick "Renzix"
 	      :nickserv-password ,freenode-password)
 	     ("127.0.0.1"
 	      :user "Renzix"
