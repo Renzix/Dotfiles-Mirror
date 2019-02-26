@@ -34,7 +34,7 @@
 
 (make-program-binding "firefox" "Firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "xfce4-terminal" "xfce4-terminal" "xfce4-terminal")
+(make-program-binding "alacritty" "Alacritty")
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")

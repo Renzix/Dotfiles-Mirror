@@ -222,6 +222,7 @@
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-b") 'helm-bookmarks)
+     (evil-define-key '(normal insert motion visual) global-map (kbd "M-q") 'helm-locate)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
@@ -241,7 +242,8 @@
 ** Magit
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
-     (use-package forge)
+     ;;(use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
+     ;;  :after evil-magit)
    #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
@@ -372,11 +374,96 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
+** pb pastebin thingy
+   @TODO(renzix): Make this into a seperate package???
+   @TODO(renzix): Add text support for buffer, file and selection
+   #+BEGIN_SRC emacs-lisp
+     (defun pb-selection (&optional beg end)
+       "Takes a picture based on mouse"
+       (interactive (if (use-region-p)
+			(list (region-beginning)
+			      (region-end))
+		      (list (point-min)
+			    (point-max))))
+       (let ((res (pb--post (buffer-substring beg end))))
+	 (kill-new res)
+	 (message res)))
+     (defun pb-file (file)
+       "Takes a picture based on mouse"
+       (interactive "fUploaded File: ")
+       (let ((res (concat (pb--post (get-string-from-file file)) (file-name-extension))))
+	 (kill-new res)
+	 (message res)))
+     (defun pb-png () ;@TODO(renzix): Doesnt work i need to fix this
+       "Takes a picture based on mouse"
+       (interactive)
+       (let ((res (concat (pb--post (shell-command-to-string "maim -sq")) ".png")))
+	 (kill-new res)
+	 (message res)))
+     (defun pb-get (&optional url) 
+       "gets content in a new buffer" 
+       (interactive (list (if 
+			      (and (not (zerop (length kill-ring))) (string-match-p "http*" (current-kill 0)))
+			      (read-string (format "Website Url(%s): " (current-kill 0))) 
+			    (read-string "Website Url: "))))
+       (if (= (length url) 0) 
+	   (browse-url-emacs (current-kill 0))
+	 (browse-url-emacs url)))
+
+     (defun pb--post (input) ;get this working almost perfectly
+       "Raw pb post function accepts a buncha params"
+       (let* ((url "https://ptpb.pw/")
+	      (url-request-method "POST")
+	      (url-request-extra-headers
+	       '(("Content-Type" . "application/x-www-form-urlencoded")))
+	      (url-request-data))
+	 (setq url-request-data (pb--urlencode `(("c" . ,input))))
+	 (with-current-buffer (url-retrieve-synchronously url)
+	   (goto-char (point-min))
+	   (re-search-forward "https://*" nil t)
+	   (buffer-substring (point) (point-at-eol)))))
+     (defun pb--urlencode (alis)
+       "Map an alist of key/value pairs to an URL-encoded string."
+       (mapconcat (lambda (pair)
+		    (format "%s=%s"
+			    (url-hexify-string
+			     (format "%s" (car pair)))
+			    (url-hexify-string
+			     (format "%s" (if (consp (cdr pair))
+					      (cadr pair)
+					    (cdr pair))))))
+		  alis
+		  "&"))
+   #+END_SRC
+
+   #+RESULTS:
+   : pb--urlencode
+
 ** Discord
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
      (use-package elcord)
      (elcord-mode)
+   #+END_SRC
+** Matrix
+   wtf the emacs matrix client is fucking lit
+   #+BEGIN_SRC emacs-lisp
+     (setq matrix-client-show-images t
+	   matrix-client-show-room-avatars t
+	   matrix-client-mark-modified-rooms t
+	   matrix-client-use-tracking t
+	   matrix-client-render-presence t
+	   matrix-client-render-membership t)
+     (use-package matrix-client
+       :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+			       :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
+     (general-define-key
+      :states '(normal)
+      :keymaps 'Matrix-mode-map
+      :prefix ","
+      (kbd ",") 'tracking-next-buffer
+      (kbd "o") 'matrix-client-upload
+      (kbd "b") 'matrix-client-switch-buffer)
    #+END_SRC
 ** IRC/Circe
    #+BEGIN_SRC emacs-lisp
@@ -385,7 +472,7 @@
 	   circe-network-options
 	   '(("Freenode"
 	      :nick "Renzix"
-	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo")
+	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "cordance")
 	      :nickserv-nick "Renzix"
 	      :nickserv-password ,freenode-password)
 	     ("127.0.0.1"
@@ -431,7 +518,6 @@
       (kbd "p") 'circe-command-PART
       (kbd "b") 'helm-circe)
    #+END_SRC
-   >>>>>>> 3781407bf6ee14d87babd284ff5d362144a0fe0c
 ** Org
    Some basic configuration for org mode incluing access to executing
    python,sql,emacs-lisp and latex. Also some keybinds
@@ -546,4 +632,5 @@
      (add-hook 'after-save-hook '(lambda () (bookmark-set (buffer-name) nil)))
 
    #+END_SRC
+   
    
