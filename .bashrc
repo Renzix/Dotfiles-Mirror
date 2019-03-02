@@ -18,10 +18,10 @@ fi
 
 ## Aliases
 #LS
-#alias l="ls --color=auto"
-#alias ls="exa"
-#alias la="exa -a"
-#alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
+alias l="ls --color=auto"
+alias ls="exa"
+alias la="exa -a"
+alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
 
 #Wine
 #alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"

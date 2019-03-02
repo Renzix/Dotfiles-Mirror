@@ -44,6 +44,10 @@
 ** Functions
    Useful function
    #+BEGIN_SRC emacs-lisp
+     (defun open-emacs-config ()
+       "Opens my emacs config uwu"
+       (interactive)
+       (find-file (concat HOME "/.emacs.d/settings.org")))
      (defun org-get-keyword (KEYWORD)
        "get the value from a line like this
      ,#+KEYWORD: value
@@ -232,8 +236,49 @@
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-'") 'eshell)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-\"") 'vterm)
      (evil-define-key '(normal insert motion visual) global-map (kbd "M-Q") 'kill-emacs)
+     ;; EX Commands that may or maynot stay forever once i decide on the best way to define keybinds
+     (evil-ex-define-cmd "em" 'helm-find-files)
+     (evil-ex-define-cmd "bl" 'helm-buffers-list)
+     (evil-ex-define-cmd "bm" 'helm-bookmarks)
+     (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
+     (evil-ex-define-cmd "es" 'eshell)
+     (evil-ex-define-cmd "te" 'vterm)
+     (evil-ex-define-cmd "lc" 'helm-locate)
+     (evil-ex-define-cmd "h" 'evil-window-left)
+     (evil-ex-define-cmd "j" 'evil-window-down)
+     (evil-ex-define-cmd "k" 'evil-window-up)
+     (evil-ex-define-cmd "l" 'evil-window-right)
+     (evil-ex-define-cmd "mh" 'evil-window-move-far-left)
+     (evil-ex-define-cmd "mj" 'evil-window-move-very-bottom)
+     (evil-ex-define-cmd "mk" 'evil-window-very-top)
+     (evil-ex-define-cmd "ml" 'evil-window-far-right)
+     (evil-ex-define-cmd "kr" 'helm-show-kill-ring)
+     (evil-ex-define-cmd "nn" 'tracking-next-buffer)
+     (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
+     (evil-ex-define-cmd "cfg" 'open-emacs-config)
    #+END_SRC
 * Programming
+** Company
+   #+BEGIN_SRC emacs-lisp
+     (use-package company)
+     (add-hook 'after-init-hook 'global-company-mode)
+     (setq company-require-match 'never
+	   company-minimum-prefix-length 0
+	   company-tooltip-align-annotations t
+	   company-idle-delay .3
+	   company-dabbrev-downcase 0
+	   company-tooltip-limit 20
+	   global-company-mode t)
+     (eval-after-load 'company
+       '(progn
+	  (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+	  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+	  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+	  (define-key company-active-map (kbd "<return>") nil)
+	  (define-key company-active-map (kbd "RET") nil)
+	  (define-key company-active-map (kbd "C-SPC") #'company-complete-selection)
+	  (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)))
+   #+END_SRC
 ** Projectile
    #+BEGIN_SRC emacs-lisp
      (use-package helm-projectile)
@@ -248,93 +293,112 @@
 ** Rust
    #+BEGIN_SRC emacs-lisp
      (use-package rust-mode)
+     (use-package rustic)
      (use-package cargo)
-     (use-package racer)
+     (use-package lsp-mode)
      (use-package clippy)
+     (use-package racer
+       :init (setq racer-rust-src-path
+		   (concat (string-trim
+			    (shell-command-to-string "rustc --print sysroot"))
+			   "/lib/rustlib/src/rust/src")))
+     (setq rustic-format-on-save t)
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
-     (add-hook 'rust-mode-hook 'cargo-minor-mode)
-     (setq rust-format-on-save t)
+     ;;(add-hook 'racer-mode-hook 'company-mode)
+
+     (general-define-key
+      :keymaps 'projectile-mode-map
+      :prefix "z r"
+      (kbd "c") 'rustic-cargo-build
+      (kbd "C") 'rustic-recompile
+      (kbd "p") 'rustic-popup
+      (kbd "t") 'rustic-cargo-test
+      (kbd "r") 'rustic-cargo-run
+      (kbd "o") 'rustic-cargo-outdated)
 
      (general-define-key
       :states '(normal)
-      :keymaps 'rust-mode-map
+      :keymaps 'rustic-mode-map
       :prefix "," 
-      (kbd "f") 'cargo-process-fmt
-      (kbd "r") 'cargo-process-run
-      (kbd "d") 'cargo-process-doc
-      (kbd "o") 'cargo-process-doc-open
-      (kbd "t") 'cargo-process-test
-      (kbd "c") 'cargo-process-check
-      (kbd "R") 'cargo-process-clean
-      (kbd "n") 'cargo-process-new
-      (kbd "u") 'cargo-process-update
-      (kbd "b") 'cargo-process-build)
+      (kbd ".") 'racer-find-definition
+      (kbd "S-.") 'racer-find-definition-other-window
+      (kbd "d") 'racer-describe-tooltip
+      (kbd "f") 'rustic-format-buffer)
    #+END_SRC
 ** Python
    #+BEGIN_SRC emacs-lisp
-     (use-package anaconda-mode
-       :config 
-       (add-hook 'python-mode-hook 'anaconda-mode)
-       (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+     (use-package company-jedi)
+
+     ;;(add-hook 'python-mode-hook 'company-mode)
+     (add-hook 'python-mode-hook 'flycheck-mode)
+     (eval-after-load 'company
+       '(add-to-list 'company-backends 'company-jedi))
+
+
      (general-define-key
       :states '(normal)
       :keymaps 'python-mode-map
       :prefix "," 
-      (kbd "d") 'python-eldoc-get-doc
-      (kbd "l") 'python-check)
+      (kbd "d") 'jedi:show-doc
+      (kbd ".") 'jedi:goto-definition
+      (kbd "c") 'python-check)
    #+END_SRC
 ** C/CPP 
    #+BEGIN_SRC emacs-lisp
-     (use-package company-c-headers)
-     (use-package irony
-       :ensure t
-       :defer t
-       :init
-       (add-hook 'c++-mode-hook 'irony-mode)
-       (add-hook 'c-mode-hook 'irony-mode)
-       (add-hook 'objc-mode-hook 'irony-mode)
-       :config
-       (defun my-irony-mode-hook ()
-	 (define-key irony-mode-map [remap completion-at-point]
-	   'irony-completion-at-point-async)
-	 (define-key irony-mode-map [remap complete-symbol]
-	   'irony-completion-at-point-async))
-       (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-     ;;(general-define-key ;;C/CPP keys
-     ;; :states '(normal motion)
-     ;; :keymaps 'irony-mode-map
-     ;; :prefix ",")
+     (use-package irony)
+     (use-package flycheck-irony)
+     (use-package irony-eldoc)
+     (use-package company-irony)
+     (use-package company-irony-c-headers)
+     (add-hook 'c++-mode-hook 'irony-mode)
+     (add-hook 'c-mode-hook 'irony-mode)
+     (add-hook 'objc-mode-hook 'irony-mode)
+
+     ;;(add-hook 'irony-mode-hook 'company-mode)
+     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+     (add-hook 'irony-mode-hook #'irony-eldoc)
+     (add-hook 'irony-mode-hook 'flycheck-mode)
+     (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+
+     (eval-after-load 'company
+       '(add-to-list 'company-backends 'company-irony))
+
+     (defadvice find-tag (around refresh-etags activate)
+       "Rerun etags and reload tags if tag not found and redo find-tag.              
+      If buffer is modified, ask about save before running etags."
+       (let ((extension (file-name-extension (buffer-file-name))))
+	 (condition-case err
+	     ad-do-it
+	   (error (and (buffer-modified-p)
+		       (not (ding))
+		       (y-or-n-p "Buffer is modified, save it? ")
+		       (save-buffer))
+		  (er-refresh-etags extension)
+		  ad-do-it))))
+
+
+     (defun er-refresh-etags (&optional extension)
+       "Run etags on all peer files in current dir and reload them silently."
+       (interactive)
+       (shell-command (format "etags *.%s" (or extension "el")))
+       (let ((tags-revert-without-query t))  ; don't query, revert silently          
+	 (visit-tags-table default-directory nil)))
+
+     (general-define-key ;;C/CPP keys
+      :states '(normal motion)
+      :keymaps 'irony-mode-map
+      :prefix ","
+      (kbd ".") 'xref-find-definition
+      (kbd "S-.") 'xref-find-definition-other-window
+      (kbd "h") 'ff-find-other-file)
    #+END_SRC
 ** Lisp
    #+BEGIN_SRC emacs-lisp
-     (setq inferior-lisp-program "/usr/bin/sbcl")
-     (use-package slime)
-     (use-package slime-company)
-     (require 'slime-autoloads)
-     (slime-setup '(slime-fancy))
-
-   #+END_SRC
-** Company
-   @TODO(renzix): Switch from company to autocomplete for fuzzy matching???
-   #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :ensure t
-       :defer t
-       :init (add-hook 'after-init-hook 'global-company-mode)
-       :config
-       (use-package company-irony :ensure t :defer t)
-       (use-package company-racer)
-       (use-package company-anaconda)
-       (setq company-idle-delay        2
-	     company-minimum-prefix-length   2
-	     company-show-numbers            t
-	     company-tooltip-limit           20
-	     company-dabbrev-downcase        nil
-	     company-backends                '((company-irony company-gtags company-anaconda company-racer company-elisp company-nixos-options)))
-       :bind ("C-<tab>" . company-indent-or-complete-common))
-     (setq tab-always-indent 'complete)
+     ;;(setq inferior-lisp-program "/usr/bin/sbcl")
+     ;;(use-package slime)
+     ;;(require 'slime-autoloads)
+     ;;(slime-setup '(slime-fancy))
    #+END_SRC
 ** Misc Programming
    @TODO(renzix): Make comments work idk why im writing this cuz im
@@ -374,7 +438,7 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
-** pb pastebin thingy
+** pb
    @TODO(renzix): Make this into a seperate package???
    @TODO(renzix): Add text support for buffer, file and selection
    #+BEGIN_SRC emacs-lisp
@@ -439,6 +503,14 @@
    #+RESULTS:
    : pb--urlencode
 
+** emms/twitch
+   #+BEGIN_SRC emacs-lisp
+     (use-package emms)
+     (emms-all)
+     (emms-default-players)
+     (use-package helm-twitch ; @TODO(renzix): Work on this to make it useable with emms
+       :quelpa (helm-twitch :fetcher github :repo "Renzix/helm-twitch"))
+   #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
      ;; For Rich presence
@@ -459,22 +531,21 @@
 			       :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
      (general-define-key
       :states '(normal)
-      :keymaps 'Matrix-mode-map
-      :prefix ","
-      (kbd ",") 'tracking-next-buffer
+      :prefix "M-z"
+      (kbd ",") 'tracking-previous-buffer
+      (kbd ".") 'tracking-next-buffer
       (kbd "o") 'matrix-client-upload
       (kbd "b") 'matrix-client-switch-buffer)
    #+END_SRC
 ** IRC/Circe
    #+BEGIN_SRC emacs-lisp
-
      (setq circe-reduce-lurker-spam t
 	   circe-network-options
 	   '(("Freenode"
 	      :nick "Renzix"
-	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "cordance")
+	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "##cordance")
 	      :nickserv-nick "Renzix"
-	      :nickserv-password ,freenode-password)
+	      :nickserv-password freenode-password)
 	     ("127.0.0.1"
 	      :user "Renzix"
 	      :port 6667
@@ -554,10 +625,9 @@
 ** Nix OS
    Some things for nixos but might get rid of it in the future in
    favor of helm-system-package?
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :noexport
      (use-package nix-mode)
      (use-package helm-nixos-options)
-     (use-package company-nixos-options)
      (general-define-key
       :states '(normal)
       :keymaps 'nix-mode-map
@@ -577,6 +647,13 @@
      (let (vterm-install)
        (require 'vterm))
      (setq vterm-shell "ion")
+   #+END_SRC
+** Clipboard Manager
+   System clipboard manager
+   #+BEGIN_SRC emacs-lisp
+     (use-package clipmon)
+     (add-to-list 'after-init-hook 'clipmon-mode-start)
+     (add-to-list 'after-init-hook 'clipmon-persist)
    #+END_SRC
 ** System Package Management
    This let me use emerge,apt,dnf,homebrew,macports,guixSD and
