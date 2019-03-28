@@ -15,6 +15,7 @@
 
 (require 'use-package)
 ;; Load use-package, used for loading packages
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (setq vc-follow-symlinks t)
 
@@ -50,7 +51,7 @@
  '(highlight-symbol-foreground-color "#E0E0E0")
  '(highlight-tail-colors '(("#7fff00007fff" . 0) ("#424242" . 100)))
  '(package-selected-packages
-   '(lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme))
+   '(go-mode go lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme))
  '(pos-tip-background-color "#000000000000")
  '(pos-tip-foreground-color "#9E9E9E")
  '(tabbar-background-color "#000000000000"))

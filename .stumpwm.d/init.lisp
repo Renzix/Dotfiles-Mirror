@@ -2,8 +2,8 @@
 
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
-;;(run-shell-command "emacs --daemon")
 (run-shell-command "xrandr --output DVI-D-0 --left-of DP-4 --auto && xrandr --output DP-3 --right-of DP-4")
+;;(run-shell-command "emacs --daemon")
 
 ;; @TODO(renzix): Maybe make this more vim like where as keys can
 ;; be prefixed with n,p,r instead of postfix
@@ -17,70 +17,51 @@
   (if (not alias)
       (setf alias program-name))
   `(progn
-     (defvar ,(intern (format nil "*~a-map*" alias)) nil)
-
-     (defcommand ,(intern (format nil "~a" alias)) () () (run-shell-command ,program-name))
-
+     (defcommand ,(intern (format nil "run-~a" alias)) () () (run-shell-command ,program-name))
      (defcommand ,(intern (format nil "run-or-raise-~a" alias)) () ()
 		 (run-or-raise ,program-name '(:class ,window-class)))
-
      (defcommand ,(intern (format nil "run-or-pull-~a" alias)) () ()
-		 (run-or-pull ,program-name '(:class ,window-class)))
-
-     (fill-keymap ,(intern (format nil "*~a-map*" alias))
-		  (kbd "p") ,(format nil "run-or-pull-~a" alias)
-		  (kbd "r") ,(format nil "run-or-raise-~a" alias)
-		  (kbd "n") ,(format nil "~a" alias))))
+		 (run-or-pull ,program-name '(:class ,window-class)))))
 
 (make-program-binding "firefox" "Firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
-(make-program-binding "alacritty" "Alacritty")
+(make-program-binding "alacritty -e ion" "Alacritty" "alacritty")
 (make-program-binding "emacs" "Emacs")
-(make-program-binding "emacsclient -c" "Emacs" "emacs_frame")
+(make-program-binding "emacsclient -ca \"\"" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
 (make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window class
 (make-program-binding "pavucontrol" "Pavucontrol")
 
-;; Commands
-(defcommand rofi () ()
-	    "Does rofi stuff"
-	    (run-shell-command "rofi -show run"))
-(defcommand twitch () () ;; @TODO(renzix): Maybe open twitch chat in emacs frame???
-	    "Uses rofi for twitch"
-	    (run-shell-command "rofi -modi twitchy:rofi-twitchy -show twitchy"))
+(defmacro make-motion-binding (name command &optional keybind)
+  "Makes a motion binding for a bunch programs"
+  (if (not keybind)
+      `(progn
+	 (define-key *root-map* (kbd "RET") ,(format nil "~a-alacritty" command))
+	 (define-key *root-map* (kbd "e")   ,(format nil "~a-emacs_frame" command))
+	 (define-key *root-map* (kbd "f")   ,(format nil "~a-thunar" command))
+	 (define-key *root-map* (kbd "d")   ,(format nil "~a-discord" command))
+	 (define-key *root-map* (kbd "i")   ,(format nil "~a-firefox" command)))
+      `(progn 
+	 (defvar ,(intern (format nil "*~a-map*" name)) nil)
+	 (define-key *root-map* ,keybind ,(intern (format nil "*~a-map*" name)))
+	 (fill-keymap ,(intern (format nil "*~a-map*" name))
+		      (kbd "RET") ,(format nil "~a-alacritty" command)
+		      (kbd "e")   ,(format nil "~a-emacs_frame" command)
+		      (kbd "f")   ,(format nil "~a-thunar" command)
+		      (kbd "d")   ,(format nil "~a-discord" command)
+		      (kbd "i")   ,(format nil "~a-firefox" command)))))
+
+
+(make-motion-binding "run"   "run"          nil)
+(make-motion-binding "raise" "run-or-raise" (kbd "r"))
+(make-motion-binding "pull"  "run-or-pull"  (kbd "p"))
 
 ;; Modal Keybinds Stuff
 (set-prefix-key (kbd "C-ESC"))
-(define-key *top-map* (kbd "S-C-ESC") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
+(define-key *top-map* (kbd "S-ESC") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
-(define-key *root-map* (kbd "SPC") "rofi")
-(define-key *root-map* (kbd "t") "twitch")
 
-;; Keybinds for freq programs
-(define-key *root-map* (kbd "RET") |*alacritty-map*|)
-(define-key *root-map* (kbd "i") |*firefox-map*|)
-(define-key *root-map* (kbd "E") |*emacs_frame-map*|)
-(define-key *root-map* (kbd "e") |*emacs-map*|)
-;; Opens new apps
-(defvar *app-map*
-  (make-sparse-keymap)
-  "Open a bunch of different applications")
-(define-key *root-map* (kbd "o") *app-map*)
-(define-key *app-map* (kbd "f") |*thunar-map*|)
-(define-key *app-map* (kbd "m") |*spotify-map*|)
-(define-key *app-map* (kbd "d") |*discord-map*|)
-(define-key *app-map* (kbd "a") |*pavucontrol-map*|)
-;; @TODO(renzix): Make a rofi with dmenu to run/pull/new
-
-(defvar *frame-map*
-  (make-sparse-keymap)
-  "Simple monitor keybinds")
-(define-key *root-map* (kbd "f") *frame-map*)
-(define-key *frame-map* (kbd "1") "fselect 0")
-(define-key *frame-map* (kbd "2") "fselect 1")
-(define-key *frame-map* (kbd "3") "fselect 2")
-
-;; Moves stuff around
+;; ;; Moves stuff around
 (define-key *root-map* (kbd "h") "move-focus left") ; Just moves focus of windows
 (define-key *root-map* (kbd "j") "move-focus down")
 (define-key *root-map* (kbd "k") "move-focus up")

@@ -1,5 +1,5 @@
-* Display
-  Makes emacs look good by theme and gets rid of toolbar stuff
+* Pre Config
+  Preconfiguration. For extra functions and better defaults
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
@@ -8,7 +8,7 @@
      ;; :config (load-theme 'nord nil))
      (load-theme 'apropospriate-dark t)
    #+END_SRC
-** Some Defaults
+** Better Defaults
    Gets rid of default options for display
    #+BEGIN_SRC emacs-lisp
      (menu-bar-mode -1)
@@ -26,11 +26,8 @@
 		   display-line-numbers-width 4
 		   display-line-numbers-widen t)
    #+END_SRC
-* Pre Config
-  Preconfiguration. For stuff before actual config like variables
 ** General
    #+BEGIN_SRC emacs-lisp
-     ;; @TODO(automatically get use-package
      (use-package quelpa
        :init '(setq quelpa-upgrade-p t
 		    quelpa-stable-p t))
@@ -38,20 +35,24 @@
      (use-package general
        :config (general-evil-setup t))
      (defvar HOME (getenv "HOME"))
-     (defvar WM nil)
+     ;; Defines passwords and current desktop (either chromebook, main, or laptop) so i dont have to make multiple git repos
      (load-file (concat HOME "/.emacs.d/private.el"))
    #+END_SRC
-** Functions
-   Useful function
+** Extra Functions
    #+BEGIN_SRC emacs-lisp
      (defun open-emacs-config ()
        "Opens my emacs config uwu"
        (interactive)
        (find-file (concat HOME "/.emacs.d/settings.org")))
+
+     (defun load-emacs-config ()
+       "Reloads my emacs config uwu"
+       (interactive)
+       (load-file (concat HOME "/.emacs.d/init.el")))
      (defun org-get-keyword (KEYWORD)
        "get the value from a line like this
-     ,#+KEYWORD: value
-     in a file."
+		    ,#+KEYWORD: value
+		    in a file."
        (interactive)
        (let ((case-fold-search t)
 	     (re (format "^#\\+%s:[ \t]+\\([^\t\n]+\\)" KEYWORD)))
@@ -60,8 +61,7 @@
 			(re-search-backward re nil t))))
 	     (error (format "No line containing #+%s: value found" KEYWORD)))
 	 (match-string 1)))
-
-     (defun eshell/clear ()
+     (defun eshell-clear ()
        "Clear the eshell buffer."
        (let ((inhibit-read-only t))
 	 (erase-buffer)
@@ -105,92 +105,37 @@
 			      (ido-read-file-name "Find file(as root): ")))
 	 (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-     (defun buf-move-up ()
-       "Swap the current buffer and the buffer above the split.
-	   If there is no split, ie now window above the current one, an
-	   error is signaled."
-       ;;  "Switches between the current buffer, and the buffer above the
-       ;;  split, if possible."
-       (interactive)
-       (let* ((other-win (windmove-find-other-window 'up))
-	      (buf-this-buf (window-buffer (selected-window))))
-	 (if (null other-win)
-	     (error "No window above this one")
-	   ;; swap top with this one
-	   (set-window-buffer (selected-window) (window-buffer other-win))
-	   ;; move this one to top
-	   (set-window-buffer other-win buf-this-buf)
-	   (select-window other-win))))
-
-     (defun buf-move-down ()
-       "Swap the current buffer and the buffer under the split.
-	   If there is no split, ie now window under the current one, an
-	   error is signaled."
-       (interactive)
-       (let* ((other-win (windmove-find-other-window 'down))
-	      (buf-this-buf (window-buffer (selected-window))))
-	 (if (or (null other-win) 
-		 (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
-	     (error "No window under this one")
-	   ;; swap top with this one
-	   (set-window-buffer (selected-window) (window-buffer other-win))
-	   ;; move this one to top
-	   (set-window-buffer other-win buf-this-buf)
-	   (select-window other-win))))
-
-     (defun buf-move-left ()
-       "Swap the current buffer and the buffer on the left of the split.
-	   If there is no split, ie now window on the left of the current
-	   one, an error is signaled."
-       (interactive)
-       (let* ((other-win (windmove-find-other-window 'left))
-	      (buf-this-buf (window-buffer (selected-window))))
-	 (if (null other-win)
-	     (error "No left split")
-	   ;; swap top with this one
-	   (set-window-buffer (selected-window) (window-buffer other-win))
-	   ;; move this one to top
-	   (set-window-buffer other-win buf-this-buf)
-	   (select-window other-win))))
-
-     (defun buf-move-right ()
-       "Swap the current buffer and the buffer on the right of the split.
-	   If there is no split, ie now window on the right of the current
-	   one, an error is signaled."
-       (interactive)
-       (let* ((other-win (windmove-find-other-window 'right))
-	      (buf-this-buf (window-buffer (selected-window))))
-	 (error "No right split")
-	 ;; swap top with this one
-	 (if (null other-win)
-	     (set-window-buffer (selected-window) (window-buffer other-win))
-	   ;; move this one to top
-	   (set-window-buffer other-win buf-this-buf)
-	   (select-window other-win))))
      (defun get-string-from-file (filePath)
        "Return filePath's file content."
        (with-temp-buffer
 	 (insert-file-contents filePath)
 	 (buffer-string)))
-     (defun app-launcher (command)
-       "Launches an application in your PATH.
-	   Can show completions at point for COMMAND using helm or ido"
-       (interactive (list (read-shell-command "$ ")))
-       (start-process-shell-command command nil command))
+     (defun helm-projectile-find-file-or-project () 
+       "Does switch project if not in a project and find-file if in one"
+       (interactive)
+       (if (projectile-project-p)
+	   (helm-projectile-find-file)
+	 (helm-projectile-switch-project)))
+     (defun helm-projectile-rg-or-project () 
+       "Does switch project if not in a project and find-file if in one"
+       (interactive)
+       (if (projectile-project-p)
+	   (helm-projectile-rg)
+	 (helm-projectile-switch-project)))
+
+
    #+END_SRC
 * Helm
   Helm stuff
-** Init
-   Helm init!
-   #+BEGIN_SRC emacs-lisp
-     (use-package helm
-       :config 
-       (helm-autoresize-mode t)
-       (setq helm-autoresize-max-height 30)
-       (setq helm-display-header-line nil)
-       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-       (helm-mode t))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package helm
+      :config 
+      (helm-autoresize-mode t)
+      (setq helm-autoresize-max-height 30)
+      (setq helm-display-header-line nil)
+      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+      (helm-mode t))
+  #+END_SRC
 * Evil Mode
   Evil Mode Settings
 ** Init
@@ -202,41 +147,53 @@
        )
    #+END_SRC
 ** Keybindings
-   My keybindings for evil
+   My keybindings for evil. I found that there are like 5 different
+   ideologies and im going to use a mix of 4 of them. They are 1
+   function per key, Modifiers for each key(ie M-l), evil commands(ie
+   :l), and a leader key (ie g l). The one im not going to use is a
+   new vim mode (ie g l ESC).
    #+BEGIN_SRC emacs-lisp
      (use-package which-key)
      (which-key-mode)
-     (evil-define-key '(normal) global-map (kbd ";") 'helm-M-x)
-     (evil-define-key '(normal) global-map (kbd "SPC") 'helm-run-external-command)
-     (evil-define-key '(normal) global-map (kbd "gc") 'comment-line)
-     (evil-define-key '(normal) global-map (kbd "z") 'projectile-command-map)
-     (evil-define-key '(normal) global-map (kbd "\\") 'helm-projectile-rg)
-     (evil-define-key '(normal) global-map (kbd "|") 'helm-projectile-find-file)
-     (evil-define-key '(normal) global-map (kbd "`") 'magit-status)
-     ;; Basic Movement @TODO(renzix): Maybe make this global period without defining what states can or cannot have this
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-h") 'evil-window-left)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-j") 'evil-window-down)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-k") 'evil-window-up)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-l") 'evil-window-right)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-v") 'evil-window-vsplit)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-s") 'evil-window-split)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-e") 'helm-find-files)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-H") 'evil-window-move-far-left)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-L") 'evil-window-move-far-right)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-J") 'evil-window-move-very-bottom)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-K") 'evil-window-move-very-top)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-b") 'helm-bookmarks)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-q") 'helm-locate)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-d") 'evil-delete-buffer)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-D") 'delete-file-and-buffer)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M--") 'evil-window-decrease-height)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-=") 'evil-window-increase-height)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-_") 'evil-window-decrease-width)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-+") 'evil-window-increase-width)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-'") 'eshell)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-\"") 'vterm)
-     (evil-define-key '(normal insert motion visual) global-map (kbd "M-Q") 'kill-emacs)
-     ;; EX Commands that may or maynot stay forever once i decide on the best way to define keybinds
+     (general-nmap "," (general-simulate-key "C-c" :state 'normal)) ;; If i didnt add special keybinds for minor mode use the default C-c
+
+     ;; Useful overrides for normal mode
+     (general-define-key
+      :states '(normal)
+      (kbd ";") 'helm-M-x
+      (kbd "g c") 'comment-line
+      (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
+      (kbd "g p") 'projectile-command-map
+      (kbd "\\") 'helm-projectile-rg-or-project
+      (kbd "|") 'helm-projectile-find-file-or-project
+      (kbd "`") 'magit-status)
+
+     ;; My Modifier style keybinds
+     (general-define-key
+      :states '(normal insert motion visual)
+      (kbd "M-h") 'evil-window-left
+      (kbd "M-j") 'evil-window-down
+      (kbd "M-k") 'evil-window-up
+      (kbd "M-l") 'evil-window-right
+      (kbd "M-v") 'evil-window-vsplit
+      (kbd "M-s") 'evil-window-split
+      (kbd "M-e") 'helm-find-files
+      (kbd "M-H") 'evil-window-move-far-left
+      (kbd "M-L") 'evil-window-move-far-right
+      (kbd "M-J") 'evil-window-move-very-bottom
+      (kbd "M-K") 'evil-window-move-very-top
+      (kbd "M-b") 'helm-bookmarks
+      (kbd "M-d") 'evil-delete-buffer
+      (kbd "M-q") 'evil-window-delete
+      (kbd "M-D") 'delete-file-and-buffer
+      (kbd "M--") 'evil-window-decrease-height
+      (kbd "M-=") 'evil-window-increase-height
+      (kbd "M-_") 'evil-window-decrease-width
+      (kbd "M-+") 'evil-window-increase-width
+      (kbd "M-'") 'eshell
+      (kbd "M-\"") 'vterm
+      (kbd "M-ESC") 'kill-emacs)
+     ;; EX Command style 
      (evil-ex-define-cmd "em" 'helm-find-files)
      (evil-ex-define-cmd "bl" 'helm-buffers-list)
      (evil-ex-define-cmd "bm" 'helm-bookmarks)
@@ -256,6 +213,7 @@
      (evil-ex-define-cmd "nn" 'tracking-next-buffer)
      (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
      (evil-ex-define-cmd "cfg" 'open-emacs-config)
+     (evil-ex-define-cmd "load" 'load-emacs-config)
    #+END_SRC
 * Programming
 ** Company
@@ -282,6 +240,11 @@
 ** Projectile
    #+BEGIN_SRC emacs-lisp
      (use-package helm-projectile)
+     (setq projectile-enable-caching t)
+     (setq projectile-file-exists-local-cache-expire (* 5 60))
+     (setq projectile-file-exists-remote-cache-expire (* 10 60))
+     (setq projectile-switch-project-action 'helm-projectile-find-file)
+     (setq projectile-sort-order 'recently-active)
      (projectile-mode t)
    #+END_SRC
 ** Magit
@@ -297,19 +260,16 @@
      (use-package cargo)
      (use-package lsp-mode)
      (use-package clippy)
-     (use-package racer
-       :init (setq racer-rust-src-path
-		   (concat (string-trim
-			    (shell-command-to-string "rustc --print sysroot"))
-			   "/lib/rustlib/src/rust/src")))
-     (setq rustic-format-on-save t)
+     (use-package racer)
+     (setq racer-cmd (concat HOME "/.cargo/bin/racer")
+	   rustic-format-on-save t)
      (add-hook 'rust-mode-hook #'racer-mode)
      (add-hook 'racer-mode-hook #'eldoc-mode)
      ;;(add-hook 'racer-mode-hook 'company-mode)
 
      (general-define-key
-      :keymaps 'projectile-mode-map
-      :prefix "z r"
+      :states '(normal)
+      :prefix "g r"
       (kbd "c") 'rustic-cargo-build
       (kbd "C") 'rustic-recompile
       (kbd "p") 'rustic-popup
@@ -401,28 +361,27 @@
      ;;(slime-setup '(slime-fancy))
    #+END_SRC
 ** Misc Programming
-   @TODO(renzix): Make comments work idk why im writing this cuz im
+   @TODO (renzix): Make comments work idk why im writing this cuz im
    gonna delete this once i fix it anyway
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
        :config (autopair-global-mode t))
-     (use-package comment-tags
-       :config
+     (use-package comment-tags)
+     (with-eval-after-load "comment-tags"
        (setq comment-tags-keyword-faces
-	     `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
-	       ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
-	       ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
-	       ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
-	       ("KLUDGE" . ,(list :weight 'bold :foreground "#E8B71A"))
-	       ("XXX" . ,(list :weight 'bold :foreground "#F7EAC8"))
-	       ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
-	       ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
-       (setq comment-tags-comment-start-only t
-	     comment-tags-require-colon t
-	     comment-tags-case-sensitive t
-	     comment-tags-show-faces t
-	     comment-tags-lighter nil)
-       (add-hook 'prog-mode-hook 'comment-tags-mode))
+	     `(("@TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
+	       ("@FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
+	       ("@BUG" . ,(list :weight 'bold :foreground "#DB3340"))
+	       ("@HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
+	       ("@INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
+	       ("@DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
+       (setq ;comment-tags-comment-start-only t
+	comment-tags-case-sensitive t
+	comment-tags-lighter nil)
+       (add-hook 'irony-mode-hook 'comment-tags-mode)
+       (add-hook 'python-mode-hook 'comment-tags-mode)
+       (add-hook 'rustic-mode-hook 'comment-tags-mode)
+       (add-hook 'org-mode-hook 'comment-tags-mode))
      ;; Auto indent on save
      (defun indent-buffer ()
        (interactive)
@@ -543,7 +502,7 @@
 	   circe-network-options
 	   '(("Freenode"
 	      :nick "Renzix"
-	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "##cordance")
+	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "#distrotube")
 	      :nickserv-nick "Renzix"
 	      :nickserv-password freenode-password)
 	     ("127.0.0.1"
@@ -614,6 +573,12 @@
       (kbd "s") 'org-babel-execute-src-block
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
+     (general-define-key
+      :states '(normal)
+      :keymaps 'orgsrc-mode-map
+      :prefix ","
+      (kbd "'") 'org-src-exit)
+
      (use-package ox-pandoc)
      (use-package htmlize)
    #+END_SRC
