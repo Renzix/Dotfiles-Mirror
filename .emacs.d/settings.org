@@ -582,11 +582,6 @@
      (use-package ox-pandoc)
      (use-package htmlize)
    #+END_SRC
-** KDE Connect
-   Simply KDE connet intergration for emacs
-   #+BEGIN_SRC emacs-lisp
-     (use-package kdeconnect)
-   #+END_SRC
 ** Nix OS
    Some things for nixos but might get rid of it in the future in
    favor of helm-system-package?
