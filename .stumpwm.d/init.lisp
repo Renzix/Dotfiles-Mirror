@@ -2,6 +2,9 @@
 
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
+(run-shell-command "xmodmap -e \"remove mod4=Super_L\"")
+(run-shell-command "xmodmap -e \"clear mod4\"")
+(run-shell-command "xmodmap -e \"keycode 133=F12\"")
 (run-shell-command "xrandr --output DVI-D-0 --left-of DP-4 --auto && xrandr --output DP-3 --right-of DP-4")
 ;;(run-shell-command "emacs --daemon")
 
@@ -57,8 +60,8 @@
 (make-motion-binding "pull"  "run-or-pull"  (kbd "p"))
 
 ;; Modal Keybinds Stuff
-(set-prefix-key (kbd "C-ESC"))
-(define-key *top-map* (kbd "S-ESC") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
+(set-prefix-key (kbd "C-F12"))
+(define-key *top-map* (kbd "F12") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
 (define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
 
 ;; ;; Moves stuff around

@@ -214,6 +214,7 @@
      (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
      (evil-ex-define-cmd "cfg" 'open-emacs-config)
      (evil-ex-define-cmd "load" 'load-emacs-config)
+     (evil-ex-define-cmd "bb" 'xref-pop-marker-stack)
    #+END_SRC
 * Programming
 ** Company
@@ -223,7 +224,7 @@
      (setq company-require-match 'never
 	   company-minimum-prefix-length 0
 	   company-tooltip-align-annotations t
-	   company-idle-delay .3
+	   company-idle-delay 1
 	   company-dabbrev-downcase 0
 	   company-tooltip-limit 20
 	   global-company-mode t)
@@ -282,7 +283,6 @@
       :keymaps 'rustic-mode-map
       :prefix "," 
       (kbd ".") 'racer-find-definition
-      (kbd "S-.") 'racer-find-definition-other-window
       (kbd "d") 'racer-describe-tooltip
       (kbd "f") 'rustic-format-buffer)
    #+END_SRC
@@ -352,6 +352,12 @@
       (kbd ".") 'xref-find-definition
       (kbd "S-.") 'xref-find-definition-other-window
       (kbd "h") 'ff-find-other-file)
+   #+END_SRC
+** JVM langauges
+   #+BEGIN_SRC emacs-lisp
+     (setq ensime-search-interface 'helm)
+     (use-package ensime)
+     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
    #+END_SRC
 ** Lisp
    #+BEGIN_SRC emacs-lisp
