@@ -574,7 +574,8 @@
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
-      (kbd "t") 'org-time-stamp
+      (kbd "t") 'org-time-stamp-inactive
+      (kbd "c") 'org-cycle
       (kbd "s") 'org-babel-execute-src-block
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
