@@ -497,8 +497,9 @@
      (general-define-key
       :states '(normal)
       :prefix "M-z"
-      (kbd ",") 'tracking-previous-buffer
-      (kbd ".") 'tracking-next-buffer
+      (kbd ".") 'tracking-previous-buffer
+      (kbd ",") 'tracking-next-buffer
+      (kbd "m") 'matrix-client-connect
       (kbd "o") 'matrix-client-upload
       (kbd "b") 'matrix-client-switch-buffer)
    #+END_SRC
@@ -574,9 +575,11 @@
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
+      (kbd "RET") (lambda () ((evil-append-line) (org-meta-return)))
       (kbd "t") 'org-time-stamp-inactive
       (kbd "c") 'org-cycle
       (kbd "s") 'org-babel-execute-src-block
+      (kbd "b") 'org-cycle-list-bullet
       (kbd "e") 'org-babel-execute-buffer
       (kbd "'") 'org-edit-special)
      (general-define-key
