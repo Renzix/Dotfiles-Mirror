@@ -620,39 +620,39 @@
 ** Email (mu4e) 
    #+BEGIN_SRC emacs-lisp
      (require 'mu4e)
-     (use-package mu4e-alert
-       :after mu4e
-       :init
-       (setq mu4e-alert-interesting-mail-query
-	     "flag:unread maildir:~/.mail/gmail")
-       (mu4e-alert-enable-mode-line-display)
-       (defun gjstein-refresh-mu4e-alert-mode-line ()
-	 (interactive)
-	 (mu4e~proc-kill)
-	 (mu4e-alert-enable-mode-line-display)
-	 )
-       (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
-       )
-
+     (require 'org-mu4e)
      ;; use mu4e for e-mail in emacs
-     (setq mail-user-agent 'mu4e-user-agent)
-     (setq mu4e-maildir       "~/.mail")
-     (setq mu4e-get-mail-command "mbsync -a")
-     (setq mu4e-contexts
-	   `( ,(make-mu4e-context
-		:name "gmail"
-		:match-func (lambda (msg) (when msg
-					    (string-prefix-p "~/.mail/gmail" (mu4e-message-field msg :maildir))))
-		)
-	      ;;,(make-mu4e-context
-	      ;;:name "wpu"
-	      ;;:match-func (lambda (msg) (when msg
-	      ;;			    (string-prefix-p "~/.mail/wpu" (mu4e-message-field msg :maildir)))))
-	      ))
 
      ;; sending mail -- replace USERNAME with your gmail username
      ;; also, make sure the gnutls command line utils are installed
      ;; package 'gnutls-bin' in Debian/Ubuntu
+     (use-package mu4e-alert
+       :after mu4e
+       :init 
+       (setq mail-user-agent 'mu4e-user-agent
+	     mu4e-update-interval 60
+	     mu4e-show-images t
+	     mu4e-maildir       "~/.mail"
+	     mu4e-get-mail-command "mbsync -a"
+	     mu4e-contexts
+	     `( ,(make-mu4e-context
+		  :name "gmail"
+		  :match-func (lambda (msg) (when msg
+					      (string-prefix-p "~/.mail/gmail" (mu4e-message-field msg :maildir))))
+		  )
+		;;,(make-mu4e-context
+		;;:name "wpu"
+		;;:match-func (lambda (msg) (when msg
+		;;			    (string-prefix-p "~/.mail/wpu" (mu4e-message-field msg :maildir)))))
+		))
+
+       :config
+       (mu4e-alert-set-default-style 'libnotify)
+       (mu4e-alert-enable-notifications)
+       (mu4e-alert-enable-mode-line-display)
+       (add-hook 'mu4e-index-updated-hook 'mu4e~headers-do-auto-update)
+       (setq mu4e-alert-interesting-mail-query (concat "flag:unread" " AND NO flag:trashed" " AND maildir:/gmail/Inbox"))
+       )
 
      (require 'smtpmail)
      (setq message-send-mail-function 'smtpmail-send-it
