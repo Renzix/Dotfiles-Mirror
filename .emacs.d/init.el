@@ -18,8 +18,16 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (setq vc-follow-symlinks t)
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
 
-(use-package org-evil)
+(use-package org-evil
+  :after evil
+  :init
+  (setq evil-want-keybinding nil))
 (org-babel-load-file
  (expand-file-name "settings.org"
 		   user-emacs-directory))
@@ -42,7 +50,7 @@
  '(evil-emacs-state-cursor '("#E57373" hbar) t)
  '(evil-insert-state-cursor '("#E57373" bar) t)
  '(evil-insert-state-modes
-   '(comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
+   '(comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode wdired-mode))
  '(evil-normal-state-cursor '("#FFEE58" box) t)
  '(evil-visual-state-cursor '("#C5E1A5" box) t)
  '(highlight-indent-guides-auto-enabled nil)
@@ -51,7 +59,7 @@
  '(highlight-symbol-foreground-color "#E0E0E0")
  '(highlight-tail-colors '(("#7fff00007fff" . 0) ("#424242" . 100)))
  '(package-selected-packages
-   '(go-mode go lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme))
+   '(mu4e-alert evil-mu4e go-mode go lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme))
  '(pos-tip-background-color "#000000000000")
  '(pos-tip-foreground-color "#9E9E9E")
  '(tabbar-background-color "#000000000000"))

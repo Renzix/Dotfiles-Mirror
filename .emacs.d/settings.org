@@ -33,10 +33,25 @@
 		    quelpa-stable-p t))
      (use-package quelpa-use-package)
      (use-package general
-       :config (general-evil-setup t))
+       :after evil
+       :init
+       (setq general-override-states '(insert
+				       emacs
+				       hybrid
+				       normal
+				       visual
+				       motion
+				       operator
+				       replace))
+       :config 
+       (general-evil-setup t)
+       )
+     (use-package which-key
+       :config (which-key-mode))
      (defvar HOME (getenv "HOME"))
      ;; Defines passwords and current desktop (either chromebook, main, or laptop) so i dont have to make multiple git repos
      (load-file (concat HOME "/.emacs.d/private.el"))
+     ;; I have no fucking idea why this doesnt work further down or in :init for use packages so im just gonna put it here
    #+END_SRC
 ** Extra Functions
    #+BEGIN_SRC emacs-lisp
@@ -137,85 +152,82 @@
       (helm-mode t))
   #+END_SRC
 * Evil Mode
-  Evil Mode Settings
-** Init
-   #+BEGIN_SRC emacs-lisp
-     (use-package evil
-       :config 
-       (evil-mode t)
-       (setq evil-cross-lines t) ; For being able to use f and t across multiple lines of code making it 10x more 
-       )
-   #+END_SRC
-** Keybindings
-   My keybindings for evil. I found that there are like 5 different
-   ideologies and im going to use a mix of 4 of them. They are 1
-   function per key, Modifiers for each key(ie M-l), evil commands(ie
-   :l), and a leader key (ie g l). The one im not going to use is a
-   new vim mode (ie g l ESC).
-   #+BEGIN_SRC emacs-lisp
-     (use-package which-key)
-     (which-key-mode)
-     (general-nmap "," (general-simulate-key "C-c" :state 'normal)) ;; If i didnt add special keybinds for minor mode use the default C-c
+  Evil Mode Settings and keybindings
+  #+BEGIN_SRC emacs-lisp
+    (use-package evil
+      :init
+      (setq evil-want-integration t
+	    evil-want-keybinding nil
+	    evil-cross-lines t)
+      :config 
+      (evil-mode t))
+    (use-package evil-collection
+      :after evil
+      :config 
+      (evil-collection-init)
+      ;; Useful overrides for normal mode
+      (general-nmap "," (general-simulate-key "C-c" :state 'normal)) ;; If i didnt add special keybinds for minor mode use the default C-c
+      (general-define-key
+       :states '(normal)
+       :keymaps 'override
+       (kbd ";") 'helm-M-x
+       (kbd "g c") 'comment-line
+       (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
+       (kbd "g p") 'projectile-command-map
+       (kbd "\\") 'helm-projectile-rg-or-project
+       (kbd "|") 'helm-projectile-find-file-or-project
+       (kbd "`") 'magit-status)
 
-     ;; Useful overrides for normal mode
-     (general-define-key
-      :states '(normal)
-      (kbd ";") 'helm-M-x
-      (kbd "g c") 'comment-line
-      (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
-      (kbd "g p") 'projectile-command-map
-      (kbd "\\") 'helm-projectile-rg-or-project
-      (kbd "|") 'helm-projectile-find-file-or-project
-      (kbd "`") 'magit-status)
-
-     ;; My Modifier style keybinds
-     (general-define-key
-      :states '(normal insert motion visual)
-      (kbd "M-h") 'evil-window-left
-      (kbd "M-j") 'evil-window-down
-      (kbd "M-k") 'evil-window-up
-      (kbd "M-l") 'evil-window-right
-      (kbd "M-v") 'evil-window-vsplit
-      (kbd "M-s") 'evil-window-split
-      (kbd "M-e") 'helm-find-files
-      (kbd "M-H") 'evil-window-move-far-left
-      (kbd "M-L") 'evil-window-move-far-right
-      (kbd "M-J") 'evil-window-move-very-bottom
-      (kbd "M-K") 'evil-window-move-very-top
-      (kbd "M-b") 'helm-bookmarks
-      (kbd "M-d") 'evil-delete-buffer
-      (kbd "M-q") 'evil-window-delete
-      (kbd "M-D") 'delete-file-and-buffer
-      (kbd "M--") 'evil-window-decrease-height
-      (kbd "M-=") 'evil-window-increase-height
-      (kbd "M-_") 'evil-window-decrease-width
-      (kbd "M-+") 'evil-window-increase-width
-      (kbd "M-'") 'eshell
-      (kbd "M-\"") 'term
-      (kbd "M-ESC") 'kill-emacs)
-     ;; EX Command style 
-     (evil-ex-define-cmd "em" 'helm-find-files)
-     (evil-ex-define-cmd "bl" 'helm-buffers-list)
-     (evil-ex-define-cmd "bm" 'helm-bookmarks)
-     (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
-     (evil-ex-define-cmd "es" 'eshell)
-     (evil-ex-define-cmd "te" 'term)
-     (evil-ex-define-cmd "lc" 'helm-locate)
-     (evil-ex-define-cmd "h" 'evil-window-left)
-     (evil-ex-define-cmd "j" 'evil-window-down)
-     (evil-ex-define-cmd "k" 'evil-window-up)
-     (evil-ex-define-cmd "l" 'evil-window-right)
-     (evil-ex-define-cmd "mh" 'evil-window-move-far-left)
-     (evil-ex-define-cmd "mj" 'evil-window-move-very-bottom)
-     (evil-ex-define-cmd "mk" 'evil-window-very-top)
-     (evil-ex-define-cmd "ml" 'evil-window-far-right)
-     (evil-ex-define-cmd "kr" 'helm-show-kill-ring)
-     (evil-ex-define-cmd "nn" 'tracking-next-buffer)
-     (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
-     (evil-ex-define-cmd "cfg" 'open-emacs-config)
-     (evil-ex-define-cmd "load" 'load-emacs-config)
-     (evil-ex-define-cmd "bb" 'xref-pop-marker-stack)
-   #+END_SRC
+      ;; My Modifier style keybinds
+      (general-define-key
+       :states '(normal insert motion visual)
+       :keymaps 'override
+       (kbd "M-h") 'evil-window-left
+       (kbd "M-j") 'evil-window-down
+       (kbd "M-k") 'evil-window-up
+       (kbd "M-l") 'evil-window-right
+       (kbd "M-v") 'evil-window-vsplit
+       (kbd "M-s") 'evil-window-split
+       (kbd "M-e") 'helm-find-files
+       (kbd "M-H") 'evil-window-move-far-left
+       (kbd "M-L") 'evil-window-move-far-right
+       (kbd "M-J") 'evil-window-move-very-bottom
+       (kbd "M-K") 'evil-window-move-very-top
+       (kbd "M-d") 'evil-delete-buffer
+       (kbd "M-D") 'delete-file-and-buffer
+       (kbd "M-c") 'evil-window-delete
+       (kbd "M-o") 'delete-other-windows
+       (kbd "M--") 'evil-window-decrease-height
+       (kbd "M-=") 'evil-window-increase-height
+       (kbd "M-_") 'evil-window-decrease-width
+       (kbd "M-+") 'evil-window-increase-width
+       (kbd "M-'") 'eshell
+       (kbd "M-\"") 'term
+       (kbd "M-ESC") 'kill-emacs)
+      ;; EX Command style 
+      (evil-ex-define-cmd "em" 'helm-find-files)
+      (evil-ex-define-cmd "bl" 'helm-buffers-list)
+      (evil-ex-define-cmd "bm" 'helm-bookmarks)
+      (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
+      (evil-ex-define-cmd "es" 'eshell)
+      (evil-ex-define-cmd "te" 'term)
+      (evil-ex-define-cmd "lc" 'helm-locate)
+      (evil-ex-define-cmd "h" 'evil-window-left)
+      (evil-ex-define-cmd "j" 'evil-window-down)
+      (evil-ex-define-cmd "k" 'evil-window-up)
+      (evil-ex-define-cmd "l" 'evil-window-right)
+      (evil-ex-define-cmd "mh" 'evil-window-move-far-left)
+      (evil-ex-define-cmd "mj" 'evil-window-move-very-bottom)
+      (evil-ex-define-cmd "mk" 'evil-window-very-top)
+      (evil-ex-define-cmd "ml" 'evil-window-far-right)
+      (evil-ex-define-cmd "kr" 'helm-show-kill-ring)
+      (evil-ex-define-cmd "nn" 'tracking-next-buffer)
+      (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
+      (evil-ex-define-cmd "cfg" 'open-emacs-config)
+      (evil-ex-define-cmd "load" 'load-emacs-config)
+      (evil-ex-define-cmd "bb" 'xref-pop-marker-stack)
+      )
+  #+END_SRC
 * Programming
 ** Company
    #+BEGIN_SRC emacs-lisp
@@ -473,8 +485,6 @@
      (use-package emms)
      (emms-all)
      (emms-default-players)
-     (use-package helm-twitch ; @TODO(renzix): Work on this to make it useable with emms
-       :quelpa (helm-twitch :fetcher github :repo "Renzix/helm-twitch"))
    #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
@@ -591,23 +601,6 @@
      (use-package ox-pandoc)
      (use-package htmlize)
    #+END_SRC
-** Nix OS
-   Some things for nixos but might get rid of it in the future in
-   favor of helm-system-package?
-   #+BEGIN_SRC emacs-lisp :noexport
-     (use-package nix-mode)
-     (use-package helm-nixos-options)
-     (general-define-key
-      :states '(normal)
-      :keymaps 'nix-mode-map
-      :prefix "," 
-      (kbd "s") 'helm-nixos-options)
-     ;; (general-define-key
-     ;;       :states '(normal)
-     ;;       :keymaps 'nix-mode-map
-     ;;       (kbd "S-TAB") 'company-indent-or-complete-common)
-
-   #+END_SRC
 ** Clipboard Manager
    System clipboard manager
    #+BEGIN_SRC emacs-lisp
@@ -615,11 +608,63 @@
      (add-to-list 'after-init-hook 'clipmon-mode-start)
      (add-to-list 'after-init-hook 'clipmon-persist)
    #+END_SRC
-** System Package Management
-   This let me use emerge,apt,dnf,homebrew,macports,guixSD and
-   possibly more with helm
+** Email (mu4e) 
    #+BEGIN_SRC emacs-lisp
-     (use-package helm-system-packages)
+     (require 'mu4e)
+     (use-package mu4e-alert
+       :after mu4e
+       :init
+       (setq mu4e-alert-interesting-mail-query
+	     "flag:unread maildir:~/.mail/gmail")
+       (mu4e-alert-enable-mode-line-display)
+       (defun gjstein-refresh-mu4e-alert-mode-line ()
+	 (interactive)
+	 (mu4e~proc-kill)
+	 (mu4e-alert-enable-mode-line-display)
+	 )
+       (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
+       )
+
+     ;; use mu4e for e-mail in emacs
+     (setq mail-user-agent 'mu4e-user-agent)
+     (setq mu4e-maildir       "~/.mail")
+     (setq mu4e-get-mail-command "mbsync -a")
+     (setq mu4e-contexts
+	   `( ,(make-mu4e-context
+		:name "gmail"
+		:match-func (lambda (msg) (when msg
+					    (string-prefix-p "~/.mail/gmail" (mu4e-message-field msg :maildir))))
+		)
+	      ;;,(make-mu4e-context
+	      ;;:name "wpu"
+	      ;;:match-func (lambda (msg) (when msg
+	      ;;			    (string-prefix-p "~/.mail/wpu" (mu4e-message-field msg :maildir)))))
+	      ))
+
+     ;; sending mail -- replace USERNAME with your gmail username
+     ;; also, make sure the gnutls command line utils are installed
+     ;; package 'gnutls-bin' in Debian/Ubuntu
+
+     (require 'smtpmail)
+     (setq message-send-mail-function 'smtpmail-send-it
+	   starttls-use-gnutls t
+	   smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+	   smtpmail-auth-credentials
+	   '(("smtp.gmail.com" 587 "eragon9981@gmail.com" nil))
+	   smtpmail-default-smtp-server "smtp.gmail.com"
+	   smtpmail-smtp-server "smtp.gmail.com"
+	   smtpmail-smtp-service 587)
+
+     ;; alternatively, for emacs-24 you can use:
+     ;;(setq message-send-mail-function 'smtpmail-send-it
+     ;;     smtpmail-stream-type 'starttls
+     ;;     smtpmail-default-smtp-server "smtp.gmail.com"
+     ;;     smtpmail-smtp-server "smtp.gmail.com"
+     ;;     smtpmail-smtp-service 587)
+
+     ;; don't keep message buffers around
+     (setq message-kill-buffer-on-exit t)
+
    #+END_SRC
 * Post Config
 ** Backups
