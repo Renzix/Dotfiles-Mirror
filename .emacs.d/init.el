@@ -8,10 +8,6 @@
 (package-refresh-contents)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-;;(setq package-enable-at-startup nil)
-;;(let ((elapsed (float-time (time-subtract (current-time)
-;;					  emacs-start-time))))
-;;  (message "Loaded packages in %.3fs" elapsed))
 
 (require 'use-package)
 ;; Load use-package, used for loading packages

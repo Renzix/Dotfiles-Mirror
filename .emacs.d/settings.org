@@ -1,11 +1,7 @@
-* Pre Config
-  Preconfiguration. For extra functions and better defaults
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
      (use-package apropospriate-theme)
-     (use-package nord-theme);
-     ;; :config (load-theme 'nord nil))
      (load-theme 'apropospriate-dark t)
    #+END_SRC
 ** Better Defaults
@@ -172,60 +168,10 @@
        :keymaps 'override
        (kbd ";") 'helm-M-x
        (kbd "g c") 'comment-line
-       (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
        (kbd "`") 'magit-status)
-
-      ;; My Modifier style keybinds
-      (general-define-key
-       :states '(normal insert motion visual)
-       :keymaps 'override
-       (kbd "M-h") 'evil-window-left
-       (kbd "M-j") 'evil-window-down
-       (kbd "M-k") 'evil-window-up
-       (kbd "M-l") 'evil-window-right
-       (kbd "M-v") 'evil-window-vsplit
-       (kbd "M-s") 'evil-window-split
-       (kbd "M-e") 'helm-find-files
-       (kbd "M-H") 'evil-window-move-far-left
-       (kbd "M-L") 'evil-window-move-far-right
-       (kbd "M-J") 'evil-window-move-very-bottom
-       (kbd "M-K") 'evil-window-move-very-top
-       (kbd "M-d") 'evil-delete-buffer
-       (kbd "M-D") 'delete-file-and-buffer
-       (kbd "M-c") 'evil-window-delete
-       (kbd "M-o") 'delete-other-windows
-       (kbd "M--") 'evil-window-decrease-height
-       (kbd "M-=") 'evil-window-increase-height
-       (kbd "M-_") 'evil-window-decrease-width
-       (kbd "M-+") 'evil-window-increase-width
-       (kbd "M-'") 'eshell
-       (kbd "M-\"") 'vterm
-       (kbd "M-ESC") 'kill-emacs)
-      ;; EX Command style 
-      (evil-ex-define-cmd "em" 'helm-find-files)
-      (evil-ex-define-cmd "bl" 'helm-buffers-list)
-      (evil-ex-define-cmd "bm" 'helm-bookmarks)
-      (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
-      (evil-ex-define-cmd "es" 'eshell)
-      (evil-ex-define-cmd "te" 'vterm)
-      (evil-ex-define-cmd "lc" 'helm-locate)
-      (evil-ex-define-cmd "h" 'evil-window-left)
-      (evil-ex-define-cmd "j" 'evil-window-down)
-      (evil-ex-define-cmd "k" 'evil-window-up)
-      (evil-ex-define-cmd "l" 'evil-window-right)
-      (evil-ex-define-cmd "mh" 'evil-window-move-far-left)
-      (evil-ex-define-cmd "mj" 'evil-window-move-very-bottom)
-      (evil-ex-define-cmd "mk" 'evil-window-very-top)
-      (evil-ex-define-cmd "ml" 'evil-window-far-right)
-      (evil-ex-define-cmd "kr" 'helm-show-kill-ring)
-      (evil-ex-define-cmd "nn" 'tracking-next-buffer)
-      (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
-      (evil-ex-define-cmd "cfg" 'open-emacs-config)
-      (evil-ex-define-cmd "load" 'load-emacs-config)
-      (evil-ex-define-cmd "bb" 'xref-pop-marker-stack)
       )
   #+END_SRC
 * Programming
@@ -236,7 +182,7 @@
      (setq company-require-match 'never
 	   company-minimum-prefix-length 0
 	   company-tooltip-align-annotations t
-	   company-idle-delay 1
+	   company-idle-delay 2
 	   company-dabbrev-downcase 0
 	   company-tooltip-limit 20
 	   global-company-mode t)
@@ -263,149 +209,11 @@
 ** Magit
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
-     ;;(use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
-     ;;  :after evil-magit)
-   #+END_SRC
-** Rust
-   #+BEGIN_SRC emacs-lisp
-     (use-package rust-mode)
-     (use-package rustic)
-     (use-package cargo)
-     (use-package lsp-mode)
-     (use-package clippy)
-     (use-package racer)
-     (setq racer-cmd (concat HOME "/.cargo/bin/racer")
-	   rustic-format-on-save t)
-     (add-hook 'rust-mode-hook #'racer-mode)
-     (add-hook 'racer-mode-hook #'eldoc-mode)
-     ;;(add-hook 'racer-mode-hook 'company-mode)
-
-     (general-define-key
-      :states '(normal)
-      :prefix "g r"
-      (kbd "c") 'rustic-cargo-build
-      (kbd "C") 'rustic-recompile
-      (kbd "p") 'rustic-popup
-      (kbd "t") 'rustic-cargo-test
-      (kbd "r") 'rustic-cargo-run
-      (kbd "o") 'rustic-cargo-outdated)
-
-     (general-define-key
-      :states '(normal)
-      :keymaps 'rustic-mode-map
-      :prefix "," 
-      (kbd ".") 'racer-find-definition
-      (kbd "d") 'racer-describe-tooltip
-      (kbd "f") 'rustic-format-buffer)
-   #+END_SRC
-** Python
-   #+BEGIN_SRC emacs-lisp
-     (use-package company-jedi)
-
-     ;;(add-hook 'python-mode-hook 'company-mode)
-     (add-hook 'python-mode-hook 'flycheck-mode)
-     (eval-after-load 'company
-       '(add-to-list 'company-backends 'company-jedi))
-
-
-     (general-define-key
-      :states '(normal)
-      :keymaps 'python-mode-map
-      :prefix "," 
-      (kbd "d") 'jedi:show-doc
-      (kbd ".") 'jedi:goto-definition
-      (kbd "c") 'python-check)
-   #+END_SRC
-** C/CPP 
-   #+BEGIN_SRC emacs-lisp
-     (use-package irony)
-     (use-package flycheck-irony)
-     (use-package irony-eldoc)
-     (use-package company-irony)
-     (use-package company-irony-c-headers)
-     (add-hook 'c++-mode-hook 'irony-mode)
-     (add-hook 'c-mode-hook 'irony-mode)
-     (add-hook 'objc-mode-hook 'irony-mode)
-
-     ;;(add-hook 'irony-mode-hook 'company-mode)
-     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-     (add-hook 'irony-mode-hook #'irony-eldoc)
-     (add-hook 'irony-mode-hook 'flycheck-mode)
-     (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
-
-     (eval-after-load 'company
-       '(add-to-list 'company-backends 'company-irony))
-
-     (defadvice find-tag (around refresh-etags activate)
-       "Rerun etags and reload tags if tag not found and redo find-tag.              
-      If buffer is modified, ask about save before running etags."
-       (let ((extension (file-name-extension (buffer-file-name))))
-	 (condition-case err
-	     ad-do-it
-	   (error (and (buffer-modified-p)
-		       (not (ding))
-		       (y-or-n-p "Buffer is modified, save it? ")
-		       (save-buffer))
-		  (er-refresh-etags extension)
-		  ad-do-it))))
-
-
-     (defun er-refresh-etags (&optional extension)
-       "Run etags on all peer files in current dir and reload them silently."
-       (interactive)
-       (shell-command (format "etags *.%s" (or extension "el")))
-       (let ((tags-revert-without-query t))  ; don't query, revert silently          
-	 (visit-tags-table default-directory nil)))
-
-     (general-define-key ;;C/CPP keys
-      :states '(normal motion)
-      :keymaps 'irony-mode-map
-      :prefix ","
-      (kbd ".") 'xref-find-definition
-      (kbd "S-.") 'xref-find-definition-other-window
-      (kbd "h") 'ff-find-other-file)
-   #+END_SRC
-** JVM langauges
-   #+BEGIN_SRC emacs-lisp
-     (setq ensime-search-interface 'helm)
-     (use-package ensime)
-     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-   #+END_SRC
-** Lisp
-   #+BEGIN_SRC emacs-lisp
-     ;;(setq inferior-lisp-program "/usr/bin/sbcl")
-     ;;(use-package slime)
-     ;;(require 'slime-autoloads)
-     ;;(slime-setup '(slime-fancy))
    #+END_SRC
 ** Misc Programming
-   @TODO (renzix): Make comments work idk why im writing this cuz im
-   gonna delete this once i fix it anyway
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
        :config (autopair-global-mode t))
-     (use-package comment-tags)
-     (with-eval-after-load "comment-tags"
-       (setq comment-tags-keyword-faces
-	     `(("@TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
-	       ("@FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
-	       ("@BUG" . ,(list :weight 'bold :foreground "#DB3340"))
-	       ("@HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
-	       ("@INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
-	       ("@DONE" . ,(list :weight 'bold :foreground "#1FDA9A"))))
-       (setq ;comment-tags-comment-start-only t
-	comment-tags-case-sensitive t
-	comment-tags-lighter nil)
-       (add-hook 'irony-mode-hook 'comment-tags-mode)
-       (add-hook 'python-mode-hook 'comment-tags-mode)
-       (add-hook 'rustic-mode-hook 'comment-tags-mode)
-       (add-hook 'org-mode-hook 'comment-tags-mode))
-     ;; Auto indent on save
-     (defun indent-buffer ()
-       (interactive)
-       (save-excursion
-	 (indent-region (point-min) (point-max) nil)))
-     (add-hook 'before-save-hook 'indent-buffer)
    #+END_SRC
 * Normal Tasks
 ** Text
@@ -415,158 +223,9 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
-** pb
-   @TODO(renzix): Make this into a seperate package???
-   @TODO(renzix): Add text support for buffer, file and selection
-   #+BEGIN_SRC emacs-lisp
-     (defun pb-selection (&optional beg end)
-       "Takes a picture based on mouse"
-       (interactive (if (use-region-p)
-			(list (region-beginning)
-			      (region-end))
-		      (list (point-min)
-			    (point-max))))
-       (let ((res (pb--post (buffer-substring beg end))))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-file (file)
-       "Takes a picture based on mouse"
-       (interactive "fUploaded File: ")
-       (let ((res (concat (pb--post (get-string-from-file file)) (file-name-extension))))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-png () ;@TODO(renzix): Doesnt work i need to fix this
-       "Takes a picture based on mouse"
-       (interactive)
-       (let ((res (concat (pb--post (shell-command-to-string "maim -sq")) ".png")))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-get (&optional url) 
-       "gets content in a new buffer" 
-       (interactive (list (if 
-			      (and (not (zerop (length kill-ring))) (string-match-p "http*" (current-kill 0)))
-			      (read-string (format "Website Url(%s): " (current-kill 0))) 
-			    (read-string "Website Url: "))))
-       (if (= (length url) 0) 
-	   (browse-url-emacs (current-kill 0))
-	 (browse-url-emacs url)))
-
-     (defun pb--post (input) ;get this working almost perfectly
-       "Raw pb post function accepts a buncha params"
-       (let* ((url "https://ptpb.pw/")
-	      (url-request-method "POST")
-	      (url-request-extra-headers
-	       '(("Content-Type" . "application/x-www-form-urlencoded")))
-	      (url-request-data))
-	 (setq url-request-data (pb--urlencode `(("c" . ,input))))
-	 (with-current-buffer (url-retrieve-synchronously url)
-	   (goto-char (point-min))
-	   (re-search-forward "https://*" nil t)
-	   (buffer-substring (point) (point-at-eol)))))
-     (defun pb--urlencode (alis)
-       "Map an alist of key/value pairs to an URL-encoded string."
-       (mapconcat (lambda (pair)
-		    (format "%s=%s"
-			    (url-hexify-string
-			     (format "%s" (car pair)))
-			    (url-hexify-string
-			     (format "%s" (if (consp (cdr pair))
-					      (cadr pair)
-					    (cdr pair))))))
-		  alis
-		  "&"))
-   #+END_SRC
-
-   #+RESULTS:
-   : pb--urlencode
-
-** emms/twitch
-   #+BEGIN_SRC emacs-lisp
-     (use-package emms)
-     (emms-all)
-     (emms-default-players)
-   #+END_SRC
-** Discord
-   #+BEGIN_SRC emacs-lisp
-     ;; For Rich presence
-     (use-package elcord)
-     (elcord-mode)
-   #+END_SRC
-** Matrix
-   wtf the emacs matrix client is fucking lit
-   #+BEGIN_SRC emacs-lisp
-     (setq matrix-client-show-images t
-	   matrix-client-show-room-avatars t
-	   matrix-client-mark-modified-rooms t
-	   matrix-client-use-tracking t
-	   matrix-client-render-presence t
-	   matrix-client-render-membership t)
-     (use-package matrix-client
-       :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-			       :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
-     (general-define-key
-      :states '(normal)
-      :prefix "M-z"
-      (kbd ".") 'tracking-previous-buffer
-      (kbd ",") 'tracking-next-buffer
-      (kbd "m") 'matrix-client-connect
-      (kbd "o") 'matrix-client-upload
-      (kbd "b") 'matrix-client-switch-buffer)
-   #+END_SRC
-** IRC/Circe
-   #+BEGIN_SRC emacs-lisp
-     (setq circe-reduce-lurker-spam t
-	   circe-network-options
-	   '(("Freenode"
-	      :nick "Renzix"
-	      :channels (:after-auth "#emacs" "#emacs-circe" "#unixporn" "#gentoo" "#distrotube")
-	      :nickserv-nick "Renzix"
-	      :nickserv-password freenode-password)
-	     ("127.0.0.1"
-	      :user "Renzix"
-	      :port 6667
-	      :channels ("#home" "#techsupport" "#devnull" "#wallpapers" "#bots" "#programming" 
-			 "#anime" "#hardware" "#voice" "#ricing" "#de" "#wm" "#tools" "#feedback"
-			 "#starboard" "#modlog" "#rules" "#announcements")
-	      :pass discord-unixporn))
-	   circe-format-say "{nick:-16s} {body}"
-	   lui-time-stamp-position 'right-margin
-	   lui-time-stamp-format "%H:%M")
-     (defun my-circe-set-margin ()
-       (setq right-margin-width 5))
-     (add-hook 'lui-mode-hook 'my-circe-set-margin)
-     (defun my-circe-prompt ()
-       (lui-set-prompt
-	(concat (propertize (concat (buffer-name) ">")
-			    'face 'circe-prompt-face)
-		" ")))
-     (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
-     (setq
-      lui-time-stamp-position 'right-margin
-      lui-fill-type nil)
-
-     (add-hook 'lui-mode-hook 'my-lui-setup)
-     (defun my-lui-setup ()
-       (setq
-	fringes-outside-margins t
-	right-margin-width 5
-	word-wrap t
-	wrap-prefix "    "))
-     (use-package circe)
-     (use-package helm-circe)
-     (use-package tracking)
-     (general-define-key
-      :states '(normal)
-      :keymaps 'circe-mode-map
-      :prefix ","
-      (kbd ",") 'tracking-next-buffer
-      (kbd "j") 'circe-command-JOIN
-      (kbd "p") 'circe-command-PART
-      (kbd "b") 'helm-circe)
-   #+END_SRC
 ** Org
    Some basic configuration for org mode incluing access to executing
-   python,sql,emacs-lisp and latex. Also some keybinds
+   python,sql,emacs-lisp and latex. Also html and pandoc stuff
    #+BEGIN_SRC emacs-lisp
      (setq-default org-display-custom-times t)
      (setq org-export-date-timestamp-format '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
@@ -580,100 +239,8 @@
 	(sql . t)
 	(shell . t)
 	(python . t)))
-     (general-define-key
-      :states '(normal)
-      :keymaps 'org-mode-map
-      :prefix ","
-      (kbd ",") 'org-export-dispatch
-      (kbd "RET") (lambda () ((evil-append-line) (org-meta-return)))
-      (kbd "t") 'org-time-stamp-inactive
-      (kbd "c") 'org-cycle
-      (kbd "s") 'org-babel-execute-src-block
-      (kbd "b") 'org-cycle-list-bullet
-      (kbd "e") 'org-babel-execute-buffer
-      (kbd "'") 'org-edit-special)
-     (general-define-key
-      :states '(normal)
-      :keymaps 'orgsrc-mode-map
-      :prefix ","
-      (kbd "'") 'org-src-exit)
-
      (use-package ox-pandoc)
      (use-package htmlize)
-   #+END_SRC
-** Clipboard Manager
-   System clipboard manager
-   #+BEGIN_SRC emacs-lisp
-     (use-package clipmon)
-     (add-to-list 'after-init-hook 'clipmon-mode-start)
-     (add-to-list 'after-init-hook 'clipmon-persist)
-   #+END_SRC
-** Libvterm
-   Terminal emulator based off of a real thing stollen from the neovim
-   project. its supposed to actually work.
-   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'load-path (concat HOME "/Projects/emacs-libvterm"))
-     (let (vterm-install)
-       (require 'vterm))
-     (setq vterm-shell "ion")
-   #+END_SRC
-** Email (mu4e) 
-   #+BEGIN_SRC emacs-lisp
-     (require 'mu4e)
-     (require 'org-mu4e)
-     ;; use mu4e for e-mail in emacs
-
-     ;; sending mail -- replace USERNAME with your gmail username
-     ;; also, make sure the gnutls command line utils are installed
-     ;; package 'gnutls-bin' in Debian/Ubuntu
-     (use-package mu4e-alert
-       :after mu4e
-       :init 
-       (setq mail-user-agent 'mu4e-user-agent
-	     mu4e-update-interval 60
-	     mu4e-show-images t
-	     mu4e-maildir       "~/.mail"
-	     mu4e-get-mail-command "mbsync -a"
-	     mu4e-contexts
-	     `( ,(make-mu4e-context
-		  :name "gmail"
-		  :match-func (lambda (msg) (when msg
-					      (string-prefix-p "~/.mail/gmail" (mu4e-message-field msg :maildir))))
-		  )
-		;;,(make-mu4e-context
-		;;:name "wpu"
-		;;:match-func (lambda (msg) (when msg
-		;;			    (string-prefix-p "~/.mail/wpu" (mu4e-message-field msg :maildir)))))
-		))
-
-       :config
-       (mu4e-alert-set-default-style 'libnotify)
-       (mu4e-alert-enable-notifications)
-       (mu4e-alert-enable-mode-line-display)
-       (add-hook 'mu4e-index-updated-hook 'mu4e~headers-do-auto-update)
-       (setq mu4e-alert-interesting-mail-query (concat "flag:unread" " AND NO flag:trashed" " AND maildir:/gmail/Inbox"))
-       )
-
-     (require 'smtpmail)
-     (setq message-send-mail-function 'smtpmail-send-it
-	   starttls-use-gnutls t
-	   smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-	   smtpmail-auth-credentials
-	   '(("smtp.gmail.com" 587 "eragon9981@gmail.com" nil))
-	   smtpmail-default-smtp-server "smtp.gmail.com"
-	   smtpmail-smtp-server "smtp.gmail.com"
-	   smtpmail-smtp-service 587)
-
-     ;; alternatively, for emacs-24 you can use:
-     ;;(setq message-send-mail-function 'smtpmail-send-it
-     ;;     smtpmail-stream-type 'starttls
-     ;;     smtpmail-default-smtp-server "smtp.gmail.com"
-     ;;     smtpmail-smtp-server "smtp.gmail.com"
-     ;;     smtpmail-smtp-service 587)
-
-     ;; don't keep message buffers around
-     (setq message-kill-buffer-on-exit t)
-
    #+END_SRC
 * Post Config
 ** Backups
@@ -689,33 +256,6 @@
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
      (setq initial-buffer-choice 'eshell)
-     ;; Theme stuff for emacs --daemon idk why it works  @TODO(renzix): Make this work
-     (defvar my:theme 'apropospriate-dark)
-     (defvar my:theme-window-loaded nil)
-     (defvar my:theme-terminal-loaded nil)
-
-     (if (daemonp)
-	 (add-hook 'after-make-frame-functions(lambda (frame)
-						(select-frame frame)
-						(if (window-system frame)
-						    (unless my:theme-window-loaded
-						      (if my:theme-terminal-loaded
-							  (enable-theme my:theme)
-							(load-theme my:theme t))
-						      (setq my:theme-window-loaded t))
-						  (unless my:theme-terminal-loaded
-						    (if my:theme-window-loaded
-							(enable-theme my:theme)
-						      (load-theme my:theme t))
-						    (setq my:theme-terminal-loaded t)))))
-
-       (progn
-	 (load-theme my:theme t)
-	 (if (display-graphic-p)
-	     (setq my:theme-window-loaded t)
-	   (setq my:theme-terminal-loaded t))))
-     (setq org-src-tab-acts-natively t)
-
      ;;On save it adds buffer to bookmarks. LastSave is every time and get overridden while projectile is only 
      ;;if in a projectile dir. the last one is every file that is saved gets added.
      (add-hook 'after-save-hook '(lambda () (bookmark-set "LastSave" nil)))
