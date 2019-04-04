@@ -202,7 +202,7 @@
        (kbd "M-_") 'evil-window-decrease-width
        (kbd "M-+") 'evil-window-increase-width
        (kbd "M-'") 'eshell
-       (kbd "M-\"") 'term
+       (kbd "M-\"") 'vterm
        (kbd "M-ESC") 'kill-emacs)
       ;; EX Command style 
       (evil-ex-define-cmd "em" 'helm-find-files)
@@ -210,7 +210,7 @@
       (evil-ex-define-cmd "bm" 'helm-bookmarks)
       (evil-ex-define-cmd "fd" 'delete-file-and-buffer)
       (evil-ex-define-cmd "es" 'eshell)
-      (evil-ex-define-cmd "te" 'term)
+      (evil-ex-define-cmd "te" 'vterm)
       (evil-ex-define-cmd "lc" 'helm-locate)
       (evil-ex-define-cmd "h" 'evil-window-left)
       (evil-ex-define-cmd "j" 'evil-window-down)
@@ -607,6 +607,15 @@
      (use-package clipmon)
      (add-to-list 'after-init-hook 'clipmon-mode-start)
      (add-to-list 'after-init-hook 'clipmon-persist)
+   #+END_SRC
+** Libvterm
+   Terminal emulator based off of a real thing stollen from the neovim
+   project. its supposed to actually work.
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'load-path (concat HOME "/Projects/emacs-libvterm"))
+     (let (vterm-install)
+       (require 'vterm))
+     (setq vterm-shell "ion")
    #+END_SRC
 ** Email (mu4e) 
    #+BEGIN_SRC emacs-lisp
