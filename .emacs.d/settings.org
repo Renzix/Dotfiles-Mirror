@@ -621,6 +621,11 @@
    #+BEGIN_SRC emacs-lisp
      (use-package helm-system-packages)
    #+END_SRC
+** PDF STUFF
+   #+BEGIN_SRC emacs-lisp
+     (use-package pdf-tools)
+     (pdf-loader-install)
+   #+END_SRC
 * Post Config
 ** Backups
    #+BEGIN_SRC emacs-lisp
