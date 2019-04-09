@@ -1,4 +1,4 @@
-#+OPTIONS: tex:t date:t author:nil date:nil title:nil
+#+OPTIONS: tex:t date:t title:nil toc:nil
 #+LATEX_CLASS: article
 
 #+LATEX_HEADER: \usepackage[letterpaper]{geometry}
@@ -12,21 +12,13 @@
 #+LATEX_HEADER: \pagestyle{fancy}
 #+LATEX_HEADER: \lhead{} 
 #+LATEX_HEADER: \chead{} 
-#+LATEX_HEADER: \rhead{Last \thepage} 
 #+LATEX_HEADER: \lfoot{} 
 #+LATEX_HEADER: \cfoot{} 
 #+LATEX_HEADER: \rfoot{} 
 #+LATEX_HEADER: \renewcommand{\headrulewidth}{0pt} 
 #+LATEX_HEADER: \renewcommand{\footrulewidth}{0pt} 
 
-#+LATEX_HEADER: \setlength\headsep{0.333in}
-
-#+LATEX_HEADER: \newcommand{\bibent}{\noindent \hangindent 40pt}
-#+LATEX_HEADER: \newenvironment{workscited}{\newpage \begin{center} Works Cited \end{center}}{\newpage }
-
-
-#+LATEX_HEADER: \begin{document}
-#+LATEX_HEADER: \begin{flushleft}
+#+LATEX_HEADER: \setlength\headsep{0.5in}
 #+MACRO: keyword (eval (org-get-keyword "$1"))
 
 {{{author}}}
@@ -35,12 +27,6 @@
 
 {{{keyword(Class)}}}
 
-{{{modification-time(%e %B %Y)}}}
-
-#+LATEX_HEADER: \end{flushleft}
-
-#+LATEX_HEADER: \begin{center}
-{{{title}}}
-#+LATEX_HEADER: \end{center}
-
+{{{modification-time(%e %B %Y)}}} \\
+\\
 
