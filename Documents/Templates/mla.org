@@ -18,7 +18,7 @@
 #+LATEX_HEADER: \renewcommand{\headrulewidth}{0pt} 
 #+LATEX_HEADER: \renewcommand{\footrulewidth}{0pt} 
 
-#+LATEX_HEADER: \setlength\headsep{0.5in}
+#+LATEX_HEADER: \setlength\headsep{0.333in}
 #+MACRO: keyword (eval (org-get-keyword "$1"))
 
 {{{author}}}

@@ -268,8 +268,8 @@
      ;;(add-hook 'racer-mode-hook 'company-mode)
 
      (general-define-key
-      :states '(normal)
-      :prefix "g r"
+      :keymaps 'projectile-mode-map
+      :prefix "M-c"
       (kbd "c") 'rustic-cargo-build
       (kbd "C") 'rustic-recompile
       (kbd "p") 'rustic-popup
@@ -515,7 +515,6 @@
 	   circe-format-say "{nick:-16s} {body}"
 	   lui-time-stamp-position 'right-margin
 	   lui-time-stamp-format "%H:%M")
-     (enable-circe-color-nicks)
      (defun my-circe-set-margin ()
        (setq right-margin-width 5))
      (add-hook 'lui-mode-hook 'my-circe-set-margin)
