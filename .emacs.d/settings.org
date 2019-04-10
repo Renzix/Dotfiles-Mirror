@@ -188,6 +188,7 @@
       (kbd "M-L") 'evil-window-move-far-right
       (kbd "M-J") 'evil-window-move-very-bottom
       (kbd "M-K") 'evil-window-move-very-top
+      (kbd "M-U") 'undo-tree-visualize
       (kbd "M-b") 'helm-bookmarks
       (kbd "M-d") 'evil-delete-buffer
       (kbd "M-q") 'evil-window-delete

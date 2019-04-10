@@ -5,7 +5,8 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
-(package-refresh-contents)
+(when (not package-archive-contents)
+  (package-refresh-contents))
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 ;;(setq package-enable-at-startup nil)
@@ -14,9 +15,8 @@
 ;;  (message "Loaded packages in %.3fs" elapsed))
 
 (require 'use-package)
-;; Load use-package, used for loading packages
 (require 'use-package-ensure)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
 (setq vc-follow-symlinks t)
 
 (use-package org-evil)
@@ -35,6 +35,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#424242" "#EF9A9A" "#C5E1A5" "#FFEE58" "#64B5F6" "#E1BEE7" "#80DEEA" "#E0E0E0"])
+ '(auth-source-save-behavior nil)
  '(beacon-color "#7fff00007fff")
  '(custom-safe-themes
    '("bf390ecb203806cbe351b966a88fc3036f3ff68cd2547db6ee3676e87327b311" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
