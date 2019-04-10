@@ -51,8 +51,8 @@
        (load-file (concat HOME "/.emacs.d/init.el")))
      (defun org-get-keyword (KEYWORD)
        "get the value from a line like this
-		    ,#+KEYWORD: value
-		    in a file."
+			 ,#+KEYWORD: value
+			 in a file."
        (interactive)
        (let ((case-fold-search t)
 	     (re (format "^#\\+%s:[ \t]+\\([^\t\n]+\\)" KEYWORD)))
@@ -104,6 +104,12 @@
 	   (find-file (concat "/sudo:root@localhost:"
 			      (ido-read-file-name "Find file(as root): ")))
 	 (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+     (defun doas-edit (&optional arg)
+       (interactive "P")
+       (if (or arg (not buffer-file-name))
+	   (find-file (concat "/doas:root@localhost:"
+			      (ido-read-file-name "Find file(as root): ")))
+	 (find-alternate-file (concat "/doas:root@localhost:" buffer-file-name))))
 
      (defun get-string-from-file (filePath)
        "Return filePath's file content."
