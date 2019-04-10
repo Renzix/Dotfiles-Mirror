@@ -287,8 +287,8 @@
      ;;(add-hook 'racer-mode-hook 'company-mode)
 
      (general-define-key
-      :keymaps 'projectile-mode-map
-      :prefix "M-c"
+      :states '(normal)
+      :prefix "g r"
       (kbd "c") 'rustic-cargo-build
       (kbd "C") 'rustic-recompile
       (kbd "p") 'rustic-popup
@@ -623,8 +623,11 @@
        (require 'vterm))
      (setq vterm-shell "ion")
    #+END_SRC
+** PDF STUFF
 ** Email (mu4e) 
    #+BEGIN_SRC emacs-lisp
+     (use-package pdf-tools)
+     (pdf-loader-install)
      (require 'mu4e)
      (require 'org-mu4e)
      ;; use mu4e for e-mail in emacs
