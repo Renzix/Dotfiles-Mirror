@@ -2,9 +2,7 @@
 
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
-(run-shell-command "xmodmap -e \"remove mod4=Super_L\"")
-(run-shell-command "xmodmap -e \"clear mod4\"")
-(run-shell-command "xmodmap -e \"keycode 133=F12\"")
+(run-shell-command "xmodmap -e \"clear mod4\" && xmodmap -e \"keycode 133=F1\" && xmodmap -e \"clear mod4\"")
 (run-shell-command "xrandr --output DVI-D-0 --left-of DP-4 --auto && xrandr --output DP-3 --right-of DP-4")
 ;;(run-shell-command "emacs --daemon")
 
@@ -32,7 +30,6 @@
 (make-program-binding "emacs" "Emacs")
 (make-program-binding "emacsclient -ca \"\"" "Emacs" "emacs_frame")
 (make-program-binding "spotify" "Spotify" "spotify")
-(make-program-binding "discord" "Discord") ; @FIX(renzix): Need to find proper window class
 (make-program-binding "pavucontrol" "Pavucontrol")
 
 (defmacro make-motion-binding (name command &optional keybind)
@@ -42,7 +39,6 @@
 	 (define-key *root-map* (kbd "RET") ,(format nil "~a-alacritty" command))
 	 (define-key *root-map* (kbd "e")   ,(format nil "~a-emacs_frame" command))
 	 (define-key *root-map* (kbd "f")   ,(format nil "~a-thunar" command))
-	 (define-key *root-map* (kbd "d")   ,(format nil "~a-discord" command))
 	 (define-key *root-map* (kbd "i")   ,(format nil "~a-firefox" command)))
       `(progn 
 	 (defvar ,(intern (format nil "*~a-map*" name)) nil)
@@ -51,20 +47,20 @@
 		      (kbd "RET") ,(format nil "~a-alacritty" command)
 		      (kbd "e")   ,(format nil "~a-emacs_frame" command)
 		      (kbd "f")   ,(format nil "~a-thunar" command)
-		      (kbd "d")   ,(format nil "~a-discord" command)
 		      (kbd "i")   ,(format nil "~a-firefox" command)))))
 
+;; Modal Keybinds Stuff
+(set-prefix-key (kbd "C-F1"))
+(define-key *top-map* (kbd "F1") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
+(define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
 
 (make-motion-binding "run"   "run"          nil)
 (make-motion-binding "raise" "run-or-raise" (kbd "r"))
 (make-motion-binding "pull"  "run-or-pull"  (kbd "p"))
 
-;; Modal Keybinds Stuff
-(set-prefix-key (kbd "C-F12"))
-(define-key *top-map* (kbd "F12") "command-mode") ; @KEYBIND(renzix): Make a better keybind so i can do somthing like this in emacs too
-(define-key *root-map* (kbd "ESC") "abort") ; can be used to exit command mode (defaults to C-g)
-
-;; ;; Moves stuff around
+;; Moves stuff around
+(define-key *root-map* (kbd "n") "next")
+(define-key *root-map* (kbd "p") "previous")
 (define-key *root-map* (kbd "h") "move-focus left") ; Just moves focus of windows
 (define-key *root-map* (kbd "j") "move-focus down")
 (define-key *root-map* (kbd "k") "move-focus up")
