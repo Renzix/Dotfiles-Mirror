@@ -24,7 +24,7 @@
      (defcommand ,(intern (format nil "run-or-pull-~a" alias)) () ()
 		 (run-or-pull ,program-name '(:class ,window-class)))))
 
-(make-program-binding "firefox" "Firefox")
+(make-program-binding "firefox-bin" "Firefox" "firefox")
 (make-program-binding "thunar" "Thunar" "thunar")
 (make-program-binding "alacritty -e ion" "Alacritty" "alacritty")
 (make-program-binding "emacs" "Emacs")

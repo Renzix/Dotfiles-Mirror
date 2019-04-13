@@ -405,7 +405,7 @@
        (interactive)
        (save-excursion
 	 (indent-region (point-min) (point-max) nil)))
-     (add-hook 'before-save-hook 'indent-buffer)
+     ;;(add-hook 'before-save-hook 'indent-buffer)
    #+END_SRC
 * Normal Tasks
 ** Text
