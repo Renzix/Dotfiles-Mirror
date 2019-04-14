@@ -3,10 +3,10 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (use-package apropospriate-theme)
+     (defvar my:theme 'nord)
      (use-package nord-theme);
      ;; :config (load-theme 'nord nil))
-     (load-theme 'apropospriate-dark t)
+     (enable-theme my:theme)
    #+END_SRC
 ** Better Defaults
    Gets rid of default options for display
@@ -266,9 +266,10 @@
      (setq projectile-sort-order 'recently-active)
      (projectile-mode t)
    #+END_SRC
-** Magit
+** Git
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
+     (use-package git-timemachine)
      ;;(use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
      ;;  :after evil-magit)
    #+END_SRC
@@ -421,76 +422,18 @@
      (add-hook 'text-mode-hook 'text-mode-hook-identify)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
    #+END_SRC
-** pb
-   @TODO(renzix): Make this into a seperate package???
-   @TODO(renzix): Add text support for buffer, file and selection
+** pastebin
    #+BEGIN_SRC emacs-lisp
-     (defun pb-selection (&optional beg end)
-       "Takes a picture based on mouse"
-       (interactive (if (use-region-p)
-			(list (region-beginning)
-			      (region-end))
-		      (list (point-min)
-			    (point-max))))
-       (let ((res (pb--post (buffer-substring beg end))))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-file (file)
-       "Takes a picture based on mouse"
-       (interactive "fUploaded File: ")
-       (let ((res (concat (pb--post (get-string-from-file file)) (file-name-extension))))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-png () ;@TODO(renzix): Doesnt work i need to fix this
-       "Takes a picture based on mouse"
-       (interactive)
-       (let ((res (concat (pb--post (shell-command-to-string "maim -sq")) ".png")))
-	 (kill-new res)
-	 (message res)))
-     (defun pb-get (&optional url) 
-       "gets content in a new buffer" 
-       (interactive (list (if 
-			      (and (not (zerop (length kill-ring))) (string-match-p "http*" (current-kill 0)))
-			      (read-string (format "Website Url(%s): " (current-kill 0))) 
-			    (read-string "Website Url: "))))
-       (if (= (length url) 0) 
-	   (browse-url-emacs (current-kill 0))
-	 (browse-url-emacs url)))
-
-     (defun pb--post (input) ;get this working almost perfectly
-       "Raw pb post function accepts a buncha params"
-       (let* ((url "https://ptpb.pw/")
-	      (url-request-method "POST")
-	      (url-request-extra-headers
-	       '(("Content-Type" . "application/x-www-form-urlencoded")))
-	      (url-request-data))
-	 (setq url-request-data (pb--urlencode `(("c" . ,input))))
-	 (with-current-buffer (url-retrieve-synchronously url)
-	   (goto-char (point-min))
-	   (re-search-forward "https://*" nil t)
-	   (buffer-substring (point) (point-at-eol)))))
-     (defun pb--urlencode (alis)
-       "Map an alist of key/value pairs to an URL-encoded string."
-       (mapconcat (lambda (pair)
-		    (format "%s=%s"
-			    (url-hexify-string
-			     (format "%s" (car pair)))
-			    (url-hexify-string
-			     (format "%s" (if (consp (cdr pair))
-					      (cadr pair)
-					    (cdr pair))))))
-		  alis
-		  "&"))
+     (use-package webpaste
+       :config (setq webpaste-provider-priority '("ix.io"))
+       )
    #+END_SRC
-
-   #+RESULTS:
-   : pb--urlencode
-
-** emms/twitch
+** EMMS
    #+BEGIN_SRC emacs-lisp
-     (use-package emms)
-     (emms-all)
-     (emms-default-players)
+     (use-package emms 
+       :config
+       (emms-all)
+       (emms-default-players))
    #+END_SRC
 ** Discord
    #+BEGIN_SRC emacs-lisp
@@ -699,7 +642,6 @@
      (setq inhibit-startup-screen t)
      (setq initial-buffer-choice 'eshell)
      ;; Theme stuff for emacs --daemon idk why it works  @TODO(renzix): Make this work
-     (defvar my:theme 'apropospriate-dark)
      (defvar my:theme-window-loaded nil)
      (defvar my:theme-terminal-loaded nil)
 
