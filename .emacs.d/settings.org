@@ -569,8 +569,9 @@
 ** PDF STUFF
 ** Email (mu4e) 
    #+BEGIN_SRC emacs-lisp
-     (use-package pdf-tools)
-     (pdf-loader-install)
+     (use-package pdf-tools
+       :config
+       (pdf-loader-install))
      (require 'mu4e)
      (require 'org-mu4e)
      ;; use mu4e for e-mail in emacs
