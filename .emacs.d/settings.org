@@ -178,8 +178,9 @@
        :keymaps 'override
        (kbd ";") 'helm-M-x
        (kbd "g c") 'comment-line
-       (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
        (kbd "g p") 'projectile-command-map
+       (kbd "g s") 'flyspell-correct-word-generic
+       (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
        (kbd "`") 'magit-status)
@@ -414,13 +415,6 @@
      (add-hook 'before-save-hook 'indent-buffer)
    #+END_SRC
 * Normal Tasks
-** Text
-   @TODO(renzix): Add spellcheck and autocorrect???
-   #+BEGIN_SRC emacs-lisp
-     (setq default-major-mode 'text-mode)
-     (add-hook 'text-mode-hook 'text-mode-hook-identify)
-     (add-hook 'text-mode-hook 'turn-on-auto-fill)
-   #+END_SRC
 ** pb
    @TODO(renzix): Make this into a seperate package???
    @TODO(renzix): Add text support for buffer, file and selection
@@ -574,10 +568,12 @@
    Some basic configuration for org mode incluing access to executing
    python,sql,emacs-lisp and latex. Also some keybinds
    #+BEGIN_SRC emacs-lisp
+     (use-package flyspell-correct-helm)
      (setq-default org-display-custom-times t)
-     (setq org-export-date-timestamp-format '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
-     (setq org-time-stamp-custom-formats '("%e %b %Y" . "<%a %b %e %Y %H:%M>"))
-     (setq org-confirm-babel-evaluate nil)
+     (setq default-major-mode 'org-mode
+	   org-export-date-timestamp-format '("%e %b %Y" . "<%a %b %e %Y %H:%M>")
+	   org-time-stamp-custom-formats '("%e %b %Y" . "<%a %b %e %Y %H:%M>")
+	   org-confirm-babel-evaluate nil)
      (org-babel-do-load-languages
       'org-babel-load-languages
       '((org . t)
