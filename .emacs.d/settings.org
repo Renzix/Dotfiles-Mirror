@@ -3,9 +3,9 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (defvar my:theme 'nord)
-     (use-package nord-theme);
+     (use-package monokai-theme);
      ;; :config (load-theme 'nord nil))
+     (setq my:theme 'monokai)
      (enable-theme my:theme)
    #+END_SRC
 ** Better Defaults
@@ -154,7 +154,7 @@
       (helm-autoresize-mode t)
       (setq helm-autoresize-max-height 30)
       (setq helm-display-header-line nil)
-      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+      (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
       (helm-mode t))
   #+END_SRC
 * Evil Mode
@@ -163,6 +163,7 @@
     (use-package evil
       :init
       (setq evil-want-integration t
+	    evil-want-C-i-jump nil
 	    evil-want-keybinding nil
 	    evil-cross-lines t)
       :config 
@@ -250,11 +251,10 @@
        '(progn
 	  (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
 	  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-	  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
 	  (define-key company-active-map (kbd "<return>") nil)
 	  (define-key company-active-map (kbd "RET") nil)
 	  (define-key company-active-map (kbd "C-SPC") #'company-complete-selection)
-	  (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)))
+	  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)))
    #+END_SRC
 ** Projectile
    #+BEGIN_SRC emacs-lisp

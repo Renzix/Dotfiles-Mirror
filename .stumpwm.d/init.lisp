@@ -2,7 +2,7 @@
 
 ;; Autostart stuff
 (run-shell-command "setxkbmap -option caps:swapescape")
-(run-shell-command "xmodmap -e \"clear mod4\" && xmodmap -e \"keycode 133=F1\" && xmodmap -e \"clear mod4\"")
+(run-shell-command "xmodmap -e \"clear mod4\" && xmodmap -e \"keycode 133=F1\" && xmodmap -e \"clear mod4\"") ; I have no idea why this doesnt work
 (run-shell-command "xrandr --output DVI-D-0 --left-of DP-4 --auto && xrandr --output DP-3 --right-of DP-4")
 ;;(run-shell-command "emacs --daemon")
 
