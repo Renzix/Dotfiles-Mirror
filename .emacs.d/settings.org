@@ -150,14 +150,14 @@
   Helm stuff
   #+BEGIN_SRC emacs-lisp
     (use-package helm
-      :config 
+      :config
       (helm-autoresize-mode t)
       (setq helm-autoresize-max-height 30)
       (setq helm-display-header-line nil)
       (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
       (helm-mode t))
   #+END_SRC
-* Evil Mode
+* Evil God Mode
   Evil Mode Settings and keybindings
   #+BEGIN_SRC emacs-lisp
     (use-package evil
@@ -168,18 +168,23 @@
 	    evil-cross-lines t)
       :config 
       (evil-mode t))
+    (use-package evil-god-state
+      :config 
+      (which-key-enable-god-mode-support)
+      (evil-define-key 'god global-map [escape] 'evil-god-state-bail))
     (use-package evil-collection
       :after evil
       :config 
       (evil-collection-init)
       ;; Useful overrides for normal mode
-      (general-nmap "," (general-simulate-key "C-c" :state 'normal)) ;; If i didnt add special keybinds for minor mode use the default C-c
       (general-define-key
        :states '(normal)
        :keymaps 'override
+       (kbd ",") 'evil-execute-in-god-state
        (kbd ";") 'helm-M-x
        (kbd "g c") 'comment-line
-       (kbd "SPC") 'helm-run-external-command ; @TODO(renzix): Make this actually useful
+       (kbd "SPC") 'other-window
+       (kbd "RET") 'helm-buffers-list
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
