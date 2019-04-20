@@ -275,6 +275,9 @@
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
      (use-package git-timemachine)
+     (use-package git-gutter
+       :config
+       (global-git-gutter-mode))
      ;;(use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
      ;;  :after evil-magit)
    #+END_SRC
