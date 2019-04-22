@@ -3,10 +3,29 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (use-package monokai-theme);
-     ;; :config (load-theme 'nord nil))
-     (setq my:theme 'monokai)
-     (enable-theme my:theme)
+     (defun disable-all-themes ()
+       "disable all active themes."
+       (interactive)
+       (dolist (i custom-enabled-themes)
+	 (disable-theme i)))
+
+     (cond ((eq system-type 'darwin) 
+	    (use-package apropospriate-theme 
+	      :init (setq my:theme 'apropospriate-dark)))
+	   ((eq system-type 'gnu/linux)
+	    (use-package dracula-theme 
+	      :init (setq my:theme 'dracula)))
+	   ((eq system-type 'windows-nt)
+	    (use-package nord-theme 
+	      :init (setq my:theme 'nord)))
+	   ((eq system-type 'berkeley-unix) 
+	    (use-package monokai-theme 
+	      :init (setq my:theme 'monokai)))
+	   ((eq system-type 'cygwin) 
+	    (use-package spacemacs-theme 
+	      :init (setq my:theme 'spacemacs-dark))))
+     (disable-all-themes)
+     (load-theme my:theme t t)
    #+END_SRC
 ** Better Defaults
    Gets rid of default options for display
@@ -186,6 +205,7 @@
        (kbd "<space>") 'evil-execute-in-god-state
        (kbd ";") 'helm-M-x
        (kbd "g c") 'comment-line
+       (kbd "g =") 'indent-buffer
        (kbd "RET") 'helm-buffers-list
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project

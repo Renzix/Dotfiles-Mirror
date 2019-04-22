@@ -43,12 +43,12 @@
  '(auth-source-save-behavior nil)
  '(beacon-color "#7fff00007fff")
  '(custom-safe-themes
-   '("bf390ecb203806cbe351b966a88fc3036f3ff68cd2547db6ee3676e87327b311" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
+   '("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "bf390ecb203806cbe351b966a88fc3036f3ff68cd2547db6ee3676e87327b311" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
  '(delete-selection-mode nil)
  '(evil-emacs-state-cursor '("#E57373" hbar) t)
  '(evil-insert-state-cursor '("#E57373" bar) t)
  '(evil-insert-state-modes
-   '(comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode))
+   '(comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode wdired-mode))
  '(evil-normal-state-cursor '("#FFEE58" box) t)
  '(evil-visual-state-cursor '("#C5E1A5" box) t)
  '(highlight-indent-guides-auto-enabled nil)
