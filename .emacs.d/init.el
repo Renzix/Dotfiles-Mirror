@@ -7,7 +7,7 @@
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
 (when (not package-archive-contents)
   (package-refresh-contents))
-(when (<= 26 emacs-major-version)
+(if (version< emacs-version "27")
   (package-initialize))
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))

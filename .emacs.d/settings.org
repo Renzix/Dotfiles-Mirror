@@ -210,7 +210,7 @@
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
-       (kbd "`") 'magit-status)
+       (kbd "`") 'magit-dispatch)
 
       ;; My Modifier style keybinds
       (general-define-key
