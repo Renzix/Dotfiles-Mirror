@@ -7,6 +7,8 @@
 (add-to-list 'package-archives '("GNU" . "https://elpa.gnu.org/packages/"))
 (when (not package-archive-contents)
   (package-refresh-contents))
+(when (<= 26 emacs-major-version)
+  (package-initialize))
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -43,21 +45,25 @@
  '(auth-source-save-behavior nil)
  '(beacon-color "#7fff00007fff")
  '(custom-safe-themes
-   '("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "bf390ecb203806cbe351b966a88fc3036f3ff68cd2547db6ee3676e87327b311" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
+   (quote
+    ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "bf390ecb203806cbe351b966a88fc3036f3ff68cd2547db6ee3676e87327b311" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default)))
  '(delete-selection-mode nil)
- '(evil-emacs-state-cursor '("#E57373" hbar) t)
- '(evil-insert-state-cursor '("#E57373" bar) t)
+ '(evil-emacs-state-cursor (quote ("#E57373" hbar)) t)
+ '(evil-insert-state-cursor (quote ("#E57373" bar)) t)
  '(evil-insert-state-modes
-   '(comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode wdired-mode))
- '(evil-normal-state-cursor '("#FFEE58" box) t)
- '(evil-visual-state-cursor '("#C5E1A5" box) t)
+   (quote
+    (comint-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode wdired-mode)))
+ '(evil-normal-state-cursor (quote ("#FFEE58" box)) t)
+ '(evil-visual-state-cursor (quote ("#C5E1A5" box)) t)
  '(highlight-indent-guides-auto-enabled nil)
  '(highlight-symbol-colors
-   '("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80"))
+   (quote
+    ("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80")))
  '(highlight-symbol-foreground-color "#E0E0E0")
- '(highlight-tail-colors '(("#7fff00007fff" . 0) ("#424242" . 100)))
+ '(highlight-tail-colors (quote (("#7fff00007fff" . 0) ("#424242" . 100))))
  '(package-selected-packages
-   '(isend-mode perl6-mode mu4e-alert evil-mu4e go-mode go lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme))
+   (quote
+    (isend-mode perl6-mode mu4e-alert evil-mu4e go-mode go lsp-mode emms evil-magit which-key tracking system-packages slime-company request racer quelpa-use-package ox-pandoc org-evil nord-theme nix-mode magit-popup kdeconnect htmlize helm-system-packages helm-rg helm-projectile helm-nixos-options helm-circe git-commit general forge flylisp erc-twitch erc-tweet erc-image elcord company-racer company-nixos-options company-irony company-c-headers company-anaconda comment-tags clippy cargo autopair apropospriate-theme)))
  '(pos-tip-background-color "#000000000000")
  '(pos-tip-foreground-color "#9E9E9E")
  '(tabbar-background-color "#000000000000"))

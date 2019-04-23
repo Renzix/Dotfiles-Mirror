@@ -46,4 +46,6 @@ alias gp="git push $@"
 alias ht="htop $@"
 alias dd="dd status=progress $@"
 
+export NIX_AUTO_RUN=1
+
 neofetch
