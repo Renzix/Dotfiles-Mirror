@@ -411,6 +411,14 @@
        (setq ensime-search-interface 'helm)
        (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
    #+END_SRC
+** Haskell   
+   #+BEGIN_SRC emacs-lisp
+     (use-package haskell-mode)
+     (use-package lsp-haskell
+       :init (add-hook 'haskell-mode-hook #'lsp))
+     (use-package flycheck-haskell
+       :init (add-hook 'haskell-mode-hook #'flycheck-haskell-setup))
+   #+END_SRC
 ** Lisp
    #+BEGIN_SRC emacs-lisp
      ;;(setq inferior-lisp-program "/usr/bin/sbcl")
