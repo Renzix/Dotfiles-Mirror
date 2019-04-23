@@ -63,7 +63,8 @@
      (use-package which-key
        :config (which-key-mode))
      (defvar HOME (getenv "HOME"))
-     (load-file (concat HOME "/.emacs.d/private.el"))
+     (if (file-exist-p (concat HOME "/.emacs.d/private.el")) 
+	 (load-file (concat HOME "/.emacs.d/private.el")))
    #+END_SRC
 ** Extra Functions
    #+BEGIN_SRC emacs-lisp
