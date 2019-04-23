@@ -3,12 +3,6 @@
 ** Themes
    Choose Theme
    #+BEGIN_SRC emacs-lisp
-     (defun disable-all-themes ()
-       "disable all active themes."
-       (interactive)
-       (dolist (i custom-enabled-themes)
-	 (disable-theme i)))
-
      (cond ((eq system-type 'darwin) 
 	    (use-package apropospriate-theme 
 	      :init (setq my:theme 'apropospriate-dark)))
@@ -24,7 +18,6 @@
 	   ((eq system-type 'cygwin) 
 	    (use-package spacemacs-theme 
 	      :init (setq my:theme 'spacemacs-dark))))
-     (disable-all-themes)
      (load-theme my:theme t t)
    #+END_SRC
 ** Better Defaults
@@ -70,9 +63,8 @@
      (use-package which-key
        :config (which-key-mode))
      (defvar HOME (getenv "HOME"))
-     ;; Defines passwords and current desktop (either chromebook, main, or laptop) so i dont have to make multiple git repos
-     (load-file (concat HOME "/.emacs.d/private.el"))
-     ;; I have no fucking idea why this doesnt work further down or in :init for use packages so im just gonna put it here
+     (if (file-exist-p (concat HOME "/.emacs.d/private.el")) 
+	 (load-file (concat HOME "/.emacs.d/private.el")))
    #+END_SRC
 ** Extra Functions
    #+BEGIN_SRC emacs-lisp
@@ -210,6 +202,7 @@
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
+       (kbd "g `") 'magit-status
        (kbd "`") 'magit-dispatch)
 
       ;; My Modifier style keybinds
@@ -246,21 +239,12 @@
       (evil-ex-define-cmd "es" 'eshell)
       (evil-ex-define-cmd "te" 'vterm)
       (evil-ex-define-cmd "lc" 'helm-locate)
-      (evil-ex-define-cmd "h" 'evil-window-left)
-      (evil-ex-define-cmd "j" 'evil-window-down)
-      (evil-ex-define-cmd "k" 'evil-window-up)
-      (evil-ex-define-cmd "l" 'evil-window-right)
-      (evil-ex-define-cmd "mh" 'evil-window-move-far-left)
-      (evil-ex-define-cmd "mj" 'evil-window-move-very-bottom)
-      (evil-ex-define-cmd "mk" 'evil-window-very-top)
-      (evil-ex-define-cmd "ml" 'evil-window-far-right)
       (evil-ex-define-cmd "kr" 'helm-show-kill-ring)
       (evil-ex-define-cmd "nn" 'tracking-next-buffer)
       (evil-ex-define-cmd "pn" 'tracking-previous-buffer)
       (evil-ex-define-cmd "cfg" 'open-emacs-config)
       (evil-ex-define-cmd "load" 'load-emacs-config)
-      (evil-ex-define-cmd "bb" 'xref-pop-marker-stack)
-      )
+      (evil-ex-define-cmd "bb" 'xref-pop-marker-stack))
   #+END_SRC
 * Programming
 ** Company
