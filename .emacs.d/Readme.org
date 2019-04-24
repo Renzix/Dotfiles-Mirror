@@ -6,10 +6,45 @@ My emacs config is pretty simple it consists of
 init.el is not meant to be used and everything is supposed to be in
 settings.org
 
-It contains alot of things including
-- Evil config
-- Movement Mode (evil mode i made for other stuff)
-- c/cpp/rust/java/python support (might have some more)
-- org mode config
-- circe config (irc)
-- pretty appearence
+The big plugins (including planned possibly)
+- [-] Normal emacs
+  - [X] Keybinds
+    - [X] Evil
+    - [X] God
+  - [X] Org
+  - [X] Git
+    - [X] Magit
+    - [X] Gutter
+    - [X] Timemachine
+  - [-] Company
+    - [X] Rust
+    - [X] C/C++
+    - [X] Python
+    - [ ] Lua
+    - [ ] Java
+    - [X] Scala
+    - [ ] Haskell
+    - [ ] Elisp
+    - [ ] Common-Lisp
+    - [ ] Scheme
+  - [X] Helm
+  - [-] Chat
+    - [X] Matrix
+    - [X] IRC
+    - [ ] Discord?
+  - [ ] Email
+    - [ ] Send
+    - [ ] Revieve
+    - [ ] Exchange
+  - [X] Projectile
+  - [X] Terminals
+    - [X] eshell
+    - [X] term
+    - [X] vterm
+  - [-] Backup system
+    - [X] Backups
+    - [ ] Search backups
+    - [ ] Organize by time
+  - [-] Pastebin
+    - [X] Text
+    - [ ] Image

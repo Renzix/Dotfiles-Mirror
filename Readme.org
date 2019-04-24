@@ -1,16 +1,24 @@
 * Dotfiles
 This is my dotfiles. 
 Below are some planned/possible things i need to make good enough to add
-- [X] bspwm
-- [ ] vim-like sxhkd
-- [X] stumpwm config
-- [ ] neovim config
-- [X] emacs config
-- [ ] herbsluft config
-- [ ] dwm config (with patches)
-- [ ] Bin folder with actually useful scripts
-- [ ] fvwm config?
-- [ ] openbox config
-- [X] bashrc
-- [ ] xonshrc
-- [X] Wallpaper
+- [-] Editor configs
+  - [ ] neovim config
+  - [X] emacs config
+  - [ ] spacemacs config?
+- [-] Window Manager configs
+  - [X] stumpwm
+  - [X] bspwm
+  - [ ] herbsluft
+  - [ ] dwm (with patches and prob in a seperate repo)
+  - [ ] xmonad 
+  - [ ] openbox
+  - [ ] Awesomewm
+  - [ ] fvwm?
+- [-] Shell configs
+  - [X] bash
+  - [ ] zsh
+  - [ ] xonsh
+  - [ ] ion
+- [-] Misc
+  - [X] Wallpaper
+  - [ ] Bin folder with actually useful scripts
