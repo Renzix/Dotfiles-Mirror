@@ -35,3 +35,16 @@
 (let ((elapsed (float-time (time-subtract (current-time)
 					  emacs-start-time))))
   (message "Loading settings...done (%.3fs)" elapsed))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(helm-circe circe frame-purpose rainbow-identifiers esxml tracking ov a anaphora matrix-client elcord emms webpaste htmlize ox-pandoc helm-flyspell treemacs-magit treemacs-evil treemacs-projectile treemacs minimap autopair flycheck-haskell lsp-haskell haskell-mode ensime company-irony-c-headers company-irony irony-eldoc flycheck-irony irony company-jedi racer clippy lsp-mode cargo rustic rust-mode git-gutter git-timemachine evil-magit helm-projectile company evil-collection evil-god-state helm which-key general quelpa-use-package quelpa dracula-theme org-evil auto-package-update use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
