@@ -35,4 +35,3 @@
 (let ((elapsed (float-time (time-subtract (current-time)
 					  emacs-start-time))))
   (message "Loading settings...done (%.3fs)" elapsed))
-(custom-set-variables
