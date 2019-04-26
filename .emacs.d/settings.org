@@ -198,7 +198,6 @@
        (kbd ";") 'helm-M-x
        (kbd "g c") 'comment-line
        (kbd "g =") 'indent-buffer
-       (kbd "RET") 'helm-buffers-list
        (kbd "g p") 'projectile-command-map
        (kbd "\\") 'helm-projectile-rg-or-project
        (kbd "|") 'helm-projectile-find-file-or-project
@@ -403,12 +402,12 @@
      (use-package flycheck-haskell
        :init (add-hook 'haskell-mode-hook #'flycheck-haskell-setup))
    #+END_SRC
-** Lisp
+** Lisps
    #+BEGIN_SRC emacs-lisp
-     ;;(setq inferior-lisp-program "/usr/bin/sbcl")
-     ;;(use-package slime)
-     ;;(require 'slime-autoloads)
-     ;;(slime-setup '(slime-fancy))
+     (setq inferior-lisp-program "/usr/bin/sbcl")
+     (use-package slime)
+     (require 'slime-autoloads)
+     (slime-setup '(slime-fancy))
    #+END_SRC
 ** Misc Programming
    @TODO (renzix): Add Keyword highlighter
@@ -473,6 +472,11 @@
      (use-package ox-pandoc)
      (use-package htmlize)
    #+END_SRC
+** email
+#+BEIN_SRC emacs-lisp
+  (setq smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587)
+#+END_SRC
 ** pastebin
    #+BEGIN_SRC emacs-lisp
      (use-package webpaste
