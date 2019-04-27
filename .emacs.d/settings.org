@@ -66,6 +66,10 @@
      (if (file-exists-p (concat HOME "/.emacs.d/private.el")) 
 	 (load-file (concat HOME "/.emacs.d/private.el")))
    #+END_SRC
+** Emacsclient
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'after-make-frame-functions (lambda (arg) (load-emacs-config)))
+   #+END_SRC
 ** Extra Functions
    #+BEGIN_SRC emacs-lisp
      (defun open-emacs-config ()
@@ -75,8 +79,8 @@
 
      (defun load-emacs-config ()
        "Reloads my emacs config uwu"
-       (interactive)
        (load-file (concat HOME "/.emacs.d/init.el")))
+
      (defun org-get-keyword (KEYWORD)
        "get the value from a line like this
 			 ,#+KEYWORD: value
