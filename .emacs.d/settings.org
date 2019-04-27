@@ -460,7 +460,7 @@
       :keymaps 'org-mode-map
       :prefix ","
       (kbd ",") 'org-export-dispatch
-      (kbd "RET") (lambda () ((evil-append-line) (org-meta-return)))
+      (kbd "RET") (lambda () ((evil-append-line) (org-meta-return))) ;; @TODO(renzix): Fix this as it doesnt work and im lazy
       (kbd "t") 'org-time-stamp-inactive
       (kbd "c") 'org-cycle
       (kbd "s") 'org-babel-execute-src-block
@@ -477,6 +477,9 @@
      (use-package htmlize)
    #+END_SRC
 ** email
+   This only is here because I installed email manually on whatever
+   emacs I am running. I might put this into ~/.emacs.d/private.el or
+   something idk
    #+BEGIN_SRC emacs-lisp
      (setq smtpmail-smtp-server "smtp.gmail.com"
 	   smtpmail-smtp-service 587)
