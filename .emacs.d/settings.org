@@ -286,8 +286,8 @@
      (use-package git-gutter
        :config
        (global-git-gutter-mode))
-     ;;(use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
-     ;;  :after evil-magit)
+     (use-package forge ; @TODO(renzix): When this gets stable i should use it uwu
+       :after evil-magit)
    #+END_SRC
 ** Rust
    #+BEGIN_SRC emacs-lisp
@@ -477,9 +477,9 @@
      (use-package htmlize)
    #+END_SRC
 ** email
-   #+BEIN_SRC emacs-lisp
-   (setq smtpmail-smtp-server "smtp.gmail.com"
-   smtpmail-smtp-service 587)
+   #+BEGIN_SRC emacs-lisp
+     (setq smtpmail-smtp-server "smtp.gmail.com"
+	   smtpmail-smtp-service 587)
    #+END_SRC
 ** pastebin
    #+BEGIN_SRC emacs-lisp
