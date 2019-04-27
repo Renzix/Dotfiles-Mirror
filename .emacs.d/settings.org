@@ -338,6 +338,10 @@
       (kbd ".") 'jedi:goto-definition
       (kbd "c") 'python-check)
    #+END_SRC
+** Raduko
+   #+BEGIN_SRC emacs-lisp
+     (use-package perl6-mode)
+   #+END_SRC
 ** C/CPP 
    #+BEGIN_SRC emacs-lisp
      (use-package irony
@@ -473,10 +477,10 @@
      (use-package htmlize)
    #+END_SRC
 ** email
-#+BEIN_SRC emacs-lisp
-  (setq smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587)
-#+END_SRC
+   #+BEIN_SRC emacs-lisp
+   (setq smtpmail-smtp-server "smtp.gmail.com"
+   smtpmail-smtp-service 587)
+   #+END_SRC
 ** pastebin
    #+BEGIN_SRC emacs-lisp
      (use-package webpaste
