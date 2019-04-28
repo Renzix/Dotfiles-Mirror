@@ -72,6 +72,11 @@
    #+END_SRC
 ** Extra Functions
    #+BEGIN_SRC emacs-lisp
+     (defun indent-buffer ()
+       (interactive)
+       (save-excursion
+	 (indent-region (point-min) (point-max) nil)))
+
      (defun open-emacs-config ()
        "Opens my emacs config uwu"
        (interactive)
@@ -283,6 +288,16 @@
        :config
        (projectile-mode t))
    #+END_SRC
+** Treemacs
+   #+BEGIN_SRC emacs-lisp
+     (use-package treemacs)
+     (use-package treemacs-projectile
+       :after treemacs projectile)
+     (use-package treemacs-evil
+       :after treemacs evil)
+     (use-package treemacs-magit
+       :after treemacs magit)
+   #+END_SRC
 ** Git
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit)
@@ -342,7 +357,7 @@
       (kbd ".") 'jedi:goto-definition
       (kbd "c") 'python-check)
    #+END_SRC
-** Raduko
+** Rakudo
    #+BEGIN_SRC emacs-lisp
      (use-package perl6-mode)
    #+END_SRC
@@ -401,12 +416,13 @@
        :init
        (setq ensime-search-interface 'helm)
        (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
+     (use-package lsp-java)
+     (use-package lsp-scala)
    #+END_SRC
-** Haskell   
+** Haskell
    #+BEGIN_SRC emacs-lisp
      (use-package haskell-mode)
-     (use-package lsp-haskell
-       :init (add-hook 'haskell-mode-hook #'lsp))
+     (use-package lsp-haskell)
      (use-package flycheck-haskell
        :init (add-hook 'haskell-mode-hook #'flycheck-haskell-setup))
    #+END_SRC
@@ -421,23 +437,10 @@
    @TODO (renzix): Add Keyword highlighter
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
-       :config (autopair-global-mode t))
      (use-package minimap
+       :config (autopair-global-mode t))
        :init (setq minimap-window-location 'right))
-     (use-package treemacs)
-     (use-package treemacs-projectile
-       :after treemacs projectile)
-     (use-package treemacs-evil
-       :after treemacs evil)
-     (use-package treemacs-magit
-       :after treemacs magit)
-
-     ;; Auto indent on save
-     (defun indent-buffer ()
-       (interactive)
-       (save-excursion
-	 (indent-region (point-min) (point-max) nil)))
-     ;;(add-hook 'before-save-hook 'indent-buffer)
+     (add-hook 'prog-mode-hook #'lsp)
    #+END_SRC
 * Normal Tasks
 ** Org
