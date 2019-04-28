@@ -437,8 +437,8 @@
    @TODO (renzix): Add Keyword highlighter
    #+BEGIN_SRC emacs-lisp
      (use-package autopair
-     (use-package minimap
        :config (autopair-global-mode t))
+     (use-package minimap
        :init (setq minimap-window-location 'right))
      (add-hook 'prog-mode-hook #'lsp)
    #+END_SRC
