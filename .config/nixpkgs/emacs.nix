@@ -67,4 +67,5 @@ in
     pkgs.pandoc
     pkgs.irony-server
     pkgs.clang
+    pkgs.ispell
   ])
