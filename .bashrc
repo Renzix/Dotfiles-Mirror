@@ -46,6 +46,11 @@ alias gp="git push $@"
 alias ht="htop $@"
 alias dd="dd status=progress $@"
 
+cb() {
+	read input
+	echo -e "\033]52;c;$(base64 <<< $input )\a"
+}
+
 export NIX_AUTO_RUN=1
 
 neofetch

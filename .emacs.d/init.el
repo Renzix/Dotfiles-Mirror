@@ -41,7 +41,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(perl6-mode helm-circe circe frame-purpose rainbow-identifiers esxml tracking ov a anaphora matrix-client elcord emms webpaste htmlize ox-pandoc helm-flyspell treemacs-magit treemacs-evil treemacs-projectile treemacs minimap autopair flycheck-haskell lsp-haskell haskell-mode ensime company-irony-c-headers company-irony irony-eldoc flycheck-irony irony company-jedi racer clippy lsp-mode cargo rustic rust-mode git-gutter git-timemachine evil-magit helm-projectile company evil-collection evil-god-state helm which-key general quelpa-use-package quelpa dracula-theme org-evil auto-package-update use-package))
+   '(lsp-scala lsp-java perl6-mode helm-circe circe frame-purpose rainbow-identifiers esxml tracking ov a anaphora matrix-client elcord emms webpaste htmlize ox-pandoc helm-flyspell treemacs-magit treemacs-evil treemacs-projectile treemacs minimap autopair flycheck-haskell lsp-haskell haskell-mode ensime company-irony-c-headers company-irony irony-eldoc flycheck-irony irony company-jedi racer clippy lsp-mode cargo rustic rust-mode git-gutter git-timemachine evil-magit helm-projectile company evil-collection evil-god-state helm which-key general quelpa-use-package quelpa dracula-theme org-evil auto-package-update use-package))
  '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com"))
 (custom-set-faces
