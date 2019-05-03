@@ -7,8 +7,8 @@
 	    (use-package apropospriate-theme 
 	      :init (setq my:theme 'apropospriate-dark)))
 	   ((eq system-type 'gnu/linux)
-	    (use-package dracula-theme 
-	      :init (setq my:theme 'dracula)))
+	    (use-package darcula-theme 
+	      :init (setq my:theme 'darcula)))
 	   ((eq system-type 'windows-nt)
 	    (use-package nord-theme 
 	      :init (setq my:theme 'nord)))
