@@ -7,6 +7,8 @@
            display-line-numbers-current-absolute t
            display-line-numbers-width 4
            display-line-numbers-widen t)
+(add-hook 'after-save-hook '(lambda () (async-start (bookmark-set (buffer-name) nil))))
+(add-hook 'after-save-hook '(lambda () (async-start (bookmark-set "LastSave" nil))))
 
 ;; Keybindings
 (map!
@@ -16,6 +18,10 @@
  :n "g c" #'comment-line
  :n "\\" #'projectile-find-file)
 
+;; Ex commands
+(evil-ex-define-cmd "es" 'eshell)
+(evil-ex-define-cmd "te" 'vterm)
+
 ;; Package configuration
-(after! elcord
+(after! 'elcord
   (elcord-mode))
