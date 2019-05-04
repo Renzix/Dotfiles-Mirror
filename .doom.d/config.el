@@ -50,12 +50,7 @@
       display-line-numbers-current-absolute t
       display-line-numbers-width 4
       display-line-numbers-widen t
-      backup-directory-alist `(("." . ,backup-directory))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 10000
-      kept-old-versions 10000
-      version-control t
+      make-backup-files nil
       vterm-shell "ion"
       evil-snipe-spillover-scope 'buffer
       auto-save-file-name-transforms
