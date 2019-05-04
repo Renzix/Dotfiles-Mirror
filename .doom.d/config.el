@@ -54,6 +54,12 @@
  :nimv "M-j" #'evil-window-down
  :nimv "M-k" #'evil-window-up
  :nimv "M-l" #'evil-window-right
+ :nimv "M-d" #'evil-delete-buffer
+ :nimv "M-c" #'evil-window-delete
+ :nimv "M-t" #'+workspace:new
+ :nimv "M-T" #'+workspace:delete
+ :nimv "M-]" #'+workspace:switch-next
+ :nimv "M-[" #'+workspace:switch-previous
  :n "SPC p x v" #'+vterm/open-popup-in-project) ;; idk why this isnt here already
 
 ;; Ex commands
