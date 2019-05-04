@@ -32,27 +32,27 @@
 (defun backup-file ()
   "Make a backup which change with each folder."
   (interactive)
-  (defvar top-directory "~/.saves/")
   (if (buffer-file-name)
-      (let* ((currentName (buffer-file-name))
+      (let* ((top-directory "~/.saves")
+             (currentName (buffer-file-name))
              (backupName (concat top-directory currentName
                                  (format-time-string "/%Y/%m/%d/%H%M") ".bak")))
         (copy-file-and-make-directory currentName backupName)
-        (message (concat "Backup saved at: " backupName)))
-    (user-error "Buffer is not a file")))
+        t)
+    (progn
+      (user-error "Buffer is not a file")
+      nil)))
 
 ;; Variables/Hooks
-(add-hook 'after-save-hook '(lambda () (async-start (bookmark-set (buffer-name) nil))))
-(add-hook 'after-save-hook '(lambda () (async-start (bookmark-set "LastSave" nil))))
-(add-hook 'after-save-hook '(lambda () (async-start (backup-file))))
+(add-hook 'after-save-hook '(lambda () (bookmark-set (buffer-name) nil)))
+(add-hook 'after-save-hook '(lambda () (bookmark-set "LastSave" nil)))
+(add-hook 'after-save-hook '(lambda () (backup-file))) ;; @TODO(renzix): Im fucking tilted. Attempt to make this async
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 (setq display-line-numbers-type 'relative
       display-line-numbers-current-absolute t
       display-line-numbers-width 4
       display-line-numbers-widen t
       make-backup-files nil
-      vterm-shell "ion"
-      evil-snipe-spillover-scope 'buffer
       auto-save-file-name-transforms
       `((".*" "~/.cache/emacs/saves/" t)))
 
@@ -93,5 +93,11 @@
 (evil-ex-define-cmd "vt[erminal]" '+vterm/open-popup)
 
 ;; Package configuration
-(after! 'elcord
+(after! elcord
   (elcord-mode))
+
+(after! vterm
+  (setq vterm-shell "ion"))
+
+(after! evil-snipe
+  (setq evil-snipe-spillover-scope 'buffer))
