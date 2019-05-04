@@ -5,7 +5,7 @@
 (defun indent-buffer ()
   (interactive)
   (save-excursion
-	(indent-region (point-min) (point-max) nil)))
+    (indent-region (point-min) (point-max) nil)))
 
 (defun rename-current-buffer-and-file ()
   "Renames current buffer and file it is visiting."
@@ -24,23 +24,42 @@
           (set-buffer-modified-p nil)
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
+(defun copy-file-and-make-directory (source destination)
+  "Copies a file and makes needed directories"
+  (make-directory (string-join (reverse (cdr (reverse (split-string destination "/")))) "/") 'parent)
+  (copy-file source destination :overwrite-if-already-exists))
+
+(defun backup-file ()
+  "Make a backup which change with each folder."
+  (interactive)
+  (defvar top-directory "~/.saves/")
+  (if (buffer-file-name)
+      (let* ((currentName (buffer-file-name))
+             (backupName (concat top-directory currentName
+                                 (format-time-string "/%Y/%m/%d/%H%M") ".bak")))
+        (copy-file-and-make-directory currentName backupName)
+        (message (concat "Backup saved at: " backupName)))
+    (user-error "Buffer is not a file")))
 
 ;; Variables/Hooks
 (add-hook 'after-save-hook '(lambda () (async-start (bookmark-set (buffer-name) nil))))
 (add-hook 'after-save-hook '(lambda () (async-start (bookmark-set "LastSave" nil))))
+(add-hook 'after-save-hook '(lambda () (async-start (backup-file))))
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 (setq display-line-numbers-type 'relative
       display-line-numbers-current-absolute t
       display-line-numbers-width 4
       display-line-numbers-widen t
-      backup-directory-alist `(("." . "~/.saves")
-                               backup-by-copying t
-                               delete-old-versions t
-                               kept-new-versions 10
-                               kept-old-versions 10
-                               version-control t)
+      backup-directory-alist `(("." . ,backup-directory))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 10000
+      kept-old-versions 10000
+      version-control t
       vterm-shell "ion"
-      evil-snipe-spillover-scope 'buffer)
+      evil-snipe-spillover-scope 'buffer
+      auto-save-file-name-transforms
+      `((".*" "~/.cache/emacs/saves/" t)))
 
 
 
