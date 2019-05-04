@@ -46,7 +46,7 @@
 (map!
  :n ";" #'counsel-M-x
  :n "," (general-simulate-key "SPC m")
- :n "`" #'magit-status
+ :n "`" #'magit-status ;; @TODO(renzix): Make this open in a new tab???
  :n "\\" #'projectile-find-file
  :n "g c" #'comment-line
  :n "g =" #'indent-buffer
@@ -54,6 +54,8 @@
  :nimv "M-j" #'evil-window-down
  :nimv "M-k" #'evil-window-up
  :nimv "M-l" #'evil-window-right
+ :nimv "M-s" #'evil-window-split
+ :nimv "M-v" #'evil-window-vsplit
  :nimv "M-d" #'evil-delete-buffer
  :nimv "M-c" #'evil-window-delete
  :nimv "M-t" #'+workspace:new
