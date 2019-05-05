@@ -24,10 +24,13 @@
           (set-buffer-modified-p nil)
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
-(defun copy-file-and-make-directory (source destination)
-  "Copies a file and makes needed directories"
-  (make-directory (string-join (reverse (cdr (reverse (split-string destination "/")))) "/") 'parent)
-  (copy-file source destination :overwrite-if-already-exists))
+(defun async-copy-file-and-make-directory (source destination)
+  "Copies a file and makes needed directories async"
+  (async-start (lambda ()
+                 (require 'subr-x)
+                 (make-directory (string-join (reverse (cdr (reverse (split-string destination "/")))) "/") 'parent)
+                 (copy-file source destination :overwrite-if-already-exists))
+               'ignore))
 
 (defun backup-file ()
   "Make a backup which change with each folder."
@@ -37,16 +40,22 @@
              (currentName (buffer-file-name))
              (backupName (concat top-directory currentName
                                  (format-time-string "/%Y/%m/%d/%H%M") ".bak")))
-        (copy-file-and-make-directory currentName backupName)
+        (async-copy-file-and-make-directory currentName backupName)
         t)
     (progn
       (user-error "Buffer is not a file")
       nil)))
 
+(defun projectile-run-vterm ()
+  "Runs vterm in projectile directory"
+  (interactive)
+  (+vterm/open t))
+
+
 ;; Variables/Hooks
 (add-hook 'after-save-hook '(lambda () (bookmark-set (buffer-name) nil)))
 (add-hook 'after-save-hook '(lambda () (bookmark-set "LastSave" nil)))
-(add-hook 'after-save-hook '(lambda () (backup-file))) ;; @TODO(renzix): Im fucking tilted. Attempt to make this async
+(add-hook 'after-save-hook #'backup-file)
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 (setq display-line-numbers-type 'relative
       display-line-numbers-current-absolute t
@@ -78,8 +87,13 @@
  :nvimor "M-t" #'+workspace:new
  :nvimor "M-T" #'+workspace:delete
  :nvimor "M-]" #'+workspace:switch-next
- :nvimor "M-[" #'+workspace:switch-previous
- :n "SPC p x v" #'+vterm/open-popup-in-project) ;; idk why this isnt here already
+ :nvimor "M-[" #'+workspace:switch-previous)
+;; Leader stuff
+(map! :leader
+      (:prefix ("p" . "project")
+        (:prefix ("x" . "terminal")
+          :desc "Open vterm in project"      "v" #'projectile-run-vterm)))
+
 
 ;; Ex commands
 (evil-ex-define-cmd "conf[ig]" 'doom/open-private-config)
