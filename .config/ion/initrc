@@ -1,0 +1,16 @@
+#!/usr/bin/env ion
+
+alias em="emacsclient -ca "" -nw"
+alias ls="exa"
+
+fn cb
+	read input
+	printf "\033]52;c;$(base64 <<< $input )\a"
+end
+
+fn ss
+	let input = $(maim -sq | curl -s -F "f:1=<-" -F "ext:1=.png" ix.io)
+	echo $input.png
+end
+
+neofetch

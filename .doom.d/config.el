@@ -29,8 +29,16 @@
   (async-start (lambda ()
                  (require 'subr-x)
                  (make-directory (string-join (reverse (cdr (reverse (split-string destination "/")))) "/") 'parent)
-                 (copy-file source destination :overwrite-if-already-exists))
-               'ignore))
+                 (copy-file source destination :overwrite-if-already-exists)
+                 destination)
+               (lambda (results)
+                 (message "Saved file to: %s" results))))
+(defun string-trim-final-newline (string)
+  (let ((len (length string)))
+    (cond
+     ((and (> len 0) (eql (aref string (- len 1)) ?\n))
+      (substring string 0 (- len 1)))
+     (t string))))
 
 (defun backup-file ()
   "Make a backup which change with each folder."
@@ -46,15 +54,27 @@
       (user-error "Buffer is not a file")
       nil)))
 
+(defun archive-backups ()
+  "Change backups into a tar.gz with the date archived."
+  (interactive)
+  (let* ((top-directory "~/.saves")
+         (archive-name (concat top-directory "/archive-"
+                               (format-time-string "%Y%m%d-%H%M") ".tar.gz"))
+         (dir-list (replace-regexp-in-string "\n" ""
+                                             (shell-command-to-string (format "ls -d %s/*" top-directory)))))
+    (shell-command (format "tar czf %s %s" archive-name dir-list))
+    (shell-command (format "rm -r %s" dir-list))))
+
+
 (defun projectile-run-vterm ()
-  "Runs vterm in projectile directory"
+  "Run vterm in projectile directory."
   (interactive)
   (+vterm/open t))
 
 
 ;; Variables/Hooks
-(add-hook 'after-save-hook '(lambda () (bookmark-set (buffer-name) nil)))
-(add-hook 'after-save-hook '(lambda () (bookmark-set "LastSave" nil)))
+(add-hook 'after-save-hook (lambda () (bookmark-set (buffer-name) nil)))
+(add-hook 'after-save-hook (lambda () (bookmark-set "LastSave" nil)))
 (add-hook 'after-save-hook #'backup-file)
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 (setq display-line-numbers-type 'relative
