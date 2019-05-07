@@ -54,16 +54,30 @@
       (user-error "Buffer is not a file")
       nil)))
 
+;; This has a small bug that can only trigger if you get 2 or more tarballs and
+;; archive twice within 1 second. It will delete your big tarball. Its probably
+;; not worth fixing.
 (defun archive-backups ()
-  "Change backups into a tar.gz with the date archived."
+  "Change backups into a tar.gz with the date archived. Requires
+tar, ls and rm. Do not call twice within a second if there are 2
+tarballs in the top directory (defaults to ~/.saves). "
   (interactive)
   (let* ((top-directory "~/.saves")
          (archive-name (concat top-directory "/archive-"
-                               (format-time-string "%Y%m%d-%H%M") ".tar.gz"))
+                               (format-time-string "%Y%m%d-%H%M%S") ".tar.gz"))
+         (tar-list (replace-regexp-in-string "\n" " "
+                                             (shell-command-to-string (format "ls %s/*.tar.gz" top-directory))))
          (dir-list (replace-regexp-in-string "\n" ""
                                              (shell-command-to-string (format "ls -d %s/*" top-directory)))))
-    (shell-command (format "tar czf %s %s" archive-name dir-list))
-    (shell-command (format "rm -r %s" dir-list))))
+    (async-start (lambda ()
+                   (require 'subr-x)
+                   (when (not (string= tar-list archive-name)) ;; @BUG(renzix): possible bug cause async
+                     (shell-command (format "tar -c -z -f %s %s" archive-name dir-list))
+                     (shell-command (format "tar --concatenate --file=%s %s" archive-name tar-list))
+                     (shell-command (format "rm -r %s" dir-list))
+                     (shell-command (format "rm %s" tar-list))))
+                 (lambda (results)
+                   (message "Completed archive of backups")))))
 
 
 (defun projectile-run-vterm ()
@@ -84,6 +98,7 @@
       make-backup-files nil
       auto-save-file-name-transforms
       `((".*" "~/.cache/emacs/saves/" t)))
+
 
 
 

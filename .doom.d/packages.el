@@ -2,4 +2,5 @@
 ;;; ~/.doom.d/packages.el
 
 ;; Code
+
 (package! elcord)
