@@ -96,31 +96,31 @@ tarballs in the top directory (defaults to ~/.saves). "
 
 ;; Keybindings
 (map!
- :n      ";"     #'counsel-M-x
- :n      ","     (general-simulate-key "SPC m")
- :n      ">"     #'evil-snipe-repeat
- :n      "<"     #'evil-snipe-repeat-reverse
- :n      "`"     #'magit-status ;; @TODO(renzix): Make this open in a new tab???
- :n      "\\"    #'projectile-find-file
- :n      "g ="   #'indent-buffer
- :nvimor "M-h"   #'evil-window-left
- :nvimor "M-j"   #'evil-window-down
- :nvimor "M-k"   #'evil-window-up
- :nvimor "M-l"   #'evil-window-right
- :nvimor "M-s"   #'evil-window-split
- :nvimor "M-v"   #'evil-window-vsplit
- :nvimor "M-d"   #'evil-delete-buffer
- :nvimor "M-c"   #'evil-window-delete
- :nvimor "M-t"   #'+workspace:new
- :nvimor "M-T"   #'+workspace:delete
- :nvimor "M-]"   #'+workspace:switch-next
- :nvimor "M-["   #'+workspace:switch-previous)
+ :n       ";"     #'counsel-M-x
+ :n       ","     (general-simulate-key "SPC m")
+ :n       ">"     #'evil-snipe-repeat
+ :n       "<"     #'evil-snipe-repeat-reverse
+ :n       "`"     #'magit-status ;; @TODO(renzix): Make this open in a new tab???
+ :n       "\\"    #'projectile-find-file
+ :n       "g ="   #'indent-buffer
+ :nvimor  "M-h"   #'evil-window-left
+ :nvimor  "M-j"   #'evil-window-down
+ :nvimor  "M-k"   #'evil-window-up
+ :nvimor  "M-l"   #'evil-window-right
+ :nvimor  "M-s"   #'evil-window-split
+ :nvimor  "M-v"   #'evil-window-vsplit
+ :nvimor  "M-d"   #'evil-delete-buffer
+ :nvimor  "M-c"   #'evil-window-delete
+ :nvimor  "M-t"   #'+workspace:new
+ :nvimor  "M-T"   #'+workspace:delete
+ :nvimor  "M-]"   #'+workspace:switch-next
+ :nvimor  "M-["   #'+workspace:switch-previous)
+
 ;; Leader stuff
 (map! :leader
       (:prefix ("p" . "project")
         (:prefix ("x" . "terminal")
           :desc "Open vterm in project"      "v" #'projectile-run-vterm)))
-
 
 ;; Ex commands
 (evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)
