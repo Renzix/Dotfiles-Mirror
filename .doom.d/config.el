@@ -24,6 +24,7 @@
           (set-buffer-modified-p nil)
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
+
 (defun async-copy-file-and-make-directory (source destination)
   "Copies a file and makes needed directories async"
   (async-start (lambda ()
@@ -33,12 +34,6 @@
                  destination)
                (lambda (results)
                  (message "Saved file to: %s" results))))
-(defun string-trim-final-newline (string)
-  (let ((len (length string)))
-    (cond
-     ((and (> len 0) (eql (aref string (- len 1)) ?\n))
-      (substring string 0 (- len 1)))
-     (t string))))
 
 (defun backup-file ()
   "Make a backup which change with each folder."
@@ -99,30 +94,27 @@ tarballs in the top directory (defaults to ~/.saves). "
       auto-save-file-name-transforms
       `((".*" "~/.cache/emacs/saves/" t)))
 
-
-
-
 ;; Keybindings
 (map!
- :n ";" #'counsel-M-x
- :n "," (general-simulate-key "SPC m")
- :n ">" #'evil-snipe-repeat
- :n "<" #'evil-snipe-repeat-reverse
- :n "`" #'magit-status ;; @TODO(renzix): Make this open in a new tab???
- :n "\\" #'projectile-find-file
- :n "g =" #'indent-buffer
- :nvimor "M-h" #'evil-window-left
- :nvimor "M-j" #'evil-window-down
- :nvimor "M-k" #'evil-window-up
- :nvimor "M-l" #'evil-window-right
- :nvimor "M-s" #'evil-window-split
- :nvimor "M-v" #'evil-window-vsplit
- :nvimor "M-d" #'evil-delete-buffer
- :nvimor "M-c" #'evil-window-delete
- :nvimor "M-t" #'+workspace:new
- :nvimor "M-T" #'+workspace:delete
- :nvimor "M-]" #'+workspace:switch-next
- :nvimor "M-[" #'+workspace:switch-previous)
+ :n      ";"     #'counsel-M-x
+ :n      ","     (general-simulate-key "SPC m")
+ :n      ">"     #'evil-snipe-repeat
+ :n      "<"     #'evil-snipe-repeat-reverse
+ :n      "`"     #'magit-status ;; @TODO(renzix): Make this open in a new tab???
+ :n      "\\"    #'projectile-find-file
+ :n      "g ="   #'indent-buffer
+ :nvimor "M-h"   #'evil-window-left
+ :nvimor "M-j"   #'evil-window-down
+ :nvimor "M-k"   #'evil-window-up
+ :nvimor "M-l"   #'evil-window-right
+ :nvimor "M-s"   #'evil-window-split
+ :nvimor "M-v"   #'evil-window-vsplit
+ :nvimor "M-d"   #'evil-delete-buffer
+ :nvimor "M-c"   #'evil-window-delete
+ :nvimor "M-t"   #'+workspace:new
+ :nvimor "M-T"   #'+workspace:delete
+ :nvimor "M-]"   #'+workspace:switch-next
+ :nvimor "M-["   #'+workspace:switch-previous)
 ;; Leader stuff
 (map! :leader
       (:prefix ("p" . "project")
@@ -131,14 +123,14 @@ tarballs in the top directory (defaults to ~/.saves). "
 
 
 ;; Ex commands
-(evil-ex-define-cmd "conf[ig]" 'doom/open-private-config)
-(evil-ex-define-cmd "bl" '+ivy/switch-buffer)
+(evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)
+(evil-ex-define-cmd "bl"          '+ivy/switch-buffer)
 (evil-ex-define-cmd "buffer-list" '+ivy/switch-buffer)
-(evil-ex-define-cmd "rename" 'rename-current-buffer-and-file)
-(evil-ex-define-cmd "rn" 'rename-current-buffer-and-file)
-(evil-ex-define-cmd "rel[oad]" 'doom/reload)
-(evil-ex-define-cmd "ref[resh]" 'doom//refresh)
-(evil-ex-define-cmd "es[hell]" '+eshell/open-popup)
+(evil-ex-define-cmd "rename"      'rename-current-buffer-and-file)
+(evil-ex-define-cmd "rn"          'rename-current-buffer-and-file)
+(evil-ex-define-cmd "rel[oad]"    'doom/reload)
+(evil-ex-define-cmd "ref[resh]"   'doom//refresh)
+(evil-ex-define-cmd "es[hell]"    '+eshell/open-popup)
 (evil-ex-define-cmd "vt[erminal]" '+vterm/open-popup)
 
 ;; Package configuration
