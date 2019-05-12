@@ -3,6 +3,7 @@
 ;;; Code:
 ;; Functions
 (defun indent-buffer ()
+  "Idents the entire buffer."
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
@@ -26,7 +27,7 @@
                    name (file-name-nondirectory new-name)))))))
 
 (defun async-copy-file-and-make-directory (source destination)
-  "Copies a file and makes needed directories async"
+  "Copies a file and make needed directories asyncrounously."
   (async-start (lambda ()
                  (require 'subr-x)
                  (make-directory (string-join (reverse (cdr (reverse (split-string destination "/")))) "/") 'parent)
@@ -55,7 +56,7 @@
 (defun archive-backups ()
   "Change backups into a tar.gz with the date archived. Requires
 tar, ls and rm. Do not call twice within a second if there are 2
-tarballs in the top directory (defaults to ~/.saves). "
+tarballs in the top directory (defaults to ~/.saves)."
   (interactive)
   (let* ((top-directory "~/.saves")
          (archive-name (concat top-directory "/archive-"
@@ -100,8 +101,8 @@ tarballs in the top directory (defaults to ~/.saves). "
  :n       ","     (general-simulate-key "SPC m")
  :n       ">"     #'evil-snipe-repeat
  :n       "<"     #'evil-snipe-repeat-reverse
- :n       "`"     #'magit-status ;; @TODO(renzix): Make this open in a new tab???
- :n       "\\"    #'projectile-find-file
+ :n "`" (general-simulate-key "SPC g") ;; @TODO(renzix): Make this open in a new tab???
+ :n "\\" (general-simulate-key "SPC p")
  :n       "g ="   #'indent-buffer
  :nvimor  "M-h"   #'evil-window-left
  :nvimor  "M-j"   #'evil-window-down
@@ -115,9 +116,10 @@ tarballs in the top directory (defaults to ~/.saves). "
  :nvimor  "M-T"   #'+workspace:delete
  :nvimor  "M-]"   #'+workspace:switch-next
  :nvimor  "M-["   #'+workspace:switch-previous)
-
 ;; Leader stuff
 (map! :leader
+      (:prefix ("g" . "git")
+        :desc "Magit Status"                 "`" #'magit-status)
       (:prefix ("p" . "project")
         (:prefix ("x" . "terminal")
           :desc "Open vterm in project"      "v" #'projectile-run-vterm)))
@@ -126,6 +128,10 @@ tarballs in the top directory (defaults to ~/.saves). "
 (evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)
 (evil-ex-define-cmd "bl"          '+ivy/switch-buffer)
 (evil-ex-define-cmd "buffer-list" '+ivy/switch-buffer)
+(evil-ex-define-cmd "nt" '+workspace:new)
+(evil-ex-define-cmd "ct" '+workspace:delete)
+(evil-ex-define-cmd "n[ext]" '+workspace:switch-next) ;; @TODO(renzix):Maybe get rid of this later???
+(evil-ex-define-cmd "p[revious]" '+workspace:switch-previous) ;; same as above???
 (evil-ex-define-cmd "rename"      'rename-current-buffer-and-file)
 (evil-ex-define-cmd "rn"          'rename-current-buffer-and-file)
 (evil-ex-define-cmd "rel[oad]"    'doom/reload)
@@ -133,9 +139,9 @@ tarballs in the top directory (defaults to ~/.saves). "
 (evil-ex-define-cmd "es[hell]"    '+eshell/open-popup)
 (evil-ex-define-cmd "vt[erminal]" '+vterm/open-popup)
 
-;; Package configuration
-(after! elcord
-  (elcord-mode))
+(after! eshell
+  (set-eshell-alias!
+   "em" "find-file $1"))
 
 (after! vterm
   (setq vterm-shell "ion"))

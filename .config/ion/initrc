@@ -8,9 +8,18 @@ fn cb
 	printf "\033]52;c;$(base64 <<< $input )\a"
 end
 
-fn ss
+fn us
 	let input = $(maim -sq | curl -s -F "f:1=<-" -F "ext:1=.png" ix.io)
 	echo $input.png
+end
+
+fn ss
+	maim -s
+end
+
+fn pb
+	read input
+	echo input | curl -s -F "f:1=<-" ix.io
 end
 
 neofetch
