@@ -92,7 +92,7 @@
        ;;assembly          ; assembly for fun or debugging
        (cc +lsp +irony)                ; C/C++/Obj-C madness
        ;; (clojure +lsp +eclim)           ; java with a lisp
-       ;; common-lisp       ; if you've seen one lisp, you've seen them all
+       common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
