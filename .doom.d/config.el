@@ -93,7 +93,9 @@ tarballs in the top directory (defaults to ~/.saves)."
       display-line-numbers-widen t
       make-backup-files nil
       auto-save-file-name-transforms
-      `((".*" "~/.cache/emacs/saves/" t)))
+      `((".*" "~/.cache/emacs/saves/" t))
+      initial-buffer-choice 'eshell)
+
 
 ;; Keybindings
 (map!
@@ -101,8 +103,9 @@ tarballs in the top directory (defaults to ~/.saves)."
  :n       ","     (general-simulate-key "SPC m")
  :n       ">"     #'evil-snipe-repeat
  :n       "<"     #'evil-snipe-repeat-reverse
- :n "`" (general-simulate-key "SPC g") ;; @TODO(renzix): Make this open in a new tab???
- :n "\\" (general-simulate-key "SPC p")
+ :n       "`"     #'magit-status;; @TODO(renzix): Make this open in a new tab???
+ :n       "\\"    (general-simulate-key "SPC p")
+ :n       "|"     #'+eshell/open
  :n       "g ="   #'indent-buffer
  :nvimor  "M-h"   #'evil-window-left
  :nvimor  "M-j"   #'evil-window-down
