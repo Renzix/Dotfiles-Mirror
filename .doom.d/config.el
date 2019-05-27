@@ -75,6 +75,12 @@ tarballs in the top directory (defaults to ~/.saves)."
                  (lambda (results)
                    (message "Completed archive of backups")))))
 
+(defun awesome-shell ()
+  "Opens the awesomewm shell in vterm"
+  (interactive)
+  (setq vterm-shell "awesome-client")
+  (+vterm/open nil)
+  (setq vterm-shell "ion"))
 
 (defun projectile-run-vterm ()
   "Run vterm in projectile directory."
@@ -94,7 +100,8 @@ tarballs in the top directory (defaults to ~/.saves)."
       make-backup-files nil
       auto-save-file-name-transforms
       `((".*" "~/.cache/emacs/saves/" t))
-      initial-buffer-choice 'eshell)
+      initial-buffer-choice 'eshell
+      major-mode 'org-mode)
 
 
 ;; Keybindings
@@ -150,4 +157,11 @@ tarballs in the top directory (defaults to ~/.saves)."
   (setq vterm-shell "ion"))
 
 (after! evil-snipe
-  (setq evil-snipe-spillover-scope 'buffer))
+  (setq evil-snipe-spillover-scope 'buffer)
+  (map!
+   :n       "f"     #'evil-snipe-s
+   :n       "F"     #'evil-snipe-S
+   :n       "t"     #'evil-snipe-x
+   :n       "T"     #'evil-snipe-X
+   :n       "s"     #'counsel-projectile-rg
+   :n       "S"     #'counsel-projectile-find-file))

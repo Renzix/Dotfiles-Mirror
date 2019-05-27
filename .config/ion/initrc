@@ -1,4 +1,6 @@
 #!/usr/bin/env ion
+#
+export PATH="$HOME/.cargo/bin:$HOME/.go/bin:$HOME/Dotfiles/Bin:$PATH"
 
 alias em="emacsclient -ca "" -nw"
 alias ls="exa"
