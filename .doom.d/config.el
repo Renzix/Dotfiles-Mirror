@@ -129,10 +129,7 @@ tarballs in the top directory (defaults to ~/.saves)."
 ;; Leader stuff
 (map! :leader
       (:prefix ("g" . "git")
-        :desc "Magit Status"                 "`" #'magit-status)
-      (:prefix ("p" . "project")
-        (:prefix ("x" . "terminal")
-          :desc "Open vterm in project"      "v" #'projectile-run-vterm)))
+        :desc "Magit Status"                 "`" #'magit-status))
 
 ;; Ex commands
 (evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)
