@@ -75,19 +75,6 @@ tarballs in the top directory (defaults to ~/.saves)."
                  (lambda (results)
                    (message "Completed archive of backups")))))
 
-(defun awesome-shell ()
-  "Opens the awesomewm shell in vterm"
-  (interactive)
-  (setq vterm-shell "awesome-client")
-  (+vterm/open nil)
-  (setq vterm-shell "ion"))
-
-(defun projectile-run-vterm ()
-  "Run vterm in projectile directory."
-  (interactive)
-  (+vterm/open t))
-
-
 ;; Variables/Hooks
 (add-hook 'after-save-hook (lambda () (bookmark-set (buffer-name) nil)))
 (add-hook 'after-save-hook (lambda () (bookmark-set "LastSave" nil)))
@@ -98,6 +85,7 @@ tarballs in the top directory (defaults to ~/.saves)."
       display-line-numbers-width 4
       display-line-numbers-widen t
       make-backup-files nil
+      confirm-kill-emacs nil
       auto-save-file-name-transforms
       `((".*" "~/.cache/emacs/saves/" t))
       initial-buffer-choice 'eshell
@@ -106,6 +94,8 @@ tarballs in the top directory (defaults to ~/.saves)."
 
 ;; Keybindings
 (map!
+ :n       "s"     #'counsel-projectile-rg
+ :n       "S"     #'counsel-projectile-find-file
  :n       ";"     #'counsel-M-x
  :n       ","     (general-simulate-key "SPC m")
  :n       ">"     #'evil-snipe-repeat
@@ -133,8 +123,7 @@ tarballs in the top directory (defaults to ~/.saves)."
 
 ;; Ex commands
 (evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)
-(evil-ex-define-cmd "bl"          '+ivy/switch-buffer)
-(evil-ex-define-cmd "buffer-list" '+ivy/switch-buffer)
+(evil-ex-define-cmd "bu[ffers]" '+ivy/switch-buffer)
 (evil-ex-define-cmd "nt" '+workspace:new)
 (evil-ex-define-cmd "ct" '+workspace:delete)
 (evil-ex-define-cmd "n[ext]" '+workspace:switch-next) ;; @TODO(renzix):Maybe get rid of this later???
@@ -159,6 +148,4 @@ tarballs in the top directory (defaults to ~/.saves)."
    :n       "f"     #'evil-snipe-s
    :n       "F"     #'evil-snipe-S
    :n       "t"     #'evil-snipe-x
-   :n       "T"     #'evil-snipe-X
-   :n       "s"     #'counsel-projectile-rg
-   :n       "S"     #'counsel-projectile-find-file))
+   :n       "T"     #'evil-snipe-X))
