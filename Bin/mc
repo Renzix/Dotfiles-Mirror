@@ -1,21 +1,18 @@
-#!/usr/bin/env perl6
-use v6;
+#!/usr/bin/env -S perl6 -p
 
-use MONKEY-TYPING; # Your not supposed to add stuff to Str but i did it anyway cuz its cool
-
-augment class Str {
-    method mc() returns Str {
-        my $index=0;
-        my @new_str;
-        for self.split("") -> $ch {
-            if $index++ %% 2 {
-                @new_str.append($ch.uc);
-            } else {
-                @new_str.append($ch.lc);
-            }
-        }
-        return @new_str.join;
+sub leetspeak($num) returns Cool {
+    if ($num == 1) {
+        return "l"
+    } elsif ($num == 3) {
+        return "E"
+    } elsif ($num == 4) {
+        return "A"
+    } elsif ($num == 0) {
+        return "O"
+    } else {
+        return $num;
     }
 }
 
-say slurp.mc;
+s:g/$<a>=(<alpha>)$<b>=(<alpha>)/{$<a>.lc}{$<b>.uc}/;
+s:g/$<n>=(<digit>)/{leetspeak($<n>)}/;
