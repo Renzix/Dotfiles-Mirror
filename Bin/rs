@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+for f in "$@"; do
+    if [ "$f" == "--help" ]; then
+        echo "This function removes the spaces in a file"
+        break
+    fi
+
+    mv "$f" "${f// /}";
+done
