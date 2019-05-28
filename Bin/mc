@@ -1,18 +1,18 @@
 #!/usr/bin/env -S perl6 -p
 
-sub leetspeak($num) returns Cool {
-    if ($num == 1) {
-        return "l"
-    } elsif ($num == 3) {
-        return "E"
-    } elsif ($num == 4) {
-        return "A"
-    } elsif ($num == 0) {
-        return "O"
+sub leetspeak($letter) returns Cool {
+    if ($letter == "l") {
+        return "1"
+    } elsif ($letter == "E") {
+        return "3"
+    } elsif ($letter == "A") {
+        return "4"
+    } elsif ($letter == "O") {
+        return "0"
     } else {
-        return $num;
+        return $letter;
     }
 }
 
 s:g/$<a>=(<alpha>)$<b>=(<alpha>)/{$<a>.lc}{$<b>.uc}/;
-s:g/$<n>=(<digit>)/{leetspeak($<n>)}/;
+s:g/$<u>=(<upper>)/{leetspeak($<u>)}/;
