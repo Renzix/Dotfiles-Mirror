@@ -16,41 +16,58 @@ fi
 
 # Put your fun stuff here.
 
-## Aliases
-#LS
-alias l="ls --color=auto"
-alias ls="exa"
-alias la="exa -a"
-alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
+# Nice functions
+# DEBUG=t
+info() {
+	[ -z "$DEBUG" ] ||
+		printf "[%s]:$1\n" "$(date +'%D %T')";
+}
 
-#Wine
-#alias wine_league="wine /home/genzix/.wine/drive_c/Riot\ Games/League\ of\ Legends/LeagueClient.exe"
-#alias wine_battlenet="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Battle.net/Battle.net\ Launcher.exe"
-#alias wine_steam="wine /home/genzix/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
+[[ $(type -P "exa") ]] && {
+	info "Exa found"
+	alias ls="exa"
+	alias la="exa -a"
+	alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
+} || {
+	info "Exa not found"
+	alias l="ls --color=auto -h"
+	alias la="ls -ah"
+	alias ll='ls -lh'
+}
 
-#Text Editors
-alias vi="nvim $@"
-alias em="emacsclient -nw -a \"\" $@"
-alias sb="subl $@"
-alias mc="micro $@"
+# Variables and aliases
+# Default editor
+[[ $(type -P "nvim") ]] && {
+	info "Found nvim so using that"
+	export EDITOR="nvim"
+} || [[ $(type -P "vim") ]] && {
+	info "Found vim so using that"
+	export EDITOR="vim"
+} || [[ $(type -P "emacs") ]] && {
+	info "Couldnt find any vi so using emacs"
+	export EDITOR="emacs -nw"
+} || [[ $(type -P "nano") ]] && {
+	info "Couldnt find any vi or emacs so using nano"
+	export EDITOR="nano"
+}
+alias vi="${EDITOR:-vi}"
 
-#System Shutdown stuff
+# System Shutdown stuff
 alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
 
-#git
-alias gc="git commit -a -m $@"
-alias gp="git push $@"
+# git
+alias gc="git commit"
+alias gp="git push"
 
 #Other
-alias ht="htop $@"
-alias dd="dd status=progress $@"
+alias ht="htop"
 
 cb() {
-	read input
+	read -rt .1 input
 	echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
 
 export NIX_AUTO_RUN=1
 
-neofetch
+[[ $(type -P "neofetch") ]] && [ -z "$DEBUG" ] && neofetch
