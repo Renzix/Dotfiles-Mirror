@@ -139,9 +139,6 @@ tarballs in the top directory (defaults to ~/.saves)."
   (set-eshell-alias!
    "em" "find-file $1"))
 
-(after! vterm
-  (setq vterm-shell "ion"))
-
 (after! evil-snipe
   (setq evil-snipe-spillover-scope 'buffer)
   (map!
