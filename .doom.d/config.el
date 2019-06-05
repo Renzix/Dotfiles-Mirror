@@ -2,6 +2,18 @@
 
 ;;; Code:
 ;; Functions
+(defun run-perl6-on-buffer ()
+  "Runs a perl6 command on the current buffer"
+  (interactive)
+  (shell-command-on-region
+   (point-min)
+   (point-max)
+   (format "perl6 -pe '%s'" (read-string "perl6 command: "))
+   (current-buffer)
+   t
+   "*perl6-error-buffer*"
+   t))
+
 (defun indent-buffer ()
   "Idents the entire buffer."
   (interactive)
@@ -102,7 +114,7 @@ tarballs in the top directory (defaults to ~/.saves)."
  :n       "<"     #'evil-snipe-repeat-reverse
  :n       "`"     #'magit-status;; @TODO(renzix): Make this open in a new tab???
  :n       "\\"    (general-simulate-key "SPC p")
- :n       "|"     #'+eshell/open
+ :n       "|"     #'run-perl6-on-buffer
  :n       "g ="   #'indent-buffer
  :nvimor  "M-h"   #'evil-window-left
  :nvimor  "M-j"   #'evil-window-down
