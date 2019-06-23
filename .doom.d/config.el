@@ -28,7 +28,7 @@
    (current-buffer)
    t
    "*perl6-error-buffer*"
-   t)
+   t))
 (defun indent-buffer ()
   "Idents the entire buffer."
   (interactive)
