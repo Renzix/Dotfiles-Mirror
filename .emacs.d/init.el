@@ -153,6 +153,7 @@
 
 ;; Projectile!!! Run/do things with projects in projectile (assumes we have helm but you can install the normal one without it)
 (use-package helm-projectile
+	     :after helm
 	     :init
 	     (setq projectile-enable-caching t
 		   projectile-file-exists-local-cache-expire (* 5 60)
@@ -161,6 +162,8 @@
 		   projectile-sort-order 'recently-active)
 	     :config
 	     (projectile-mode t))
+(use-package helm-projectile-rg
+	     :after helm-projectile)
 
 ;; Org mode with my default config you can change it if you want
 (use-package org
