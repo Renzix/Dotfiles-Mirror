@@ -28,7 +28,7 @@
    (current-buffer)
    t
    "*perl6-error-buffer*"
-   t)
+   t))
 (defun indent-buffer ()
   "Idents the entire buffer."
   (interactive)
@@ -148,7 +148,9 @@ tarballs in the top directory (defaults to ~/.saves)."
 ;; Leader stuff
 (map! :leader
       (:prefix ("g" . "git")
-        :desc "Magit Status"                 "`" #'magit-status))
+        :desc "Magit Status"                 "`" #'magit-status)
+      (:prefix ("p" . "project")
+        :desc "ripgrep"                 "\\" #'counsel-projectile-rg))
 
 ;; Ex commands
 (evil-ex-define-cmd "conf[ig]"    'doom/open-private-config)

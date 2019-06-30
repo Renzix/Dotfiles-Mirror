@@ -62,12 +62,25 @@ alias gp="git push"
 
 #Other
 alias ht="htop"
+alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k" # because im lazy only works on 1 cpu
+alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k" # because im lazy only works on 1 cpu
+alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
+
 
 cb() {
 	read -rt .1 input
 	echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
 
-export NIX_AUTO_RUN=1
+__prompt_command() {
+	if [[ $? != 0 ]]; then
+		PS1="\e[0;31m\$\e[m "
+	else
+		PS1="\e[0;32m\$\e[m "
+	fi
+	export PS1
+}
 
-[[ $(type -P "neofetch") ]] && [ -z "$DEBUG" ] && neofetch
+PROMPT_COMMAND=__prompt_command
+
+export NIX_AUTO_RUN=1
