@@ -30,6 +30,14 @@
 (scroll-bar-mode -1)
 (display-battery-mode)
 
+;; Very useful funciton
+(defun sudo-edit (&optional arg)
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+    (find-file (concat "/sudo:root@localhost:"
+		       (ido-read-file-name "Find file(as root): ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 ;; Relative Line numbers r lit
 (global-display-line-numbers-mode)
 (setq-default display-line-numbers-type 'relative
@@ -199,19 +207,19 @@
 ;; the actual config instead
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default)))
- '(package-selected-packages
-   (quote
-    (helm which-key quelpa-use-package quelpa use-package))))
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(custom-safe-themes
+     (quote
+       ("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default)))
+  '(package-selected-packages
+     (quote
+       (helm which-key quelpa-use-package quelpa use-package))))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
