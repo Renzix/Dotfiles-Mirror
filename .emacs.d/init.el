@@ -176,11 +176,11 @@
 
 ;; Treemacs which is just a nerdtree like plugin (although there is a nerd tree port). I think this one is better
 ;; because it has more plugins
-(use-package treemacs)
-(use-package treemacs-projectile
-	     :after treemacs projectile)
-(use-package treemacs-magit
-	     :after treemacs magit)
+;;(use-package treemacs)
+;;(use-package treemacs-projectile
+;;	     :after treemacs projectile)
+;;(use-package treemacs-magit
+;;	     :after treemacs magit)
 
 
 ;; Actually useful terminal emulator inside emacs based on the same library as :term that doesnt work
