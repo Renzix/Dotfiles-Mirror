@@ -39,8 +39,8 @@
 		       (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-(when (> emacs-major-version 26)
 ;; Relative Line numbers r lit
+(when (> emacs-major-version 26)
   (global-display-line-numbers-mode)
   (setq-default display-line-numbers-type 'relative
 		display-line-numbers-current-absolute t
@@ -74,7 +74,8 @@
 (use-package helm
 	     :bind
 	     (("M-x" . helm-M-x)
-	      ("C-x C-f" . helm-find-files))
+	      ("C-x C-f" . helm-find-files)
+	      ("C-x b" . helm-buffers-list))
 	     :config
 	     (helm-autoresize-mode t)
 	     (setq helm-autoresize-max-height 30)
@@ -127,9 +128,11 @@
 
 
 ;; Git intergrations add if you want
-(use-package magit)
-(use-package git-timemachine) ; Way to go back in a single file with git history and a keybind
-(use-package git-gutter  ; + for addition and - for subtraction at side bar
+(use-package magit
+  :bind ("C-c g g" . 'magit-status))
+(use-package git-timemachine ; Way to go back in a single file with git history and a keybind
+  :bind ("C-c g t" . 'git-timemachine-toggle))
+ (use-package git-gutter  ; + for addition and - for subtraction at side bar
 	     :config
 	     (global-git-gutter-mode))
 (use-package forge ; UNSTABLE but good thing for github/gitlab specific stuff like issues and prs
