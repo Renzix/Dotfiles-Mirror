@@ -71,16 +71,34 @@ cb() {
 	read -rt .1 input
 	echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
-
-__prompt_command() {
-	if [[ $? != 0 ]]; then
-		PS1="\e[0;31m\$\e[m "
-	else
-		PS1="\e[0;32m\$\e[m "
-	fi
-	export PS1
+pwdp() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
+}
+usrp() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\$\[\e[m\] '
+}
+timep() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\A\[\e[m\] '
+}
+verp() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\v\[\e[m\] '
+}
+datep() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\d\[\e[m\] '
 }
 
-PROMPT_COMMAND=__prompt_command
+tw() {
+	mpv "https://twitch.tv/$1"
+}
+
+# Random prompt from the ones above
+rand_prompt() {
+	prompts=('pwdp' 'timep' 'usrp' 'verp' 'datep')
+	RANDOM=$$$(date +%s)
+	rand=$[$RANDOM % ${#prompts[@]}]
+	${prompts[$rand]}
+}
+
+PROMPT_COMMAND=rand_prompt
 
 export NIX_AUTO_RUN=1

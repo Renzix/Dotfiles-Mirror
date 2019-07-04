@@ -7,8 +7,9 @@
       package-archive-priorities
       '(("elpa"     . 5)
 	("melpa"        . 10)))
-
-(package-initialize)
+(if (< emacs-major-version 26)
+    (package-initialize)
+  (package-refresh-contents))
 
 ;; Bootstrap `use-package`
 (unless (package-installed-p 'use-package)
@@ -38,12 +39,14 @@
 		       (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
+(when (> emacs-major-version 26)
 ;; Relative Line numbers r lit
-(global-display-line-numbers-mode)
-(setq-default display-line-numbers-type 'relative
-	      display-line-numbers-current-absolute t
-	      display-line-numbers-width 4
-	      display-line-numbers-widen t)
+  (global-display-line-numbers-mode)
+  (setq-default display-line-numbers-type 'relative
+		display-line-numbers-current-absolute t
+		display-line-numbers-width 4
+		display-line-numbers-widen t))
+
 ;; Better backup defaults
 (setq backup-directory-alist `(("." . "~/.saves"))
       backup-by-copying t
@@ -124,7 +127,7 @@
 
 
 ;; Git intergrations add if you want
-(use-package magit) ; must have
+(use-package magit)
 (use-package git-timemachine) ; Way to go back in a single file with git history and a keybind
 (use-package git-gutter  ; + for addition and - for subtraction at side bar
 	     :config
