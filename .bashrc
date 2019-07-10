@@ -92,13 +92,14 @@ tw() {
 }
 
 # Random prompt from the ones above
-rand_prompt() {
-	prompts=('pwdp' 'timep' 'usrp' 'verp' 'datep')
-	RANDOM=$$$(date +%s)
-	rand=$[$RANDOM % ${#prompts[@]}]
-	${prompts[$rand]}
-}
+#rand_prompt() {
+#	prompts=('pwdp' 'timep' 'usrp' 'verp' 'datep')
+#	RANDOM=$$$(date +%s)
+#	rand=$[$RANDOM % ${#prompts[@]}]
+#	${prompts[$rand]}
+#}
 
-PROMPT_COMMAND=rand_prompt
+#PROMPT_COMMAND=rand_prompt
+pwdp
 
 export NIX_AUTO_RUN=1
