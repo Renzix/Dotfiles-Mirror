@@ -256,6 +256,10 @@
 ;;(use-package quelpa-use-package) 
 ;; Use like use-package but add the :quelpa flag
 
+;; Misc programming stuff
+(use-package autopair
+  :config (autopair-global-mode t))
+
 ;; Languages!!!
 ;; Scala
 (use-package scala-mode
