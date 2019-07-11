@@ -148,12 +148,6 @@
   :after org)
 (use-package treemacs-evil
   :after treemacs evil)
-;; Nice for keybinds in evil mode for example i will bind ; to helm-M-x in normal/visual mode
-;; Note that use-package also has a :general keyword which lets you do the same thing
-(use-package general)
-(general-define-key
- :states '(normal visual)
- ";" 'helm-M-x)
 
 ;; If you dont like evil i would try out god-mode. Basically a prefix key (defaults to escape) then you are in god mode
 ;; during which all keybinds assume you do a Control. the g key assumes you do a alt (M). a space assumes you mean to not use control
@@ -310,10 +304,12 @@
 ;; Add company-lsp backend for metals
 (use-package company-lsp)
 
-;; KEYBINDS
+;; KEYBINDS general is nice 4 evil but useful without it also
+(use-package general)
 (general-define-key
  :states '(normal visual)
  "SPC" 'helm-buffers-list
+ "S-SPC" 'helm-projectile-switch-to-buffer
  "S" 'helm-projectile-find-file-or-project
  "s" 'helm-find-files
  ";" 'helm-M-x
