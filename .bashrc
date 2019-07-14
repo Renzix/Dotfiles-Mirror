@@ -23,34 +23,17 @@ info() {
 		printf "[%s]:$1\n" "$(date +'%D %T')";
 }
 
-[[ $(type -P "exa") ]] && {
+if hash "exa" 2>/dev/null ; then
 	info "Exa found"
 	alias ls="exa"
 	alias la="exa -a"
 	alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
-} || {
+else
 	info "Exa not found"
 	alias l="ls --color=auto -h"
 	alias la="ls -ah"
 	alias ll='ls -lh'
-}
-
-# Variables and aliases
-# Default editor
-[[ $(type -P "nvim") ]] && {
-	info "Found nvim so using that"
-	export EDITOR="nvim"
-} || [[ $(type -P "vim") ]] && {
-	info "Found vim so using that"
-	export EDITOR="vim"
-} || [[ $(type -P "emacs") ]] && {
-	info "Couldnt find any vi so using emacs"
-	export EDITOR="emacs -nw"
-} || [[ $(type -P "nano") ]] && {
-	info "Couldnt find any vi or emacs so using nano"
-	export EDITOR="nano"
-}
-alias vi="${EDITOR:-vi}"
+fi
 
 # System Shutdown stuff
 alias rb="sudo reboot"
@@ -65,6 +48,7 @@ alias ht="htop"
 alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k" # because im lazy only works on 1 cpu
 alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k" # because im lazy only works on 1 cpu
 alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
+alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
 
 
 cb() {
