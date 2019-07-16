@@ -85,7 +85,7 @@
     (helm-projectile-switch-project)))
 ;; Window stuff for eshell
 (defvar my:window-conf nil)
-(defun toggle-eshell (buf-name)
+(defun eshell-toggle (buf-name)
   "Switches to eshell and saves persp"
   (interactive (list (buffer-name)))
   (if (string-equal buf-name "*eshell*")
@@ -94,6 +94,22 @@
       (setq my:window-conf (current-window-configuration))
       (delete-other-windows)
       (eshell))))
+(defun previous-newline-without-break-of-line ()
+  "1. move to previous line
+  2. move to end of the line.
+  3. insert newline with index"
+  (interactive)
+  (let ((oldpos (point)))
+    (previous-line)
+    (end-of-line)
+    (newline-and-indent)))
+(defun newline-without-break-of-line ()
+  "1. move to end of the line.
+  2. insert newline with index"
+  (interactive)
+  (let ((oldpos (point)))
+    (end-of-line)
+    (newline-and-indent)))
 
 ;; Relative Line numbers r lit
 (when (> emacs-major-version 26)
@@ -162,25 +178,6 @@
 (use-package treemacs-evil
   :after treemacs evil)
 
-;; If you dont like evil i would try out god-mode. Basically a prefix key (defaults to escape) then you are in god mode
-;; during which all keybinds assume you do a Control. the g key assumes you do a alt (M). a space assumes you mean to not use control
-;; and a capital G means C-M or control and alt. You can also add a keybind to repeat the last bind
-;;(use-package god-mode
-;;	     :init (progn
-;;		     (setq god-exempt-major-modes nil
-;;			   god-exempt-predicates nil)
-;;		     (defun my-update-cursor ()
-;;		       (setq cursor-type (if (or god-local-mode buffer-read-only)
-;;					   'box
-;;					   'bar)))
-;;		     (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-;;		     (add-hook 'god-mode-disabled-hook 'my-update-cursor))
-;;	     :bind (("<escape>" . god-local-mode)
-;;		    :map god-local-mode-map
-;;		    ("." . repeat)))
-
-
-
 ;; Git intergrations add if you want
 (use-package magit
   :bind ("C-c g g" . 'magit-status))
@@ -225,9 +222,10 @@
 ;; Org mode with my default config you can change it if you want
 (use-package org
   :init
-  (setq default-major-mode 'org-mode
-	org-src-tab-acts-natively t
-	org-confirm-babel-evaluate nil)
+  (setq-default initial-major-mode 'org-mode
+		initial-scratch-message ""
+		org-src-tab-acts-natively t
+		org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((org . t)
@@ -242,18 +240,12 @@
 (use-package htmlize
   :after org) ;; for html exports in org mode
 
-;; Treemacs which is just a nerdtree like plugin (although there is a nerd tree port). I think this one is better
-;; because it has more plugins
-;;(use-package treemacs)
-;;(use-package treemacs-projectile
-;;	     :after treemacs projectile)
-;;(use-package treemacs-magit
-;;	     :after treemacs magit)
-
-
 ;; Actually useful terminal emulator inside emacs based on the same library as :term that doesnt work
-;; properly from melpa yet!!! Dont uncomment this you have to build from their github as of rn
+;; properly from melpa yet!!! For now i install it manually
 ;;(use-package vterm)
+(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
+      (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+      (require 'vterm))
 
 ;; Easy way to install directly from github using quelpa. Note that this is only used in the config
 ;; So if you never use it you can just get rid of it or comment it out. Keep in mind this auto updates with the setq
@@ -266,6 +258,19 @@
 ;; Misc programming stuff
 (use-package autopair
   :config (autopair-global-mode t))
+
+;; LSP
+(use-package lsp-mode
+  :hook
+  ((scala-mode . lsp)
+   (python-mode . lsp)
+   (c-mode . lsp))
+  :config (setq lsp-prefer-flymake nil))
+
+(use-package lsp-ui
+  :after lsp-mode
+  :hook (lsp-mode-hook . lsp-ui-mode))
+
 ;; Languages!!!
 ;; Scala
 (use-package scala-mode
@@ -289,7 +294,14 @@
 
 ;; Haskell
 (use-package haskell-mode)
-(use-package lsp-haskell)
+(use-package lsp-haskell
+  :after lsp-mode)
+(use-package flycheck-haskell
+  :after flycheck)
+
+;; Perl6
+(use-package flycheck-perl6
+  :after flycheck)
 
 ;; Flycheck
 (use-package flycheck
@@ -297,22 +309,6 @@
 (use-package flycheck-pos-tip
   :after flycheck
   :config (flycheck-pos-tip-mode))
-(use-package flycheck-perl6
-  :after flycheck)
-(use-package flycheck-haskell
-  :after flycheck)
-;; LSP
-(use-package lsp-mode
-  :hook
-  ((scala-mode . lsp)
-   (python-mode . lsp)
-   (c-mode . lsp))
-  :config (setq lsp-prefer-flymake nil))
-
-(use-package lsp-ui
-  :after lsp-mode
-  :hook (lsp-mode-hook . lsp-ui-mode))
-
 ;; Add company-lsp backend for metals
 (use-package company-lsp)
 
@@ -335,7 +331,9 @@
  "_" 'magit-dispatch
  "Q" 'save-buffers-kill-terminal
  "C-s" 'eshell-toggle
- "U" 'undo-tree-visualize)
+ "U" 'undo-tree-visualize
+ "[ SPC" 'previous-newline-without-break-of-line
+ "] SPC" 'newline-without-break-of-line)
 (evil-ex-define-cmd "cfg" 'open-emacs-config)
 ;; Anything past here is autogenerated every time you run emacs. it is safe to delete this only if you also delete everything else
 ;; the actual config instead
