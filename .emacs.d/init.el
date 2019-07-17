@@ -244,8 +244,8 @@
 ;; properly from melpa yet!!! For now i install it manually
 ;;(use-package vterm)
 (when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-      (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
-      (require 'vterm))
+  (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+  (require 'vterm))
 
 ;; Easy way to install directly from github using quelpa. Note that this is only used in the config
 ;; So if you never use it you can just get rid of it or comment it out. Keep in mind this auto updates with the setq
@@ -271,6 +271,9 @@
   :after lsp-mode
   :hook (lsp-mode-hook . lsp-ui-mode))
 
+(use-package company-lsp
+  :after '(company lsp-mode))
+
 ;; Languages!!!
 ;; Scala
 (use-package scala-mode
@@ -285,6 +288,18 @@
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map))
+
+;; C
+(use-package irony
+  :hook (c++-mode-hook . irony-mode)
+  :hook (objc-mode-hook . irony-mode)
+  :hook (c-mode-hook . irony-mode))
+(use-package company-irony
+  :after '(company irony))
+(use-package flycheck-irony
+  :after '(flycheck irony))
+(use-package irony-eldoc
+  :after '(irony))
 
 ;; Rust
 (use-package rustic)
@@ -303,14 +318,12 @@
 (use-package flycheck-perl6
   :after flycheck)
 
-;; Flycheck
+;; Flycheck misc
 (use-package flycheck
   :init (global-flycheck-mode))
 (use-package flycheck-pos-tip
   :after flycheck
   :config (flycheck-pos-tip-mode))
-;; Add company-lsp backend for metals
-(use-package company-lsp)
 
 ;; KEYBINDS general is nice 4 evil but useful without it also
 (use-package general)
