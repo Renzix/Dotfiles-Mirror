@@ -175,8 +175,6 @@
   :after magit)
 (use-package evil-org
   :after org)
-(use-package treemacs-evil
-  :after treemacs evil)
 
 ;; Git intergrations add if you want
 (use-package magit
