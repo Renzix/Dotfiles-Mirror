@@ -338,7 +338,7 @@
  "g p" 'projectile-command-map
  "\\" 'helm-projectile-rg-or-project
  "|" 'helm-locate
- "g _" 'magit-status
+ "," 'magit-status
  "_" 'magit-dispatch
  "Q" 'save-buffers-kill-terminal
  "C-s" 'eshell-toggle
