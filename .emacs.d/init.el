@@ -172,7 +172,20 @@
 
 ;; Must have if you get magit this is one of the only things not covered by evil-collection
 (use-package evil-magit
-  :after magit)
+  :after magit
+  :config ; Magit defaults to opening status in the current window better default
+  (setq magit-display-buffer-function
+		(lambda (buffer)
+		  (display-buffer
+		   buffer (if (and (derived-mode-p 'magit-mode)
+				   (memq (with-current-buffer buffer major-mode)
+					 '(magit-process-mode
+					   magit-revision-mode
+					   magit-diff-mode
+					   magit-stash-mode
+					   magit-status-mode)))
+			      nil
+			    '(display-buffer-same-window))))))
 (use-package evil-org
   :after org)
 
