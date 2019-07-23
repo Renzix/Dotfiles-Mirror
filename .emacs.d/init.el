@@ -266,6 +266,10 @@
   :after org) ;; for pandoc exports in org mode
 (use-package htmlize
   :after org) ;; for html exports in org mode
+;; Other useful text stuff
+(use-package langtool
+  :init (setq langtool-language-tool-jar "~/Projects/NotMine/LanguageTool-4.6/languagetool-commandline.jar"
+	      langtool-default-language "en-US"))
 
 ;; Actually useful terminal emulator inside emacs based on the same library as :term that doesnt work
 ;; properly from melpa yet!!! For now i install it manually
