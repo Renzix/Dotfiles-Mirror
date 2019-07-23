@@ -169,9 +169,7 @@
   (setq evil-want-keybinding nil ; for evil-collection
 	evil-want-intergration t) ; also for evil-collection
   :config 
-  (evil-mode 1)
-  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-  (key-chord-mode 1))
+  (evil-mode 1))
 ;; You probably want this as it allows intergration with a shit ton of things with evil
 (use-package evil-collection
   :after evil
@@ -200,6 +198,12 @@
 			    '(display-buffer-same-window))))))
 (use-package evil-org
   :after org)
+
+(use-package key-chord
+  :after evil
+  :config
+  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+  (key-chord-mode 1))
 
 ;; Git intergrations add if you want
 (use-package magit
