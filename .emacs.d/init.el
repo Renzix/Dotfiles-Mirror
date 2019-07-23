@@ -32,6 +32,12 @@
 (display-battery-mode)
 
 ;; Very useful funciton
+(defun create-tags (dir-name)
+     "Create tags file."
+     (interactive "DDirectory: ")
+     (eshell-command
+      (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+
 (defun sudo-edit (&optional arg)
   (interactive "P")
   (if (or arg (not buffer-file-name))
@@ -129,7 +135,7 @@
       warning-minimum-level :error)
 ;; Themes. Just gonna default to apropospriate-dark
 (use-package doom-themes
-  :config (load-theme 'doom-tomorrow-night t))
+  :config (load-theme 'doom-dracula t))
 
 ;; Auto updates packages (makes startup time alot longer as it checks for updates)
 ;;(use-package auto-package-update
@@ -163,12 +169,18 @@
   (setq evil-want-keybinding nil ; for evil-collection
 	evil-want-intergration t) ; also for evil-collection
   :config 
-  (evil-mode 1))
+  (evil-mode 1)
+  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+  (key-chord-mode 1))
 ;; You probably want this as it allows intergration with a shit ton of things with evil
 (use-package evil-collection
   :after evil
   :config
   (evil-collection-init))
+(use-package evil-goggles
+  :config
+  (evil-goggles-mode)
+  (evil-goggles-use-diff-faces))
 
 ;; Must have if you get magit this is one of the only things not covered by evil-collection
 (use-package evil-magit
@@ -276,6 +288,8 @@
   :after '(treemacs projectile))
 (use-package treemacs-magit
   :after '(treemacs magit))
+;; Icons for treemacs
+(use-package all-the-icons)
 
 ;; LSP
 (use-package lsp-mode
@@ -385,4 +399,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(evil-goggles-change-face ((t (:inherit diff-removed))))
+ '(evil-goggles-delete-face ((t (:inherit diff-removed))))
+ '(evil-goggles-paste-face ((t (:inherit diff-added))))
+ '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
+ '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
+ '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed)))))
