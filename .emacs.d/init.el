@@ -33,10 +33,10 @@
 
 ;; Very useful funciton
 (defun create-tags (dir-name)
-     "Create tags file."
-     (interactive "DDirectory: ")
-     (eshell-command
-      (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+  "Create tags file."
+  (interactive "DDirectory: ")
+  (eshell-command
+   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
 (defun sudo-edit (&optional arg)
   (interactive "P")
@@ -153,12 +153,11 @@
   :bind
   (("M-x" . helm-M-x)
    ("C-x C-f" . helm-find-files)
-   ("C-x b" . helm-buffers-list))
+   ("C-x b" . helm-mini))
   :config
   (helm-autoresize-mode t)
   (setq helm-autoresize-max-height 30)
   (setq helm-display-header-line nil)
-  (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
   (helm-mode t))
 (use-package helm-rg
   :after helm)
@@ -185,17 +184,17 @@
   :after magit
   :config ; Magit defaults to opening status in the current window better default
   (setq magit-display-buffer-function
-		(lambda (buffer)
-		  (display-buffer
-		   buffer (if (and (derived-mode-p 'magit-mode)
-				   (memq (with-current-buffer buffer major-mode)
-					 '(magit-process-mode
-					   magit-revision-mode
-					   magit-diff-mode
-					   magit-stash-mode
-					   magit-status-mode)))
-			      nil
-			    '(display-buffer-same-window))))))
+	(lambda (buffer)
+	  (display-buffer
+	   buffer (if (and (derived-mode-p 'magit-mode)
+			   (memq (with-current-buffer buffer major-mode)
+				 '(magit-process-mode
+				   magit-revision-mode
+				   magit-diff-mode
+				   magit-stash-mode
+				   magit-status-mode)))
+		      nil
+		    '(display-buffer-same-window))))))
 (use-package evil-org
   :after org)
 
@@ -369,7 +368,7 @@
 (use-package general)
 (general-define-key
  :states '(normal visual)
- "SPC" 'helm-buffers-list
+ "SPC" 'helm-mini
  "S-SPC" 'helm-projectile-switch-to-buffer
  "S" 'helm-projectile-find-file-or-project
  "s" 'helm-find-files
