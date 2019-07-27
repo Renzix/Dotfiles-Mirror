@@ -312,7 +312,13 @@
 (when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
   (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
   (require 'vterm)
-  (evil-define-key 'insert vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+  (general-define-key
+   :states '(normal)
+   :keymaps 'vterm-mode-map
+   "o" #'evil-insert-resume
+   "a" #'evil-insert-resume
+   "i" #'evil-insert-resume
+   "<return>" #'evil-insert-resume))
 
 ;; Easy way to install directly from github using quelpa. Note that this is only used in the config
 ;; So if you never use it you can just get rid of it or comment it out. Keep in mind this auto updates with the setq
@@ -406,6 +412,10 @@
 (use-package flycheck-pos-tip
   :after flycheck
   :config (flycheck-pos-tip-mode))
+
+;; Other fun stuff
+(use-package elcord
+  :config (elcord-mode))
 
 ;; KEYBINDS general is nice 4 evil but useful without it also
 (use-package general)
