@@ -57,8 +57,8 @@
   "Renames current buffer and file it is visiting."
   (interactive)
   (let* ((name (buffer-name))
-        (filename (buffer-file-name))
-        (basename (file-name-nondirectory filename)))
+         (filename (buffer-file-name))
+         (basename (file-name-nondirectory filename)))
     (if (not (and filename (file-exists-p filename)))
         (error "Buffer '%s' is not visiting a file!" name)
       (let ((new-name (read-file-name "New name: " (file-name-directory filename) basename nil basename)))
@@ -140,7 +140,7 @@
   (global-display-line-numbers-mode)
   (setq-default display-line-numbers-type 'relative
 		display-line-numbers-current-absolute t
-		display-line-numbers-width 4
+		display-line-numbers-width 3
 		display-line-numbers-widen t))
 
 ;; Better backup defaults
@@ -322,6 +322,7 @@
    "a" #'evil-insert-resume
    "i" #'evil-insert-resume
    "<return>" #'evil-insert-resume))
+(use-package powershell)
 
 ;; Easy way to install directly from github using quelpa. Note that this is only used in the config
 ;; So if you never use it you can just get rid of it or comment it out. Keep in mind this auto updates with the setq
@@ -420,6 +421,10 @@
 ;; Other fun stuff
 (use-package elcord
   :config (elcord-mode))
+;; MY PROJECT
+(when (file-directory-p "~/Projects/Mine/rencord")
+  (add-to-list 'load-path "~/Projects/Mine/rencord")
+  (require 'rencord))
 
 ;; KEYBINDS general is nice 4 evil but useful without it also
 (use-package general)
@@ -459,7 +464,7 @@
  '(custom-safe-themes
    '("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
  '(package-selected-packages
-   '(helm-rg helm which-key quelpa-use-package quelpa use-package)))
+   '(websocket helm-rg helm which-key quelpa-use-package quelpa use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
