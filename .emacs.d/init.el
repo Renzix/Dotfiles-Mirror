@@ -57,19 +57,19 @@
   "Renames current buffer and file it is visiting."
   (interactive)
   (let* ((name (buffer-name))
-         (filename (buffer-file-name))
-         (basename (file-name-nondirectory filename)))
+	 (filename (buffer-file-name))
+	 (basename (file-name-nondirectory filename)))
     (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
+	(error "Buffer '%s' is not visiting a file!" name)
       (let ((new-name (read-file-name "New name: " (file-name-directory filename) basename nil basename)))
-        (if (get-buffer new-name)
-            (error "A buffer named '%s' already exists!" new-name)
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil)
-          (message "File '%s' successfully renamed to '%s'"
-                   name (file-name-nondirectory new-name)))))))
+	(if (get-buffer new-name)
+	    (error "A buffer named '%s' already exists!" new-name)
+	  (rename-file filename new-name 1)
+	  (rename-buffer new-name)
+	  (set-visited-file-name new-name)
+	  (set-buffer-modified-p nil)
+	  (message "File '%s' successfully renamed to '%s'"
+		   name (file-name-nondirectory new-name)))))))
 (defun delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
@@ -151,9 +151,27 @@
       kept-old-versions 10
       version-control t
       warning-minimum-level :error)
-;; Themes. Just gonna default to apropospriate-dark
-(use-package doom-themes
-  :config (load-theme 'doom-dracula t))
+;; Themes. Changes depending on the day of the week
+(setq renzix-weekday (format-time-string "%w"))
+(use-package doom-themes)
+(use-package apropospriate-theme)
+(use-package monokai-theme)
+(use-package monokai-pro-theme)
+(cond ((eq 0 renzix-weekday) ;; Sunday
+       (load-theme 'doom-dracula t))
+      ((eq 1 renzix-weekday) ;; Monday
+       (load-theme 'doom-nord t))
+      ((eq 2 renzix-weekday) ;; Tuesday
+       (load-theme 'doom-opera t))
+      ((eq 3 renzix-weekday) ;; Wednsday
+       (load-theme 'doom-monokai t))
+      ((eq 4 renzix-weekday) ;; Thursday
+       (load-theme 'apropospriate-dark t))
+      ((eq 5 renzix-weekday) ;; Friday
+       (load-theme 'monokai t))
+      ((eq 6 renzix-weekday) ;; Saterday
+       (load-theme 'monokai-pro t))
+      (t (load-theme 'doom-one t))) ;; ???
 
 ;; Auto updates packages (makes startup time alot longer as it checks for updates)
 ;;(use-package auto-package-update
@@ -194,9 +212,13 @@
   :config
   (evil-collection-init))
 (use-package evil-goggles
+  :after evil
   :config
   (evil-goggles-mode)
   (evil-goggles-use-diff-faces))
+(use-package evil-matchit
+  :after evil
+  :config (global-evil-matchit-mode 1))
 
 ;; Must have if you get magit this is one of the only things not covered by evil-collection
 (use-package evil-magit
@@ -390,6 +412,13 @@
 (use-package irony-eldoc
   :after '(irony))
 
+;; C#
+(use-package csharp-mode)
+(use-package omnisharp
+  :hook (csharp-mode-hook . omnisharp-mode)
+  :config
+  (add-to-list 'company-backends 'company-omnisharp))
+
 ;; Rust
 (use-package rustic)
 
@@ -462,7 +491,7 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(custom-safe-themes
-   '("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
+   '("1d2f406a342499f0098f9388b87d05ec9b28ccb12ca548f4f5fa80ae368235b6" "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" "8c847a5675ece40017de93045a28ebd9ede7b843469c5dec78988717f943952a" "82358261c32ebedfee2ca0f87299f74008a2e5ba5c502bde7aaa15db20ee3731" "e3c87e869f94af65d358aa279945a3daf46f8185f1a5756ca1c90759024593dd" "34c99997eaa73d64b1aaa95caca9f0d64229871c200c5254526d0062f8074693" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
  '(package-selected-packages
    '(websocket helm-rg helm which-key quelpa-use-package quelpa use-package)))
 (custom-set-faces
