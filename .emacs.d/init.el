@@ -152,26 +152,25 @@
       version-control t
       warning-minimum-level :error)
 ;; Themes. Changes depending on the day of the week
-(setq renzix-weekday (format-time-string "%w"))
+(defvar renzix-weekday (format-time-string "%w"))
 (use-package doom-themes)
 (use-package apropospriate-theme)
 (use-package monokai-theme)
 (use-package monokai-pro-theme)
-(cond ((eq 0 renzix-weekday) ;; Sunday
+(cond ((string= "0" renzix-weekday) ;; Sunday
        (load-theme 'doom-dracula t))
-      ((eq 1 renzix-weekday) ;; Monday
-       (load-theme 'doom-nord t))
-      ((eq 2 renzix-weekday) ;; Tuesday
+      ((string= "1" renzix-weekday) ;; Monday
        (load-theme 'doom-opera t))
-      ((eq 3 renzix-weekday) ;; Wednsday
-       (load-theme 'doom-monokai t))
-      ((eq 4 renzix-weekday) ;; Thursday
+      ((string= "2" renzix-weekday) ;; Tuesday
        (load-theme 'apropospriate-dark t))
-      ((eq 5 renzix-weekday) ;; Friday
+      ((string= "3" renzix-weekday) ;; Wednsday
+       (load-theme 'doom-molokai t))
+      ((string= "4" renzix-weekday) ;; Thursday
+       (load-theme 'doom-nord t))
+      ((string= "5" renzix-weekday) ;; Friday
        (load-theme 'monokai t))
-      ((eq 6 renzix-weekday) ;; Saterday
-       (load-theme 'monokai-pro t))
-      (t (load-theme 'doom-one t))) ;; ???
+      ((string= "6" renzix-weekday) ;; Saterday
+       (load-theme 'monokai-pro t)))
 
 ;; Auto updates packages (makes startup time alot longer as it checks for updates)
 ;;(use-package auto-package-update
