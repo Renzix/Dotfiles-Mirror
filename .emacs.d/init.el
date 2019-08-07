@@ -150,6 +150,7 @@
       kept-new-versions 10
       kept-old-versions 10
       version-control t
+      split-width-threshold 1
       warning-minimum-level :error)
 ;; Themes. Changes depending on the day of the week
 (defvar renzix-weekday (format-time-string "%w"))
