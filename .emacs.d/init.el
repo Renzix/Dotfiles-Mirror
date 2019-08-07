@@ -172,13 +172,6 @@
       ((string= "6" renzix-weekday) ;; Saterday
        (load-theme 'monokai-pro t)))
 
-;; Auto updates packages (makes startup time alot longer as it checks for updates)
-;;(use-package auto-package-update
-;;  :config
-;;  (setq auto-package-Mpdate-delete-old-versions t
-;;    auto-package-update-hide-results t)
-;;  (auto-package-update-maybe))
-
 ;; Add which-key (makes keybinds show all possible things) VERY nice to learn emacs with
 (use-package which-key
   :config (which-key-mode))
@@ -221,20 +214,20 @@
 
 ;; Must have if you get magit this is one of the only things not covered by evil-collection
 (use-package evil-magit
-  :after magit
-  :config ; Magit defaults to opening status in the current window better default
-  (setq magit-display-buffer-function
-	(lambda (buffer)
-	  (display-buffer
-	   buffer (if (and (derived-mode-p 'magit-mode)
-			   (memq (with-current-buffer buffer major-mode)
-				 '(magit-process-mode
-				   magit-revision-mode
-				   magit-diff-mode
-				   magit-stash-mode
-				   magit-status-mode)))
-		      nil
-		    '(display-buffer-same-window))))))
+  :after magit)
+;; :config ; Magit defaults to opening status in the current window better default
+;;   (setq magit-display-buffer-function
+;; 	(lambda (buffer)
+;; 	  (display-buffer
+;; 	   buffer (if (and (derived-mode-p 'magit-mode)
+;; 			   (memq (with-current-buffer buffer major-mode)
+;; 				 '(magit-process-mode
+;; 				   magit-revision-mode
+;; 				   magit-diff-mode
+;; 				   magit-stash-mode
+;; 				   magit-status-mode)))
+;; 		      nil
+;; 		    '(display-buffer-same-window))))))
 (use-package evil-org
   :after '(org evil))
 (use-package evil-space
