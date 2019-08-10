@@ -35,11 +35,18 @@ else
 	alias ll='ls -lh'
 fi
 
+
+# Some nice keybindings and aliases
+alias e="emacs -nw"
+bind -m emacs -x '"\C-x\C-f":"emacs -nw ."'
+
 # System Shutdown stuff
 alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
 
 # git
+alias gs="emacs -nw -f magit-status-only"
+bind -m emacs -x '"\C-xg":"emacs -nw -f magit-status-only"'
 alias gc="git commit"
 alias gp="git push"
 
