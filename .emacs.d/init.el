@@ -372,6 +372,7 @@
 (use-package lsp-mode
   :hook
   ((scala-mode . lsp)
+   (java-mode . lsp)
    (python-mode . lsp)
    (c-mode . lsp))
   :config (setq lsp-prefer-flymake nil))
@@ -383,7 +384,19 @@
 (use-package company-lsp
   :after '(company lsp-mode))
 
+;; dap-mode
+(use-package dap-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1)
+  (require 'dap-python)
+  (require 'dap-java)
+  (require 'dap-lldb))
+
 ;; Languages!!!
+;; Java
+(use-package lsp-java)
+
 ;; Scala
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
@@ -447,7 +460,9 @@
 
 ;; Other fun stuff
 (use-package elcord
-  :config (elcord-mode))
+  :config
+  (setq elcord-use-major-mode-as-main-icon t)
+  (elcord-mode))
 ;; MY PROJECT
 (when (file-directory-p "~/Projects/Mine/rencord")
   (add-to-list 'load-path "~/Projects/Mine/rencord")
