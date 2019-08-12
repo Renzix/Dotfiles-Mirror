@@ -45,7 +45,7 @@ alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
 
 # git
-alias gs="emacs -nw -f magit-status-only"
+alias gs="emacs -nw -f magit-status-only" # @TODO(renzix): Switch to emacsclient
 bind -m emacs -x '"\C-xg":"emacs -nw -f magit-status-only"'
 alias gc="git commit"
 alias gp="git push"
@@ -62,20 +62,9 @@ cb() {
 	read -rt .1 input
 	echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
+
 pwdp() {
 	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
-}
-usrp() {
-	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\$\[\e[m\] '
-}
-timep() {
-	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\A\[\e[m\] '
-}
-verp() {
-	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\v\[\e[m\] '
-}
-datep() {
-	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\d\[\e[m\] '
 }
 
 tw() {
