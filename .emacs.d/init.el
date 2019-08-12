@@ -7,7 +7,7 @@
       package-archive-priorities
       '(("elpa"     . 5)
 	("melpa"        . 10)))
-(if (< emacs-major-version 26)
+(if (<= emacs-major-version 26)
     (package-initialize)
   (package-refresh-contents))
 
@@ -23,16 +23,25 @@
 ;; Follow symlinks instead of asking to follow symlinks
 (setq vc-follow-symlinks t)
 
-;; Some visual defaults you can change that i think look ugly af
+;; Some better defaults
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
-      confirm-kill-processes nil)
+      confirm-kill-processes nil
+      indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (display-battery-mode)
 
 ;; Very useful functions
+(defun evil-insert-undo-line ()
+  (interactive)
+  (if (looking-back "^" 0)
+      (backward-delete-char 1)
+    (if (looking-back "^\s*" 0)
+        (delete-region (point) (line-beginning-position))
+      (evil-delete (+ (line-beginning-position) (current-indentation)) (point)))))
+
 (defun magit-status-only ()
   "Opens magit-status in a single buffer."
   (magit-status)
@@ -141,7 +150,7 @@
     (newline-and-indent)))
 
 ;; Relative Line numbers r lit
-(when (> emacs-major-version 26)
+(when (>= emacs-major-version 26)
   (global-display-line-numbers-mode)
   (setq-default display-line-numbers-type 'relative
 		display-line-numbers-current-absolute t
@@ -491,6 +500,9 @@
  :states '(normal visual insert)
  "C-s" 'eshell-toggle
  "C-t" 'vterm-toggle)
+(general-define-key
+ :states '(insert)
+ "C-u" 'evil-insert-undo-line)
 (evil-ex-define-cmd "cfg" 'open-emacs-config)
 (evil-ex-define-cmd "l" 'TeX-command-master)
 (evil-ex-define-cmd "q[uit]" 'delete-window)
