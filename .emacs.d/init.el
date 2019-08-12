@@ -3,10 +3,9 @@
 
 (setq package-archives
       '(("elpa"     . "https://elpa.gnu.org/packages/")
-	("melpa"        . "https://melpa.org/packages/"))
+        ("melpa"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(("elpa"     . 5)
-	("melpa"        . 10)))
+      '(("elpa"     . 5) ("melpa"        . 10)))
 (if (<= emacs-major-version 26)
     (package-initialize)
   (package-refresh-contents))
@@ -40,7 +39,8 @@
       (backward-delete-char 1)
     (if (looking-back "^\s*" 0)
         (delete-region (point) (line-beginning-position))
-      (evil-delete (+ (line-beginning-position) (current-indentation)) (point)))))
+      (evil-delete
+       (+ (line-beginning-position) (current-indentation)) (point)))))
 
 (defun magit-status-only ()
   "Opens magit-status in a single buffer."
@@ -56,8 +56,9 @@
 (defun sudo-edit (&optional arg)
   (interactive "P")
   (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:"
-			 (ido-read-file-name "Find file(as root): ")))
+      (find-file
+       (concat "/sudo:root@localhost:"
+               (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 (defun open-emacs-config ()
   "Opens my emacs config uwu"
@@ -71,30 +72,31 @@
   "Renames current buffer and file it is visiting."
   (interactive)
   (let* ((name (buffer-name))
-	 (filename (buffer-file-name))
-	 (basename (file-name-nondirectory filename)))
+         (filename (buffer-file-name))
+         (basename (file-name-nondirectory filename)))
     (if (not (and filename (file-exists-p filename)))
-	(error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: " (file-name-directory filename) basename nil basename)))
-	(if (get-buffer new-name)
-	    (error "A buffer named '%s' already exists!" new-name)
-	  (rename-file filename new-name 1)
-	  (rename-buffer new-name)
-	  (set-visited-file-name new-name)
-	  (set-buffer-modified-p nil)
-	  (message "File '%s' successfully renamed to '%s'"
-		   name (file-name-nondirectory new-name)))))))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: "
+				      (file-name-directory filename) basename nil basename)))
+        (if (get-buffer new-name)
+            (error "A buffer named '%s' already exists!" new-name)
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil)
+          (message "File '%s' successfully renamed to '%s'"
+                   name (file-name-nondirectory new-name)))))))
 (defun delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
   (let ((filename (buffer-file-name)))
     (when filename
       (if (vc-backend filename)
-	  (vc-delete-file filename)
-	(progn
-	  (delete-file filename)
-	  (message "Deleted file %s" filename)
-	  (kill-buffer))))))
+          (vc-delete-file filename)
+        (progn
+          (delete-file filename)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
 (defun helm-projectile-find-file-or-project () 
   "Does switch project if not in a project and find-file if in one"
   (interactive)
@@ -153,9 +155,9 @@
 (when (>= emacs-major-version 26)
   (global-display-line-numbers-mode)
   (setq-default display-line-numbers-type 'relative
-		display-line-numbers-current-absolute t
-		display-line-numbers-width 3
-		display-line-numbers-widen t))
+                display-line-numbers-current-absolute t
+                display-line-numbers-width 3
+                display-line-numbers-widen t))
 
 ;; Better backup defaults
 (setq backup-directory-alist `(("." . "~/.saves"))
@@ -173,19 +175,19 @@
   (use-package apropospriate-theme)
   (use-package monokai-theme)
   (cond ((string= "0" renzix-weekday) ;; Sunday
-	 (load-theme 'doom-dracula t))
-	((string= "1" renzix-weekday) ;; Monday
-	 (load-theme 'doom-opera t))
-	((string= "2" renzix-weekday) ;; Tuesday
-	 (load-theme 'apropospriate-dark t))
-	((string= "3" renzix-weekday) ;; Wednsday
-	 (load-theme 'doom-molokai t))
-	((string= "4" renzix-weekday) ;; Thursday
-	 (load-theme 'doom-nord t))
-	((string= "5" renzix-weekday) ;; Friday
-	 (load-theme 'monokai t))
-	((string= "6" renzix-weekday) ;; Saterday
-	 (load-theme 'doom-one t))))
+         (load-theme 'doom-dracula t))
+        ((string= "1" renzix-weekday) ;; Monday
+         (load-theme 'doom-opera t))
+        ((string= "2" renzix-weekday) ;; Tuesday
+         (load-theme 'apropospriate-dark t))
+        ((string= "3" renzix-weekday) ;; Wednsday
+         (load-theme 'doom-molokai t))
+        ((string= "4" renzix-weekday) ;; Thursday
+         (load-theme 'doom-nord t))
+        ((string= "5" renzix-weekday) ;; Friday
+         (load-theme 'monokai t))
+        ((string= "6" renzix-weekday) ;; Saterday
+         (load-theme 'doom-one t))))
 
 ;; Add which-key (makes keybinds show all possible things) VERY nice to learn emacs with
 (use-package which-key
@@ -210,7 +212,7 @@
 (use-package evil
   :init
   (setq evil-want-keybinding nil ; for evil-collection
-	evil-want-intergration t) ; also for evil-collection
+        evil-want-intergration t) ; also for evil-collection
   :config 
   (evil-mode 1))
 ;; You probably want this as it allows intergration with a shit ton of things with evil
@@ -232,17 +234,17 @@
   :after magit)
 ;; :config ; Magit defaults to opening status in the current window better default
 ;;   (setq magit-display-buffer-function
-;; 	(lambda (buffer)
-;; 	  (display-buffer
-;; 	   buffer (if (and (derived-mode-p 'magit-mode)
-;; 			   (memq (with-current-buffer buffer major-mode)
-;; 				 '(magit-process-mode
-;; 				   magit-revision-mode
-;; 				   magit-diff-mode
-;; 				   magit-stash-mode
-;; 				   magit-status-mode)))
-;; 		      nil
-;; 		    '(display-buffer-same-window))))))
+;;      (lambda (buffer)
+;;        (display-buffer
+;;         buffer (if (and (derived-mode-p 'magit-mode)
+;;                         (memq (with-current-buffer buffer major-mode)
+;;                               '(magit-process-mode
+;;                                 magit-revision-mode
+;;                                 magit-diff-mode
+;;                                 magit-stash-mode
+;;                                 magit-status-mode)))
+;;                    nil
+;;                  '(display-buffer-same-window))))))
 (use-package evil-org
   :after '(org evil))
 (use-package evil-space
@@ -271,28 +273,28 @@
   :init
   (add-hook 'after-init-hook 'global-company-mode)
   (setq company-require-match 'never
-	company-minimum-prefix-length 3
-	company-tooltip-align-annotations t
-	company-idle-delay 1
-	company-dabbrev-downcase 0
-	company-tooltip-limit 20
-	global-company-mode t)
+        company-minimum-prefix-length 3
+        company-tooltip-align-annotations t
+        company-idle-delay 1
+        company-dabbrev-downcase 0
+        company-tooltip-limit 20
+        global-company-mode t)
   :bind (:map company-active-map
-	      ("S-TAB" . company-select-previous)
-	      ("<backtab>" . company-select-previous)
-	      ("<return>" . nil)
-	      ("RET" . nil)
-	      ("C-SPC" . company-complete-selection)
-	      ("TAB" . company-complete-common-or-cycle)))
+              ("S-TAB" . company-select-previous)
+              ("<backtab>" . company-select-previous)
+              ("<return>" . nil)
+              ("RET" . nil)
+              ("C-SPC" . company-complete-selection)
+              ("TAB" . company-complete-common-or-cycle)))
 
 ;; Projectile!!! Run/do things with projects in projectile (assumes we have helm but you can install the normal one without it)
 (use-package helm-projectile
   :init
   (setq projectile-enable-caching t
-	projectile-file-exists-local-cache-expire (* 5 60)
-	projectile-file-exists-remote-cache-expire (* 10 60)
-	projectile-switch-project-action 'helm-projectile-find-file
-	projectile-sort-order 'recently-active)
+        projectile-file-exists-local-cache-expire (* 5 60)
+        projectile-file-exists-remote-cache-expire (* 10 60)
+        projectile-switch-project-action 'helm-projectile-find-file
+        projectile-sort-order 'recently-active)
   :config
   (projectile-mode t))
 
@@ -300,9 +302,9 @@
 (use-package org
   :init
   (setq-default initial-major-mode 'org-mode
-		initial-scratch-message ""
-		org-src-tab-acts-natively t
-		org-confirm-babel-evaluate nil)
+                initial-scratch-message ""
+                org-src-tab-acts-natively t
+                org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((org . t)
@@ -321,14 +323,14 @@
   :ensure auctex
   :config
   (setq TeX-auto-save t
-	TeX-parse-self t
-	TeX-view-program-selection '(((output-dvi has-no-display-manager)
-				      "dvi2tty")
-				     ((output-dvi style-pstricks)
-				      "dvips and gv")
-				     (output-dvi "xdvi")
-				     (output-pdf "mupdf")
-				     (output-html "xdg-open")))
+        TeX-parse-self t
+        TeX-view-program-selection '(((output-dvi has-no-display-manager)
+                                      "dvi2tty")
+                                     ((output-dvi style-pstricks)
+                                      "dvips and gv")
+                                     (output-dvi "xdvi")
+                                     (output-pdf "mupdf")
+                                     (output-html "xdg-open")))
   (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
 (use-package company-auctex
   :after tex
@@ -336,7 +338,7 @@
 ;; Other useful text stuff
 (use-package langtool
   :init (setq langtool-language-tool-jar "~/Projects/NotMine/LanguageTool-4.6/languagetool-commandline.jar"
-	      langtool-default-language "en-US"))
+              langtool-default-language "en-US"))
 
 ;; Actually useful terminal emulator inside emacs based on the same library as :term that doesnt work
 ;; properly from melpa yet!!! For now i install it manually
@@ -356,8 +358,8 @@
 ;; Easy way to install directly from github using quelpa. Note that this is only used in the config
 ;; So if you never use it you can just get rid of it or comment it out. Keep in mind this auto updates with the setq
 ;;(use-package quelpa
-;; 	     :init (setq quelpa-upgrade-p t
-;;			 quelpa-stable-p t))
+;;           :init (setq quelpa-upgrade-p t
+;;                       quelpa-stable-p t))
 ;;(use-package quelpa-use-package) 
 ;; Use like use-package but add the :quelpa flag
 
