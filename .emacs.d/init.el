@@ -67,7 +67,8 @@
 (defun indent-buffer ()
   (interactive)
   (save-excursion
-    (indent-region (point-min) (point-max) nil)))
+    (indent-region (point-min) (point-max) nil))
+  (untabify))
 (defun rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
