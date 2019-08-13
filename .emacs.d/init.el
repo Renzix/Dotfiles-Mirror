@@ -25,8 +25,8 @@
 ;; Some better defaults
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
-      confirm-kill-processes nil
-      indent-tabs-mode nil)
+      confirm-kill-processes nil)
+(setq-default indent-tabs-mode nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -34,6 +34,7 @@
 
 ;; Very useful functions
 (defun evil-insert-undo-line ()
+  "Undo a line in insert mode."
   (interactive)
   (if (looking-back "^" 0)
       (backward-delete-char 1)
@@ -48,12 +49,13 @@
   (delete-other-windows))
 
 (defun create-tags (dir-name)
-  "Create tags file."
+  "Create tags file in DIR-NAME."
   (interactive "DDirectory: ")
   (eshell-command
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
 (defun sudo-edit (&optional arg)
+  "Edits a file with sudo priv.  Optionally take a ARG for the filename."
   (interactive "P")
   (if (or arg (not buffer-file-name))
       (find-file
@@ -61,15 +63,17 @@
                (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 (defun open-emacs-config ()
-  "Opens my emacs config uwu"
+  "Opens my Emacs config uwu."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
+
 (defun indent-buffer ()
+  "Indent the entire buffer and untabifies it."
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil))
   (untabify))
-(defun rename-current-buffer-file ()
+(defun rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
   (interactive)
   (let* ((name (buffer-name))
@@ -99,21 +103,23 @@
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 (defun helm-projectile-find-file-or-project () 
-  "Does switch project if not in a project and find-file if in one"
+  "Does switch project if not in a project and 'find-file' if in one."
   (interactive)
   (if (projectile-project-p)
       (helm-projectile-find-file)
     (helm-projectile-switch-project)))
-(defun helm-projectile-rg-or-project () 
-  "Does switch project if not in a project and find-file if in one"
+(defun helm-projectile-search-or-project () 
+  "Does switch project if not in a project and search all files in said project."
   (interactive)
   (if (projectile-project-p)
-      (helm-projectile-rg)
+      (if (string-equal system-type "windows-nt")
+	  (helm-projectile-ag)
+	(helm-projectile-rg))
     (helm-projectile-switch-project)))
 ;; Window stuff for eshell and vterm
 (defvar my:window-conf nil)
 (defun eshell-toggle (buf-name)
-  "Switches to eshell and saves persp"
+  "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
   (interactive (list (buffer-name)))
   (if (string-equal buf-name "*eshell*")
       (set-window-configuration my:window-conf)
@@ -122,12 +128,12 @@
       (delete-other-windows)
       (eshell))))
 (defun switch-to-vterm ()
-  "Switches to vterm"
+  "Switch to vterm."
   (if (get-buffer "vterm")
       (switch-to-buffer "vterm")
     (vterm)))
 (defun vterm-toggle (buf-name)
-  "Switches to vterm and saves persp"
+  "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
   (interactive (list (buffer-name)))
   (if (string-equal buf-name "vterm")
       (set-window-configuration my:window-conf)
@@ -136,17 +142,14 @@
       (delete-other-windows)
       (switch-to-vterm))))
 (defun previous-newline-without-break-of-line ()
-  "1. move to previous line
-  2. move to end of the line.
-  3. insert newline with index"
+  "Go to previous newline and press enter."
   (interactive)
   (let ((oldpos (point)))
     (previous-line)
     (end-of-line)
     (newline-and-indent)))
 (defun newline-without-break-of-line ()
-  "1. move to end of the line.
-  2. insert newline with index"
+  "Move to end of line and linebreak."
   (interactive)
   (let ((oldpos (point)))
     (end-of-line)
@@ -212,8 +215,7 @@
 ;; If you want evil uncomment this stuff
 (use-package evil
   :init
-  (setq evil-want-keybinding nil ; for evil-collection
-        evil-want-intergration t) ; also for evil-collection
+  (setq evil-want-keybinding nil) ; for evil-collection
   :config 
   (evil-mode 1))
 ;; You probably want this as it allows intergration with a shit ton of things with evil
@@ -277,7 +279,6 @@
         company-minimum-prefix-length 3
         company-tooltip-align-annotations t
         company-idle-delay 1
-        company-dabbrev-downcase 0
         company-tooltip-limit 20
         global-company-mode t)
   :bind (:map company-active-map
@@ -485,6 +486,7 @@
 (general-define-key
  :states '(normal visual)
  "|" 'helm-mini
+ "SPC" 'helm-imenu
  "_" 'evil-jump-backward
  "S" 'helm-projectile-find-file-or-project
  "s" 'helm-find-files
@@ -493,7 +495,7 @@
  "g c r" 'comment-or-uncomment-region
  "g =" 'indent-buffer
  "g p" 'projectile-command-map
- "\\" 'helm-projectile-rg-or-project
+ "\\" 'helm-projectile-search-or-project
  "," 'magit-status
  "Q" 'save-buffers-kill-terminal
  "U" 'undo-tree-visualize
@@ -521,7 +523,7 @@
  '(custom-safe-themes
    '("1d2f406a342499f0098f9388b87d05ec9b28ccb12ca548f4f5fa80ae368235b6" "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" "8c847a5675ece40017de93045a28ebd9ede7b843469c5dec78988717f943952a" "82358261c32ebedfee2ca0f87299f74008a2e5ba5c502bde7aaa15db20ee3731" "e3c87e869f94af65d358aa279945a3daf46f8185f1a5756ca1c90759024593dd" "34c99997eaa73d64b1aaa95caca9f0d64229871c200c5254526d0062f8074693" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" default))
  '(package-selected-packages
-   '(websocket helm-rg helm which-key quelpa-use-package quelpa use-package)))
+   '(websocket quelpa-use-package quelpa use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
