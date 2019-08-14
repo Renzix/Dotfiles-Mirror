@@ -33,6 +33,13 @@
 (display-battery-mode)
 
 ;; Very useful functions
+(defun evil-insert-delete-back-word ()
+  "Delete back a word."
+  (interactive)
+  (delete-region
+   (point)
+   (save-excursion (skip-syntax-backward "^ ") (point))))
+
 (defun evil-insert-undo-line ()
   "Undo a line in insert mode."
   (interactive)
@@ -226,18 +233,16 @@
 (use-package evil
   :init
   (setq evil-want-keybinding nil) ; for evil-collection
-  :config 
-  (evil-mode 1))
+  :config (evil-mode 1))
 ;; You probably want this as it allows intergration with a shit ton of things with evil
 (use-package evil-collection
   :after evil
-  :config
-  (evil-collection-init))
+  :config (evil-collection-init))
 (use-package evil-goggles
   :after evil
-  :config
-  (evil-goggles-mode)
-  (evil-goggles-use-diff-faces))
+  :config (progn
+            (evil-goggles-mode)
+            (evil-goggles-use-diff-faces)))
 (use-package evil-matchit
   :after evil
   :config (global-evil-matchit-mode 1))
@@ -245,30 +250,12 @@
 ;; Must have if you get magit this is one of the only things not covered by evil-collection
 (use-package evil-magit
   :after magit)
-;; :config ; Magit defaults to opening status in the current window better default
-;;   (setq magit-display-buffer-function
-;;      (lambda (buffer)
-;;        (display-buffer
-;;         buffer (if (and (derived-mode-p 'magit-mode)
-;;                         (memq (with-current-buffer buffer major-mode)
-;;                               '(magit-process-mode
-;;                                 magit-revision-mode
-;;                                 magit-diff-mode
-;;                                 magit-stash-mode
-;;                                 magit-status-mode)))
-;;                    nil
-;;                  '(display-buffer-same-window))))))
 (use-package evil-org
   :after '(org evil))
-(use-package evil-space
-  ;; :init (setq evil-space-auto-setup nil)
-  :config (evil-space-mode))
 
 (use-package key-chord
   :after evil
-  :config
-  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
-  (key-chord-mode 1))
+  :config (key-chord-mode 1))
 
 ;; Git intergrations add if you want
 (use-package magit
@@ -492,7 +479,10 @@
   (add-to-list 'load-path "~/Projects/Mine/rencord")
   (require 'rencord))
 
-;; KEYBINDS general is nice 4 evil but useful without it also
+;; General keybindings most of the ones i use are going to be defined here
+;; as a general rule of thumb i am using , instead of C-c and those are going
+;; to be defined in other packages. I think im going to try to make alot of
+;; key-chord keybindings for insert mode
 (use-package general)
 (general-define-key
  :states '(normal visual)
@@ -510,18 +500,18 @@
  "g =" 'indent-buffer
  "g p" 'projectile-command-map
  "\\" 'helm-projectile-search-or-project
- "," 'magit-status
- "Q" 'save-buffers-kill-terminal
  "U" 'undo-tree-visualize
+ "Q" 'save-buffers-kill-terminal
+ (general-chord "ss") 'eshell-toggle
+ (general-chord "vv") 'vterm-toggle
+ (general-chord "``") 'magit-status ; I believe `` and `' are interchangable
  "[ SPC" 'previous-newline-without-break-of-line
  "] SPC" 'newline-without-break-of-line)
 (general-define-key
- :states '(normal visual insert)
- "C-s" 'eshell-toggle
- "C-t" 'vterm-toggle)
-(general-define-key
  :states '(insert)
- "C-u" 'evil-insert-undo-line)
+ (general-chord "UU") 'evil-insert-undo-line
+ (general-chord "uu") 'evil-insert-delete-back-word)
+
 (evil-ex-define-cmd "cfg" 'open-emacs-config)
 (evil-ex-define-cmd "l" 'TeX-command-master)
 (evil-ex-define-cmd "q[uit]" 'delete-window)
