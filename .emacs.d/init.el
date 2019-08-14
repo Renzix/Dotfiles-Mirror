@@ -71,8 +71,9 @@
   "Indent the entire buffer and untabifies it."
   (interactive)
   (save-excursion
-    (indent-region (point-min) (point-max) nil))
-  (untabify))
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max))))
+
 (defun rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -82,7 +83,7 @@
     (if (not (and filename (file-exists-p filename)))
         (error "Buffer '%s' is not visiting a file!" name)
       (let ((new-name (read-file-name "New name: "
-				      (file-name-directory filename) basename nil basename)))
+                                      (file-name-directory filename) basename nil basename)))
         (if (get-buffer new-name)
             (error "A buffer named '%s' already exists!" new-name)
           (rename-file filename new-name 1)
@@ -91,6 +92,7 @@
           (set-buffer-modified-p nil)
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
+
 (defun delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
@@ -102,20 +104,23 @@
           (delete-file filename)
           (message "Deleted file %s" filename)
           (kill-buffer))))))
-(defun helm-projectile-find-file-or-project () 
+
+(defun helm-projectile-find-file-or-project ()
   "Does switch project if not in a project and 'find-file' if in one."
   (interactive)
   (if (projectile-project-p)
       (helm-projectile-find-file)
     (helm-projectile-switch-project)))
-(defun helm-projectile-search-or-project () 
+
+(defun helm-projectile-search-or-project ()
   "Does switch project if not in a project and search all files in said project."
   (interactive)
   (if (projectile-project-p)
       (if (string-equal system-type "windows-nt")
-	  (helm-projectile-ag)
-	(helm-projectile-rg))
+          (helm-projectile-ag)
+        (helm-projectile-rg))
     (helm-projectile-switch-project)))
+
 ;; Window stuff for eshell and vterm
 (defvar my:window-conf nil)
 (defun eshell-toggle (buf-name)
@@ -127,11 +132,13 @@
       (setq my:window-conf (current-window-configuration))
       (delete-other-windows)
       (eshell))))
+
 (defun switch-to-vterm ()
   "Switch to vterm."
   (if (get-buffer "vterm")
       (switch-to-buffer "vterm")
     (vterm)))
+
 (defun vterm-toggle (buf-name)
   "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
   (interactive (list (buffer-name)))
@@ -141,13 +148,15 @@
       (setq my:window-conf (current-window-configuration))
       (delete-other-windows)
       (switch-to-vterm))))
+
 (defun previous-newline-without-break-of-line ()
   "Go to previous newline and press enter."
   (interactive)
   (let ((oldpos (point)))
-    (previous-line)
+    (forward-line -1)
     (end-of-line)
     (newline-and-indent)))
+
 (defun newline-without-break-of-line ()
   "Move to end of line and linebreak."
   (interactive)
@@ -172,6 +181,7 @@
       version-control t
       split-width-threshold 1
       warning-minimum-level :error)
+
 ;; Themes. Changes depending on the day of the week
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -205,8 +215,8 @@
    ("C-x b" . helm-mini))
   :config
   (helm-autoresize-mode t)
-  (setq helm-autoresize-max-height 30)
-  (setq helm-display-header-line nil)
+  (setq helm-autoresize-max-height 30
+        helm-display-header-line nil)
   (helm-mode t))
 (use-package helm-rg
   :after helm)
@@ -310,6 +320,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((org . t)
+     (C . t)
      (latex . t)
      (emacs-lisp . t)
      (sql . t)
@@ -485,6 +496,9 @@
 (use-package general)
 (general-define-key
  :states '(normal visual)
+ "C-c a" 'org-agenda
+ "C-c l" 'org-store-link
+ "C-c c" 'org-capture
  "|" 'helm-mini
  "SPC" 'helm-imenu
  "_" 'evil-jump-backward
