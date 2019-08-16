@@ -32,6 +32,19 @@
 (scroll-bar-mode -1)
 (display-battery-mode)
 
+;; Disables more then 2 windows
+(setq split-width-threshold (- (window-width) 10))
+(setq split-height-threshold nil)
+(defun count-visible-buffers (&optional frame)
+  "Count how many buffers are currently being shown.  Defaults to selected FRAME."
+  (length (mapcar #'window-buffer (window-list frame))))
+(defun do-not-split-more-than-two-windows (window &optional horizontal)
+  "WINDOW HORIZONTAL."
+  (if (and horizontal (> (count-visible-buffers) 1))
+      nil
+    t))
+(advice-add 'window-splittable-p :before-while #'do-not-split-more-than-two-windows)
+
 ;; Very useful functions
 (defun evil-insert-delete-back-word ()
   "Delete back a word."
