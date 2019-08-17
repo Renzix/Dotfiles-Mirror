@@ -37,8 +37,7 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp
      (unless (package-installed-p 'use-package)
        (package-refresh-contents)
-       (package-install 'use-package) 
-       )
+       (package-install 'use-package))
      (require 'use-package)
      (require 'use-package-ensure)
      (setq use-package-always-ensure t)
@@ -57,8 +56,7 @@ Some decisions are inspired by
 
    #+BEGIN_SRC emacs-lisp
      (use-package quelpa
-       :init (setq quelpa-upgrade-p t
-                   quelpa-stable-p t))
+       :init (setq quelpa-upgrade-p t))
      (use-package quelpa-use-package) 
    #+END_SRC
 ** Increase garbage collector threshold
@@ -474,14 +472,15 @@ Some decisions are inspired by
 * Packages
 ** Fuzzy Find
 *** Helm
-    <<helm>>
+    <<helm>> 
+
     Helm is a fuzzy finder search for ANYTHING you want in emacs. It
     also has alot of plugins that work with other plugins. The two
     alternatives is ivy and ido. Helm is the heaviest however it also
     has the most features. Ivy is the simpliest and has the smallest
-    code base. Ivy is also very extendable and easier to work with then
-    helm or ido. Ido comes default with emacs and is said to be the
-    fastest but has a more complex code base then ivy.
+    code base. Ivy is also very extendable and easier to work with
+    then helm or ido. Ido comes default with emacs and is said to be
+    the fastest but has a more complex code base then ivy.
 
     One of the big things that seperates helm from the rest is that
     there are multiple selection options per command. For example if
@@ -497,7 +496,8 @@ Some decisions are inspired by
               helm-display-header-line nil)
         (helm-mode t))
     #+END_SRC
-    <<helm-rg>>
+    <<helm-rg>> 
+
     Helm has a plugin you can use to use ripgrep as the search tool.
 
     #+BEGIN_SRC emacs-lisp
@@ -508,17 +508,19 @@ Some decisions are inspired by
 ** Version Control
 *** Git
 **** Magit
-     <<magit>>
+     <<magit>> 
+     
      Magit is one of the greatest emacs packages to exist. It allows
      the power of git in a tui/gui/cli form depending on what is
      needed. Note this is disabled because it is not [[evil]] enough
 
-     #+BEGIN_SRC emacs-lisp :exports none
+     #+BEGIN_SRC emacs-lisp :tangle no
        (use-package magit)
      #+END_SRC
 
 **** evil-magit
-     <<evil-magit>>
+     <<evil-magit>> 
+
      [[Magit]] isnt [[evil]] enough. It doesnt have standard [[evil]] keybindings
      and rebinds stuff like j and k. evil-magit fixes this by
      rebinding them and this is one of the only packages that isnt
@@ -531,6 +533,7 @@ Some decisions are inspired by
 
 **** Git Timemachine
      <<git-timemachine>>
+
      This package allows you to go back and forth between a files git
      history. 
 
@@ -541,6 +544,7 @@ Some decisions are inspired by
 
 **** Git Gutter
      <<git-gutter>>
+
      Shows changes, deletions or additions from master. Really useful
      to see what you did and what will or wont be committed without
      having to open up [[magit]].
@@ -551,6 +555,7 @@ Some decisions are inspired by
      #+END_SRC
 **** Forge
      <<forge>>
+
      This is in beta but forge allows [[magit]] to talk to github and
      gitlab in order to deal with Pull Requests and Issues.
 
@@ -561,6 +566,7 @@ Some decisions are inspired by
 ** Autocompletion
 *** Company
     <<company>>
+    
     Company is the newest and greatest auto completion engine for
     emacs. Technically these have binds but I am not really counting
     those as real keybindings because its only in effect during a
@@ -588,6 +594,7 @@ Some decisions are inspired by
 ** Projects
 *** Projectile
     <<projectile>><<helm-projectile>>
+    
     Projectile is a way to use specific commands for a specific
     project. A project is any folder with a source control or a
     .projectile file/folder. This is the definition of helm-projectile
@@ -609,6 +616,7 @@ Some decisions are inspired by
 
 *** Treemacs
     <<treemacs>><<treemacs-evil>><<treemacs-projectile>><<treemacs-magit>>
+    
     Treemacs is a tree layout file explorer. Its useful for projects
     and has TONS of plugins to work with other plugins. It works with
     [[evil]],[[projectile]], and [[magit]]. It also should have =all-the-icons= to
@@ -629,6 +637,7 @@ Some decisions are inspired by
 ** Plain Text Modes
 *** Org
     <<org>>
+    
     Org mode is the best thing since sliced bread. It allows you to do
     Outlines, Planning, Capturing, Spreadsheets, Markup, Exporting,
     Literite Programming and much [[https://orgmode.org/][more]].
@@ -651,6 +660,7 @@ Some decisions are inspired by
            (python . t))))
     #+END_SRC
     <<org-rifle>><<helm-org-rifle>>
+    
     Org rifle is a thing that helps me search a org mode multiple org
     mode buffers with [[helm]] I am mainly gonna use it to search for
     locations. Note this requires [[helm]]
@@ -661,11 +671,13 @@ Some decisions are inspired by
     #+END_SRC
 
 **** Org Exports
-     <<ox-pandoc>><<htmlize>><<ox-twbs>>
+     <<ox-pandoc>><<htmlize>><<ox-twbs>><<ox-hugo>>
      There are many plugins you can install to get more exports. Here
      are the 3 that I use frequently. Pandoc is nice for docx, htmlize
-     is for html docs and ox-twbs is for better html docs with
-     twitter-bootstrap.
+     is for html and ox-twbs is for better html docs with
+     twitter-bootstrap. ox-hugo because the markdown specs are awful
+     and very vague so this one works on the static site generator
+     [[https://gohugo.io][hugo]]. See [[https://ox-hugo.scripter.co][here]] for doucmentation on it.
 
      #+BEGIN_SRC emacs-lisp
        (use-package ox-pandoc
@@ -673,6 +685,8 @@ Some decisions are inspired by
        (use-package htmlize
          :after org)
        (use-package ox-twbs
+         :after org)
+       (use-package ox-hugo
          :after org)
      #+END_SRC
 
@@ -688,7 +702,8 @@ Some decisions are inspired by
      #+END_SRC
 *** \LaTeX
 **** Auctex
-     <<auctex>>
+     <<latex>><<auctex>>
+     
      Auctex is supposed to be really good at showing and displaying \LaTeX .
 
      #+BEGIN_SRC emacs-lisp
@@ -706,7 +721,8 @@ Some decisions are inspired by
                                             (output-html "xdg-open")))
          (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
      #+END_SRC
-    
+     <<company-auctex>>
+     
      It also has a [[company]] backend
 
      #+BEGIN_SRC emacs-lisp
@@ -715,9 +731,20 @@ Some decisions are inspired by
          :config (company-auctex-init))
      #+END_SRC
 
+*** Markdown
+    <<markdown>><<markdown-mode>>
+    
+    Markdown is dope and even though I would love to use org-mode for
+    everything sometimes I have to edit/view markdown.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package markdown-mode)
+    #+END_SRC
+
 ** Key Packages
 *** Evil 
     <<evil>>
+    
     Evil is vi emulation in emacs. It is by far the best vi emulation
     outside of vi itself and very extendable/fast.
 
@@ -728,6 +755,7 @@ Some decisions are inspired by
         :config (evil-mode 1))
     #+END_SRC
     <<evil-collection>>
+    
     =evil-collection= is a project which provides evil keybindings for
     almost every popular plugin in emacs outside of a few. Its really
     nice if you want to use evil in buffers where its very emacsy. A
@@ -741,6 +769,7 @@ Some decisions are inspired by
         :config (evil-collection-init))
     #+END_SRC
     <<evil-goggles>>
+    
     =evil-goggles= makes it so that every edit you do is highlighted
     for a brief period of time. This makes it much easier to know
     exactly what you are doing and also looks cool af.
@@ -753,6 +782,7 @@ Some decisions are inspired by
                   (evil-goggles-use-diff-faces)))
     #+END_SRC
     <<evil-machit>>
+    
     =evil-matchit= makes % work for alot of different things. All of
     them are listed [[https://github.com/redguardtoo/evil-matchit][here]].
 
@@ -764,6 +794,7 @@ Some decisions are inspired by
 
 *** key-chord
     <<key-chord>>
+    
     key-chord allows you to make key strokes that only trigger if you
     press them fast enough. This makes for some pretty interesting
     ideas and allows you to bind a nonprefix key to a prefix.
@@ -775,6 +806,7 @@ Some decisions are inspired by
 
 ** vterm
    <<vterm>>
+   
    Very powerful terminal emulator as the project was started by
    neovim to create a actual terminal emulator in neovim. This should
    in theory be just as good. Unfortunately the [[https://melpa.org/][melpa]] package doesnt
@@ -797,7 +829,8 @@ Some decisions are inspired by
     
 * Programming
 ** Autopair
-   
+   <<autopair>>
+
    Autopair just adds a closing ) to your (. It also supports other
    types such as []{}<> and many more.
 
@@ -809,6 +842,7 @@ Some decisions are inspired by
 
 ** LSP
    <<lsp>><<lsp-mode>>
+   
    lsp is basically a server that does syntax checking and stuff. The
    best part about it is its editor independant so that all the
    editors can improve it making it alot better.
@@ -823,6 +857,7 @@ Some decisions are inspired by
        :config (setq lsp-prefer-flymake nil))
    #+END_SRC
    <<lsp-ui>>
+   
    =lsp-ui= adds a inline ui element so you can see it.
 
    #+BEGIN_SRC emacs-lisp
@@ -831,6 +866,7 @@ Some decisions are inspired by
        :hook (lsp-mode-hook . lsp-ui-mode))
    #+END_SRC
    <<company-lsp>>
+   
    lsp also has [[company]] support
 
    #+BEGIN_SRC emacs-lisp
@@ -838,6 +874,7 @@ Some decisions are inspired by
        :after '(company lsp-mode))
    #+END_SRC
    <<dap-mode>>
+
    [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
    debug. Hopefully it gets really good eventually.
 
@@ -854,6 +891,7 @@ Some decisions are inspired by
 ** JVM
 *** Java
     <<java>><<lsp-java>>
+    
     All i have for java is a simple [[lsp]]. Maybe eventually I will hook
     up the entire eclipse server thing too.
    
@@ -863,6 +901,7 @@ Some decisions are inspired by
 
 *** Scala
     <<scala>><<scala-mode>>
+    
     Scala lsp is part of [[lsp-mode]] so you can enable/disable it from
     there. Here is just syntax highlighting for scala.
     
@@ -871,6 +910,7 @@ Some decisions are inspired by
         :mode "\\.s\\(cala\\|bt\\)$")
     #+END_SRC
     <<sbt>><<sbt-mode>>
+    
     this is a mode for [[scala]] package manager sbt.
     
     #+BEGIN_SRC emacs-lisp
@@ -887,6 +927,7 @@ Some decisions are inspired by
 
 ** c and cpp
    <<c>><<cpp>><<irony>>
+   
    This one uses irony server which needs to be installed. Note that
    it can be installed inside emacs. Uses [[lsp]] to do stuff.
 
@@ -897,6 +938,7 @@ Some decisions are inspired by
        :hook (c-mode-hook . irony-mode))
    #+END_SRC
    <<company-irony>>
+   
    Irony also has support for [[company]].
 
    #+BEGIN_SRC emacs-lisp
@@ -904,6 +946,7 @@ Some decisions are inspired by
        :after '(company irony))
    #+END_SRC
    <<irony-eldoc>>
+   
    This allows us to read docs while irony is working.
 
    #+BEGIN_SRC emacs-lisp
@@ -914,6 +957,7 @@ Some decisions are inspired by
 ** Microsoft/Dotnet
 *** csharp
     <<c#>><<csharp>><<csharp-mode>>
+    
     csharp is still growing a emacs presence. For right now omnisharp
     is what we got and its still in beta. We also have standard syntax
     highlighting for it.
@@ -928,6 +972,7 @@ Some decisions are inspired by
     #+END_SRC
 *** powershell
     <<powershell>>
+    
     Just a major mode and simple repl for powershell. Nothing too
     major.
 
@@ -937,6 +982,7 @@ Some decisions are inspired by
 
 ** Rust
    <<rustic>><<rust>>
+   
    Rust support is alright. Most things should work ootb with rustic
    and [[lsp-mode]].
 
@@ -946,6 +992,7 @@ Some decisions are inspired by
 
 ** Python
    <<python>><<lsp-python-ms>>
+   
    We are using [[https://github.com/microsoft/language-server-protocol][microsofts lsp]] because its supposed to be good. Thats
    about it probably should add more. Also this is partially configured
    in [[lsp-mode]]
@@ -956,6 +1003,7 @@ Some decisions are inspired by
 
 ** Haskell
    <<haskell>><<haskell-mode>><<lsp-haskell>><<flycheck-haskell>>
+   
    Haskell is a cool language. I should probably actually learn it one
    day.
 
@@ -969,6 +1017,7 @@ Some decisions are inspired by
 
 ** perl6/Rakudo
    <<perl6>><<rakudo>><<perl6-mode>><<flycheck-perl6>>
+   
    perl6 is such a cool language but its SOO slow. Feels bad. Maybe
    eventually it becomes fast and good enough to be used in
    industry. Note this doesnt have that good syntax highlighting and
@@ -983,6 +1032,7 @@ Some decisions are inspired by
 ** Google
 *** Dart
     <<dart>><<dart-mode>>
+    
     Dart is googles new language. I doubt im ever going to use it but
     it seems cool enough to try out.
 
@@ -992,6 +1042,7 @@ Some decisions are inspired by
     
 ** Flycheck
    <<flycheck>><<flycheck-pos-tip>>
+   
    These are my flycheck settings although most packages have their
    flycheck set to start in their own packages.
 
@@ -1005,6 +1056,7 @@ Some decisions are inspired by
 
 ** imenu
    <<imenu>><<imenu-anywhere>>
+   
    Imenu is nice to have because you can intelligently view and move
    to parts of your program. This one in perticular is able to do it
    anywhere and have helm support.
@@ -1015,8 +1067,21 @@ Some decisions are inspired by
 
 * Misc
 ** Chat programs
+*** Matrix
+    <<matrix>>
+
+    Matrix is nice but I know nobody on it. Too bad the emacs cilient
+    is actually amazing...
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package matrix-client
+        :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+                                :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
+    #+END_SRC
+
 *** Discord
 **** elcord
+     <<elcord>>
      
      elcord is rich presence in discord.
 
@@ -1029,7 +1094,9 @@ Some decisions are inspired by
 
 **** discord-api
      <<discord-api>>
+
      A project i have been working on uwu
+
      #+BEGIN_SRC emacs-lisp
        (when (file-directory-p "~/Projects/Mine/rencord")
          (add-to-list 'load-path "~/Projects/Mine/rencord")
@@ -1038,6 +1105,7 @@ Some decisions are inspired by
     
 ** Beacon
    <<beacon>>
+
    Beacon just shos a light to the location where the cursor moved
    to. Simple as that.
 
@@ -1049,7 +1117,9 @@ Some decisions are inspired by
 ** Help
 *** which-key
     <<which-key>>
+
     which-key shows keybindings as you press them making it much easier.
+
     #+BEGIN_SRC emacs-lisp
       (use-package which-key
         :config (which-key-mode))
@@ -1061,49 +1131,53 @@ Some decisions are inspired by
   to be defined in other packages. I think im going to try to make alot of
   key-chord keybindings for insert mode
     
-  These are my keys for visual and normal mode.
+** Normal/Visual State
 
-  #+BEGIN_SRC emacs-lisp
-    (use-package general)
-    (general-define-key
-     :states '(normal visual)
-     "C-c a" 'org-agenda
-     "C-c l" 'org-store-link
-     "C-c c" 'org-capture
-     "|" 'helm-mini
-     "SPC" 'helm-imenu
-     "_" 'evil-jump-backward
-     "S" 'helm-projectile-find-file-or-project
-     "s" 'helm-find-files
-     ";" 'helm-M-x
-     "g c c" 'comment-line
-     "g c r" 'comment-or-uncomment-region
-     "g =" 'indent-buffer
-     "g p" 'projectile-command-map
-     "\\" 'helm-projectile-search-or-project
-     "U" 'undo-tree-visualize
-     "Q" 'save-buffers-kill-terminal
-     (general-chord "ss") 'eshell-toggle
-     (general-chord "vv") 'vterm-toggle
-     (general-chord "``") 'magit-status)
-  #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package general)
+     (general-define-key
+      :states '(normal visual)
+      "C-c a" 'org-agenda
+      "C-c l" 'org-store-link
+      "C-c c" 'org-capture
+      "|" 'helm-mini
+      "SPC" 'helm-imenu
+      "_" 'evil-jump-backward
+      "S" 'helm-projectile-find-file-or-project
+      "s" 'helm-find-files
+      ";" 'helm-M-x
+      "g c c" 'comment-line
+      "g c r" 'comment-or-uncomment-region
+      "g =" 'indent-buffer
+      "g p" 'projectile-command-map
+      "\\" 'helm-projectile-search-or-project
+      "U" 'undo-tree-visualize
+      "Q" 'save-buffers-kill-terminal
+      (general-chord "ss") 'eshell-toggle
+      (general-chord "vv") 'vterm-toggle
+      (general-chord "``") 'magit-status)
+   #+END_SRC
+  
+** Insert State
 
-  These are my keys for insert mode. They should be specifically
-  about entering or deleting text
+   These are my keys for insert mode. They should be specifically
+   about entering or deleting text
 
-  #+BEGIN_SRC emacs-lisp
-    (general-define-key
-     :states '(insert)
-     (general-chord "UU") 'evil-insert-undo-line
-     (general-chord "uu") 'evil-insert-delete-back-word)
-  #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (general-define-key
+      :states '(insert)
+      (general-chord "UU") 'evil-insert-undo-line
+      (general-chord "uu") 'evil-insert-delete-back-word)
+   #+END_SRC
+  
+** Ex commands
     
-  The rest is my ex commands. These are things that are pretty
-  useful but do not require much context.
+   The rest is my ex commands. These are things that are pretty
+   useful but do not require much context.
 
-  #+BEGIN_SRC emacs-lisp
-    (evil-ex-define-cmd "cfg" 'open-emacs-config)
-    (evil-ex-define-cmd "l" 'TeX-command-master)
-    (evil-ex-define-cmd "q[uit]" 'delete-window)
-    (evil-ex-define-cmd "bd" 'kill-this-buffer)
-  #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (evil-ex-define-cmd "cfg" 'open-emacs-config)
+     (evil-ex-define-cmd "l" 'TeX-command-master)
+     (evil-ex-define-cmd "q[uit]" 'delete-window)
+     (evil-ex-define-cmd "bd" 'kill-this-buffer)
+   #+END_SRC
