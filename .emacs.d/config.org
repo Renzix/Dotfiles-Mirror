@@ -1,6 +1,7 @@
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
 #+TOC: true
+#+PROPERTY: header-args :results silent
 
 Hello This is my second real attempt to make a "Perfect" config. Idk
 if it will ever be good enough but here it is. Note this is available
@@ -21,11 +22,11 @@ Some decisions are inspired by
 
    #+BEGIN_SRC emacs-lisp
      (setq package-enable-at-startup nil)
-(setq package-archives
-      '(("elpa"     . "https://elpa.gnu.org/packages/")
-        ("melpa"        . "https://melpa.org/packages/"))
-      package-archive-priorities
-      '(("elpa"     . 5) ("melpa"        . 10)))
+     (setq package-archives
+           '(("elpa"     . "https://elpa.gnu.org/packages/")
+             ("melpa"        . "https://melpa.org/packages/"))
+           package-archive-priorities
+           '(("elpa"     . 5) ("melpa"        . 10)))
 
    #+END_SRC
 
@@ -38,8 +39,8 @@ Some decisions are inspired by
        (package-refresh-contents)
        (package-install 'use-package) 
        )
-       (require 'use-package)
-(require 'use-package-ensure)
+     (require 'use-package)
+     (require 'use-package-ensure)
      (setq use-package-always-ensure t)
    #+END_SRC
 
@@ -55,11 +56,11 @@ Some decisions are inspired by
    and also it has a [[use-package]] with the keyword :quelpa.
 
    #+BEGIN_SRC emacs-lisp
-    (use-package quelpa
-               :init (setq quelpa-upgrade-p t
-                           quelpa-stable-p t))
-    (use-package quelpa-use-package) 
-    #+END_SRC
+     (use-package quelpa
+       :init (setq quelpa-upgrade-p t
+                   quelpa-stable-p t))
+     (use-package quelpa-use-package) 
+   #+END_SRC
 ** Increase garbage collector threshold
    <<garbage-collection>>
    The default garbage collection threshold is 800kB, increasing this
@@ -508,10 +509,11 @@ Some decisions are inspired by
 *** Git
 **** Magit
      <<magit>>
-     Magit is one of the greatest emacs packages to exist. It allows the
-     power of git in a tui/gui/cli form depending on what is needed.  
+     Magit is one of the greatest emacs packages to exist. It allows
+     the power of git in a tui/gui/cli form depending on what is
+     needed. Note this is disabled because it is not [[evil]] enough
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :exports none
        (use-package magit)
      #+END_SRC
 
@@ -585,25 +587,25 @@ Some decisions are inspired by
 
 ** Projects
 *** Projectile
-   <<projectile>><<helm-projectile>>
-   Projectile is a way to use specific commands for a specific
-   project. A project is any folder with a source control or a
-   .projectile file/folder. This is the definition of helm-projectile
-   however it also installs projectile. This is also intergrated into
-   [[helm]].
+    <<projectile>><<helm-projectile>>
+    Projectile is a way to use specific commands for a specific
+    project. A project is any folder with a source control or a
+    .projectile file/folder. This is the definition of helm-projectile
+    however it also installs projectile. This is also intergrated into
+    [[helm]].
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package helm-projectile
-       :after 'helm
-       :init
-       (setq projectile-enable-caching t
-             projectile-file-exists-local-cache-expire (* 5 60)
-             projectile-file-exists-remote-cache-expire (* 10 60)
-             projectile-switch-project-action 'helm-projectile-find-file
-             projectile-sort-order 'recently-active)
-       :config
-       (projectile-mode t))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm-projectile
+        :after 'helm
+        :init
+        (setq projectile-enable-caching t
+              projectile-file-exists-local-cache-expire (* 5 60)
+              projectile-file-exists-remote-cache-expire (* 10 60)
+              projectile-switch-project-action 'helm-projectile-find-file
+              projectile-sort-order 'recently-active)
+        :config
+        (projectile-mode t))
+    #+END_SRC
 
 *** Treemacs
     <<treemacs>><<treemacs-evil>><<treemacs-projectile>><<treemacs-magit>>
@@ -613,15 +615,15 @@ Some decisions are inspired by
     look pretty :p.
 
     #+BEGIN_SRC emacs-lisp
-    (use-package treemacs)
-    (use-package treemacs-evil
-    :after '(treemacs evil))
-    (use-package treemacs-projectile
-    :after '(treemacs projectile))
-    (use-package treemacs-magit
-    :after '(treemacs magit))
-    ;; Icons for treemacs
-    (use-package all-the-icons)
+      (use-package treemacs)
+      (use-package treemacs-evil
+        :after '(treemacs evil))
+      (use-package treemacs-projectile
+        :after '(treemacs projectile))
+      (use-package treemacs-magit
+        :after '(treemacs magit))
+      ;; Icons for treemacs
+      (use-package all-the-icons)
     #+END_SRC
 
 ** Plain Text Modes
@@ -632,23 +634,32 @@ Some decisions are inspired by
     Literite Programming and much [[https://orgmode.org/][more]].
 
     #+BEGIN_SRC emacs-lisp
-   (use-package org
-   :init
-   (setq-default initial-major-mode 'org-mode
-   initial-scratch-message ""
-   org-src-tab-acts-natively t
-   org-confirm-babel-evaluate nil)
-   (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((org . t)
-   (C . t)
-   (latex . t)
-   (emacs-lisp . t)
-   (sql . t)
-   (shell . t)
-   (python . t))))
+      (use-package org
+        :init
+        (setq-default initial-major-mode 'org-mode
+                      initial-scratch-message ""
+                      org-src-tab-acts-natively t
+                      org-confirm-babel-evaluate nil)
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '((org . t)
+           (C . t)
+           (latex . t)
+           (emacs-lisp . t)
+           (sql . t)
+           (shell . t)
+           (python . t))))
     #+END_SRC
+    <<org-rifle>><<helm-org-rifle>>
+    Org rifle is a thing that helps me search a org mode multiple org
+    mode buffers with [[helm]] I am mainly gonna use it to search for
+    locations. Not this requires [[helm]]
     
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm-org-rifle
+        :after '(org helm))
+    #+END_SRC
+
 **** Org Exports
      <<ox-pandoc>><<htmlize>><<ox-twbs>>
      There are many plugins you can install to get more exports. Here
@@ -657,13 +668,13 @@ Some decisions are inspired by
      twitter-bootstrap.
 
      #+BEGIN_SRC emacs-lisp
-    (use-package ox-pandoc
-    :after org)
-    (use-package htmlize
-    :after org)
-    (use-package ox-twbs
-    :after org)
-#+END_SRC
+       (use-package ox-pandoc
+         :after org)
+       (use-package htmlize
+         :after org)
+       (use-package ox-twbs
+         :after org)
+     #+END_SRC
 
 **** Evil org mode
      <<evil-org>>
@@ -672,37 +683,37 @@ Some decisions are inspired by
      keybindings.
      
      #+BEGIN_SRC emacs-lisp
-    (use-package evil-org
-    :after '(org evil))
-    #+END_SRC
+       (use-package evil-org
+         :after '(org evil))
+     #+END_SRC
 *** \LaTeX
 **** Auctex
      <<auctex>>
      Auctex is supposed to be really good at showing and displaying \LaTeX .
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package tex
-    :ensure auctex
-    :config
-    (setq TeX-auto-save t
-    TeX-parse-self t
-    TeX-view-program-selection '(((output-dvi has-no-display-manager)
-    "dvi2tty")
-    ((output-dvi style-pstricks)
-    "dvips and gv")
-    (output-dvi "xdvi")
-    (output-pdf "mupdf")
-    (output-html "xdg-open")))
-    (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
-    #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (use-package tex
+         :ensure auctex
+         :config
+         (setq TeX-auto-save t
+               TeX-parse-self t
+               TeX-view-program-selection '(((output-dvi has-no-display-manager)
+                                             "dvi2tty")
+                                            ((output-dvi style-pstricks)
+                                             "dvips and gv")
+                                            (output-dvi "xdvi")
+                                            (output-pdf "mupdf")
+                                            (output-html "xdg-open")))
+         (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
+     #+END_SRC
     
-    It also has a [[company]] backend
+     It also has a [[company]] backend
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package company-auctex
-    :after '(company tex)
-    :config (company-auctex-init))
-    #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (use-package company-auctex
+         :after '(company tex)
+         :config (company-auctex-init))
+     #+END_SRC
 
 ** Key Packages
 *** Evil 
@@ -771,18 +782,18 @@ Some decisions are inspired by
    also don't count.
 
    #+BEGIN_SRC emacs-lisp
-    ;;(use-package vterm)
-    (when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-    (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
-    (require 'vterm)
-    (general-define-key
-    :states '(normal)
-    :keymaps 'vterm-mode-map
-    "o" #'evil-insert-resume
-    "a" #'evil-insert-resume
-    "i" #'evil-insert-resume
-    "<return>" #'evil-insert-resume))
-    #+END_SRC
+     ;;(use-package vterm)
+     (when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
+       (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+       (require 'vterm)
+       (general-define-key
+        :states '(normal)
+        :keymaps 'vterm-mode-map
+        "o" #'evil-insert-resume
+        "a" #'evil-insert-resume
+        "i" #'evil-insert-resume
+        "<return>" #'evil-insert-resume))
+   #+END_SRC
     
 * Programming
 ** Autopair
@@ -791,10 +802,10 @@ Some decisions are inspired by
    types such as []{}<> and many more.
 
    #+BEGIN_SRC emacs-lisp
-    ;; Misc programming stuff
-    (use-package autopair
-    :config (autopair-global-mode t))
-    #+END_SRC
+     ;; Misc programming stuff
+     (use-package autopair
+       :config (autopair-global-mode t))
+   #+END_SRC
 
 ** LSP
    <<lsp>><<lsp-mode>>
@@ -803,42 +814,42 @@ Some decisions are inspired by
    editors can improve it making it alot better.
    
    #+BEGIN_SRC emacs-lisp
-    (use-package lsp-mode
-    :hook
-    ((scala-mode . lsp)
-    (java-mode . lsp)
-    (python-mode . lsp)
-    (c-mode . lsp))
-    :config (setq lsp-prefer-flymake nil))
-    #+END_SRC
-    <<lsp-ui>>
-    =lsp-ui= adds a inline ui element so you can see it.
+     (use-package lsp-mode
+       :hook
+       ((scala-mode . lsp)
+        (java-mode . lsp)
+        (python-mode . lsp)
+        (c-mode . lsp))
+       :config (setq lsp-prefer-flymake nil))
+   #+END_SRC
+   <<lsp-ui>>
+   =lsp-ui= adds a inline ui element so you can see it.
 
    #+BEGIN_SRC emacs-lisp
-    (use-package lsp-ui
-    :after lsp-mode
-    :hook (lsp-mode-hook . lsp-ui-mode))
-    #+END_SRC
-    <<company-lsp>>
-    lsp also has [[company]] support
+     (use-package lsp-ui
+       :after lsp-mode
+       :hook (lsp-mode-hook . lsp-ui-mode))
+   #+END_SRC
+   <<company-lsp>>
+   lsp also has [[company]] support
 
    #+BEGIN_SRC emacs-lisp
-    (use-package company-lsp
-    :after '(company lsp-mode))
-    #+END_SRC
-    <<dap-mode>>
-    [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
-    debug. Hopefully it gets really good eventually.
+     (use-package company-lsp
+       :after '(company lsp-mode))
+   #+END_SRC
+   <<dap-mode>>
+   [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
+   debug. Hopefully it gets really good eventually.
 
    #+BEGIN_SRC emacs-lisp
-    (use-package dap-mode
-    :config
-    (dap-mode 1)
-    (dap-ui-mode 1)
-    (require 'dap-python)
-    (require 'dap-java)
-    (require 'dap-lldb))
-    #+END_SRC
+     (use-package dap-mode
+       :config
+       (dap-mode 1)
+       (dap-ui-mode 1)
+       (require 'dap-python)
+       (require 'dap-java)
+       (require 'dap-lldb))
+   #+END_SRC
 
 ** JVM
 *** Java
@@ -847,7 +858,7 @@ Some decisions are inspired by
     up the entire eclipse server thing too.
    
     #+BEGIN_SRC emacs-lisp
-    (use-package lsp-java)
+      (use-package lsp-java)
     #+END_SRC
 
 *** Scala
@@ -856,22 +867,22 @@ Some decisions are inspired by
     there. Here is just syntax highlighting for scala.
     
     #+BEGIN_SRC emacs-lisp
-    (use-package scala-mode
-    :mode "\\.s\\(cala\\|bt\\)$")
+      (use-package scala-mode
+        :mode "\\.s\\(cala\\|bt\\)$")
     #+END_SRC
     <<sbt>><<sbt-mode>>
     this is a mode for [[scala]] package manager sbt.
     
     #+BEGIN_SRC emacs-lisp
-    (use-package sbt-mode
-    :commands sbt-start sbt-command
-    :config
-    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-    ;; allows using SPACE when in the minibuffer
-    (substitute-key-definition
-    'minibuffer-complete-word
-    'self-insert-command
-    minibuffer-local-completion-map))
+      (use-package sbt-mode
+        :commands sbt-start sbt-command
+        :config
+        ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+        ;; allows using SPACE when in the minibuffer
+        (substitute-key-definition
+         'minibuffer-complete-word
+         'self-insert-command
+         minibuffer-local-completion-map))
     #+END_SRC
 
 ** c and cpp
@@ -879,41 +890,41 @@ Some decisions are inspired by
    This one uses irony server which needs to be installed. Note that
    it can be installed inside emacs. Uses [[lsp]] to do stuff.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package irony
-    :hook (c++-mode-hook . irony-mode)
-    :hook (objc-mode-hook . irony-mode)
-    :hook (c-mode-hook . irony-mode))
-    #+END_SRC
-    <<company-irony>>
-    Irony also has support for [[company]].
+   #+BEGIN_SRC emacs-lisp
+     (use-package irony
+       :hook (c++-mode-hook . irony-mode)
+       :hook (objc-mode-hook . irony-mode)
+       :hook (c-mode-hook . irony-mode))
+   #+END_SRC
+   <<company-irony>>
+   Irony also has support for [[company]].
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package company-irony
-    :after '(company irony))
-    #+END_SRC
-    <<irony-eldoc>>
-    This allows us to read docs while irony is working.
+   #+BEGIN_SRC emacs-lisp
+     (use-package company-irony
+       :after '(company irony))
+   #+END_SRC
+   <<irony-eldoc>>
+   This allows us to read docs while irony is working.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package irony-eldoc
-    :after '(irony))
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package irony-eldoc
+       :after '(irony))
+   #+END_SRC
 
 ** Microsoft/Dotnet
 *** csharp
-   <<c#>><<csharp>><<csharp-mode>>
-   csharp is still growing a emacs presence. For right now omnisharp
-   is what we got and its still in beta. We also have standard syntax
-   highlighting for it.
+    <<c#>><<csharp>><<csharp-mode>>
+    csharp is still growing a emacs presence. For right now omnisharp
+    is what we got and its still in beta. We also have standard syntax
+    highlighting for it.
 
     #+BEGIN_SRC emacs-lisp
-    (use-package csharp-mode)
-    (use-package omnisharp
-    :hook (csharp-mode-hook . omnisharp-mode)
-    :config
-    (add-to-list 'company-backends 'company-omnisharp)
-    (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
+      (use-package csharp-mode)
+      (use-package omnisharp
+        :hook (csharp-mode-hook . omnisharp-mode)
+        :config
+        (add-to-list 'company-backends 'company-omnisharp)
+        (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
     #+END_SRC
 *** powershell
     <<powershell>>
@@ -921,7 +932,7 @@ Some decisions are inspired by
     major.
 
     #+BEGIN_SRC emacs-lisp
-    (use-package powershell)
+      (use-package powershell)
     #+END_SRC
 
 ** Rust
@@ -929,9 +940,9 @@ Some decisions are inspired by
    Rust support is alright. Most things should work ootb with rustic
    and [[lsp-mode]].
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package rustic)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package rustic)
+   #+END_SRC
 
 ** Python
    <<python>><<lsp-python-ms>>
@@ -939,22 +950,22 @@ Some decisions are inspired by
    about it probably should add more. Also this is partially configured
    in [[lsp-mode]]
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package lsp-python-ms)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package lsp-python-ms)
+   #+END_SRC
 
 ** Haskell
    <<haskell>><<haskell-mode>><<lsp-haskell>><<flycheck-haskell>>
    Haskell is a cool language. I should probably actually learn it one
    day.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package haskell-mode)
-    (use-package lsp-haskell
-    :after lsp-mode)
-    (use-package flycheck-haskell
-    :after flycheck)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package haskell-mode)
+     (use-package lsp-haskell
+       :after lsp-mode)
+     (use-package flycheck-haskell
+       :after flycheck)
+   #+END_SRC
 
 ** perl6/Rakudo
    <<perl6>><<rakudo>><<perl6-mode>><<flycheck-perl6>>
@@ -963,20 +974,20 @@ Some decisions are inspired by
    industry. Note this doesnt have that good syntax highlighting and
    no lsp.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package perl6-mode)
-    (use-package flycheck-perl6
-    :after flycheck)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package perl6-mode)
+     (use-package flycheck-perl6
+       :after flycheck)
+   #+END_SRC
 
 ** Google
 *** Dart
-   <<dart>><<dart-mode>>
-   Dart is googles new language. I doubt im ever going to use it but
-   it seems cool enough to try out.
+    <<dart>><<dart-mode>>
+    Dart is googles new language. I doubt im ever going to use it but
+    it seems cool enough to try out.
 
     #+BEGIN_SRC emacs-lisp
-    (use-package dart-mode)
+      (use-package dart-mode)
     #+END_SRC
     
 ** Flycheck
@@ -984,13 +995,13 @@ Some decisions are inspired by
    These are my flycheck settings although most packages have their
    flycheck set to start in their own packages.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package flycheck
-    :init (global-flycheck-mode))
-    (use-package flycheck-pos-tip
-    :after flycheck
-    :config (flycheck-pos-tip-mode))
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :init (global-flycheck-mode))
+     (use-package flycheck-pos-tip
+       :after flycheck
+       :config (flycheck-pos-tip-mode))
+   #+END_SRC
 
 ** imenu
    <<imenu>><<imenu-anywhere>>
@@ -998,9 +1009,9 @@ Some decisions are inspired by
    to parts of your program. This one in perticular is able to do it
    anywhere and have helm support.
   
-    #+BEGIN_SRC emacs-lisp
-    (use-package imenu-anywhere)
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package imenu-anywhere)
+   #+END_SRC
 
 * Misc
 ** Chat programs
@@ -1009,90 +1020,90 @@ Some decisions are inspired by
      
      elcord is rich presence in discord.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package elcord
-    :config
-    (setq elcord-use-major-mode-as-main-icon t)
-    (elcord-mode))
-    #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (use-package elcord
+         :config
+         (setq elcord-use-major-mode-as-main-icon t)
+         (elcord-mode))
+     #+END_SRC
 
 **** discord-api
-   <<discord-api>>
-   A project i have been working on uwu
-    #+BEGIN_SRC emacs-lisp
-    (when (file-directory-p "~/Projects/Mine/rencord")
-    (add-to-list 'load-path "~/Projects/Mine/rencord")
-    (require 'rencord))
-    #+END_SRC
+     <<discord-api>>
+     A project i have been working on uwu
+     #+BEGIN_SRC emacs-lisp
+       (when (file-directory-p "~/Projects/Mine/rencord")
+         (add-to-list 'load-path "~/Projects/Mine/rencord")
+         (require 'rencord))
+     #+END_SRC
     
 ** Beacon
    <<beacon>>
    Beacon just shos a light to the location where the cursor moved
    to. Simple as that.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package beacon
-    :config (beacon-mode 1))
-    #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package beacon
+       :config (beacon-mode 1))
+   #+END_SRC
     
 ** Help
 *** which-key
     <<which-key>>
     which-key shows keybindings as you press them making it much easier.
     #+BEGIN_SRC emacs-lisp
-    (use-package which-key
-    :config (which-key-mode))
+      (use-package which-key
+        :config (which-key-mode))
     #+END_SRC
 
 * Keybindings
-    General keybindings most of the ones i use are going to be defined here
-    as a general rule of thumb i am using , instead of C-c and those are going
-    to be defined in other packages. I think im going to try to make alot of
-    key-chord keybindings for insert mode
+  General keybindings most of the ones i use are going to be defined here
+  as a general rule of thumb i am using , instead of C-c and those are going
+  to be defined in other packages. I think im going to try to make alot of
+  key-chord keybindings for insert mode
     
-    These are my keys for visual and normal mode.
+  These are my keys for visual and normal mode.
 
-    #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
     (use-package general)
     (general-define-key
-    :states '(normal visual)
-    "C-c a" 'org-agenda
-    "C-c l" 'org-store-link
-    "C-c c" 'org-capture
-    "|" 'helm-mini
-    "SPC" 'helm-imenu
-    "_" 'evil-jump-backward
-    "S" 'helm-projectile-find-file-or-project
-    "s" 'helm-find-files
-    ";" 'helm-M-x
-    "g c c" 'comment-line
-    "g c r" 'comment-or-uncomment-region
-    "g =" 'indent-buffer
-    "g p" 'projectile-command-map
-    "\\" 'helm-projectile-search-or-project
-    "U" 'undo-tree-visualize
-    "Q" 'save-buffers-kill-terminal
-    (general-chord "ss") 'eshell-toggle
-    (general-chord "vv") 'vterm-toggle
-    (general-chord "``") 'magit-status)
-    #+END_SRC
+     :states '(normal visual)
+     "C-c a" 'org-agenda
+     "C-c l" 'org-store-link
+     "C-c c" 'org-capture
+     "|" 'helm-mini
+     "SPC" 'helm-imenu
+     "_" 'evil-jump-backward
+     "S" 'helm-projectile-find-file-or-project
+     "s" 'helm-find-files
+     ";" 'helm-M-x
+     "g c c" 'comment-line
+     "g c r" 'comment-or-uncomment-region
+     "g =" 'indent-buffer
+     "g p" 'projectile-command-map
+     "\\" 'helm-projectile-search-or-project
+     "U" 'undo-tree-visualize
+     "Q" 'save-buffers-kill-terminal
+     (general-chord "ss") 'eshell-toggle
+     (general-chord "vv") 'vterm-toggle
+     (general-chord "``") 'magit-status)
+  #+END_SRC
 
-    These are my keys for insert mode. They should be specifically
-    about entering or deleting text
+  These are my keys for insert mode. They should be specifically
+  about entering or deleting text
 
-    #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
     (general-define-key
-    :states '(insert)
-    (general-chord "UU") 'evil-insert-undo-line
-    (general-chord "uu") 'evil-insert-delete-back-word)
-    #+END_SRC
+     :states '(insert)
+     (general-chord "UU") 'evil-insert-undo-line
+     (general-chord "uu") 'evil-insert-delete-back-word)
+  #+END_SRC
     
-    The rest is my ex commands. These are things that are pretty
-    useful but do not require much context.
+  The rest is my ex commands. These are things that are pretty
+  useful but do not require much context.
 
-    #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
     (evil-ex-define-cmd "cfg" 'open-emacs-config)
     (evil-ex-define-cmd "l" 'TeX-command-master)
     (evil-ex-define-cmd "q[uit]" 'delete-window)
     (evil-ex-define-cmd "bd" 'kill-this-buffer)
-    #+END_SRC
+  #+END_SRC
