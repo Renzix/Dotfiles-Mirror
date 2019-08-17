@@ -653,7 +653,7 @@ Some decisions are inspired by
     <<org-rifle>><<helm-org-rifle>>
     Org rifle is a thing that helps me search a org mode multiple org
     mode buffers with [[helm]] I am mainly gonna use it to search for
-    locations. Not this requires [[helm]]
+    locations. Note this requires [[helm]]
     
     #+BEGIN_SRC emacs-lisp
       (use-package helm-org-rifle
