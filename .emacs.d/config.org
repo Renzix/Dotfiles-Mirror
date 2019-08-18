@@ -520,7 +520,7 @@ Some decisions are inspired by
      the power of git in a tui/gui/cli form depending on what is
      needed. Note this is disabled because it is not [[evil]] enough
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (use-package magit)
      #+END_SRC
 
@@ -530,7 +530,7 @@ Some decisions are inspired by
      This is in beta but forge allows [[magit]] to talk to github and
      gitlab in order to deal with Pull Requests and Issues.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp
        (use-package forge
          :after magit)
      #+END_SRC
@@ -540,10 +540,13 @@ Some decisions are inspired by
      [[Magit]] isnt [[evil]] enough. It doesnt have standard [[evil]] keybindings
      and rebinds stuff like j and k. evil-magit fixes this by
      rebinding them and this is one of the only packages that isnt
-     supported by [[evil-collection]].
+     supported by [[evil-collection]]. For some fucking reason this has to
+     load before evil so it also needs evil-want-keybinding for
+     [[evil-collection]].
 
      #+BEGIN_SRC emacs-lisp
-       (use-package evil-magit)
+       (use-package evil-magit
+         :init (setq evil-want-keybinding nil))
      #+END_SRC
 
 **** Git Timemachine
@@ -772,8 +775,6 @@ Some decisions are inspired by
 
     #+BEGIN_SRC emacs-lisp
       (use-package evil
-        :init
-        (setq evil-want-keybinding nil) ; for evil-collection
         :config (evil-mode 1))
     #+END_SRC
     <<evil-collection>>
@@ -783,11 +784,12 @@ Some decisions are inspired by
     nice if you want to use evil in buffers where its very emacsy. A
     list of all keybindings and supported packages can be found
     [[https://github.com/emacs-evil/evil-collection][here]]. One of the nonsupported packages is magit so here is
-    [[file:config.org::*evil-magit][evil-magit]] config.
+    [[file:config.org::*evil-magit][evil-magit]] config. Also [[evil-magit]] has to load before evil so it
+    needs to set evil-want-keybinding to nil.
 
     #+BEGIN_SRC emacs-lisp
       (use-package evil-collection
-        :after evil
+        :after '(evil evil-magit)
         :config (evil-collection-init))
     #+END_SRC
     <<evil-goggles>>
@@ -838,16 +840,16 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp
      ;;(use-package vterm)
      (eval-after-load "general"
-     '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-       (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
-       (require 'vterm)
-       (general-define-key
-        :states '(normal)
-        :keymaps 'vterm-mode-map
-        "o" #'evil-insert-resume
-        "a" #'evil-insert-resume
-        "i" #'evil-insert-resume
-        "<return>" #'evil-insert-resume)))
+       '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
+          (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+          (require 'vterm)
+          (general-define-key
+           :states '(normal)
+           :keymaps 'vterm-mode-map
+           "o" #'evil-insert-resume
+           "a" #'evil-insert-resume
+           "i" #'evil-insert-resume
+           "<return>" #'evil-insert-resume)))
    #+END_SRC
     
 ** Templates/Snippets
@@ -1185,32 +1187,32 @@ Some decisions are inspired by
   to be defined in other packages. I think im going to try to make alot of
   key-chord keybindings for insert mode
   
-#+BEGIN_SRC emacs-lisp
-(use-package general)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package general)
+  #+END_SRC
     
 ** Normal/Visual State
 
    #+BEGIN_SRC emacs-lisp
      (eval-after-load "general"
-     '(general-define-key
-      :states '(normal visual)
-      "|" 'helm-mini
-      "SPC" 'helm-imenu
-      "_" 'evil-jump-backward
-      "S" 'helm-projectile-find-file-or-project
-      "s" 'helm-find-files
-      ";" 'helm-M-x
-      "g c c" 'comment-line
-      "g c r" 'comment-or-uncomment-region
-      "g =" 'indent-buffer
-      "g p" 'projectile-command-map
-      "\\" 'helm-projectile-search-or-project
-      "U" 'undo-tree-visualize
-      "Q" 'save-buffers-kill-terminal
-      (general-chord "ss") 'eshell-toggle
-      (general-chord "vv") 'vterm-toggle
-      (general-chord "``") 'magit-status))
+       '(general-define-key
+         :states '(normal visual)
+         "|" 'helm-mini
+         "SPC" 'helm-imenu
+         "_" 'evil-jump-backward
+         "S" 'helm-projectile-find-file-or-project
+         "s" 'helm-find-files
+         ";" 'helm-M-x
+         "g c c" 'comment-line
+         "g c r" 'comment-or-uncomment-region
+         "g =" 'indent-buffer
+         "g p" 'projectile-command-map
+         "\\" 'helm-projectile-search-or-project
+         "U" 'undo-tree-visualize
+         "Q" 'save-buffers-kill-terminal
+         (general-chord "ss") 'eshell-toggle
+         (general-chord "vv") 'vterm-toggle
+         (general-chord "``") 'magit-status))
    #+END_SRC
   
 ** Insert State
@@ -1220,10 +1222,10 @@ Some decisions are inspired by
 
    #+BEGIN_SRC emacs-lisp
      (eval-after-load "general"
-     (general-define-key
-      :states '(insert)
-      (general-chord "UU") 'evil-insert-undo-line
-      (general-chord "uu") 'evil-insert-delete-back-word))
+       (general-define-key
+        :states '(insert)
+        (general-chord "UU") 'evil-insert-undo-line
+        (general-chord "uu") 'evil-insert-delete-back-word))
    #+END_SRC
   
 ** Ex commands
