@@ -18,6 +18,7 @@ Some decisions are inspired by
 
 ** Configure package sources
    <<melpa>>
+
    Melpa is nice because its more bleeding edge.
 
    #+BEGIN_SRC emacs-lisp
@@ -32,6 +33,7 @@ Some decisions are inspired by
 
 ** Bootstrap use-package
    <<use-package>>
+
    install =use-package= if not already installed.
 
    #+BEGIN_SRC emacs-lisp
@@ -50,6 +52,7 @@ Some decisions are inspired by
    #+END_SRC
 ** Add quelpa
    <<quelpa>><<quelpa-use-package>>
+
    Quelpa is another way to get packages and it basically wraps around
    git repositories. Its really nice if you want bleeding edge stuff
    and also it has a [[use-package]] with the keyword :quelpa.
@@ -61,6 +64,7 @@ Some decisions are inspired by
    #+END_SRC
 ** Increase garbage collector threshold
    <<garbage-collection>>
+
    The default garbage collection threshold is 800kB, increasing this
    to 10MB for startup increases speed.
 
@@ -77,6 +81,7 @@ Some decisions are inspired by
 
 ** Set custom settings to load in own file
    <<custom>>
+
    This stops emacs adding customised settings to =init.el=. I try to
    avoid using customize anyway, preferring programmatic control of
    variables. Creating it as a temporary file effectively disables it
@@ -175,13 +180,13 @@ Some decisions are inspired by
               (load-theme 'doom-opera t))
              ((string= "2" renzix-weekday) ;; Tuesday
               (load-theme 'apropospriate-dark t))
-             ((string= "3" renzix-weekday) ;; Wednsday
+             ((string= "3" renzix-weekday) ;; Wednesday
               (load-theme 'doom-molokai t))
              ((string= "4" renzix-weekday) ;; Thursday
               (load-theme 'doom-nord t))
              ((string= "5" renzix-weekday) ;; Friday
               (load-theme 'monokai t))
-             ((string= "6" renzix-weekday) ;; Saterday
+             ((string= "6" renzix-weekday) ;; Saturday
               (load-theme 'doom-one t))))
    #+END_SRC   
 
@@ -193,8 +198,8 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp
      (setq vc-follow-symlinks t)
    #+END_SRC
-   
    <<indent-default>>
+
    Use spaces instead of tabs by default. Either is fine to me however
    I have to choose one and only one.
 
@@ -383,7 +388,7 @@ Some decisions are inspired by
     I like using eshell and vterm but dealing with emacs buffers is
     actually insane. I made a coupld simple functions to switch to a
     vterm/eshell window and then be able to switch back. This makes
-    then fullscreen which is hella nice. This is the variable that
+    them fullscreen which is hella nice. This is the variable that
     stores the perspective.
 
     #+BEGIN_SRC emacs-lisp
@@ -469,7 +474,7 @@ Some decisions are inspired by
         (find-file "~/Dotfiles/.emacs.d/config.org"))
     #+END_SRC
 
-* Packages
+* Core
 ** Fuzzy Find
 *** Helm
     <<helm>> 
@@ -518,6 +523,16 @@ Some decisions are inspired by
        (use-package magit)
      #+END_SRC
 
+**** Forge
+     <<forge>>
+
+     This is in beta but forge allows [[magit]] to talk to github and
+     gitlab in order to deal with Pull Requests and Issues.
+
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (use-package forge
+         :after magit)
+     #+END_SRC
 **** evil-magit
      <<evil-magit>> 
 
@@ -528,7 +543,8 @@ Some decisions are inspired by
 
      #+BEGIN_SRC emacs-lisp
        (use-package evil-magit 
-         :after '(magit evil))
+         :after '(magit evil)
+         :config (evil-magit-init))
      #+END_SRC
 
 **** Git Timemachine
@@ -553,16 +569,6 @@ Some decisions are inspired by
        (use-package git-gutter 
          :config (global-git-gutter-mode)) 
      #+END_SRC
-**** Forge
-     <<forge>>
-
-     This is in beta but forge allows [[magit]] to talk to github and
-     gitlab in order to deal with Pull Requests and Issues.
-
-     #+BEGIN_SRC emacs-lisp
-       (use-package forge
-         :after magit)
-     #+END_SRC
 ** Autocompletion
 *** Company
     <<company>>
@@ -577,7 +583,7 @@ Some decisions are inspired by
         :init
         (add-hook 'after-init-hook 'global-company-mode)
         (setq company-require-match 'never
-              company-minimum-prefix-length 3
+              company-minimum-prefix-length 2
               company-tooltip-align-annotations t
               company-idle-delay 1
               company-tooltip-limit 20
@@ -590,6 +596,22 @@ Some decisions are inspired by
                     ("C-SPC" . company-complete-selection)
                     ("TAB" . company-complete-common-or-cycle)))
     #+END_SRC
+    
+    This is also intergrated with [[yasnippet]] for a whole bunhc of
+    functions.
+     
+    #+BEGIN_SRC emacs-lisp
+      (defun company-mode-with-yas (backend)
+        (if (and (listp backend) (member 'company-yasnippet backend))
+            backend
+          (append (if (consp backend) backend (list backend))
+                  '(:with company-yasnippet))))
+
+      (with-eval-after-load "company"
+        (with-eval-after-load "yasnippet"
+          (setq company-backends (mapcar #'company-mode-with-yas company-backends))))
+    #+END_SRC
+
 
 ** Projects
 *** Projectile
@@ -730,6 +752,7 @@ Some decisions are inspired by
          :after '(company tex)
          :config (company-auctex-init))
      #+END_SRC
+     
 
 *** Markdown
     <<markdown>><<markdown-mode>>
@@ -827,245 +850,37 @@ Some decisions are inspired by
         "<return>" #'evil-insert-resume))
    #+END_SRC
     
-* Programming
-** Autopair
-   <<autopair>>
+** Templates/Snippets
+   <<yasnippet>>
 
-   Autopair just adds a closing ) to your (. It also supports other
-   types such as []{}<> and many more.
-
-   #+BEGIN_SRC emacs-lisp
-     ;; Misc programming stuff
-     (use-package autopair
-       :config (autopair-global-mode t))
-   #+END_SRC
-
-** LSP
-   <<lsp>><<lsp-mode>>
-   
-   lsp is basically a server that does syntax checking and stuff. The
-   best part about it is its editor independant so that all the
-   editors can improve it making it alot better.
-   
-   #+BEGIN_SRC emacs-lisp
-     (use-package lsp-mode
-       :hook
-       ((scala-mode . lsp)
-        (java-mode . lsp)
-        (python-mode . lsp)
-        (c-mode . lsp))
-       :config (setq lsp-prefer-flymake nil))
-   #+END_SRC
-   <<lsp-ui>>
-   
-   =lsp-ui= adds a inline ui element so you can see it.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package lsp-ui
-       :after lsp-mode
-       :hook (lsp-mode-hook . lsp-ui-mode))
-   #+END_SRC
-   <<company-lsp>>
-   
-   lsp also has [[company]] support
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package company-lsp
-       :after '(company lsp-mode))
-   #+END_SRC
-   <<dap-mode>>
-
-   [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
-   debug. Hopefully it gets really good eventually.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package dap-mode
-       :config
-       (dap-mode 1)
-       (dap-ui-mode 1)
-       (require 'dap-python)
-       (require 'dap-java)
-       (require 'dap-lldb))
-   #+END_SRC
-
-** JVM
-*** Java
-    <<java>><<lsp-java>>
+   Yasnippets is possibly cool? It's supposed to intergrate with
+   [[company]] mode if I add some code which seems cool. All this does is
+   add the abillity to add predefined definitions in a whole bunch of
+   languages.
     
-    All i have for java is a simple [[lsp]]. Maybe eventually I will hook
-    up the entire eclipse server thing too.
-   
-    #+BEGIN_SRC emacs-lisp
-      (use-package lsp-java)
-    #+END_SRC
-
-*** Scala
-    <<scala>><<scala-mode>>
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :config (yas-global-mode))
+   #+END_SRC
+   <<yasnippet-snippets>>
     
-    Scala lsp is part of [[lsp-mode]] so you can enable/disable it from
-    there. Here is just syntax highlighting for scala.
-    
-    #+BEGIN_SRC emacs-lisp
-      (use-package scala-mode
-        :mode "\\.s\\(cala\\|bt\\)$")
-    #+END_SRC
-    <<sbt>><<sbt-mode>>
-    
-    this is a mode for [[scala]] package manager sbt.
-    
-    #+BEGIN_SRC emacs-lisp
-      (use-package sbt-mode
-        :commands sbt-start sbt-command
-        :config
-        ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-        ;; allows using SPACE when in the minibuffer
-        (substitute-key-definition
-         'minibuffer-complete-word
-         'self-insert-command
-         minibuffer-local-completion-map))
-    #+END_SRC
-
-** c and cpp
-   <<c>><<cpp>><<irony>>
-   
-   This one uses irony server which needs to be installed. Note that
-   it can be installed inside emacs. Uses [[lsp]] to do stuff.
+   Yasnippets requires another package for some predefined snippets so
+   I can actually use it without defining it myself.
 
    #+BEGIN_SRC emacs-lisp
-     (use-package irony
-       :hook (c++-mode-hook . irony-mode)
-       :hook (objc-mode-hook . irony-mode)
-       :hook (c-mode-hook . irony-mode))
+     (use-package yasnippet-snippets
+       :config (yasnippet-snippets-initialize))
    #+END_SRC
-   <<company-irony>>
-   
-   Irony also has support for [[company]].
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package company-irony
-       :after '(company irony))
-   #+END_SRC
-   <<irony-eldoc>>
-   
-   This allows us to read docs while irony is working.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package irony-eldoc
-       :after '(irony))
-   #+END_SRC
-
-** Microsoft/Dotnet
-*** csharp
-    <<c#>><<csharp>><<csharp-mode>>
     
-    csharp is still growing a emacs presence. For right now omnisharp
-    is what we got and its still in beta. We also have standard syntax
-    highlighting for it.
+*** Gentoo Snippets
+    
+    Gentoo comes with a skeleton for ebuilds which is nice. I would
+    like to include it by default.
 
     #+BEGIN_SRC emacs-lisp
-      (use-package csharp-mode)
-      (use-package omnisharp
-        :hook (csharp-mode-hook . omnisharp-mode)
-        :config
-        (add-to-list 'company-backends 'company-omnisharp)
-        (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
-    #+END_SRC
-*** powershell
-    <<powershell>>
-    
-    Just a major mode and simple repl for powershell. Nothing too
-    major.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package powershell)
+      (add-hook 'ebuild-mode-hook 'ebuild-mode-insert-skeleton)
     #+END_SRC
 
-** Rust
-   <<rustic>><<rust>>
-   
-   Rust support is alright. Most things should work ootb with rustic
-   and [[lsp-mode]].
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package rustic)
-   #+END_SRC
-
-** Python
-   <<python>><<lsp-python-ms>>
-   
-   We are using [[https://github.com/microsoft/language-server-protocol][microsofts lsp]] because its supposed to be good. Thats
-   about it probably should add more. Also this is partially configured
-   in [[lsp-mode]]
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package lsp-python-ms)
-   #+END_SRC
-
-** Haskell
-   <<haskell>><<haskell-mode>><<lsp-haskell>><<flycheck-haskell>>
-   
-   Haskell is a cool language. I should probably actually learn it one
-   day.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package haskell-mode)
-     (use-package lsp-haskell
-       :after lsp-mode)
-     (use-package flycheck-haskell
-       :after flycheck)
-   #+END_SRC
-
-** perl6/Rakudo
-   <<perl6>><<rakudo>><<perl6-mode>><<flycheck-perl6>>
-   
-   perl6 is such a cool language but its SOO slow. Feels bad. Maybe
-   eventually it becomes fast and good enough to be used in
-   industry. Note this doesnt have that good syntax highlighting and
-   no lsp.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package perl6-mode)
-     (use-package flycheck-perl6
-       :after flycheck)
-   #+END_SRC
-
-** Google
-*** Dart
-    <<dart>><<dart-mode>>
-    
-    Dart is googles new language. I doubt im ever going to use it but
-    it seems cool enough to try out.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package dart-mode)
-    #+END_SRC
-    
-** Flycheck
-   <<flycheck>><<flycheck-pos-tip>>
-   
-   These are my flycheck settings although most packages have their
-   flycheck set to start in their own packages.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package flycheck
-       :init (global-flycheck-mode))
-     (use-package flycheck-pos-tip
-       :after flycheck
-       :config (flycheck-pos-tip-mode))
-   #+END_SRC
-
-** imenu
-   <<imenu>><<imenu-anywhere>>
-   
-   Imenu is nice to have because you can intelligently view and move
-   to parts of your program. This one in perticular is able to do it
-   anywhere and have helm support.
-  
-   #+BEGIN_SRC emacs-lisp
-     (use-package imenu-anywhere)
-   #+END_SRC
-
-* Misc
 ** Chat programs
 *** Matrix
     <<matrix>>
@@ -1125,7 +940,246 @@ Some decisions are inspired by
         :config (which-key-mode))
     #+END_SRC
 
+** Programming
+*** Autopair
+    <<autopair>>
+
+    Autopair just adds a closing ) to your (. It also supports other
+    types such as []{}<> and many more.
+
+    #+BEGIN_SRC emacs-lisp
+      ;; Misc programming stuff
+      (use-package autopair
+        :config (autopair-global-mode t))
+    #+END_SRC
+
+*** LSP
+    <<lsp>><<lsp-mode>>
+   
+    lsp is basically a server that does syntax checking and stuff. The
+    best part about it is its editor independant so that all the
+    editors can improve it making it alot better.
+   
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-mode
+        :hook
+        ((scala-mode . lsp)
+         (java-mode . lsp)
+         (python-mode . lsp)
+         (c-mode . lsp))
+        :config (setq lsp-prefer-flymake nil))
+    #+END_SRC
+    <<lsp-ui>>
+   
+    =lsp-ui= adds a inline ui element so you can see it.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-ui
+        :after lsp-mode
+        :hook (lsp-mode-hook . lsp-ui-mode))
+    #+END_SRC
+    <<company-lsp>>
+   
+    lsp also has [[company]] support
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package company-lsp
+        :after '(company lsp-mode))
+    #+END_SRC
+    <<dap-mode>>
+
+    [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
+    debug. Hopefully it gets really good eventually.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package dap-mode
+        :config
+        (dap-mode 1)
+        (dap-ui-mode 1)
+        (require 'dap-python)
+        (require 'dap-java)
+        (require 'dap-lldb))
+    #+END_SRC
+
+*** JVM
+*** Java
+    <<java>><<lsp-java>>
+    
+    All i have for java is a simple [[lsp]]. Maybe eventually I will hook
+    up the entire eclipse server thing too.
+   
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-java)
+    #+END_SRC
+
+*** Scala
+    <<scala>><<scala-mode>>
+    
+    Scala lsp is part of [[lsp-mode]] so you can enable/disable it from
+    there. Here is just syntax highlighting for scala.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package scala-mode
+        :mode "\\.s\\(cala\\|bt\\)$")
+    #+END_SRC
+    <<sbt>><<sbt-mode>>
+    
+    this is a mode for [[scala]] package manager sbt.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package sbt-mode
+        :commands sbt-start sbt-command
+        :config
+        ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+        ;; allows using SPACE when in the minibuffer
+        (substitute-key-definition
+         'minibuffer-complete-word
+         'self-insert-command
+         minibuffer-local-completion-map))
+    #+END_SRC
+
+*** c and cpp
+    <<c>><<cpp>><<irony>>
+   
+    This one uses irony server which needs to be installed. Note that
+    it can be installed inside emacs. Uses [[lsp]] to do stuff.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package irony
+        :hook (c++-mode-hook . irony-mode)
+        :hook (objc-mode-hook . irony-mode)
+        :hook (c-mode-hook . irony-mode))
+    #+END_SRC
+    <<company-irony>>
+   
+    Irony also has support for [[company]].
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package company-irony
+        :after '(company irony))
+    #+END_SRC
+    <<irony-eldoc>>
+   
+    This allows us to read docs while irony is working.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package irony-eldoc
+        :after '(irony))
+    #+END_SRC
+
+*** Microsoft/Dotnet
+*** csharp
+    <<c#>><<csharp>><<csharp-mode>>
+    
+    csharp is still growing a emacs presence. For right now omnisharp
+    is what we got and its still in beta. We also have standard syntax
+    highlighting for it.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package csharp-mode)
+      (use-package omnisharp
+        :hook (csharp-mode-hook . omnisharp-mode)
+        :config
+        (add-to-list 'company-backends 'company-omnisharp)
+        (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
+    #+END_SRC
+*** powershell
+    <<powershell>>
+    
+    Just a major mode and simple repl for powershell. Nothing too
+    major.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package powershell)
+    #+END_SRC
+
+*** Rust
+    <<rustic>><<rust>>
+   
+    Rust support is alright. Most things should work ootb with rustic
+    and [[lsp-mode]].
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package rustic)
+    #+END_SRC
+
+*** Python
+    <<python>><<lsp-python-ms>>
+   
+    We are using [[https://github.com/microsoft/language-server-protocol][microsofts lsp]] because its supposed to be good. Thats
+    about it probably should add more. Also this is partially configured
+    in [[lsp-mode]]
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-python-ms)
+    #+END_SRC
+
+*** Haskell
+    <<haskell>><<haskell-mode>><<lsp-haskell>><<flycheck-haskell>>
+   
+    Haskell is a cool language. I should probably actually learn it one
+    day.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package haskell-mode)
+      (use-package lsp-haskell
+        :after lsp-mode)
+      (use-package flycheck-haskell
+        :after flycheck)
+    #+END_SRC
+
+*** perl6/Rakudo
+    <<perl6>><<rakudo>><<perl6-mode>><<flycheck-perl6>>
+   
+    perl6 is such a cool language but its SOO slow. Feels bad. Maybe
+    eventually it becomes fast and good enough to be used in
+    industry. Note this doesnt have that good syntax highlighting and
+    no lsp.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package perl6-mode)
+      (use-package flycheck-perl6
+        :after flycheck)
+    #+END_SRC
+
+*** Google
+*** Dart
+    <<dart>><<dart-mode>>
+    
+    Dart is googles new language. I doubt im ever going to use it but
+    it seems cool enough to try out.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package dart-mode)
+    #+END_SRC
+    
+*** Flycheck
+    <<flycheck>><<flycheck-pos-tip>>
+   
+    These are my flycheck settings although most packages have their
+    flycheck set to start in their own packages.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+        :init (global-flycheck-mode))
+      (use-package flycheck-pos-tip
+        :after flycheck
+        :config (flycheck-pos-tip-mode))
+    #+END_SRC
+
+*** imenu
+    <<imenu>><<imenu-anywhere>>
+   
+    Imenu is nice to have because you can intelligently view and move
+    to parts of your program. This one in perticular is able to do it
+    anywhere and have helm support.
+  
+    #+BEGIN_SRC emacs-lisp
+      (use-package imenu-anywhere)
+    #+END_SRC
+
 * Keybindings
+
   General keybindings most of the ones i use are going to be defined here
   as a general rule of thumb i am using , instead of C-c and those are going
   to be defined in other packages. I think im going to try to make alot of
@@ -1137,9 +1191,6 @@ Some decisions are inspired by
      (use-package general)
      (general-define-key
       :states '(normal visual)
-      "C-c a" 'org-agenda
-      "C-c l" 'org-store-link
-      "C-c c" 'org-capture
       "|" 'helm-mini
       "SPC" 'helm-imenu
       "_" 'evil-jump-backward
