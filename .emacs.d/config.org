@@ -614,7 +614,6 @@ Some decisions are inspired by
           '(setq company-backends (mapcar #'company-mode-with-yas company-backends))))
     #+END_SRC
 
-
 ** Projects
 *** Projectile
     <<projectile>><<helm-projectile>>
@@ -816,18 +815,42 @@ Some decisions are inspired by
         :config (global-evil-matchit-mode 1))
     #+END_SRC
 
+*** general
+    <<general>>
+
+    General keybindings most of the ones i use are going to be defined here
+    as a general rule of thumb i am using , instead of C-c and those are going
+    to be defined in other packages.
+  
+    #+BEGIN_SRC emacs-lisp
+      (use-package general)
+    #+END_SRC
+
 *** key-chord
     <<key-chord>>
     
     key-chord allows you to make key strokes that only trigger if you
     press them fast enough. This makes for some pretty interesting
-    ideas and allows you to bind a nonprefix key to a prefix.
+    ideas and allows you to bind a nonprefix key to a prefix. This is
+    a very underused package imo because pressing the same character 2
+    times in a row is very easy.
 
     #+BEGIN_SRC emacs-lisp
       (use-package key-chord
         :config (key-chord-mode 1))
     #+END_SRC
 
+*** which-key
+    <<which-key>>
+
+    which-key shows keybindings as you press them making it much
+    easier. Helps ALOT when learning keybinds
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package which-key
+        :config (which-key-mode))
+    #+END_SRC
+    
 ** vterm
    <<vterm>>
    
@@ -931,17 +954,6 @@ Some decisions are inspired by
        :config (beacon-mode 1))
    #+END_SRC
     
-** Help
-*** which-key
-    <<which-key>>
-
-    which-key shows keybindings as you press them making it much easier.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package which-key
-        :config (which-key-mode))
-    #+END_SRC
-
 ** Programming
 *** Autopair
     <<autopair>>
@@ -1182,60 +1194,69 @@ Some decisions are inspired by
 
 * Keybindings
 
-  General keybindings most of the ones i use are going to be defined here
-  as a general rule of thumb i am using , instead of C-c and those are going
-  to be defined in other packages. I think im going to try to make alot of
-  key-chord keybindings for insert mode
-  
-  #+BEGIN_SRC emacs-lisp
-    (use-package general)
-  #+END_SRC
-    
-** Normal/Visual State
+  This is all of my defined keybinds
 
-   #+BEGIN_SRC emacs-lisp
-     (eval-after-load "general"
-       '(general-define-key
-         :states '(normal visual)
-         "|" 'helm-mini
-         "SPC" 'helm-imenu
-         "_" 'evil-jump-backward
-         "S" 'helm-projectile-find-file-or-project
-         "s" 'helm-find-files
-         ";" 'helm-M-x
-         "g c c" 'comment-line
-         "g c r" 'comment-or-uncomment-region
-         "g =" 'indent-buffer
-         "g p" 'projectile-command-map
-         "\\" 'helm-projectile-search-or-project
-         "U" 'undo-tree-visualize
-         "Q" 'save-buffers-kill-terminal
-         (general-chord "ss") 'eshell-toggle
-         (general-chord "vv") 'vterm-toggle
-         (general-chord "``") 'magit-status))
+  #+NAME: keybinds
+  #+BEGIN_SRC emacs-lisp :noweb yes
+    (eval-after-load "general"
+      (progn 
+        <<keybinds-normal>>
+        <<keybinds-insert>>))
+  #+END_SRC
+
+** Normal/Visual State
+   
+   General evil overided global keybinds. 
+
+   #+NAME: keybinds-normal
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (general-define-key
+      :states '(normal visual)
+      "|" 'helm-mini
+      "SPC" 'helm-imenu
+      "_" 'evil-jump-backward
+      "S" 'helm-projectile-find-file-or-project
+      "s" 'helm-find-files
+      ";" 'helm-M-x
+      "g c c" 'comment-line
+      "g c r" 'comment-or-uncomment-region
+      "g =" 'indent-buffer
+      "g p" 'projectile-command-map
+      "\\" 'helm-projectile-search-or-project
+      "U" 'undo-tree-visualize
+      "Q" 'save-buffers-kill-terminal
+      (general-chord "ss") 'eshell-toggle
+      (general-chord "vv") 'vterm-toggle
+      (general-chord "``") 'magit-status)
    #+END_SRC
   
 ** Insert State
 
    These are my keys for insert mode. They should be specifically
-   about entering or deleting text
+   about entering or deleting text.
 
-   #+BEGIN_SRC emacs-lisp
-     (eval-after-load "general"
-       (general-define-key
-        :states '(insert)
-        (general-chord "UU") 'evil-insert-undo-line
-        (general-chord "uu") 'evil-insert-delete-back-word))
+   #+NAME: keybinds-insert
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (general-define-key
+      :states '(insert)
+      (general-chord "uu") 'evil-insert-delete-back-word)
    #+END_SRC
   
 ** Ex commands
-    
+   
    The rest is my ex commands. These are things that are pretty
    useful but do not require much context.
 
+   #+NAME: ex-commands
    #+BEGIN_SRC emacs-lisp
      (evil-ex-define-cmd "cfg" 'open-emacs-config)
      (evil-ex-define-cmd "l" 'TeX-command-master)
      (evil-ex-define-cmd "q[uit]" 'delete-window)
      (evil-ex-define-cmd "bd" 'kill-this-buffer)
    #+END_SRC
+** Major Modes
+*** Org mode
+    <<keybinds-org-mode>><<keybinds-org>>
+
+    The keybinds for org-mode.
+    (general-key)
