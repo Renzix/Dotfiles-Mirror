@@ -224,9 +224,10 @@ Some decisions are inspired by
    I probably shouldnt do this but warnings are annoying and i dont
    like them so I disable them. Its mainly because a few plugins (im
    talking to you ox-pandoc) will warn you for older versions of
-   software and other stupid stuff like that.
+   software and other stupid stuff like that. Disabled because this is
+   awful.
    
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
      (setq warning-minimum-level :error)
    #+END_SRC
  
@@ -542,9 +543,7 @@ Some decisions are inspired by
      supported by [[evil-collection]].
 
      #+BEGIN_SRC emacs-lisp
-       (use-package evil-magit 
-         :after '(magit evil)
-         :config (evil-magit-init))
+       (use-package evil-magit)
      #+END_SRC
 
 **** Git Timemachine
@@ -609,7 +608,7 @@ Some decisions are inspired by
 
       (with-eval-after-load "company"
         (with-eval-after-load "yasnippet"
-          (setq company-backends (mapcar #'company-mode-with-yas company-backends))))
+          '(setq company-backends (mapcar #'company-mode-with-yas company-backends))))
     #+END_SRC
 
 
@@ -838,7 +837,8 @@ Some decisions are inspired by
 
    #+BEGIN_SRC emacs-lisp
      ;;(use-package vterm)
-     (when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
+     (eval-after-load "general"
+     '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
        (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
        (require 'vterm)
        (general-define-key
@@ -847,7 +847,7 @@ Some decisions are inspired by
         "o" #'evil-insert-resume
         "a" #'evil-insert-resume
         "i" #'evil-insert-resume
-        "<return>" #'evil-insert-resume))
+        "<return>" #'evil-insert-resume)))
    #+END_SRC
     
 ** Templates/Snippets
@@ -1184,12 +1184,16 @@ Some decisions are inspired by
   as a general rule of thumb i am using , instead of C-c and those are going
   to be defined in other packages. I think im going to try to make alot of
   key-chord keybindings for insert mode
+  
+#+BEGIN_SRC emacs-lisp
+(use-package general)
+#+END_SRC
     
 ** Normal/Visual State
 
    #+BEGIN_SRC emacs-lisp
-     (use-package general)
-     (general-define-key
+     (eval-after-load "general"
+     '(general-define-key
       :states '(normal visual)
       "|" 'helm-mini
       "SPC" 'helm-imenu
@@ -1206,7 +1210,7 @@ Some decisions are inspired by
       "Q" 'save-buffers-kill-terminal
       (general-chord "ss") 'eshell-toggle
       (general-chord "vv") 'vterm-toggle
-      (general-chord "``") 'magit-status)
+      (general-chord "``") 'magit-status))
    #+END_SRC
   
 ** Insert State
@@ -1215,10 +1219,11 @@ Some decisions are inspired by
    about entering or deleting text
 
    #+BEGIN_SRC emacs-lisp
+     (eval-after-load "general"
      (general-define-key
       :states '(insert)
       (general-chord "UU") 'evil-insert-undo-line
-      (general-chord "uu") 'evil-insert-delete-back-word)
+      (general-chord "uu") 'evil-insert-delete-back-word))
    #+END_SRC
   
 ** Ex commands
