@@ -709,7 +709,8 @@ Some decisions are inspired by
         (setq-default initial-major-mode 'org-mode
                       initial-scratch-message ""
                       org-src-tab-acts-natively t
-                      org-confirm-babel-evaluate nil)
+                      org-confirm-babel-evaluate nil
+                      org-log-done 'time)
         (org-babel-do-load-languages
          'org-babel-load-languages
          '((org . t)
@@ -760,7 +761,11 @@ Some decisions are inspired by
      
      #+BEGIN_SRC emacs-lisp
        (use-package evil-org
-         :after '(org evil))
+         :after '(org evil)
+         :config
+         (add-hook 'org-mode-hook 'evil-org-mode)
+         (evil-org-set-key '(navigation insert textobjects additional calendar))
+         (evil-org-agenda-set-keys))
      #+END_SRC
 *** LaTeX
 **** Auctex
@@ -1279,6 +1284,7 @@ Some decisions are inspired by
       "\\" 'helm-projectile-search-or-project
       "U" 'undo-tree-visualize
       "Q" 'save-buffers-kill-terminal
+      ", , c" 'org-capture
       (general-chord ";;") 'eval-expression
       (general-chord "SS") 'helm-projectile-find-file-or-project
       (general-chord "ss") 'vterm-toggle
@@ -1305,7 +1311,8 @@ Some decisions are inspired by
    #+NAME: ex-commands
    #+BEGIN_SRC emacs-lisp
      (evil-ex-define-cmd "cfg" 'open-emacs-config)
-     (evil-ex-define-cmd "l" 'TeX-command-master)
+     (evil-ex-define-cmd "a[genda]" 'org-agenda)
+     (evil-ex-define-cmd "l" 'TeX-command-master) ;; @TODO(renzix): Add this to , prefix instead
      (evil-ex-define-cmd "q[uit]" 'delete-window)
      (evil-ex-define-cmd "bd" 'kill-this-buffer)
    #+END_SRC
@@ -1326,5 +1333,9 @@ Some decisions are inspired by
       ", >" 'outline-promote
       ", p" 'org-up-element
       ", n" 'org-down-element
+      ", t" 'org-todo
+      ", l" 'org-insert-link
+      ", ." 'org-time-stamp
+      ", e" 'org-export-dispatch
       ", '" 'org-edit-special)
    #+END_SRC
