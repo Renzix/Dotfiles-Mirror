@@ -96,7 +96,10 @@ Some decisions are inspired by
   Some preferences I like/dont like about emacs. Basically trying to
   make the defaults better.
 
-** Buffers
+** SOMEDAY Buffers
+
+   - Note taken on [2019-08-18 Sun 21:53] \\
+     Make it so this only triggers on laptop? Also add a section for my variables.
 
    Dont display startscreen on startup. I used to use eshell but now
    that I have ss as a keybinding I don't think its nessisary.
@@ -116,7 +119,7 @@ Some decisions are inspired by
      (setq confirm-kill-processes nil)
    #+END_SRC
    
-   Nice little display for my battery. @TODO(Renzix): Make it so this only triggers on laptop? Also add a section for my variables.
+   Nice little display for my battery.
 
    #+NAME: battery
    #+BEGIN_SRC emacs-lisp
@@ -350,8 +353,11 @@ Some decisions are inspired by
                 (kill-buffer))))))
     #+END_SRC
 
-*** Projects
+*** SOMEDAY Projects
     
+    - Note taken on [2019-08-18 Sun 21:53] \\
+      Make a =projectile-create-tags= that also works on windows
+
     This first sees if it is in a projectile project. If it isnt then
     it will ask for one then run =projectile-find-file=. If it is then
     it will just run =projectile-find-file=. Just a better default.
@@ -399,12 +405,10 @@ Some decisions are inspired by
     #+END_SRC
 
     Creates tags for all the files. I need to get something like this
-    that works properly on windows. @TODO(Renzix): Make a
-    =projectile-create-tags= that also works on windows
+    that works properly on windows.
    
     #+NAME: create-tags
     #+BEGIN_SRC emacs-lisp
-      ;; @TODO(Renzix): Make this work in windows possibly
       (defun create-tags (dir-name)
         "Create tags file in DIR-NAME."
         (interactive "DDirectory: ")
@@ -412,8 +416,11 @@ Some decisions are inspired by
          (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
     #+END_SRC
 
-*** Open Buffer
+*** SOMEDAY Open Buffer
     
+    - Note taken on [2019-08-18 Sun 21:54] \\
+      Add doas-edit or make [[sudo-edit]] check for bsd/doas
+
     I like using eshell and vterm but dealing with emacs buffers is
     actually insane. I made a coupld simple functions to switch to a
     vterm/eshell window and then be able to switch back. This makes
@@ -487,7 +494,6 @@ Some decisions are inspired by
    
     #+NAME: sudo-edit
     #+BEGIN_SRC emacs-lisp
-      ;; @TODO(Renzix): Check if on a bsd for doas
       (defun sudo-edit (&optional arg)
         "Edits a file with sudo priv.  Optionally take a ARG for the filename."
         (interactive "P")
@@ -747,6 +753,7 @@ Some decisions are inspired by
      and very vague so this one works on the static site generator
      [[https://gohugo.io][hugo]]. See [[https://ox-hugo.scripter.co][here]] for doucmentation on it.
 
+     #+NAME: org-exports
      #+BEGIN_SRC emacs-lisp
        (use-package ox-pandoc
          :after org)
@@ -759,11 +766,12 @@ Some decisions are inspired by
      #+END_SRC
 
 **** Evil org mode
-     <<evil-org>>
+
      [[Org]] mode is nice but [[evil]] is also very nice. Here is the only
      other one then [[magit-evil]] that doesnt have [[evil-collection]]
      keybindings.
      
+     #+NAME: evil-org
      #+BEGIN_SRC emacs-lisp
        (use-package evil-org
          :after '(org evil)
@@ -773,10 +781,13 @@ Some decisions are inspired by
          (evil-org-agenda-set-keys))
      #+END_SRC
 *** LaTeX
-**** Auctex
+**** TODO Auctex
+     - Note taken on [2019-08-18 Sun 21:52] \\
+       Add MLA style LaTeX template
      <<latex>>
      
-     Auctex is supposed to be really good at showing and displaying LaTeX .
+     Auctex is supposed to be really good at showing and displaying
+     LaTeX. I should use latex but I normally just use org-mode.
 
      #+NAME: auctex
      #+BEGIN_SRC emacs-lisp
@@ -865,6 +876,7 @@ Some decisions are inspired by
         :config (global-evil-matchit-mode 1))
     #+END_SRC
 
+*** SOMEDAY God mode
 *** general
 
     General keybindings most of the ones i use are going to be defined here
@@ -1259,7 +1271,9 @@ Some decisions are inspired by
 
 * Keybindings
 
-  This is all of my defined keybinds
+  This is all of my defined keybinds. I use [[key-chord]] alot because its
+  a good package for [[evil]]. People rarely do things like ;; (M-x ;) and
+  other stuff. 
 
   #+NAME: keybinds
   #+BEGIN_SRC emacs-lisp :noweb yes
@@ -1292,6 +1306,7 @@ Some decisions are inspired by
       "U" 'undo-tree-visualize
       "Q" 'save-buffers-kill-terminal
       ", , c" 'org-capture
+      ", , l" 'org-store-link
       (general-chord ";;") 'eval-expression
       (general-chord "SS") 'helm-projectile-find-file-or-project
       (general-chord "ss") 'vterm-toggle
@@ -1319,7 +1334,6 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp
      (evil-ex-define-cmd "cfg" 'open-emacs-config)
      (evil-ex-define-cmd "a[genda]" 'org-agenda)
-     (evil-ex-define-cmd "l" 'TeX-command-master) ;; @TODO(renzix): Add this to , prefix instead
      (evil-ex-define-cmd "q[uit]" 'delete-window)
      (evil-ex-define-cmd "bd" 'kill-this-buffer)
    #+END_SRC
@@ -1347,14 +1361,17 @@ Some decisions are inspired by
        ", s" 'org-schedule
        ", d" 'org-deadline
        ", e" 'org-export-dispatch
+       ", [" 'org-agenda-file-to-front
+       ", ]" 'org-remove-file
        ", '" 'org-edit-special)
     #+END_SRC
 
 **** TODO Org src mode
 **** SOMEDAY latex mode
+     TeX-command-master
 **** SOMEDAY markdown mode
 *** Programming
-**** TODO csharp mode
+**** NEXT csharp mode
 **** TODO rustic mode
 **** SOMEDAY c/cpp mode
 **** SOMEDAY haskell mode
@@ -1376,3 +1393,4 @@ Some decisions are inspired by
 **** SOMEDAY magit mode
 ** Minor Modes
 *** TODO projectile mode
+*** TODO git-timemachine mode
