@@ -1283,6 +1283,28 @@ Some decisions are inspired by
         <<keybinds-insert>>
         <<keybinds-org-mode>>))
   #+END_SRC
+  
+** Thoughts on keybindings
+
+   There are a bunch of different ways on how to bind a key. I think
+   each way has its merit and should be thought of before you assign a
+   keybinding. states and prefixes are achived through
+   keymaps. Arguments are achieved through C-u or evil
+   motions/1-9/registers. chords are by key-chord or its in vim by
+   default. commands are by command mode in vim or M-x in
+   emacs. Modifiers are just control alt and shift etc... The big
+   thing that emacs has over vim is provide context to a
+   function. Working differently depending on where you are is
+   extremely powerful. Emacs also allows making new mode maps which is
+   the other big thing that emacs does better.
+   
+   - states (insert or normal)
+   - prefix (C-x or evil leader)
+   - argument (2dd or C-u)
+   - chords (keychord)
+   - commands (M-x or ex-commands)
+   - modifers (C-y or C-S-<backspace>)
+   - context (org mode C-c C-c)
 
 ** Normal/Visual State
    
