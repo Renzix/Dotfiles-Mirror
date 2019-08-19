@@ -709,8 +709,13 @@ Some decisions are inspired by
         (setq-default initial-major-mode 'org-mode
                       initial-scratch-message ""
                       org-src-tab-acts-natively t
-                      org-confirm-babel-evaluate nil
-                      org-log-done 'time)
+                      org-confirm-babel-evaluate nil)
+        (setq org-log-done 'time
+              org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
+                                  (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
+                                  (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
+                                  (sequence "|" "DONE(d)" "CANCEL(c@)")
+                                  (sequence "|" "STUDY(y!)")))
         (org-babel-do-load-languages
          'org-babel-load-languages
          '((org . t)
@@ -1064,7 +1069,7 @@ Some decisions are inspired by
     #+END_SRC
 
 *** JVM
-**** Java
+**** java
     
      All i have for java is a simple [[lsp]]. Maybe eventually I will hook
      up the entire eclipse server thing too.
@@ -1074,8 +1079,7 @@ Some decisions are inspired by
        (use-package lsp-java)
      #+END_SRC
 
-**** Scala
-     <<scala>><<scala-mode>>
+**** scala
     
      Scala lsp is part of [[lsp-mode]] so you can enable/disable it from
      there. Here is just syntax highlighting for scala.
@@ -1100,8 +1104,10 @@ Some decisions are inspired by
           minibuffer-local-completion-map))
      #+END_SRC
 
+**** SOMEDAY kotlin
+**** SOMEDAY clojure
 *** Scripting langs
-**** Python
+**** python
      <<python>>
    
      We are using [[https://github.com/microsoft/language-server-protocol][microsofts lsp]] because its supposed to be good. Thats
@@ -1128,9 +1134,12 @@ Some decisions are inspired by
          :after flycheck)
      #+END_SRC
 
+**** SOMEDAY perl
+**** SOMEDAY common-lisp
+**** SOMEDAY shell
 *** Microsoft/Dotnet
 **** csharp
-     <<c#>><<csharp>><<omnisharp>>
+     <<c#>><<omnisharp>>
     
      csharp is still growing a emacs presence. For right now omnisharp
      is what we got and its still in beta. We also have standard syntax
@@ -1145,6 +1154,7 @@ Some decisions are inspired by
          (add-to-list 'company-backends 'company-omnisharp)
          (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
      #+END_SRC
+
 **** powershell
     
      Just a major mode and simple repl for powershell. Nothing too
@@ -1155,8 +1165,7 @@ Some decisions are inspired by
        (use-package powershell)
      #+END_SRC
 
-*** Rust
-    <<rust>>
+*** rust
    
     Rust support is alright. Most things should work ootb with rustic
     and [[lsp-mode]].
@@ -1196,8 +1205,8 @@ Some decisions are inspired by
         :after '(irony))
     #+END_SRC
 
-*** Haskell
-    <<haskell>><<lsp-haskell>><<flycheck-haskell>>
+*** haskell
+    <<lsp-haskell>><<flycheck-haskell>>
    
     Haskell is a cool language. I should probably actually learn it one
     day.
@@ -1212,8 +1221,7 @@ Some decisions are inspired by
     #+END_SRC
 
 *** Google
-**** Dart
-     <<dart>>
+**** dart
     
      Dart is googles new language. I doubt im ever going to use it but
      it seems cool enough to try out.
@@ -1239,7 +1247,6 @@ Some decisions are inspired by
     #+END_SRC
 
 *** imenu
-    <<imenu>>
    
     Imenu is nice to have because you can intelligently view and move
     to parts of your program. This one in perticular is able to do it
@@ -1317,25 +1324,55 @@ Some decisions are inspired by
      (evil-ex-define-cmd "bd" 'kill-this-buffer)
    #+END_SRC
 ** Major Modes
-*** Org mode
+*** Plain Text
+**** Org mode
 
-   The keybinds for org-mode.
+    The keybinds for org-mode.
     
-   #+NAME: keybinds-org-mode
-   #+BEGIN_SRC emacs-lisp
-     (general-define-key
-      :keymaps 'org-mode-map
-      :states '(normal visual)
-      "SPC" 'helm-org-rifle
-      (general-chord "  ") 'helm-imenu
-      ", c" 'org-ctrl-c-ctrl-c
-      ", <" 'outline-demote
-      ", >" 'outline-promote
-      ", p" 'org-up-element
-      ", n" 'org-down-element
-      ", t" 'org-todo
-      ", l" 'org-insert-link
-      ", ." 'org-time-stamp
-      ", e" 'org-export-dispatch
-      ", '" 'org-edit-special)
-   #+END_SRC
+    #+NAME: keybinds-org-mode
+    #+BEGIN_SRC emacs-lisp
+      (general-define-key
+       :keymaps 'org-mode-map
+       :states '(normal visual)
+       "SPC" 'helm-org-rifle
+       (general-chord "  ") 'helm-imenu
+       ", c" 'org-ctrl-c-ctrl-c
+       ", <" 'outline-demote
+       ", >" 'outline-promote
+       ", p" 'org-up-element
+       ", n" 'org-down-element
+       ", t" 'org-todo
+       ", l" 'org-insert-link
+       ", ." 'org-time-stamp
+       ", s" 'org-schedule
+       ", d" 'org-deadline
+       ", e" 'org-export-dispatch
+       ", '" 'org-edit-special)
+    #+END_SRC
+
+**** TODO Org src mode
+**** SOMEDAY latex mode
+**** SOMEDAY markdown mode
+*** Programming
+**** TODO csharp mode
+**** TODO rustic mode
+**** SOMEDAY c/cpp mode
+**** SOMEDAY haskell mode
+**** SOMEDAY java mode
+**** SOMEDAY scala mode
+**** SOMEDAY kotlin mode
+**** SOMEDAY clojure mode
+**** SOMEDAY powershell mode
+**** SOMEDAY shell mode
+**** SOMEDAY golang mode
+**** SOMEDAY dart mode
+**** SOMEDAY emacs lisp mode
+**** SOMEDAY common lisp mode
+**** SOMEDAY perl6 mode
+*** Messaging
+**** matrix mode
+**** irc mode
+*** Other
+**** SOMEDAY magit mode
+** Minor Modes
+*** TODO projectile mode
