@@ -1296,10 +1296,15 @@ Some decisions are inspired by
    thing that emacs has over vim is provide context to a
    function. Working differently depending on where you are is
    extremely powerful. Emacs also allows making new mode maps which is
-   the other big thing that emacs does better.
+   the other big thing that emacs does better. Note keymaps are a
+   combination of states and prefixes. Vim arguments work better
+   however C-u is a VERY interesting idea. vim also loses to
+   major/minor modes as this makes plugins ALOT more modular. Allowing
+   multiple ways to look at a single file depending on context.
    
    - states (insert or normal)
-   - prefix (C-x or evil leader)
+   - prefix (emacs C-x or vim C-w)
+   - modes (major/minor modes or file types)
    - argument (2dd or C-u)
    - chords (keychord)
    - commands (M-x or ex-commands)
