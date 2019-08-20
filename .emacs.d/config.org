@@ -1307,12 +1307,11 @@ Some decisions are inspired by
        (use-package go-eldoc)
      #+END_SRC
 
-     Lets also add syntax/error checking with goflymake because it
-     uses native golang tools unlike flymake-go which only uses gofmt.
+     flymake-go is good i guess.
      
-     #+NAME: goflymake
+     #+NAME: flymake-go
      #+BEGIN_SRC emacs-lisp
-       (use-package goflymake)
+       (use-package flymake-go)
      #+END_SRC
 
      and finally we can give it [[company]] completion. It should
@@ -1414,7 +1413,7 @@ Some decisions are inspired by
       "Q" 'save-buffers-kill-terminal
       ", , c" 'org-capture
       ", , l" 'org-store-link
-      (general-chord ";;") 'smart-eval
+      (general-chord ";;") 'eval-expression
       (general-chord "SS") 'helm-projectile-find-file-or-project
       (general-chord "ss") 'vterm-toggle
       (general-chord "``") 'magit-status)
