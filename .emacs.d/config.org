@@ -1363,7 +1363,7 @@ Some decisions are inspired by
         <<keybinds-org-mode>>))
   #+END_SRC
   
-** Thoughts on keybindings
+** Rant on keybindings
 
    There are a bunch of different ways on how to bind a key. I think
    each way has its merit and should be thought of before you assign a
@@ -1379,7 +1379,14 @@ Some decisions are inspired by
    combination of states and prefixes. Vim arguments work better
    however C-u is a VERY interesting idea. vim also loses to
    major/minor modes as this makes plugins ALOT more modular. Allowing
-   multiple ways to look at a single file depending on context.
+   multiple ways to look at a single file depending on context. I dont
+   absolutely hate the idea of using a mouse like in acme however I
+   will mention that the more you use the mouse the more likely you
+   will keep trying to use it. In that case you end up abandonning the
+   keyboard for long periods of times making it worse. Pressing escape
+   to do 60+ keybindings is MUCH more efficent then reaching over to
+   your mouse for a max of 20 keybinds which are context dependant. It
+   may however be easier to understand at first.
    
    - states (insert or normal)
    - prefix (emacs C-x or vim C-w)
@@ -1389,6 +1396,7 @@ Some decisions are inspired by
    - commands (M-x or ex-commands)
    - modifers (C-y or C-S-<backspace>)
    - context (org mode C-c C-c or [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][this]])
+   - mouse (plan 9's acme?)
 
 ** Normal/Visual State
    
