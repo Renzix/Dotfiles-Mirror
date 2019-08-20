@@ -10,6 +10,8 @@ on [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and it should be mirrored on [
 Some decisions are inspired by
 
 [[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout
+[[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas
+[[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help
 
 * Startup
 
@@ -158,7 +160,8 @@ Some decisions are inspired by
 
    In evil relative line numbers are really nice. This also allows the
    current line number to not be 0 but whatever the actual line number
-   it is. Having 0 is kinda useless in relative line numbers.
+   it is. Having 0 is kinda useless in relative line numbers. This is
+   disabled for [[vterm]] because it doesnt deal with it well.
 
    #+NAME: line-numbers
    #+BEGIN_SRC emacs-lisp
@@ -208,6 +211,14 @@ Some decisions are inspired by
    #+NAME: symlinks
    #+BEGIN_SRC emacs-lisp
      (setq vc-follow-symlinks t)
+   #+END_SRC
+
+   Typing yes or no is hard and y or n is easier so lets do that
+   instead.
+
+   #+NAME: yes-or-no-p
+   #+BEGIN_SRC emacs-lisp
+     (defalias 'yes-or-no-p 'y-or-n-p)
    #+END_SRC
 
    Use spaces instead of tabs by default. Either is fine to me however
@@ -375,14 +386,14 @@ Some decisions are inspired by
     This one runs =helm-projectile-find-file= if in a project but
     normal =helm-find-file= if not inside a project.
 
-    #+NAME: helm-projectile-find-file-or-project
+    #+NAME: helm-projectile-find-file-or-find-file
     #+BEGIN_SRC emacs-lisp
-      (defun helm--find-file-or-projectile-find-file ()
+      (defun helm-projectile-find-file-or-find-file ()
         "Does switch project if not in a project and 'find-file' if in one."
         (interactive)
         (if (projectile-project-p)
             (helm-projectile-find-file)
-          (helm-find-file)))
+          (helm-find-files)))
     #+END_SRC
    
     This first sees if it is in a projectile project. If it isnt then
@@ -516,9 +527,40 @@ Some decisions are inspired by
         (find-file "~/Dotfiles/.emacs.d/config.org"))
     #+END_SRC
 
+*** SOMEDAY Eval
+    
+    Helper function for smart-eval. Says if its valid lisp or not.
+
+    Functions that help you do evalution of functions and deal with
+    stuff.
+    #+NAME: valid-elisp-p :tangle no
+    #+BEGIN_SRC emacs-lisp
+      (defun valid-elisp-p (s)
+        "S is a string."
+        (and (listp (read s))
+             (not (booleanp (read s)))))
+    #+END_SRC
+
+
+    #+NAME: smart-eval
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (defun smart-eval ()
+        "This function interactively evaluates elisp.  First it checks
+                  to see if there is anything in the kill-ring that is valid elisp."
+        (interactive)
+        (let ((kr (if (current-kill 0 t) (current-kill 0 t) nil))
+              (values nil))
+          (cond 
+           ;; ((use-region-p) (setq values (eval (buffer-substring start ion-end)))))
+           ((valid-elisp-p kr) (setq values `(,(eval (read kr)))))
+           ((t) (call-interactively 'eval-expression)))
+          (message "%s" (car values))
+          (kill-new (prin1-to-string (car values)))))
+    #+END_SRC
+
 * Core
 ** Fuzzy Find
-*** Helm
+*** helm
 
     Helm is a fuzzy finder search for ANYTHING you want in emacs. It
     also has alot of plugins that work with other plugins. The two
@@ -552,6 +594,8 @@ Some decisions are inspired by
         :after helm)
     #+END_SRC
    
+*** SOMEDAY ido
+*** SOMEDAY ivy 
 ** Version Control
 *** Git
 **** Magit
@@ -612,6 +656,7 @@ Some decisions are inspired by
        (use-package git-gutter 
          :config (global-git-gutter-mode)) 
      #+END_SRC
+*** SOMEDAY vcmode
 ** Autocompletion
 *** Company
     
@@ -657,8 +702,7 @@ Some decisions are inspired by
     #+END_SRC
 
 ** Projects
-*** Projectile
-    <<helm-projectile>>
+*** projectile
     
     Projectile is a way to use specific commands for a specific
     project. A project is any folder with a source control or a
@@ -666,10 +710,9 @@ Some decisions are inspired by
     however it also installs projectile. This is also intergrated into
     [[helm]].
 
-    #+NAME: projectile
+    #+NAME: helm-projectile
     #+BEGIN_SRC emacs-lisp
       (use-package helm-projectile
-        :after 'helm
         :init
         (setq projectile-enable-caching t
               projectile-file-exists-local-cache-expire (* 5 60)
@@ -680,7 +723,7 @@ Some decisions are inspired by
         (projectile-mode t))
     #+END_SRC
 
-*** Treemacs
+*** treemacs
     <<treemacs-evil>><<treemacs-projectile>><<treemacs-magit>>
     
     Treemacs is a tree layout file explorer. Its useful for projects
@@ -715,7 +758,8 @@ Some decisions are inspired by
         (setq-default initial-major-mode 'org-mode
                       initial-scratch-message ""
                       org-src-tab-acts-natively t
-                      org-confirm-babel-evaluate nil)
+                      org-confirm-babel-evaluate nil
+                      org-return-follows-link t)
         (setq org-log-done 'time
               org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
                                   (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
@@ -919,7 +963,8 @@ Some decisions are inspired by
    neovim to create a actual terminal emulator in neovim. This should
    in theory be just as good. Unfortunately the [[https://melpa.org/][melpa]] package doesnt
    install properly so you have to [[https://github.com/akermu/emacs-libvterm][manually]] install it. These keybinds
-   also don't count.
+   also don't count. [[line-numbers][Line numbers]] also dont work properly so we
+   disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/pull/129][fixed soon]].
 
    #+NAME: vterm
    #+BEGIN_SRC emacs-lisp
@@ -934,7 +979,9 @@ Some decisions are inspired by
            "o" #'evil-insert-resume
            "a" #'evil-insert-resume
            "i" #'evil-insert-resume
-           "<return>" #'evil-insert-resume)))
+           "<return>" #'evil-insert-resume)
+          (add-hook 'doc-view-mode-hook (lambda ()
+                                          (global-linum-relative-mode -1)))))
    #+END_SRC
     
 ** Templates/Snippets
@@ -978,9 +1025,10 @@ Some decisions are inspired by
     
     #+NAME: matrix-client
     #+BEGIN_SRC emacs-lisp
-      (use-package matrix-client
-        :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-                                :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))))
+      (when (not (string-equal system-type "windows-nt"))
+        (use-package matrix-client
+          :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+                                  :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))))
     #+END_SRC
 
 *** Discord
@@ -1243,6 +1291,38 @@ Some decisions are inspired by
        (use-package dart-mode)
      #+END_SRC
     
+**** golang
+     
+     Go is fast/easy. First we can start off with the major mode.
+
+     #+NAME: go-mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package go-mode)
+     #+END_SRC
+     
+     Then we can give it documentation popups.
+
+     #+NAME: go-eldoc
+     #+BEGIN_SRC emacs-lisp
+       (use-package go-eldoc)
+     #+END_SRC
+
+     Lets also add syntax/error checking with goflymake because it
+     uses native golang tools unlike flymake-go which only uses gofmt.
+     
+     #+NAME: goflymake
+     #+BEGIN_SRC emacs-lisp
+       (use-package goflymake)
+     #+END_SRC
+
+     and finally we can give it [[company]] completion. It should
+     recognize it however I havent tested it yet.
+
+     #+NAME: company-go
+     #+BEGIN_SRC emacs-lisp
+       (use-package company-go)
+     #+END_SRC
+
 *** Flycheck
     <<flycheck-pos-tip>>
    
@@ -1289,8 +1369,8 @@ Some decisions are inspired by
    There are a bunch of different ways on how to bind a key. I think
    each way has its merit and should be thought of before you assign a
    keybinding. states and prefixes are achived through
-   keymaps. Arguments are achieved through C-u or evil
-   motions/1-9/registers. chords are by key-chord or its in vim by
+   keymaps. Arguments are achieved through C-u or evil motions/
+   1-9/registers. chords are by key-chord or its in vim by
    default. commands are by command mode in vim or M-x in
    emacs. Modifiers are just control alt and shift etc... The big
    thing that emacs has over vim is provide context to a
@@ -1309,7 +1389,7 @@ Some decisions are inspired by
    - chords (keychord)
    - commands (M-x or ex-commands)
    - modifers (C-y or C-S-<backspace>)
-   - context (org mode C-c C-c)
+   - context (org mode C-c C-c or [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][this]])
 
 ** Normal/Visual State
    
@@ -1323,7 +1403,7 @@ Some decisions are inspired by
       "SPC" 'helm-imenu
       "_" 'evil-jump-backward
       "s" 'eshell-toggle
-      "S" 'helm-find-file-or-projectile-find-file
+      "S" 'helm-projectile-find-file-or-find-file
       ";" 'helm-M-x
       "g c c" 'comment-line
       "g c r" 'comment-or-uncomment-region
@@ -1334,12 +1414,12 @@ Some decisions are inspired by
       "Q" 'save-buffers-kill-terminal
       ", , c" 'org-capture
       ", , l" 'org-store-link
-      (general-chord ";;") 'eval-expression
+      (general-chord ";;") 'smart-eval
       (general-chord "SS") 'helm-projectile-find-file-or-project
       (general-chord "ss") 'vterm-toggle
       (general-chord "``") 'magit-status)
    #+END_SRC
-  
+   
 ** Insert State
 
    These are my keys for insert mode. They should be specifically
@@ -1364,34 +1444,36 @@ Some decisions are inspired by
      (evil-ex-define-cmd "q[uit]" 'delete-window)
      (evil-ex-define-cmd "bd" 'kill-this-buffer)
    #+END_SRC
+
 ** Major Modes
 *** Plain Text
 **** Org mode
 
-    The keybinds for org-mode.
+     The keybinds for org-mode.
     
-    #+NAME: keybinds-org-mode
-    #+BEGIN_SRC emacs-lisp
-      (general-define-key
-       :keymaps 'org-mode-map
-       :states '(normal visual)
-       "SPC" 'helm-org-rifle
-       (general-chord "  ") 'helm-imenu
-       ", c" 'org-ctrl-c-ctrl-c
-       ", <" 'outline-demote
-       ", >" 'outline-promote
-       ", p" 'org-up-element
-       ", n" 'org-down-element
-       ", t" 'org-todo
-       ", l" 'org-insert-link
-       ", ." 'org-time-stamp
-       ", s" 'org-schedule
-       ", d" 'org-deadline
-       ", e" 'org-export-dispatch
-       ", [" 'org-agenda-file-to-front
-       ", ]" 'org-remove-file
-       ", '" 'org-edit-special)
-    #+END_SRC
+     #+NAME: keybinds-org-mode
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (general-define-key
+        :keymaps 'org-mode-map
+        :states '(normal visual)
+        "SPC" 'helm-org-rifle
+        "RET" 'org-ctrl-c-ctrl-c
+        (general-chord "  ") 'helm-imenu
+        ", <" 'outline-demote
+        ", >" 'outline-promote
+        ", p" 'org-up-element
+        ", n" 'org-down-element
+        ", t" 'org-todo
+        ", l" 'org-insert-link
+        ", ." 'org-time-stamp
+        ", s" 'org-schedule
+        ", d" 'org-deadline
+        ", e" 'org-export-dispatch
+        ", [" 'org-agenda-file-to-front
+        ", ]" 'org-remove-file
+        ", '" 'org-edit-special
+        ", a" 'org-add-note)
+     #+END_SRC
 
 **** TODO Org src mode
 **** SOMEDAY latex mode
@@ -1414,8 +1496,8 @@ Some decisions are inspired by
 **** SOMEDAY common lisp mode
 **** SOMEDAY perl6 mode
 *** Messaging
-**** matrix mode
-**** irc mode
+**** SOMEDAY matrix mode
+**** SOMEDAY irc mode
 *** Other
 **** SOMEDAY magit mode
 ** Minor Modes
