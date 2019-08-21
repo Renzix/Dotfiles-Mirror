@@ -1461,6 +1461,7 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
       "M-x" 'helm-M-x
+      "C-x C-b" 'helm-mini
       "C-x C-f" 'helm-find-files
       "C-a" 'my/move-beginning-of-line)
      ;; "C-k" 'my/kill-line)
