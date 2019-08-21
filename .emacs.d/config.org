@@ -1457,7 +1457,10 @@ Some decisions are inspired by
    #+NAME: keybinds-emacs
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
+      :keymaps '(global-map evil-emacs-state-map)
+      :keymaps 'override
       "M-x" 'helm-M-x
+      "C-x C-b" 'helm-mini
       "C-x C-f" 'helm-find-files
       "C-x C-b" 'helm-buffers-list
       "C-x b" 'helm-mini
