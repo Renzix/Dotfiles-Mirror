@@ -10,9 +10,10 @@ on [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and it should be mirrored on [
 Some decisions are inspired by
 
 [[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout
-[[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas
 [[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help
-
+[[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff
+[[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas
+ 
 * Startup
 
   Starts up emacs. This should be somewhat small and only for
@@ -604,10 +605,6 @@ Some decisions are inspired by
             (move-beginning-of-line 1))))
     #+END_SRC
 
-    Kinda like the one above only this time C-u (without number) kills
-    the entire line.
-
-
 * Core
 ** Key Packages
 *** Evil 
@@ -618,7 +615,7 @@ Some decisions are inspired by
     #+NAME: evil
     #+BEGIN_SRC emacs-lisp
       (use-package evil
-        :config (if (>= 1 (random 3)) (evil-mode 1)))
+        :config (if (>= 1 (random 2)) (evil-mode 1)))
     #+END_SRC
     
     =evil-collection= is a project which provides evil keybindings for
@@ -1462,8 +1459,10 @@ Some decisions are inspired by
      (general-define-key
       "M-x" 'helm-M-x
       "C-x C-f" 'helm-find-files
-      "C-a" 'my/move-beginning-of-line)
-     ;; "C-k" 'my/kill-line)
+      "C-x C-b" 'helm-buffers-list
+      "C-x b" 'helm-mini
+      "C-a" 'my/move-beginning-of-line
+      "C-k" 'kill-whole-line)
    #+END_SRC
 
 ** Normal/Visual State
