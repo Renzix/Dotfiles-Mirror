@@ -44,7 +44,6 @@ Some decisions are inspired by
        (package-install 'use-package))
      (require 'use-package)
      (require 'use-package-ensure)
-     (setq use-package-always-ensure t)
    #+END_SRC
 
    Makes sure that =use-package= always downloads the package if not available
@@ -201,6 +200,24 @@ Some decisions are inspired by
              ((string= "6" renzix-weekday) ;; Saturday
               (load-theme 'doom-one t))))
    #+END_SRC   
+   
+   Evil is cool and i want to be able to tell what state I am in
+   without having to look at the bottom left. One easy way to do this
+   is change the color and type of the cursor. It changes the type but
+   not the color by default and normal is the same as emacs state.
+   
+   #+NAME: evil-cursor
+   #+BEGIN_SRC emacs-lisp
+     (setq evil-insert-state-cursor '(bar "#ff00ff")
+           evil-normal-state-cursor '(box "#6666f6")
+           evil-motion-state-cursor '(hollow "#87d7ff")
+           evil-replace-state-cursor '(hollow "#bf2222")
+           evil-operator-state-cursor '(box "#F5F5DC")
+           evil-visual-state-cursor '(hollow "#ffffff")
+           evil-emacs-state-cursor '(hbar "#43DE43"))
+     (setq-default cursor-type 'hbar)
+     (set-cursor-color "#43DE43")
+   #+END_SRC
 
 ** Other
 
@@ -264,7 +281,7 @@ Some decisions are inspired by
    
     #+NAME evil-insert-delete-back-word
     #+BEGIN_SRC emacs-lisp
-      (defun evil-insert-delete-back-word ()
+      (defun my/evil-insert-delete-back-word ()
         "Made specifically for insert state but works in other
       states. Deletes backwards until a space. Not a true vim word or
       WORD."
@@ -279,7 +296,7 @@ Some decisions are inspired by
 
     #+NAME: evil-insert-undo-line
     #+BEGIN_SRC emacs-lisp
-      (defun evil-insert-undo-line ()
+      (defun my/evil-insert-undo-line ()
         "Undo a line in insert mode."
         (interactive)
         (if (looking-back "^" 0)
@@ -294,7 +311,7 @@ Some decisions are inspired by
 
     #+NAME: indent-buffer
     #+BEGIN_SRC emacs-lisp
-      (defun indent-buffer ()
+      (defun my/indent-buffer ()
         "Indent the entire buffer and untabifies it."
         (interactive)
         (save-excursion
@@ -308,7 +325,7 @@ Some decisions are inspired by
 
     #+NAME: infer-identation-style
     #+BEGIN_SRC emacs-lisp
-      (defun infer-indentation-style ()
+      (defun my/infer-indentation-style ()
         (let ((space-count (how-many "^  " (point-min) (point-max)))
               (tab-count (how-many "^\t" (point-min) (point-max))))
           (if (> space-count tab-count) (setq indent-tabs-mode nil))
@@ -324,7 +341,7 @@ Some decisions are inspired by
 
     #+NAME: rename-file-and-buffer
     #+BEGIN_SRC emacs-lisp
-      (defun rename-file-and-buffer ()
+      (defun my/rename-file-and-buffer ()
         "Renames current buffer and file it is visiting."
         (interactive)
         (let* ((name (buffer-name))
@@ -375,7 +392,7 @@ Some decisions are inspired by
 
     #+NAME: helm-projectile-find-file-or-project
     #+BEGIN_SRC emacs-lisp
-      (defun helm-projectile-find-file-or-project ()
+      (defun my/helm-projectile-find-file-or-project ()
         "Does switch project if not in a project and 'find-file' if in one."
         (interactive)
         (if (projectile-project-p)
@@ -388,7 +405,7 @@ Some decisions are inspired by
 
     #+NAME: helm-projectile-find-file-or-find-file
     #+BEGIN_SRC emacs-lisp
-      (defun helm-projectile-find-file-or-find-file ()
+      (defun my/helm-projectile-find-file-or-find-file ()
         "Does switch project if not in a project and 'find-file' if in one."
         (interactive)
         (if (projectile-project-p)
@@ -405,7 +422,7 @@ Some decisions are inspired by
 
     #+NAME: helm-projectile-search-or-project
     #+BEGIN_SRC emacs-lisp
-      (defun helm-projectile-search-or-project ()
+      (defun my/helm-projectile-search-or-project ()
         "Does switch project if not in a project and search all files in said project."
         (interactive)
         (if (projectile-project-p)
@@ -420,7 +437,7 @@ Some decisions are inspired by
    
     #+NAME: create-tags
     #+BEGIN_SRC emacs-lisp
-      (defun create-tags (dir-name)
+      (defun my/create-tags (dir-name)
         "Create tags file in DIR-NAME."
         (interactive "DDirectory: ")
         (eshell-command
@@ -440,7 +457,7 @@ Some decisions are inspired by
 
     #+NAME: my:window-conf
     #+BEGIN_SRC emacs-lisp
-      (defvar my:window-conf nil)
+      (defvar my/window-conf nil)
     #+END_SRC
 
     Here is the eshell toggle function which uses said variable to
@@ -448,13 +465,13 @@ Some decisions are inspired by
     
     #+NAME: eshell-toggle
     #+BEGIN_SRC emacs-lisp
-      (defun eshell-toggle (buf-name)
+      (defun my/eshell-toggle (buf-name)
         "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
         (interactive (list (buffer-name)))
         (if (string-equal buf-name "*eshell*")
-            (set-window-configuration my:window-conf)
+            (set-window-configuration my/window-conf)
           (progn
-            (setq my:window-conf (current-window-configuration))
+            (setq my/window-conf (current-window-configuration))
             (delete-other-windows)
             (eshell))))
     #+END_SRC
@@ -464,7 +481,7 @@ Some decisions are inspired by
 
     #+NAME: switch-to-vterm
     #+BEGIN_SRC emacs-lisp
-      (defun switch-to-vterm ()
+      (defun my/switch-to-vterm ()
         "Switch to vterm."
         (if (get-buffer "vterm")
             (switch-to-buffer "vterm")
@@ -476,7 +493,7 @@ Some decisions are inspired by
 
     #+NAME: vterm-toggle
     #+BEGIN_SRC emacs-lisp
-      (defun vterm-toggle (buf-name)
+      (defun my/vterm-toggle (buf-name)
         "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
         (interactive (list (buffer-name)))
         (if (string-equal buf-name "vterm")
@@ -493,7 +510,7 @@ Some decisions are inspired by
 
     #+NAME: magit-status-only
     #+BEGIN_SRC emacs-lisp
-      (defun magit-status-only ()
+      (defun my/magit-status-only ()
         "Opens magit-status in a single buffer."
         (magit-status)
         (delete-other-windows))
@@ -505,7 +522,7 @@ Some decisions are inspired by
    
     #+NAME: sudo-edit
     #+BEGIN_SRC emacs-lisp
-      (defun sudo-edit (&optional arg)
+      (defun my/sudo-edit (&optional arg)
         "Edits a file with sudo priv.  Optionally take a ARG for the filename."
         (interactive "P")
         (if (or arg (not buffer-file-name))
@@ -513,15 +530,13 @@ Some decisions are inspired by
              (concat "/sudo:root@localhost:"
                      (ido-read-file-name "Find file(as root): ")))
           (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-
     #+END_SRC
     
     Opens my emacs configuration for editing.
 
     #+NAME: open-emacs-config
     #+BEGIN_SRC emacs-lisp
-      (defun open-emacs-config ()
+      (defun my/open-emacs-config ()
         "Opens my Emacs config uwu."
         (interactive)
         (find-file "~/Dotfiles/.emacs.d/config.org"))
@@ -535,7 +550,7 @@ Some decisions are inspired by
     stuff.
     #+NAME: valid-elisp-p :tangle no
     #+BEGIN_SRC emacs-lisp
-      (defun valid-elisp-p (s)
+      (defun my/valid-elisp-p (s)
         "S is a string."
         (and (listp (read s))
              (not (booleanp (read s)))))
@@ -544,7 +559,7 @@ Some decisions are inspired by
 
     #+NAME: smart-eval
     #+BEGIN_SRC emacs-lisp :tangle no
-      (defun smart-eval ()
+      (defun my/smart-eval ()
         "This function interactively evaluates elisp.  First it checks
                   to see if there is anything in the kill-ring that is valid elisp."
         (interactive)
@@ -558,7 +573,129 @@ Some decisions are inspired by
           (kill-new (prin1-to-string (car values)))))
     #+END_SRC
 
+*** Redefined Functions
+    
+    This is C-a redefined to go to first nonwhitespace then if pressed
+    again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]].
+    
+    #+NAME: move-beginning-of-line
+    #+BEGIN_SRC emacs-lisp
+      (defun my/move-beginning-of-line (arg)
+        "Move point back to indentation of beginning of line.
+
+      Move point to the first non-whitespace character on this line.
+      If point is already there, move to the beginning of the line.
+      Effectively toggle between the first non-whitespace character and
+      the beginning of the line.
+
+      If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+      point reaches the beginning or end of the buffer, stop there."
+        (interactive "^p")
+        (setq arg (or arg 1))
+
+        ;; Move lines first
+        (when (/= arg 1)
+          (let ((line-move-visual nil))
+            (forward-line (1- arg))))
+
+        (let ((orig-point (point)))
+          (back-to-indentation)
+          (when (= orig-point (point))
+            (move-beginning-of-line 1))))
+    #+END_SRC
+
+    Kinda like the one above only this time C-u (without number) kills
+    the entire line.
+
+
 * Core
+** Key Packages
+*** Evil 
+    
+    Evil is vi emulation in emacs. It is by far the best vi emulation
+    outside of vi itself and very extendable/fast.
+
+    #+NAME: evil
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil
+        :config (if (>= 1 (random 3)) (evil-mode 1)))
+    #+END_SRC
+    
+    =evil-collection= is a project which provides evil keybindings for
+    almost every popular plugin in emacs outside of a few. Its really
+    nice if you want to use evil in buffers where its very emacsy. A
+    list of all keybindings and supported packages can be found
+    [[https://github.com/emacs-evil/evil-collection][here]]. One of the nonsupported packages is magit so here is
+    [[file:config.org::*evil-magit][evil-magit]] config. Also [[evil-magit]] has to load before evil so it
+    needs to set evil-want-keybinding to nil.
+
+    #+NAME: evil-collection
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-collection
+        :after '(evil evil-magit)
+        :config (evil-collection-init))
+    #+END_SRC
+    
+    =evil-goggles= makes it so that every edit you do is highlighted
+    for a brief period of time. This makes it much easier to know
+    exactly what you are doing and also looks cool af.
+
+    #+NAME: evil-goggles
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-goggles
+        :after evil
+        :config (progn
+                  (evil-goggles-mode)
+                  (evil-goggles-use-diff-faces)))
+    #+END_SRC
+    
+    =evil-matchit= makes % work for alot of different things. All of
+    them are listed [[https://github.com/redguardtoo/evil-matchit][here]].
+
+    #+NAME: evil-matchit
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-matchit
+        :after evil
+        :config (global-evil-matchit-mode 1))
+    #+END_SRC
+
+*** SOMEDAY God mode
+*** general
+
+    General keybindings most of the ones i use are going to be defined here
+    as a general rule of thumb i am using , instead of C-c and those are going
+    to be defined in other packages.
+  
+    #+NAME: general
+    #+BEGIN_SRC emacs-lisp
+      (use-package general)
+    #+END_SRC
+
+*** key-chord
+    
+    key-chord allows you to make key strokes that only trigger if you
+    press them fast enough. This makes for some pretty interesting
+    ideas and allows you to bind a nonprefix key to a prefix. This is
+    a very underused package imo because pressing the same character 2
+    times in a row is very easy.
+
+    #+NAME: key-chord
+    #+BEGIN_SRC emacs-lisp
+      (use-package key-chord
+        :config (key-chord-mode 1))
+    #+END_SRC
+
+*** which-key
+
+    which-key shows keybindings as you press them making it much
+    easier. Helps ALOT when learning keybinds
+
+    #+NAME: which-key
+    #+BEGIN_SRC emacs-lisp
+      (use-package which-key
+        :config (which-key-mode))
+    #+END_SRC
+    
 ** Fuzzy Find
 *** helm
 
@@ -754,6 +891,7 @@ Some decisions are inspired by
     #+NAME: org
     #+BEGIN_SRC emacs-lisp
       (use-package org
+        :ghook #'org-indent-mode
         :init
         (setq-default initial-major-mode 'org-mode
                       initial-scratch-message ""
@@ -819,8 +957,8 @@ Some decisions are inspired by
      #+BEGIN_SRC emacs-lisp
        (use-package evil-org
          :after '(org evil)
+         :ghook ('org-mode-hook #'evil-org-mode)
          :config
-         (add-hook 'org-mode-hook 'evil-org-mode)
          (evil-org-set-key '(navigation insert textobjects additional calendar))
          (evil-org-agenda-set-keys))
      #+END_SRC
@@ -870,93 +1008,6 @@ Some decisions are inspired by
       (use-package markdown-mode)
     #+END_SRC
 
-** Key Packages
-*** Evil 
-    
-    Evil is vi emulation in emacs. It is by far the best vi emulation
-    outside of vi itself and very extendable/fast.
-
-    #+NAME: evil
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil
-        :config (evil-mode 1))
-    #+END_SRC
-    
-    =evil-collection= is a project which provides evil keybindings for
-    almost every popular plugin in emacs outside of a few. Its really
-    nice if you want to use evil in buffers where its very emacsy. A
-    list of all keybindings and supported packages can be found
-    [[https://github.com/emacs-evil/evil-collection][here]]. One of the nonsupported packages is magit so here is
-    [[file:config.org::*evil-magit][evil-magit]] config. Also [[evil-magit]] has to load before evil so it
-    needs to set evil-want-keybinding to nil.
-
-    #+NAME: evil-collection
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil-collection
-        :after '(evil evil-magit)
-        :config (evil-collection-init))
-    #+END_SRC
-    
-    =evil-goggles= makes it so that every edit you do is highlighted
-    for a brief period of time. This makes it much easier to know
-    exactly what you are doing and also looks cool af.
-
-    #+NAME: evil-goggles
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil-goggles
-        :after evil
-        :config (progn
-                  (evil-goggles-mode)
-                  (evil-goggles-use-diff-faces)))
-    #+END_SRC
-    
-    =evil-matchit= makes % work for alot of different things. All of
-    them are listed [[https://github.com/redguardtoo/evil-matchit][here]].
-
-    #+NAME: evil-matchit
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil-matchit
-        :after evil
-        :config (global-evil-matchit-mode 1))
-    #+END_SRC
-
-*** SOMEDAY God mode
-*** general
-
-    General keybindings most of the ones i use are going to be defined here
-    as a general rule of thumb i am using , instead of C-c and those are going
-    to be defined in other packages.
-  
-    #+NAME: general
-    #+BEGIN_SRC emacs-lisp
-      (use-package general)
-    #+END_SRC
-
-*** key-chord
-    
-    key-chord allows you to make key strokes that only trigger if you
-    press them fast enough. This makes for some pretty interesting
-    ideas and allows you to bind a nonprefix key to a prefix. This is
-    a very underused package imo because pressing the same character 2
-    times in a row is very easy.
-
-    #+NAME: key-chord
-    #+BEGIN_SRC emacs-lisp
-      (use-package key-chord
-        :config (key-chord-mode 1))
-    #+END_SRC
-
-*** which-key
-
-    which-key shows keybindings as you press them making it much
-    easier. Helps ALOT when learning keybinds
-
-    #+NAME: which-key
-    #+BEGIN_SRC emacs-lisp
-      (use-package which-key
-        :config (which-key-mode))
-    #+END_SRC
-    
 ** vterm
    
    Very powerful terminal emulator as the project was started by
@@ -1358,6 +1409,7 @@ Some decisions are inspired by
   #+BEGIN_SRC emacs-lisp :noweb yes
     (eval-after-load "general"
       (progn 
+        <<keybinds-emacs>>
         <<keybinds-normal>>
         <<keybinds-insert>>
         <<keybinds-org-mode>>))
@@ -1398,6 +1450,22 @@ Some decisions are inspired by
    - context (org mode C-c C-c or [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][this]])
    - mouse (plan 9's acme?)
 
+** Emacs State
+
+   Yes i want to be able to use emacs because i think its important to
+   understand different ways of doing things. Because of this I am
+   going to make it a 66% on startup of whether evil mode is enabled
+   or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybinds]].
+
+   #+NAME: keybinds-emacs
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (general-define-key
+      "M-x" 'helm-M-x
+      "C-x C-f" 'helm-find-files
+      "C-a" 'my/move-beginning-of-line)
+     ;; "C-k" 'my/kill-line)
+   #+END_SRC
+
 ** Normal/Visual State
    
    General evil overided global keybinds. 
@@ -1408,22 +1476,22 @@ Some decisions are inspired by
       :states '(normal visual)
       "|" 'helm-mini
       "SPC" 'helm-imenu
-      "_" 'evil-jump-backward
-      "s" 'eshell-toggle
-      "S" 'helm-projectile-find-file-or-find-file
+      ;; "_" 'my/evil-jump-backward
+      "s" 'my/eshell-toggle
+      "S" 'my/helm-projectile-find-file-or-find-file
       ";" 'helm-M-x
       "g c c" 'comment-line
       "g c r" 'comment-or-uncomment-region
-      "g =" 'indent-buffer
+      "g =" 'my/indent-buffer
       "g p" 'projectile-command-map
-      "\\" 'helm-projectile-search-or-project
+      "\\" 'my/helm-projectile-search-or-project
       "U" 'undo-tree-visualize
       "Q" 'save-buffers-kill-terminal
       ", , c" 'org-capture
       ", , l" 'org-store-link
       (general-chord ";;") 'eval-expression
-      (general-chord "SS") 'helm-projectile-find-file-or-project
-      (general-chord "ss") 'vterm-toggle
+      (general-chord "SS") 'my/helm-projectile-find-file-or-project
+      (general-chord "ss") 'my/vterm-toggle
       (general-chord "``") 'magit-status)
    #+END_SRC
    
@@ -1436,7 +1504,7 @@ Some decisions are inspired by
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
       :states '(insert)
-      (general-chord "uu") 'evil-insert-delete-back-word)
+      (general-chord "uu") 'my/evil-insert-delete-back-word)
    #+END_SRC
   
 ** Ex commands
@@ -1446,7 +1514,7 @@ Some decisions are inspired by
 
    #+NAME: ex-commands
    #+BEGIN_SRC emacs-lisp
-     (evil-ex-define-cmd "cfg" 'open-emacs-config)
+     (evil-ex-define-cmd "cfg" 'my/open-emacs-config)
      (evil-ex-define-cmd "a[genda]" 'org-agenda)
      (evil-ex-define-cmd "q[uit]" 'delete-window)
      (evil-ex-define-cmd "bd" 'kill-this-buffer)

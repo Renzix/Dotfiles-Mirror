@@ -37,16 +37,17 @@ fi
 
 
 # Some nice keybindings and aliases
-alias e="emacs -nw"
-bind -m emacs -x '"\C-x\C-f":"emacs -nw ."'
+# emacs keybindings
+alias e="emacsclient -nw -ca \"\""
+bind -m emacs -x '"\ee":"emacsclient -c -nw ."'
+alias f="emacsclient -nw -ca \"\" ."
+bind -m emacs -x '"\C-xd":"emacsclient -c -nw ."'
 
 # System Shutdown stuff
 alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
 
 # git
-alias gs="emacs -nw -f magit-status-only" # @TODO(renzix): Switch to emacsclient
-bind -m emacs -x '"\C-xg":"emacs -nw -f magit-status-only"'
 alias gc="git commit"
 alias gp="git push"
 
