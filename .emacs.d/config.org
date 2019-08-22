@@ -218,6 +218,15 @@ Some decisions are inspired by
            evil-emacs-state-cursor '(hbar "#43DE43"))
      (setq-default cursor-type 'hbar)
      (set-cursor-color "#43DE43")
+     (defun my/update-god-cursor ()
+       "Update the cursor from god-mode."
+       (if (or god-local-mode buffer-read-only)
+           (progn
+             (setq-default cursor-type 'box)
+             (set-cursor-color "#FFFF00"))
+         (progn
+           (setq-default cursor-type 'hbar)
+           (set-cursor-color "#43DE43"))))
    #+END_SRC
 
 ** Other
@@ -546,9 +555,9 @@ Some decisions are inspired by
 *** SOMEDAY Eval
     
     Helper function for smart-eval. Says if its valid lisp or not.
-
     Functions that help you do evalution of functions and deal with
     stuff.
+
     #+NAME: valid-elisp-p :tangle no
     #+BEGIN_SRC emacs-lisp
       (defun my/valid-elisp-p (s)
@@ -557,6 +566,7 @@ Some decisions are inspired by
              (not (booleanp (read s)))))
     #+END_SRC
 
+    @TODO(renzix): Finish this
 
     #+NAME: smart-eval
     #+BEGIN_SRC emacs-lisp :tangle no
@@ -577,7 +587,7 @@ Some decisions are inspired by
 *** Redefined Functions
     
     This is C-a redefined to go to first nonwhitespace then if pressed
-    again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]].
+    again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]] and from [[https://github.com/bbatsov/crux][crux]].
     
     #+NAME: move-beginning-of-line
     #+BEGIN_SRC emacs-lisp
@@ -605,9 +615,31 @@ Some decisions are inspired by
             (move-beginning-of-line 1))))
     #+END_SRC
 
+    This is a function close to evil o and O which is pretty useful in
+    alot of scenerios. I have 0 idea why this isnt in emacs already. This
+    was also mainly stolen from [[https://emacsredux.com/blog/2013/03/26/smarter-open-line/][this]] and [[https://emacsredux.com/blog/2013/06/15/open-line-above/][this]] which was based off of [[https://github.com/bbatsov/crux][crux]] emacs
+    extension.
+
+    #+NAME: smart-open-line
+    #+BEGIN_SRC emacs-lisp
+      (defun my/smart-open-line (&optional arg)
+        "Insert an empty line after the current line.
+      Position the cursor at its beginning, according to the current mode."
+        (interactive)
+        (if arg
+            (progn
+              (move-beginning-of-line nil)
+              (newline-and-indent)
+              (forward-line -1)
+              (indent-according-to-mode))
+          (progn
+            (move-end-of-line nil)
+            (newline-and-indent))))
+    #+END_SRC
+
 * Core
 ** Key Packages
-*** Evil 
+*** evil 
     
     Evil is vi emulation in emacs. It is by far the best vi emulation
     outside of vi itself and very extendable/fast.
@@ -615,7 +647,9 @@ Some decisions are inspired by
     #+NAME: evil
     #+BEGIN_SRC emacs-lisp
       (use-package evil
-        :config (if (>= 1 (random 2)) (evil-mode 1)))
+        :config 
+        (when (> 1 (random 2)) 
+          (evil-mode 1)))
     #+END_SRC
     
     =evil-collection= is a project which provides evil keybindings for
@@ -656,7 +690,32 @@ Some decisions are inspired by
         :config (global-evil-matchit-mode 1))
     #+END_SRC
 
-*** SOMEDAY God mode
+*** TODO god mode
+
+    God mode is a way to bring a prefix like style of keybinds to
+    emacs. It allows you to press a prefix key then all your keybinds
+    are like holding Control. In order to "let go" of the control you
+    press spacebar first. In order to use alt instead do a g prefix. A
+    G prefix its the same as Control and Alt.
+
+    #+NAME: god-mode
+    #+BEGIN_SRC emacs-lisp
+      (defun god-mode-revert-if-buffer-changed (orig &rest args)
+        (when (not (eq (current-buffer) god-mode-current-buffer))
+          (if god-local-mode
+              (progn
+                (god-local-mode)
+                (my/update-god-cursor))
+            (apply orig args))))
+
+      (use-package god-mode
+        :config
+        (defvar god-mode-current-buffer nil)
+        (add-hook 'god-mode-enabled-hook 'my/update-god-cursor)
+        (add-hook 'god-mode-disabled-hook 'my/update-god-cursor)
+        (advice-add 'god-mode-maybe-activate :around 'god-mode-revert-if-buffer-changed))
+    #+END_SRC
+
 *** general
 
     General keybindings most of the ones i use are going to be defined here
@@ -1114,6 +1173,17 @@ Some decisions are inspired by
        :config (beacon-mode 1))
    #+END_SRC
     
+** Should Be in Emacs
+*** expand-region
+
+    This is a single function package which expands the current region
+
+    #+NAME: expand-region
+    #+BEGIN_SRC emacs-lisp
+      (use-package expand-region
+        :config (delete-selection-mode 1))
+    #+END_SRC
+
 ** Programming
 *** Autopair
 
@@ -1409,7 +1479,8 @@ Some decisions are inspired by
         <<keybinds-emacs>>
         <<keybinds-normal>>
         <<keybinds-insert>>
-        <<keybinds-org-mode>>))
+        <<keybinds-org-mode>>
+        ))
   #+END_SRC
   
 ** Rant on keybindings
@@ -1460,12 +1531,15 @@ Some decisions are inspired by
       :keymaps '(global-map evil-emacs-state-map)
       :keymaps 'override
       "M-x" 'helm-M-x
-      "C-x C-b" 'helm-mini
       "C-x C-f" 'helm-find-files
+      "C-x f" 'helm-locate
       "C-x C-b" 'helm-buffers-list
       "C-x b" 'helm-mini
-      "C-a" 'my/move-beginning-of-line
-      "C-k" 'kill-whole-line)
+      "C-o" 'my/smart-open-line
+      "C-\\" 'er/expand-region
+      "C-." 'repeat
+      "<escape>" 'god-local-mode
+      "C-a" 'my/move-beginning-of-line)
    #+END_SRC
 
 ** Normal/Visual State
@@ -1535,7 +1609,6 @@ Some decisions are inspired by
         :states '(normal visual)
         "SPC" 'helm-org-rifle
         "RET" 'org-ctrl-c-ctrl-c
-        (general-chord "  ") 'helm-imenu
         ", <" 'outline-demote
         ", >" 'outline-promote
         ", p" 'org-up-element
@@ -1550,6 +1623,13 @@ Some decisions are inspired by
         ", ]" 'org-remove-file
         ", '" 'org-edit-special
         ", a" 'org-add-note)
+       (general-define-key
+        :keymaps 'org-mode-map
+        :states 'emacs
+        "C-c r" 'helm-org-rifle)
+       (general-define-key
+        :keymaps 'org-mode-map
+        "C-c r" 'helm-org-rifle) ; There prob is a better way to do this i might make my own macro
      #+END_SRC
 
 **** TODO Org src mode
