@@ -1067,30 +1067,30 @@ Some decisions are inspired by
 ** Terminals
 *** vterm
    
-   Very powerful terminal emulator as the project was started by
-   neovim to create a actual terminal emulator in neovim. This should
-   in theory be just as good. Unfortunately the [[https://melpa.org/][melpa]] package doesnt
-   install properly so you have to [[https://github.com/akermu/emacs-libvterm][manually]] install it. These keybinds
-   also don't count. [[line-numbers][Line numbers]] also dont work properly so we
-   disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/pull/129][fixed soon]].
+    Very powerful terminal emulator as the project was started by
+    neovim to create a actual terminal emulator in neovim. This should
+    in theory be just as good. Unfortunately the [[https://melpa.org/][melpa]] package doesnt
+    install properly so you have to [[https://github.com/akermu/emacs-libvterm][manually]] install it. These keybinds
+    also don't count. [[line-numbers][Line numbers]] also dont work properly so we
+    disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/pull/129][fixed soon]].
 
-   #+NAME: vterm
-   #+BEGIN_SRC emacs-lisp
-     ;;(use-package vterm)
-     (eval-after-load "general"
-       '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-          (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
-          (require 'vterm)
-          (general-define-key
-           :states '(normal)
-           :keymaps 'vterm-mode-map
-           "o" #'evil-insert-resume
-           "a" #'evil-insert-resume
-           "i" #'evil-insert-resume
-           "<return>" #'evil-insert-resume)
-          (add-hook 'doc-view-mode-hook (lambda ()
-                                          (global-linum-relative-mode -1)))))
-   #+END_SRC
+    #+NAME: vterm
+    #+BEGIN_SRC emacs-lisp
+      ;;(use-package vterm)
+      (eval-after-load "general"
+        '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
+           (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+           (require 'vterm)
+           (general-define-key
+            :states '(normal)
+            :keymaps 'vterm-mode-map
+            "o" #'evil-insert-resume
+            "a" #'evil-insert-resume
+            "i" #'evil-insert-resume
+            "<return>" #'evil-insert-resume)
+           (add-hook 'doc-view-mode-hook (lambda ()
+                                           (global-linum-relative-mode -1)))))
+    #+END_SRC
 
 *** eshell
 
@@ -1102,6 +1102,14 @@ Some decisions are inspired by
     #+BEGIN_SRC emacs-lisp
       (defun eshell/e (file)
         (find-file file))
+      (defun eshell-maybe-bol ()
+        (interactive)
+        (let ((p (point)))
+          (eshell-bol)
+          (if (= p (point))
+              (beginning-of-line))))
+      (add-hook 'eshell-mode-hook
+                '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
     #+END_SRC
 
 ** Templates/Snippets
@@ -1175,7 +1183,8 @@ Some decisions are inspired by
          (require 'rencord))
      #+END_SRC
     
-** Beacon
+** Visual Helpers
+*** beacon
 
    Beacon just shos a light to the location where the cursor moved
    to. Simple as that.
@@ -1185,7 +1194,18 @@ Some decisions are inspired by
      (use-package beacon
        :config (beacon-mode 1))
    #+END_SRC
+
+*** rainbow-delimiters
     
+    closing things get different highlighting so you can tell if it is
+    closed or not.
+    
+    #+NAME: rainbow-delimiters
+    #+BEGIN_SRC emacs-lisp
+      (use-package rainbow-delimiters
+        :ghook 'prog-mode-hook)
+    #+END_SRC
+
 ** Should Be in Emacs
 *** expand-region
 
