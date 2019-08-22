@@ -1064,7 +1064,8 @@ Some decisions are inspired by
       (use-package markdown-mode)
     #+END_SRC
 
-** vterm
+** Terminals
+*** vterm
    
    Very powerful terminal emulator as the project was started by
    neovim to create a actual terminal emulator in neovim. This should
@@ -1090,7 +1091,19 @@ Some decisions are inspired by
           (add-hook 'doc-view-mode-hook (lambda ()
                                           (global-linum-relative-mode -1)))))
    #+END_SRC
-    
+
+*** eshell
+
+    Eshell is a nice interactive prompt to use with emacs. Imo this is
+    a really useful package as you can run shell and elisp commands
+    pretty easily.
+
+    #+NAME: eshell
+    #+BEGIN_SRC emacs-lisp
+      (defun eshell/e (file)
+        (find-file file))
+    #+END_SRC
+
 ** Templates/Snippets
 
    Yasnippets is possibly cool? It's supposed to intergrate with
