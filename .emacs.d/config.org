@@ -17,7 +17,8 @@ Some decisions are inspired by
 * Startup
 
   Starts up emacs. This should be somewhat small and only for
-  proccesses that are required to run first.
+  proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
+  which is annoying.
 
 ** Configure package sources
 
@@ -31,7 +32,8 @@ Some decisions are inspired by
              ("melpa"        . "https://melpa.org/packages/"))
            package-archive-priorities
            '(("elpa"     . 5) ("melpa"        . 10)))
-
+   ;; bug
+   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
    #+END_SRC
 
 ** Bootstrap use-package
@@ -177,7 +179,9 @@ Some decisions are inspired by
    is boring so I make it switch depending on the day of the
    week. Also the theme stays default if emacs is ran in the terminal
    because the themes that are good suck in the terminal and black is
-   good enough.
+   good enough. There is a bug with monokai on macos and windows where
+   it loads without me telling it to. Because of this i have to
+   enable/disable it...
 
    #+NAME: theme
    #+BEGIN_SRC emacs-lisp
@@ -185,7 +189,10 @@ Some decisions are inspired by
        (defvar renzix-weekday (format-time-string "%w"))
        (use-package doom-themes)
        (use-package apropospriate-theme)
-       (use-package monokai-theme)
+       (use-package monokai-theme
+         :config 
+         (load-theme 'monokai t)
+         (disable-theme 'monokai))
        (cond ((string= "0" renzix-weekday) ;; Sunday
               (load-theme 'doom-dracula t))
              ((string= "1" renzix-weekday) ;; Monday
@@ -690,7 +697,7 @@ Some decisions are inspired by
         :config (global-evil-matchit-mode 1))
     #+END_SRC
 
-*** TODO god mode
+*** god mode
 
     God mode is a way to bring a prefix like style of keybinds to
     emacs. It allows you to press a prefix key then all your keybinds
@@ -741,17 +748,7 @@ Some decisions are inspired by
         :config (key-chord-mode 1))
     #+END_SRC
 
-*** which-key
-
-    which-key shows keybindings as you press them making it much
-    easier. Helps ALOT when learning keybinds
-
-    #+NAME: which-key
-    #+BEGIN_SRC emacs-lisp
-      (use-package which-key
-        :config (which-key-mode))
-    #+END_SRC
-    
+*** TODO avy
 ** Fuzzy Find
 *** helm
 
@@ -1206,6 +1203,18 @@ Some decisions are inspired by
         :ghook 'prog-mode-hook)
     #+END_SRC
 
+*** TODO wilfred
+*** which-key
+
+    which-key shows keybindings as you press them making it much
+    easier. Helps ALOT when learning keybinds
+
+    #+NAME: which-key
+    #+BEGIN_SRC emacs-lisp
+      (use-package which-key
+        :config (which-key-mode))
+    #+END_SRC
+    
 ** Should Be in Emacs
 *** expand-region
 
