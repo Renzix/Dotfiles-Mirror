@@ -23,34 +23,25 @@ info() {
 		printf "[%s]:$1\n" "$(date +'%D %T')";
 }
 
-[[ $(type -P "exa") ]] && {
+if hash "exa" 2>/dev/null ; then
 	info "Exa found"
 	alias ls="exa"
 	alias la="exa -a"
 	alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
-} || {
+else
 	info "Exa not found"
 	alias l="ls --color=auto -h"
 	alias la="ls -ah"
 	alias ll='ls -lh'
-}
+fi
 
-# Variables and aliases
-# Default editor
-[[ $(type -P "nvim") ]] && {
-	info "Found nvim so using that"
-	export EDITOR="nvim"
-} || [[ $(type -P "vim") ]] && {
-	info "Found vim so using that"
-	export EDITOR="vim"
-} || [[ $(type -P "emacs") ]] && {
-	info "Couldnt find any vi so using emacs"
-	export EDITOR="emacs -nw"
-} || [[ $(type -P "nano") ]] && {
-	info "Couldnt find any vi or emacs so using nano"
-	export EDITOR="nano"
-}
-alias vi="${EDITOR:-vi}"
+
+# Some nice keybindings and aliases
+# emacs keybindings
+alias e="emacsclient -nw -ca \"\""
+bind -m emacs -x '"\ee":"emacsclient -c -nw ."'
+alias f="emacsclient -nw -ca \"\" ."
+bind -m emacs -x '"\C-xd":"emacsclient -c -nw ."'
 
 # System Shutdown stuff
 alias rb="sudo reboot"
@@ -62,12 +53,34 @@ alias gp="git push"
 
 #Other
 alias ht="htop"
+alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k" # because im lazy only works on 1 cpu
+alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k" # because im lazy only works on 1 cpu
+alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
+alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
+
 
 cb() {
 	read -rt .1 input
 	echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
 
-export NIX_AUTO_RUN=1
+pwdp() {
+	PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
+}
 
-[[ $(type -P "neofetch") ]] && [ -z "$DEBUG" ] && neofetch
+tw() {
+	mpv "https://twitch.tv/$1"
+}
+
+# Random prompt from the ones above
+#rand_prompt() {
+#	prompts=('pwdp' 'timep' 'usrp' 'verp' 'datep')
+#	RANDOM=$$$(date +%s)
+#	rand=$[$RANDOM % ${#prompts[@]}]
+#	${prompts[$rand]}
+#}
+
+#PROMPT_COMMAND=rand_prompt
+pwdp
+
+export NIX_AUTO_RUN=1
