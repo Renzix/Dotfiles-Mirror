@@ -13,6 +13,7 @@ Some decisions are inspired by
 [[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help
 [[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff
 [[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas
+[[https://github.com/bbatsov/crux][Crux]]: Alot of my redefined functions are based off of it
  
 * Startup
 
@@ -32,8 +33,9 @@ Some decisions are inspired by
              ("melpa"        . "https://melpa.org/packages/"))
            package-archive-priorities
            '(("elpa"     . 5) ("melpa"        . 10)))
-   ;; bug
-   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+     ;; bug in macos
+     (when (string= system-type "darwin")
+       (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
    #+END_SRC
 
 ** Bootstrap use-package
@@ -289,6 +291,15 @@ Some decisions are inspired by
      (setq warning-minimum-level :error)
    #+END_SRC
  
+   If you set the variable kill-whole-line then the kill-line will
+   delete the entire line including newline if at the beginning of the
+   line.
+
+   #+NAME: kill-whole-line
+   #+BEGIN_SRC emacs-lisp
+     (setq kill-whole-line t)
+   #+END_SRC
+
 ** Useful Functions
 *** Edit Text
 
@@ -328,12 +339,22 @@ Some decisions are inspired by
 
     #+NAME: indent-buffer
     #+BEGIN_SRC emacs-lisp
-      (defun my/indent-buffer ()
-        "Indent the entire buffer and untabifies it."
+      (defun my/smart-indent ()
+        "If a region is selected indent that.
+      If given ARG indent the current line.
+      Else indent the entire buffer."
         (interactive)
         (save-excursion
-          (indent-region (point-min) (point-max) nil)
-          (untabify (point-min) (point-max))))
+          (if (region-active-p) (progn
+                                  (indent-region (region-beginning) (region-end))
+                                  (message "Indenting region")))
+          (if current-prefix-arg
+              (progn
+                (indent-region (line-beginning-position) (line-end-position))
+                (message "Indenting line"))
+            (progn
+              (indent-region (point-min) (point-max))
+              (message "Identing buffer")))))
     #+END_SRC
    
     Smart indentation that i found [[https://www.emacswiki.org/emacs/NoTabs][here]]. Infers indentation based on
@@ -617,9 +638,9 @@ Some decisions are inspired by
             (forward-line (1- arg))))
 
         (let ((orig-point (point)))
-          (back-to-indentation)
+          (move-beginning-of-line 1)
           (when (= orig-point (point))
-            (move-beginning-of-line 1))))
+            (back-to-indentation))))
     #+END_SRC
 
     This is a function close to evil o and O which is pretty useful in
@@ -629,10 +650,10 @@ Some decisions are inspired by
 
     #+NAME: smart-open-line
     #+BEGIN_SRC emacs-lisp
-      (defun my/smart-open-line (&optional arg)
+      (defun my/smart-open-line (arg)
         "Insert an empty line after the current line.
       Position the cursor at its beginning, according to the current mode."
-        (interactive)
+        (interactive "P")
         (if arg
             (progn
               (move-beginning-of-line nil)
@@ -748,7 +769,15 @@ Some decisions are inspired by
         :config (key-chord-mode 1))
     #+END_SRC
 
-*** TODO avy
+*** avy
+
+
+    Avy is nice to use. Its hard to explain just look at the [[https://github.com/abo-abo/avy][github]] gifs.
+    #+NAME: avy
+    #+BEGIN_SRC emacs-lisp
+      (use-package avy)
+    #+END_SRC
+
 ** Fuzzy Find
 *** helm
 
@@ -910,7 +939,8 @@ Some decisions are inspired by
               projectile-switch-project-action 'helm-projectile-find-file
               projectile-sort-order 'recently-active)
         :config
-        (projectile-mode t))
+        (projectile-mode t)
+        (helm-projectile-on))
     #+END_SRC
 
 *** treemacs
@@ -1183,14 +1213,14 @@ Some decisions are inspired by
 ** Visual Helpers
 *** beacon
 
-   Beacon just shos a light to the location where the cursor moved
-   to. Simple as that.
+    Beacon just shos a light to the location where the cursor moved
+    to. Simple as that.
 
-   #+NAME: beacon
-   #+BEGIN_SRC emacs-lisp
-     (use-package beacon
-       :config (beacon-mode 1))
-   #+END_SRC
+    #+NAME: beacon
+    #+BEGIN_SRC emacs-lisp
+      (use-package beacon
+        :config (beacon-mode 1))
+    #+END_SRC
 
 *** rainbow-delimiters
     
@@ -1570,17 +1600,24 @@ Some decisions are inspired by
    #+NAME: keybinds-emacs
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
-      :keymaps '(global-map evil-emacs-state-map)
-      :keymaps 'override
+      :keymaps '(global evil-emacs-state-map override)
       "M-x" 'helm-M-x
       "C-x C-f" 'helm-find-files
       "C-x f" 'helm-locate
       "C-x C-b" 'helm-buffers-list
       "C-x b" 'helm-mini
+      "C-x g" 'magit-status
+      "C-x C-g" 'magit-dispatch
       "C-o" 'my/smart-open-line
       "C-\\" 'er/expand-region
       "C-." 'repeat
       "<escape>" 'god-local-mode
+      "C-=" 'my/smart-indent
+      "C-j" 'avy-goto-char-2
+      "C-'" 'my/helm-projectile-find-file-or-project
+      "C-\"" 'my/helm-projectile-search-or-project
+      "M-p" 'projectile-command-map
+      "C-%" 'evilmi-jump-items
       "C-a" 'my/move-beginning-of-line)
    #+END_SRC
 
@@ -1600,7 +1637,7 @@ Some decisions are inspired by
       ";" 'helm-M-x
       "g c c" 'comment-line
       "g c r" 'comment-or-uncomment-region
-      "g =" 'my/indent-buffer
+      "g =" 'my/smart-indent
       "g p" 'projectile-command-map
       "\\" 'my/helm-projectile-search-or-project
       "U" 'undo-tree-visualize
