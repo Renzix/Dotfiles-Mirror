@@ -214,7 +214,9 @@ Some decisions are inspired by
    Evil is cool and i want to be able to tell what state I am in
    without having to look at the bottom left. One easy way to do this
    is change the color and type of the cursor. It changes the type but
-   not the color by default and normal is the same as emacs state.
+   not the color by default and normal is the same as emacs
+   state. However because i have god-mode It does not come with a easy
+   way of doing this so i have a function to update it.
    
    #+NAME: evil-cursor
    #+BEGIN_SRC emacs-lisp
@@ -227,15 +229,15 @@ Some decisions are inspired by
            evil-emacs-state-cursor '(hbar "#43DE43"))
      (setq-default cursor-type 'hbar)
      (set-cursor-color "#43DE43")
-     (defun my/update-god-cursor ()
+     (defun my/update-god-cursor (&rest args)
        "Update the cursor from god-mode."
-       (if (or god-local-mode buffer-read-only)
-           (progn
-             (setq-default cursor-type 'box)
-             (set-cursor-color "#FFFF00"))
-         (progn
-           (setq-default cursor-type 'hbar)
-           (set-cursor-color "#43DE43"))))
+       (cond 
+        ((eq god-local-mode t) ;; if i just do god-local-mode it thinks its a function
+         (set-cursor-color "#FFFF00")
+         (setq cursor-type 'box))
+        ((eq evil-state 'emacs)
+         (set-cursor-color "#43DE43")
+         (setq cursor-type 'hbar))))
    #+END_SRC
 
 ** Other
@@ -676,8 +678,8 @@ Some decisions are inspired by
     #+BEGIN_SRC emacs-lisp
       (use-package evil
         :config 
-        (when (> 1 (random 2)) 
-          (evil-mode 1)))
+        (setq evil-default-state 'emacs) ;; For now this will always be emacs state so i get used to it
+        (evil-mode 1))
     #+END_SRC
     
     =evil-collection= is a project which provides evil keybindings for
@@ -724,8 +726,11 @@ Some decisions are inspired by
     emacs. It allows you to press a prefix key then all your keybinds
     are like holding Control. In order to "let go" of the control you
     press spacebar first. In order to use alt instead do a g prefix. A
-    G prefix its the same as Control and Alt.
-
+    G prefix its the same as Control and Alt. Color wise I have it use
+    a yellow box and a green underscore for normal emacs mode. There
+    is no good way of telling when you change buffer focus so I just
+    have it run after every command.
+    
     #+NAME: god-mode
     #+BEGIN_SRC emacs-lisp
       (defun god-mode-revert-if-buffer-changed (orig &rest args)
@@ -739,8 +744,8 @@ Some decisions are inspired by
       (use-package god-mode
         :config
         (defvar god-mode-current-buffer nil)
-        (add-hook 'god-mode-enabled-hook 'my/update-god-cursor)
-        (add-hook 'god-mode-disabled-hook 'my/update-god-cursor)
+        (add-hook 'post-command-hook 'my/update-god-cursor) ;; There is no good way to do this
+        (advice-add 'other-window :after 'my/update-god-cursor) 
         (advice-add 'god-mode-maybe-activate :around 'god-mode-revert-if-buffer-changed))
     #+END_SRC
 
@@ -1600,7 +1605,7 @@ Some decisions are inspired by
    #+NAME: keybinds-emacs
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
-      :keymaps '(global evil-emacs-state-map override)
+      :states '(emacs)
       "M-x" 'helm-M-x
       "C-x C-f" 'helm-find-files
       "C-x f" 'helm-locate
@@ -1608,6 +1613,8 @@ Some decisions are inspired by
       "C-x b" 'helm-mini
       "C-x g" 'magit-status
       "C-x C-g" 'magit-dispatch
+      "C-x C-o" 'other-window
+      "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
       "C-o" 'my/smart-open-line
       "C-\\" 'er/expand-region
       "C-." 'repeat
@@ -1616,8 +1623,9 @@ Some decisions are inspired by
       "C-j" 'avy-goto-char-2
       "C-'" 'my/helm-projectile-find-file-or-project
       "C-\"" 'my/helm-projectile-search-or-project
+      "C-:" 'helm-bookmarks
       "M-p" 'projectile-command-map
-      "C-%" 'evilmi-jump-items
+      "M-m" 'evilmi-jump-items
       "C-a" 'my/move-beginning-of-line)
    #+END_SRC
 
@@ -1706,9 +1714,6 @@ Some decisions are inspired by
         :keymaps 'org-mode-map
         :states 'emacs
         "C-c r" 'helm-org-rifle)
-       (general-define-key
-        :keymaps 'org-mode-map
-        "C-c r" 'helm-org-rifle) ; There prob is a better way to do this i might make my own macro
      #+END_SRC
 
 **** TODO Org src mode
