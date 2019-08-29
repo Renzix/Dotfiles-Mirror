@@ -10,6 +10,7 @@ Table of Contents
 _________________
 
 Startup
+.. Enable local variable check
 .. Configure package sources
 .. Bootstrap use-package
 .. quelpa
@@ -117,9 +118,9 @@ only runs on save of the file. Maybe this will make me only save when
 necessary.
 
 ,----
-|   (org-export-to-file 'html "../docs/index.html")
-|   (org-export-to-file 'org "../docs/index.org")
-|   (org-export-to-file 'ascii "../docs/index.txt")
+| (org-export-to-file 'html "../docs/index.html")
+| (org-export-to-file 'org "../docs/index.org")
+| (org-export-to-file 'ascii "../docs/index.txt")
 | ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
 `----
 
@@ -158,6 +159,22 @@ Startup
 
 [bug]
 <https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package>
+
+Enable local variable check
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  I disable the check for safety in [init.el] so that I dont have to
+  press y/n on startup. I would like to be somewhat safe and eval code
+  at the top so I reactivate the check here.
+
+  ,----
+  | (setq enable-local-eval 'maybe
+  |       enable-local-variables t)
+  `----
+
+
+[init.el] <file:init.el>
+
 
 Configure package sources
 ~~~~~~~~~~~~~~~~~~~~~~~~~

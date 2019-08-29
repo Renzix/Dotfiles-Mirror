@@ -45,7 +45,7 @@ when necessary.
   (org-export-to-file 'html "../docs/index.html")
   (org-export-to-file 'org "../docs/index.org")
   (org-export-to-file 'ascii "../docs/index.txt")
-;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
+  ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
 #+END_SRC
 
 
@@ -54,6 +54,18 @@ when necessary.
   Starts up emacs. This should be somewhat small and only for
   proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
   which is annoying.
+
+** Enable local variable check
+
+   I disable the check for safety in [[file:init.el][init.el]] so that I dont have to
+   press y/n on startup. I would like to be somewhat safe and eval
+   code at the top so I reactivate the check here.
+
+   #+NAME: enable-local-eval
+   #+BEGIN_SRC emacs-lisp
+     (setq enable-local-eval 'maybe
+           enable-local-variables t)
+   #+END_SRC
 
 ** Configure package sources
 
