@@ -5,6 +5,7 @@
 #+DESCRIPTION: My org mode config file
 #+KEYWORDS: org, config, literate-programming
 #+LANGUAGE: en
+#+EXPORT_FILE_NAME: ../docs/index.html
 
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
@@ -1092,7 +1093,6 @@ Made to work with emacs 26 and 27 on windows, linux, and macos
          :after org)
        (use-package ox-hugo
          :after org)
-       (use-package org-html-themes
      #+END_SRC
 
 **** Evil org mode
