@@ -1,43 +1,96 @@
 
 # Table of Contents
 
--   [Startup](#org64e514b)
-    -   [Configure package sources](#org7a35242)
-    -   [Bootstrap use-package](#org3ba19b2)
-    -   [quelpa](#org1e453c3)
-    -   [Increase garbage collector threshold](#org2318c09)
-    -   [Set custom settings to load in own file](#org0bdbac8)
--   [Preferences](#org2d89ca5)
-    -   [Buffers](#orge1a4cde)
-    -   [Display](#org8038f37)
-    -   [Other](#orgd2e21b5)
-    -   [Useful Functions](#org0b2283a)
--   [Core](#orga123edc)
-    -   [Key Packages](#org7597752)
-    -   [Fuzzy Find](#orgf9aad1c)
-    -   [Version Control](#org0db4c0e)
-    -   [Autocompletion](#orged76f18)
-    -   [Projects](#org52e1975)
-    -   [Plain Text Modes](#org9a385af)
-    -   [Terminals](#org40f1239)
-    -   [Templates/Snippets](#orgfa9b00a)
-    -   [Chat programs](#orga4c20b4)
-    -   [Visual Helpers](#org949b3a6)
-    -   [Should Be in Emacs](#orgb2952ca)
-    -   [Programming](#org0c9fd4c)
--   [Keybindings](#orga02f55c)
-    -   [Rant on keybindings](#orgb68aaa0)
-    -   [Emacs State](#orgeaa9ab8)
-    -   [Normal/Visual State](#org7467f0c)
-    -   [Insert State](#org7f6b090)
-    -   [Ex commands](#org69e1725)
-    -   [Major Modes](#org0fb4f2a)
-    -   [Other](#org855def8)
+-   [Startup](#orge49ca21)
+    -   [Configure package sources](#org5e7da82)
+    -   [Bootstrap use-package](#org0227769)
+    -   [quelpa](#org8fe5855)
+    -   [Increase garbage collector threshold](#org9905c53)
+    -   [Set custom settings to load in own file](#orgf35bc43)
+-   [Preferences](#org38b24ae)
+    -   [Buffers](#org1e5a8ef)
+    -   [Display](#orgaa9dc88)
+    -   [Other](#org33e5633)
+    -   [Useful Functions](#orgdd727db)
+        -   [Edit Text](#org1456ceb)
+        -   [Format Text](#org62254d8)
+        -   [File Handling](#orgf12cde8)
+        -   [Projects](#org6a21603)
+        -   [Open Buffer](#org71a7f7b)
+        -   [Eval](#org03713fb)
+        -   [Redefined Functions](#org310f4c5)
+-   [Core](#orgd1d0202)
+    -   [Key Packages](#org1e3582d)
+        -   [evil](#orgfcf8e53)
+        -   [god mode](#org372665b)
+        -   [general](#org001394c)
+        -   [key-chord](#orgfc1216b)
+        -   [avy](#org313f932)
+    -   [Fuzzy Find](#org085e25c)
+        -   [helm](#org4e52d74)
+        -   [ido](#org2a432b3)
+        -   [ivy](#org2269b2a)
+    -   [Version Control](#org24a3175)
+        -   [Git](#org30bd4d9)
+        -   [vcmode](#org6cc0375)
+    -   [Autocompletion](#org33b2a06)
+        -   [Company](#orga820ced)
+    -   [Projects](#org7bd9ae0)
+        -   [projectile](#org981a26f)
+        -   [treemacs](#org9bdc7d8)
+    -   [Plain Text Modes](#orgae53036)
+        -   [Org](#org41bf6d4)
+        -   [LaTeX](#org20c02b4)
+        -   [Markdown](#org43839e4)
+    -   [Terminals](#orge4a389a)
+        -   [vterm](#org9be92b2)
+        -   [eshell](#org713df00)
+    -   [Templates/Snippets](#orgf07f74d)
+        -   [Gentoo Snippets](#orgf55f865)
+    -   [Chat programs](#orgd2372ca)
+        -   [Matrix](#org57e910e)
+        -   [Discord](#orgc95d9bb)
+        -   [IRC](#org94b6d35)
+    -   [Visual Helpers](#org8c301b0)
+        -   [beacon](#org8c2cd2a)
+        -   [rainbow-delimiters](#orga33dd68)
+        -   [wilfred](#org3d87fc4)
+        -   [which-key](#org1a73897)
+    -   [Should Be in Emacs](#org105060c)
+        -   [expand-region](#org2e86a1e)
+    -   [Programming](#org2210b91)
+        -   [Autopair](#orgfd79395)
+        -   [LSP](#org3bbc847)
+        -   [JVM](#org86317a7)
+        -   [Scripting langs](#org4f986ef)
+        -   [Microsoft/Dotnet](#org6113ed2)
+        -   [rust](#org7c4f8c0)
+        -   [c and cpp](#org1c0d37b)
+        -   [haskell](#org0293e24)
+        -   [Google](#org218db81)
+        -   [Flycheck](#orgf10184c)
+        -   [imenu](#org499060b)
+-   [Keybindings](#org4fe3b05)
+    -   [Rant on keybindings](#org71d6102)
+    -   [Emacs State](#orga4d96cf)
+    -   [Normal/Visual State](#org0a3a816)
+    -   [Insert State](#orgf987453)
+    -   [Ex commands](#orgff6e495)
+    -   [Major Modes](#orgca8f38c)
+        -   [Plain Text](#org1cc4206)
+        -   [Programming](#orgc6c8d31)
+        -   [Messaging](#org9c8674f)
+        -   [Other](#orgd84e63c)
+    -   [Other](#org516494f)
+        -   [Helm](#org8b8b58d)
+
+\#-**- after-save-hook: (lambda () (save-excursion (org-babel-goto-named-src-block "export-to-docs") (org-babel-execute-src-block))); -**-
 
 Hello This is my second real attempt to make a "Perfect" config. Idk
 if it will ever be good enough but here it is. Note this is available
 on [gitlab](https://gitlab.com/Renzix/Dotfiles) and it should be mirrored on [github](https://github.com/Renzix/Dotfiles-Mirror). There are multiple
-versions of this file including [readtheorg](index.html) and [hugo](hugo.html) for now.
+versions of this file including [readtheorg](index.html), [plain text](index.txt) and [markdown](index.md)
+for now.
 
 Some decisions are inspired by
 
@@ -53,7 +106,7 @@ Made to work with emacs 26 and 27 on windows, linux, and macos
 </div>
 
 
-<a id="org64e514b"></a>
+<a id="orge49ca21"></a>
 
 # Startup
 
@@ -62,7 +115,7 @@ proccesses that are required to run first. Also there is a small [bug](https://s
 which is annoying.
 
 
-<a id="org7a35242"></a>
+<a id="org5e7da82"></a>
 
 ## Configure package sources
 
@@ -79,7 +132,7 @@ Melpa is nice because its more bleeding edge.
       (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 
-<a id="org3ba19b2"></a>
+<a id="org0227769"></a>
 
 ## Bootstrap use-package
 
@@ -96,20 +149,20 @@ Makes sure that `use-package` always downloads the package if not available
     (setq use-package-always-ensure t)
 
 
-<a id="org1e453c3"></a>
+<a id="org8fe5855"></a>
 
 ## quelpa
 
 Quelpa is another way to get packages and it basically wraps around
 git repositories. Its really nice if you want bleeding edge stuff
-and also it has a [2](#org266094c) with the keyword :quelpa.
+and also it has a [2](#org22d6f61) with the keyword :quelpa.
 
     (use-package quelpa
       :init (setq quelpa-upgrade-p t))
     (use-package quelpa-use-package) 
 
 
-<a id="org2318c09"></a>
+<a id="org9905c53"></a>
 
 ## Increase garbage collector threshold
 
@@ -126,7 +179,7 @@ to 10MB for startup increases speed.
                          gc-cons-threshold)))
 
 
-<a id="org0bdbac8"></a>
+<a id="orgf35bc43"></a>
 
 ## Set custom settings to load in own file
 
@@ -138,7 +191,7 @@ variables. Creating it as a temporary file effectively disables it
     (setq custom-file (make-temp-file "emacs-custom"))
 
 
-<a id="org2d89ca5"></a>
+<a id="org38b24ae"></a>
 
 # Preferences
 
@@ -146,7 +199,7 @@ Some preferences I like/dont like about emacs. Basically trying to
 make the defaults better.
 
 
-<a id="orge1a4cde"></a>
+<a id="org1e5a8ef"></a>
 
 ## SOMEDAY Buffers
 
@@ -170,7 +223,7 @@ Nice little display for my battery.
     (display-battery-mode)
 
 
-<a id="org8038f37"></a>
+<a id="orgaa9dc88"></a>
 
 ## Display
 
@@ -199,7 +252,7 @@ annoying and in general only 2 windows are nessisary.
 In evil relative line numbers are really nice. This also allows the
 current line number to not be 0 but whatever the actual line number
 it is. Having 0 is kinda useless in relative line numbers. This is
-disabled for [69](#org5d2b66f) because it doesnt deal with it well.
+disabled for [69](#org6e1ada2) because it doesnt deal with it well.
 
     (when (>= emacs-major-version 26)
       (global-display-line-numbers-mode)
@@ -266,7 +319,7 @@ way of doing this so i have a function to update it.
         (setq cursor-type 'hbar))))
 
 
-<a id="orgd2e21b5"></a>
+<a id="org33e5633"></a>
 
 ## Other
 
@@ -313,10 +366,12 @@ line.
     (setq kill-whole-line t)
 
 
-<a id="org0b2283a"></a>
+<a id="orgdd727db"></a>
 
 ## Useful Functions
 
+
+<a id="org1456ceb"></a>
 
 ### Edit Text
 
@@ -347,6 +402,8 @@ on the current line in insert mode.
            (+ (line-beginning-position) (current-indentation)) (point)))))
 
 
+<a id="org62254d8"></a>
+
 ### Format Text
 
     (defun my/smart-indent ()
@@ -368,7 +425,7 @@ on the current line in insert mode.
 
 Smart indentation that i found [here](https://www.emacswiki.org/emacs/NoTabs). Infers indentation based on
 the amount of tabs/spaces in the current buffer. If its a new
-buffer then use the [default value](#org2c69c09).
+buffer then use the [default value](#orgb7f3518).
 
     (defun my/infer-indentation-style ()
       (let ((space-count (how-many "^  " (point-min) (point-max)))
@@ -376,6 +433,8 @@ buffer then use the [default value](#org2c69c09).
         (if (> space-count tab-count) (setq indent-tabs-mode nil))
         (if (> tab-count space-count) (setq indent-tabs-mode t))))
 
+
+<a id="orgf12cde8"></a>
 
 ### File Handling
 
@@ -429,6 +488,8 @@ Reads a string directly from a file then returns it as a string
         (buffer-string)))
 
 
+<a id="org6a21603"></a>
+
 ### SOMEDAY Projects
 
 -   Note taken on <span class="timestamp-wrapper"><span class="timestamp">[2019-08-18 Sun 21:53] </span></span>   
@@ -481,10 +542,12 @@ that works properly on windows.
        (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
 
+<a id="org71a7f7b"></a>
+
 ### SOMEDAY Open Buffer
 
 -   Note taken on <span class="timestamp-wrapper"><span class="timestamp">[2019-08-18 Sun 21:54] </span></span>   
-    Add doas-edit or make [37](#org49523c6) check for bsd/doas
+    Add doas-edit or make [37](#org2f071e9) check for bsd/doas
 
 I like using eshell and vterm but dealing with emacs buffers is
 actually insane. I made a coupld simple functions to switch to a
@@ -559,6 +622,8 @@ Opens my emacs configuration for editing.
       (find-file "~/Dotfiles/.emacs.d/config.org"))
 
 
+<a id="org03713fb"></a>
+
 ### SOMEDAY Eval
 
 Helper function for smart-eval. Says if its valid lisp or not.
@@ -585,6 +650,8 @@ stuff.
         (message "%s" (car values))
         (kill-new (prin1-to-string (car values)))))
 
+
+<a id="org310f4c5"></a>
 
 ### Redefined Functions
 
@@ -634,15 +701,17 @@ extension.
           (newline-and-indent))))
 
 
-<a id="orga123edc"></a>
+<a id="orgd1d0202"></a>
 
 # Core
 
 
-<a id="org7597752"></a>
+<a id="org1e3582d"></a>
 
 ## Key Packages
 
+
+<a id="orgfcf8e53"></a>
 
 ### evil
 
@@ -659,7 +728,7 @@ almost every popular plugin in emacs outside of a few. Its really
 nice if you want to use evil in buffers where its very emacsy. A
 list of all keybindings and supported packages can be found
 [here](https://github.com/emacs-evil/evil-collection). One of the nonsupported packages is magit so here is
-[evil-magit](config.md) config. Also [55](#org7200a1a) has to load before evil so it
+[evil-magit](config.md) config. Also [55](#org9c1f150) has to load before evil so it
 needs to set evil-want-keybinding to nil.
 
     (use-package evil-collection
@@ -683,6 +752,8 @@ them are listed [here](https://github.com/redguardtoo/evil-matchit).
       :after evil
       :config (global-evil-matchit-mode 1))
 
+
+<a id="org372665b"></a>
 
 ### god mode
 
@@ -711,6 +782,8 @@ have it run after every command.
       (advice-add 'god-mode-maybe-activate :around 'god-mode-revert-if-buffer-changed))
 
 
+<a id="org001394c"></a>
+
 ### general
 
 General keybindings most of the ones i use are going to be defined here
@@ -719,6 +792,8 @@ to be defined in other packages.
 
     (use-package general)
 
+
+<a id="orgfc1216b"></a>
 
 ### key-chord
 
@@ -732,6 +807,8 @@ times in a row is very easy.
       :config (key-chord-mode 1))
 
 
+<a id="org313f932"></a>
+
 ### avy
 
 Avy is nice to use. Its hard to explain just look at the [github](https://github.com/abo-abo/avy) gifs.
@@ -739,10 +816,12 @@ Avy is nice to use. Its hard to explain just look at the [github](https://github
     (use-package avy)
 
 
-<a id="orgf9aad1c"></a>
+<a id="org085e25c"></a>
 
 ## Fuzzy Find
 
+
+<a id="org4e52d74"></a>
 
 ### helm
 
@@ -802,16 +881,22 @@ tool. This is required if I want to use helm-projectile-rg.
       :after helm)
 
 
+<a id="org2a432b3"></a>
+
 ### SOMEDAY ido
 
+
+<a id="org2269b2a"></a>
 
 ### SOMEDAY ivy
 
 
-<a id="org0db4c0e"></a>
+<a id="org24a3175"></a>
 
 ## Version Control
 
+
+<a id="org30bd4d9"></a>
 
 ### Git
 
@@ -819,13 +904,13 @@ tool. This is required if I want to use helm-projectile-rg.
 
     Magit is one of the greatest emacs packages to exist. It allows
     the power of git in a tui/gui/cli form depending on what is
-    needed. Note this is disabled because it is not [43](#org5cd113d) enough
+    needed. Note this is disabled because it is not [43](#org958e5a6) enough
     
         (use-package magit)
 
 -   Forge
 
-    This is in beta but forge allows [53](#org15b4e7a) to talk to github and
+    This is in beta but forge allows [53](#orgcc9bcc8) to talk to github and
     gitlab in order to deal with Pull Requests and Issues.
     
         (use-package forge
@@ -833,12 +918,12 @@ tool. This is required if I want to use helm-projectile-rg.
 
 -   evil-magit
 
-    [Magit](#org4cea28e) isnt [43](#org5cd113d) enough. It doesnt have standard [43](#org5cd113d) keybindings
+    [Magit](#org9c555f3) isnt [43](#org958e5a6) enough. It doesnt have standard [43](#org958e5a6) keybindings
     and rebinds stuff like j and k. evil-magit fixes this by
     rebinding them and this is one of the only packages that isnt
-    supported by [44](#org24cb398). For some fucking reason this has to
+    supported by [44](#org02b192d). For some fucking reason this has to
     load before evil so it also needs evil-want-keybinding for
-    [44](#org24cb398).
+    [44](#org02b192d).
     
         (use-package evil-magit
           :init (setq evil-want-keybinding nil))
@@ -855,19 +940,23 @@ tool. This is required if I want to use helm-projectile-rg.
 
     Shows changes, deletions or additions from master. Really useful
     to see what you did and what will or wont be committed without
-    having to open up [53](#org15b4e7a).
+    having to open up [53](#orgcc9bcc8).
     
         (use-package git-gutter 
           :config (global-git-gutter-mode)) 
 
 
+<a id="org6cc0375"></a>
+
 ### SOMEDAY vcmode
 
 
-<a id="orged76f18"></a>
+<a id="org33b2a06"></a>
 
 ## Autocompletion
 
+
+<a id="orga820ced"></a>
 
 ### Company
 
@@ -893,7 +982,7 @@ completion.
                   ("C-SPC" . company-complete-selection)
                   ("TAB" . company-complete-common-or-cycle)))
 
-This is also intergrated with [71](#orgd07b58c) for a whole bunhc of
+This is also intergrated with [71](#org0010f6c) for a whole bunhc of
 functions.
 
     (defun company-mode-with-yas (backend)
@@ -907,12 +996,12 @@ functions.
         '(setq company-backends (mapcar #'company-mode-with-yas company-backends))))
 
 
-<a id="org52e1975"></a>
+<a id="org7bd9ae0"></a>
 
 ## Projects
 
 
-<a id="org8dc691c"></a>
+<a id="org981a26f"></a>
 
 ### projectile
 
@@ -920,7 +1009,7 @@ Projectile is a way to use specific commands for a specific
 project. A project is any folder with a source control or a
 .projectile file/folder. This is the definition of helm-projectile
 however it also installs projectile. This is also intergrated into
-[51](#orgaee287c).
+[51](#org0ac7289).
 
     (use-package helm-projectile
       :init
@@ -934,13 +1023,15 @@ however it also installs projectile. This is also intergrated into
       (helm-projectile-on))
 
 
+<a id="org9bdc7d8"></a>
+
 ### treemacs
 
-<a id="org4210f9f"></a><a id="org25fc328"></a><a id="org84334e9"></a>
+<a id="org0797ef4"></a><a id="org680ff21"></a><a id="org2fa75ea"></a>
 
 Treemacs is a tree layout file explorer. Its useful for projects
 and has TONS of plugins to work with other plugins. It works with
-[43](#org5cd113d),[projectile](#org8dc691c), and [53](#org15b4e7a). It also should have `all-the-icons` to
+[43](#org958e5a6),[projectile](#org981a26f), and [53](#orgcc9bcc8). It also should have `all-the-icons` to
 look pretty :p.
 
     (use-package treemacs)
@@ -954,12 +1045,12 @@ look pretty :p.
     (use-package all-the-icons)
 
 
-<a id="org9a385af"></a>
+<a id="orgae53036"></a>
 
 ## Plain Text Modes
 
 
-<a id="orga29679a"></a>
+<a id="org41bf6d4"></a>
 
 ### Org
 
@@ -991,18 +1082,18 @@ Literite Programming and much [more](https://orgmode.org/).
          (shell . t)
          (python . t))))
 
-<a id="org04a2fa5"></a>
+<a id="org21b1f75"></a>
 
 Org rifle is a thing that helps me search a org mode multiple org
-mode buffers with [51](#orgaee287c) I am mainly gonna use it to search for
-locations. Note this requires [51](#orgaee287c)
+mode buffers with [51](#org0ac7289) I am mainly gonna use it to search for
+locations. Note this requires [51](#org0ac7289)
 
     (use-package helm-org-rifle
       :after '(org helm))
 
 -   Org Exports
 
-    <a id="org2d91082"></a><a id="org9574256"></a><a id="org53bbf5b"></a><a id="orga0dca5c"></a>
+    <a id="orgdfe1990"></a><a id="org87f7724"></a><a id="orge2ca5d5"></a><a id="orgb9634f0"></a>
     There are many plugins you can install to get more exports. Here
     are the 3 that I use frequently. Pandoc is nice for docx, htmlize
     is for html and ox-twbs is for better html docs with
@@ -1021,8 +1112,8 @@ locations. Note this requires [51](#orgaee287c)
 
 -   Evil org mode
 
-    [Org](#orga29679a) mode is nice but [43](#org5cd113d) is also very nice. Here is the only
-    other one then [53](#org15b4e7a) that doesnt have [44](#org24cb398)
+    [Org](#org41bf6d4) mode is nice but [43](#org958e5a6) is also very nice. Here is the only
+    other one then [53](#orgcc9bcc8) that doesnt have [44](#org02b192d)
     keybindings.
     
         (use-package evil-org
@@ -1033,6 +1124,8 @@ locations. Note this requires [51](#orgaee287c)
           (evil-org-agenda-set-keys))
 
 
+<a id="org20c02b4"></a>
+
 ### LaTeX
 
 -   TODO Auctex
@@ -1040,7 +1133,7 @@ locations. Note this requires [51](#orgaee287c)
     -   Note taken on <span class="timestamp-wrapper"><span class="timestamp">[2019-08-18 Sun 21:52] </span></span>   
         Add MLA style LaTeX template
     
-    <a id="orgaef61af"></a>
+    <a id="orgae2ee5b"></a>
     
     Auctex is supposed to be really good at showing and displaying
     LaTeX. I should use latex but I normally just use org-mode.
@@ -1059,16 +1152,18 @@ locations. Note this requires [51](#orgaee287c)
                                              (output-html "xdg-open")))
           (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
     
-    It also has a [58](#orgca5ad6c) backend
+    It also has a [58](#orgbff7167) backend
     
         (use-package company-auctex
           :after '(company tex)
           :config (company-auctex-init))
 
 
+<a id="org43839e4"></a>
+
 ### Markdown
 
-<a id="org8b0b289"></a>
+<a id="orgc9de7d0"></a>
 
 Markdown is dope and even though I would love to use org-mode for
 everything sometimes I have to edit/view markdown.
@@ -1076,10 +1171,12 @@ everything sometimes I have to edit/view markdown.
     (use-package markdown-mode)
 
 
-<a id="org40f1239"></a>
+<a id="orge4a389a"></a>
 
 ## Terminals
 
+
+<a id="org9be92b2"></a>
 
 ### vterm
 
@@ -1087,7 +1184,7 @@ Very powerful terminal emulator as the project was started by
 neovim to create a actual terminal emulator in neovim. This should
 in theory be just as good. Unfortunately the [melpa](https://melpa.org/) package doesnt
 install properly so you have to [manually](https://github.com/akermu/emacs-libvterm) install it. These keybinds
-also don't count. [Line numbers](#org7749080) also dont work properly so we
+also don't count. [Line numbers](#orgd1815e1) also dont work properly so we
 disable them. Hopefully it will get [fixed soon](https://github.com/akermu/emacs-libvterm/pull/129).
 
     ;;(use-package vterm)
@@ -1105,6 +1202,8 @@ disable them. Hopefully it will get [fixed soon](https://github.com/akermu/emacs
          (add-hook 'doc-view-mode-hook (lambda ()
                                          (global-linum-relative-mode -1)))))
 
+
+<a id="org713df00"></a>
 
 ### eshell
 
@@ -1124,12 +1223,12 @@ pretty easily.
               '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 
 
-<a id="orgfa9b00a"></a>
+<a id="orgf07f74d"></a>
 
 ## Templates/Snippets
 
 Yasnippets is possibly cool? It's supposed to intergrate with
-[58](#orgca5ad6c) mode if I add some code which seems cool. All this does is
+[58](#orgbff7167) mode if I add some code which seems cool. All this does is
 add the abillity to add predefined definitions in a whole bunch of
 languages.
 
@@ -1143,6 +1242,8 @@ I can actually use it without defining it myself.
       :config (yasnippet-snippets-initialize))
 
 
+<a id="orgf55f865"></a>
+
 ### Gentoo Snippets
 
 Gentoo comes with a skeleton for ebuilds which is nice. I would
@@ -1151,14 +1252,16 @@ like to include it by default.
     (add-hook 'ebuild-mode-hook 'ebuild-mode-insert-skeleton)
 
 
-<a id="orga4c20b4"></a>
+<a id="orgd2372ca"></a>
 
 ## Chat programs
 
 
+<a id="org57e910e"></a>
+
 ### Matrix
 
-<a id="orge64b0e6"></a>
+<a id="org6bdb0b0"></a>
 
 Matrix is nice but I know nobody on it. Too bad the emacs cilient
 is actually amazing&#x2026;
@@ -1168,6 +1271,8 @@ is actually amazing&#x2026;
         :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
                                 :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))))
 
+
+<a id="orgc95d9bb"></a>
 
 ### Discord
 
@@ -1188,6 +1293,8 @@ is actually amazing&#x2026;
           (add-to-list 'load-path "~/Projects/Mine/rencord")
           (require 'rencord))
 
+
+<a id="org94b6d35"></a>
 
 ### IRC
 
@@ -1216,10 +1323,12 @@ is actually amazing&#x2026;
                                      (flyspell-mode 1)))
 
 
-<a id="org949b3a6"></a>
+<a id="org8c301b0"></a>
 
 ## Visual Helpers
 
+
+<a id="org8c2cd2a"></a>
 
 ### beacon
 
@@ -1230,6 +1339,8 @@ to. Simple as that.
       :config (beacon-mode 1))
 
 
+<a id="orga33dd68"></a>
+
 ### rainbow-delimiters
 
 closing things get different highlighting so you can tell if it is
@@ -1239,8 +1350,12 @@ closed or not.
       :ghook 'prog-mode-hook)
 
 
+<a id="org3d87fc4"></a>
+
 ### TODO wilfred
 
+
+<a id="org1a73897"></a>
 
 ### which-key
 
@@ -1251,10 +1366,12 @@ easier. Helps ALOT when learning keybinds
       :config (which-key-mode))
 
 
-<a id="orgb2952ca"></a>
+<a id="org105060c"></a>
 
 ## Should Be in Emacs
 
+
+<a id="org2e86a1e"></a>
 
 ### expand-region
 
@@ -1264,10 +1381,12 @@ This is a single function package which expands the current region
       :config (delete-selection-mode 1))
 
 
-<a id="org0c9fd4c"></a>
+<a id="org2210b91"></a>
 
 ## Programming
 
+
+<a id="orgfd79395"></a>
 
 ### Autopair
 
@@ -1279,9 +1398,11 @@ types such as []{}<> and many more.
       :config (autopair-global-mode t))
 
 
+<a id="org3bbc847"></a>
+
 ### LSP
 
-<a id="orgc7a22e0"></a>
+<a id="org60ccb7e"></a>
 
 lsp is basically a server that does syntax checking and stuff. The
 best part about it is its editor independant so that all the
@@ -1301,7 +1422,7 @@ editors can improve it making it alot better.
       :after lsp-mode
       :hook (lsp-mode-hook . lsp-ui-mode))
 
-lsp also has [58](#orgca5ad6c) support
+lsp also has [58](#orgbff7167) support
 
     (use-package company-lsp
       :after '(company lsp-mode))
@@ -1318,6 +1439,8 @@ debug. Hopefully it gets really good eventually.
       (require 'dap-lldb))
 
 
+<a id="org86317a7"></a>
+
 ### JVM
 
 -   java
@@ -1329,15 +1452,15 @@ debug. Hopefully it gets really good eventually.
 
 -   scala
 
-    Scala lsp is part of [83](#org8d7c399) so you can enable/disable it from
+    Scala lsp is part of [83](#org44c692f) so you can enable/disable it from
     there. Here is just syntax highlighting for scala.
     
         (use-package scala-mode
           :mode "\\.s\\(cala\\|bt\\)$")
     
-    <a id="orgec619ff"></a><a id="org92eaa08"></a>
+    <a id="org62bc172"></a><a id="org2869d93"></a>
     
-    this is a mode for [scala](#orgb97c08a) package manager sbt.
+    this is a mode for [scala](#orgab16357) package manager sbt.
     
         (use-package sbt-mode
           :commands sbt-start sbt-command
@@ -1354,21 +1477,23 @@ debug. Hopefully it gets really good eventually.
 -   SOMEDAY clojure
 
 
+<a id="org4f986ef"></a>
+
 ### Scripting langs
 
 -   python
 
-    <a id="org64237e6"></a>
+    <a id="orgdc007f7"></a>
     
     We are using [microsofts lsp](https://github.com/microsoft/language-server-protocol) because its supposed to be good. Thats
     about it probably should add more. Also this is partially configured
-    in [83](#org8d7c399)
+    in [83](#org44c692f)
     
         (use-package lsp-python-ms)
 
 -   rakudo
 
-    <a id="org9f74ac3"></a><a id="orgc0bc947"></a>
+    <a id="org25e8e6d"></a><a id="orgdde7b21"></a>
     
     perl6 is such a cool language but its SOO slow. Feels bad. Maybe
     eventually it becomes fast and good enough to be used in
@@ -1386,11 +1511,13 @@ debug. Hopefully it gets really good eventually.
 -   SOMEDAY shell
 
 
+<a id="org6113ed2"></a>
+
 ### Microsoft/Dotnet
 
 -   csharp
 
-    <a id="orga41551c"></a><a id="org5b22e13"></a>
+    <a id="org58a0bfd"></a><a id="orgf24df2d"></a>
     
     csharp is still growing a emacs presence. For right now omnisharp
     is what we got and its still in beta. We also have standard syntax
@@ -1411,17 +1538,21 @@ debug. Hopefully it gets really good eventually.
         (use-package powershell)
 
 
+<a id="org7c4f8c0"></a>
+
 ### rust
 
 Rust support is alright. Most things should work ootb with rustic
-and [83](#org8d7c399).
+and [83](#org44c692f).
 
     (use-package rustic)
 
 
+<a id="org1c0d37b"></a>
+
 ### c and cpp
 
-<a id="orgbc0ef50"></a><a id="org1bd1cfe"></a>
+<a id="orgbbcacc6"></a><a id="org78841b8"></a>
 
 This one uses irony server which needs to be installed. Note that
 it can be installed inside emacs. Uses to do stuff.
@@ -1431,7 +1562,7 @@ it can be installed inside emacs. Uses to do stuff.
       :hook (objc-mode-hook . irony-mode)
       :hook (c-mode-hook . irony-mode))
 
-Irony also has support for [58](#orgca5ad6c).
+Irony also has support for [58](#orgbff7167).
 
     (use-package company-irony
       :after '(company irony))
@@ -1442,9 +1573,11 @@ This allows us to read docs while irony is working.
       :after '(irony))
 
 
+<a id="org0293e24"></a>
+
 ### haskell
 
-<a id="orgca0f995"></a><a id="orgbb9350b"></a>
+<a id="orga768cd2"></a><a id="org99f8576"></a>
 
 Haskell is a cool language. I should probably actually learn it one
 day.
@@ -1455,6 +1588,8 @@ day.
     (use-package flycheck-haskell
       :after flycheck)
 
+
+<a id="org218db81"></a>
 
 ### Google
 
@@ -1479,15 +1614,17 @@ day.
     
         (use-package flymake-go)
     
-    and finally we can give it [58](#orgca5ad6c) completion. It should
+    and finally we can give it [58](#orgbff7167) completion. It should
     recognize it however I havent tested it yet.
     
         (use-package company-go)
 
 
+<a id="orgf10184c"></a>
+
 ### Flycheck
 
-<a id="orgdc99ac2"></a>
+<a id="orgd5cd08e"></a>
 
 These are my flycheck settings although most packages have their
 flycheck set to start in their own packages.
@@ -1499,6 +1636,8 @@ flycheck set to start in their own packages.
       :config (flycheck-pos-tip-mode))
 
 
+<a id="org499060b"></a>
+
 ### imenu
 
 Imenu is nice to have because you can intelligently view and move
@@ -1508,110 +1647,18 @@ anywhere and have helm support.
     (use-package imenu-anywhere)
 
 
-<a id="orga02f55c"></a>
+<a id="org4fe3b05"></a>
 
 # Keybindings
 
-This is all of my defined keybinds. I use [49](#org143606e) alot because its
-a good package for [43](#org5cd113d). People rarely do things like ;; (M-x ;) and
+This is all of my defined keybinds. I use [49](#org5ff3062) alot because its
+a good package for [43](#org958e5a6). People rarely do things like ;; (M-x ;) and
 other stuff. Btw the )) is on the end of the line because i may want
 to comment out the last <<>> and that would actually comment ))
 causing a syntax error.
 
-    (eval-after-load "general"
-      (progn 
-        (general-define-key
-         :states '(emacs)
-         "M-x" 'helm-M-x
-         "C-x C-f" 'helm-find-files
-         "C-x f" 'helm-locate
-         "C-x C-b" 'helm-buffers-list
-         "C-x b" 'helm-multi-files
-         "C-x g" 'magit-status
-         "C-x C-g" 'magit-dispatch
-         "C-x C-o" 'other-window
-         "C-x C-k" 'kill-this-buffer
-         "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
-         "C-o" 'my/smart-open-line
-         "C-\\" 'er/expand-region
-         "C-." 'repeat
-         "<escape>" 'god-local-mode
-         "C-=" 'my/smart-indent
-         "C-j" 'avy-goto-char-2
-         "C-'" 'my/helm-projectile-find-file-or-find-file
-         "C-\"" 'my/helm-projectile-find-file-or-project
-         "M-'" 'my/helm-projectile-search-or-project
-         "M-\"" 'helm-occur
-         "C-|" 'helm-mini
-         "C-:" 'helm-bookmarks
-         "M-p" 'projectile-command-map
-         "M-m" 'evilmi-jump-items
-         "C-c h" 'helm-command-prefix
-         "C-a" 'my/move-beginning-of-line)
-        (general-define-key
-         :states '(normal visual)
-         "|" 'helm-mini
-         "SPC" 'helm-imenu
-         ;; "_" 'my/evil-jump-backward
-         "s" 'my/eshell-toggle
-         "S" 'my/helm-projectile-find-file-or-find-file
-         ";" 'helm-M-x
-         "g c c" 'comment-line
-         "g c r" 'comment-or-uncomment-region
-         "g =" 'my/smart-indent
-         "g p" 'projectile-command-map
-         "\\" 'my/helm-projectile-search-or-project
-         "U" 'undo-tree-visualize
-         "Q" 'save-buffers-kill-terminal
-         ", , c" 'org-capture
-         ", , l" 'org-store-link
-         (general-chord ";;") 'eval-expression
-         (general-chord "SS") 'my/helm-projectile-find-file-or-project
-         (general-chord "ss") 'my/vterm-toggle
-         (general-chord "``") 'magit-status)
-        (general-define-key
-         :states '(insert)
-         (general-chord "uu") 'my/evil-insert-delete-back-word)
-        (general-define-key
-         :keymaps 'org-mode-map
-         :states '(normal visual)
-         "SPC" 'helm-org-rifle
-         "RET" 'org-ctrl-c-ctrl-c
-         ", <" 'outline-demote
-         ", >" 'outline-promote
-         ", p" 'org-up-element
-         ", n" 'org-down-element
-         ", t" 'org-todo
-         ", l" 'org-insert-link
-         ", ." 'org-time-stamp
-         ", s" 'org-schedule
-         ", d" 'org-deadline
-         ", e" 'org-export-dispatch
-         ", [" 'org-agenda-file-to-front
-         ", ]" 'org-remove-file
-         ", '" 'org-edit-special
-         ", a" 'org-add-note)
-        (general-define-key
-         :keymaps 'org-mode-map
-         :states 'emacs
-         "C-c r" 'helm-org-rifle)
-        (general-define-key
-         :keymaps 'helm-find-files-map
-         "C-'" 'my/helm-projectile-from-find-files
-         "C-s" 'helm-ff-run-grep-ag)
-        (general-define-key
-         :keymaps 'helm-projectile-find-file-map
-         "C-'" 'my/helm-goto-find-files)
-        (general-define-key
-         :keymaps 'helm-rg-map
-         "M-'" 'my/helm-goto-helm-occur)
-        (general-define-key
-         :keymaps 'helm-occur-map
-         "M-'" 'my/helm-goto-helm-rg)
-        ))
 
-
-<a id="orgb68aaa0"></a>
+<a id="org71d6102"></a>
 
 ## Rant on keybindings
 
@@ -1649,7 +1696,7 @@ may however be easier to understand at first.
 -   mouse (plan 9's acme?)
 
 
-<a id="orgeaa9ab8"></a>
+<a id="orga4d96cf"></a>
 
 ## Emacs State
 
@@ -1688,7 +1735,7 @@ or not. [This is nice if I forget keybinds](http://www.elmindreda.org/emacs.html
      "C-a" 'my/move-beginning-of-line)
 
 
-<a id="org7467f0c"></a>
+<a id="org0a3a816"></a>
 
 ## Normal/Visual State
 
@@ -1717,7 +1764,7 @@ General evil overided global keybinds.
      (general-chord "``") 'magit-status)
 
 
-<a id="org7f6b090"></a>
+<a id="orgf987453"></a>
 
 ## Insert State
 
@@ -1729,7 +1776,7 @@ about entering or deleting text.
      (general-chord "uu") 'my/evil-insert-delete-back-word)
 
 
-<a id="org69e1725"></a>
+<a id="orgff6e495"></a>
 
 ## Ex commands
 
@@ -1742,10 +1789,12 @@ useful but do not require much context.
     (evil-ex-define-cmd "bd" 'kill-this-buffer)
 
 
-<a id="org0fb4f2a"></a>
+<a id="orgca8f38c"></a>
 
 ## Major Modes
 
+
+<a id="org1cc4206"></a>
 
 ### Plain Text
 
@@ -1786,6 +1835,8 @@ useful but do not require much context.
 -   SOMEDAY markdown mode
 
 
+<a id="orgc6c8d31"></a>
+
 ### Programming
 
 -   NEXT csharp mode
@@ -1819,6 +1870,8 @@ useful but do not require much context.
 -   SOMEDAY perl6 mode
 
 
+<a id="org9c8674f"></a>
+
 ### Messaging
 
 -   SOMEDAY matrix mode
@@ -1826,15 +1879,19 @@ useful but do not require much context.
 -   SOMEDAY irc mode
 
 
+<a id="orgd84e63c"></a>
+
 ### Other
 
 -   SOMEDAY magit
 
 
-<a id="org855def8"></a>
+<a id="org516494f"></a>
 
 ## Other
 
+
+<a id="org8b8b58d"></a>
 
 ### Helm
 

@@ -1,4 +1,4 @@
-# Created 2019-08-28 Wed 22:57
+# Created 2019-08-28 Wed 23:41
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -27,6 +27,22 @@ Some decisions are inspired by
 #+begin_attention
 Made to work with emacs 26 and 27 on windows, linux, and macos
 #+end_attention
+
+I automatically export my themes to my [[https:renzix.github.io/Dotfiles-Mirror][github pages]] docs directory on
+save. This is not async because emacs sucks with async and it will
+prompt me on open of file and of emacs. It definetly could be better
+but it keeps my config/website up to date. This block is not tangled
+so it only runs on save of the file. Maybe this will make me only save
+when necessary.
+
+#+name: export-to-docs
+#+begin_src emacs-lisp
+    (org-export-to-file 'html "../docs/index.html")
+    (org-export-to-file 'org "../docs/index.org")
+    (org-export-to-file 'ascii "../docs/index.txt")
+  ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
+#+end_src
+
 
 * Startup
 
@@ -1631,101 +1647,6 @@ a good package for [[evil]]. People rarely do things like ;; (M-x ;) and
 other stuff. Btw the )) is on the end of the line because i may want
 to comment out the last <<>> and that would actually comment ))
 causing a syntax error.
-
-#+name: keybinds
-#+begin_src emacs-lisp
-  (eval-after-load "general"
-    (progn 
-      (general-define-key
-       :states '(emacs)
-       "M-x" 'helm-M-x
-       "C-x C-f" 'helm-find-files
-       "C-x f" 'helm-locate
-       "C-x C-b" 'helm-buffers-list
-       "C-x b" 'helm-multi-files
-       "C-x g" 'magit-status
-       "C-x C-g" 'magit-dispatch
-       "C-x C-o" 'other-window
-       "C-x C-k" 'kill-this-buffer
-       "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
-       "C-o" 'my/smart-open-line
-       "C-\\" 'er/expand-region
-       "C-." 'repeat
-       "<escape>" 'god-local-mode
-       "C-=" 'my/smart-indent
-       "C-j" 'avy-goto-char-2
-       "C-'" 'my/helm-projectile-find-file-or-find-file
-       "C-\"" 'my/helm-projectile-find-file-or-project
-       "M-'" 'my/helm-projectile-search-or-project
-       "M-\"" 'helm-occur
-       "C-|" 'helm-mini
-       "C-:" 'helm-bookmarks
-       "M-p" 'projectile-command-map
-       "M-m" 'evilmi-jump-items
-       "C-c h" 'helm-command-prefix
-       "C-a" 'my/move-beginning-of-line)
-      (general-define-key
-       :states '(normal visual)
-       "|" 'helm-mini
-       "SPC" 'helm-imenu
-       ;; "_" 'my/evil-jump-backward
-       "s" 'my/eshell-toggle
-       "S" 'my/helm-projectile-find-file-or-find-file
-       ";" 'helm-M-x
-       "g c c" 'comment-line
-       "g c r" 'comment-or-uncomment-region
-       "g =" 'my/smart-indent
-       "g p" 'projectile-command-map
-       "\\" 'my/helm-projectile-search-or-project
-       "U" 'undo-tree-visualize
-       "Q" 'save-buffers-kill-terminal
-       ", , c" 'org-capture
-       ", , l" 'org-store-link
-       (general-chord ";;") 'eval-expression
-       (general-chord "SS") 'my/helm-projectile-find-file-or-project
-       (general-chord "ss") 'my/vterm-toggle
-       (general-chord "``") 'magit-status)
-      (general-define-key
-       :states '(insert)
-       (general-chord "uu") 'my/evil-insert-delete-back-word)
-      (general-define-key
-       :keymaps 'org-mode-map
-       :states '(normal visual)
-       "SPC" 'helm-org-rifle
-       "RET" 'org-ctrl-c-ctrl-c
-       ", <" 'outline-demote
-       ", >" 'outline-promote
-       ", p" 'org-up-element
-       ", n" 'org-down-element
-       ", t" 'org-todo
-       ", l" 'org-insert-link
-       ", ." 'org-time-stamp
-       ", s" 'org-schedule
-       ", d" 'org-deadline
-       ", e" 'org-export-dispatch
-       ", [" 'org-agenda-file-to-front
-       ", ]" 'org-remove-file
-       ", '" 'org-edit-special
-       ", a" 'org-add-note)
-      (general-define-key
-       :keymaps 'org-mode-map
-       :states 'emacs
-       "C-c r" 'helm-org-rifle)
-      (general-define-key
-       :keymaps 'helm-find-files-map
-       "C-'" 'my/helm-projectile-from-find-files
-       "C-s" 'helm-ff-run-grep-ag)
-      (general-define-key
-       :keymaps 'helm-projectile-find-file-map
-       "C-'" 'my/helm-goto-find-files)
-      (general-define-key
-       :keymaps 'helm-rg-map
-       "M-'" 'my/helm-goto-helm-occur)
-      (general-define-key
-       :keymaps 'helm-occur-map
-       "M-'" 'my/helm-goto-helm-rg)
-      ))
-#+end_src
 
 ** Rant on keybindings
 

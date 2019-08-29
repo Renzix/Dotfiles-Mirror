@@ -1,3 +1,5 @@
+# -*- after-save-hook: (lambda () (save-excursion (org-babel-goto-named-src-block "export-to-docs") (org-babel-execute-src-block))); -*-
+
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
 #+EMAIL: eragon9981@gmail.com
@@ -31,9 +33,19 @@ Some decisions are inspired by
 Made to work with emacs 26 and 27 on windows, linux, and macos
 #+end_attention
 
+I automatically export my themes to my [[https:renzix.github.io/Dotfiles-Mirror][github pages]] docs directory on
+save. This is not async because emacs sucks with async and it will
+prompt me on open of file and of emacs. It definetly could be better
+but it keeps my config/website up to date. This block is not tangled
+so it only runs on save of the file. Maybe this will make me only save
+when necessary.
+
 #+NAME: export-to-docs
-#+BEGIN_SRC emacs-lisp :exports none :tangle no
-  (org-export-to-file 'html "../docs/index.html") ;; Eventually i want to change this to include more stuff
+#+BEGIN_SRC emacs-lisp :tangle no
+  (org-export-to-file 'html "../docs/index.html")
+  (org-export-to-file 'org "../docs/index.org")
+  (org-export-to-file 'ascii "../docs/index.txt")
+;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
 #+END_SRC
 
 
