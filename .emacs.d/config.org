@@ -3,25 +3,21 @@
 #+EMAIL: eragon9981@gmail.com
 
 #+DESCRIPTION: My org mode config file
-#+KEYWORDS: org, config, literate-programming
 #+LANGUAGE: en
 #+EXPORT_FILE_NAME: ../docs/index.html
 
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+# ReadTheOrg stuff
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
-#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+#+OPTIONS: num:nil
 
-#+OPTIONS: num:nil toc:2
-
-#+PROPERTY: header-args :results silent -n
+#+PROPERTY: header-args :results silent
 
 Hello This is my second real attempt to make a "Perfect" config. Idk
 if it will ever be good enough but here it is. Note this is available
-on [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and it should be mirrored on [[https://github.com/Renzix/Dotfiles-Mirror][github]].
+on [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and it should be mirrored on [[https://github.com/Renzix/Dotfiles-Mirror][github]]. There are multiple
+versions of this file including [[file:index.html][readtheorg]], [[file:index.txt][plain text]] and [[file:index.md][markdown]]
+for now.
 
 Some decisions are inspired by
 
@@ -34,6 +30,12 @@ Some decisions are inspired by
 #+begin_attention
 Made to work with emacs 26 and 27 on windows, linux, and macos
 #+end_attention
+
+#+NAME: export-to-docs
+#+BEGIN_SRC emacs-lisp :exports none :tangle no
+  (org-export-to-file 'html "../docs/index.html") ;; Eventually i want to change this to include more stuff
+#+END_SRC
+
 
 * Startup
 
@@ -1640,7 +1642,7 @@ Made to work with emacs 26 and 27 on windows, linux, and macos
   causing a syntax error.
 
   #+NAME: keybinds
-  #+BEGIN_SRC emacs-lisp :noweb yes
+  #+BEGIN_SRC emacs-lisp :noweb yes :exports none
     (eval-after-load "general"
       (progn 
         <<keybinds-emacs>>
