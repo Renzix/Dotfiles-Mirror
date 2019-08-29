@@ -1,7 +1,22 @@
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
-#+TOC: true
-#+PROPERTY: header-args :results silent
+#+EMAIL: eragon9981@gmail.com
+
+#+DESCRIPTION: My org mode config file
+#+KEYWORDS: org, config, literate-programming
+#+LANGUAGE: en
+
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+
+#+OPTIONS: num:nil toc:2
+
+#+PROPERTY: header-args :results silent -n
 
 Hello This is my second real attempt to make a "Perfect" config. Idk
 if it will ever be good enough but here it is. Note this is available
@@ -9,12 +24,16 @@ on [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and it should be mirrored on [
 
 Some decisions are inspired by
 
-[[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout
-[[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help
-[[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff
-[[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas
-[[https://github.com/bbatsov/crux][Crux]]: Alot of my redefined functions are based off of it
+[[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout \\
+[[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help \\
+[[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff \\
+[[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas \\
+[[https://github.com/bbatsov/crux][Crux]]: Alot of my redefined functions are based off of it \\
  
+#+begin_attention
+Made to work with emacs 26 and 27 on windows, linux, and macos
+#+end_attention
+
 * Startup
 
   Starts up emacs. This should be somewhat small and only for
@@ -309,7 +328,7 @@ Some decisions are inspired by
     states. Deletes backwards until a space. Not a true vim word or
     WORD.
    
-    #+NAME evil-insert-delete-back-word
+    #+NAME: evil-insert-delete-back-word
     #+BEGIN_SRC emacs-lisp
       (defun my/evil-insert-delete-back-word ()
         "Made specifically for insert state but works in other
@@ -421,6 +440,17 @@ Some decisions are inspired by
                 (kill-buffer))))))
     #+END_SRC
 
+    Reads a string directly from a file then returns it as a string
+    
+    #+NAME: get-string-from-file
+    #+BEGIN_SRC emacs-lisp
+      (defun my/get-string-from-file (filePath)
+        "Return filePath's file content."
+        (with-temp-buffer
+          (insert-file-contents filePath)
+          (buffer-string)))
+    #+END_SRC
+
 *** SOMEDAY Projects
     
     - Note taken on [2019-08-18 Sun 21:53] \\
@@ -450,7 +480,7 @@ Some decisions are inspired by
         (interactive)
         (if (projectile-project-p)
             (helm-projectile-find-file)
-          (helm-find-files)))
+          (helm-find-files nil)))
     #+END_SRC
    
     This first sees if it is in a projectile project. If it isnt then
@@ -794,23 +824,52 @@ Some decisions are inspired by
     then helm or ido. Ido comes default with emacs and is said to be
     the fastest but has a more complex code base then ivy.
 
-    One of the big things that seperates helm from the rest is that
-    there are multiple selection options per command. For example if
-    you =helm-find-file= and press =RET= it will open that
-    file. However if you press F2 it will open that file in another
-    window.
+    Helm has actions based on whatever you want to do at that
+    point. You can think of it like a litteral search based tui.
 
     #+NAME: helm
     #+BEGIN_SRC emacs-lisp
+      (defun my/helm-projectile-from-find-files ()
+        (interactive)
+        (helm-run-after-exit
+         (lambda ()
+           (let ((default-directory helm-ff-default-directory)
+                 (projectile-require-project-root nil))
+             (helm-projectile-find-file-dwim)))))
+      ;; This is mainly for [[helm-projectile]]
+      (defun my/helm-goto-find-files ()
+        (interactive)
+        (helm-run-after-exit
+         (lambda ()
+           (let ((default-directory (helm-basedir (helm-get-selection))))
+             (helm-find-files nil)))))
+
+      (defun my/helm-goto-helm-occur ()
+        (interactive)
+        (helm-run-after-exit
+         (lambda ()
+           (helm-occur))))
+
+      (defun my/helm-goto-helm-rg ()
+        (interactive)
+        (helm-run-after-exit
+         (lambda ()
+           (my/helm-projectile-search-or-project))))
+
       (use-package helm
-        :config
-        (helm-autoresize-mode t)
-        (setq helm-autoresize-max-height 30
+        :init
+        (setq helm-follow-mode-persistent t
+              helm-autoresize-max-height 40
               helm-display-header-line nil)
+        :config
+        (require 'helm-config)
+        (helm-autoresize-mode t)
+        (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
         (helm-mode t))
     #+END_SRC
 
-    Helm has a plugin you can use to use ripgrep as the search tool.
+    Helm has a plugin you can use to use ripgrep as the search
+    tool. This is required if I want to use helm-projectile-rg.
 
     #+NAME: helm-rg
     #+BEGIN_SRC emacs-lisp
@@ -826,7 +885,7 @@ Some decisions are inspired by
      
      Magit is one of the greatest emacs packages to exist. It allows
      the power of git in a tui/gui/cli form depending on what is
-     needed. Note this is disabled because it is not [[Evil]] enough
+     needed. Note this is disabled because it is not [[evil]] enough
 
      #+NAME: magit
      #+BEGIN_SRC emacs-lisp
@@ -1033,12 +1092,13 @@ Some decisions are inspired by
          :after org)
        (use-package ox-hugo
          :after org)
+       (use-package org-html-themes
      #+END_SRC
 
 **** Evil org mode
 
      [[Org]] mode is nice but [[evil]] is also very nice. Here is the only
-     other one then [[magit-evil]] that doesnt have [[evil-collection]]
+     other one then [[magit]] that doesnt have [[evil-collection]]
      keybindings.
      
      #+NAME: evil-org
@@ -1215,6 +1275,34 @@ Some decisions are inspired by
          (require 'rencord))
      #+END_SRC
     
+*** IRC
+**** rcirc
+
+     This is the lightest irc client i think and comes
+     preinstalled. Also works pretty nice and barely requires a
+     config.
+
+     #+NAME: rcirc
+     #+BEGIN_SRC emacs-lisp
+       (setq rcirc-default-nick "Renzix"
+             rcirc-server-alist
+             '(("irc.freenode.net" :channels ("#emacs"))
+               ("localhost" :channels ("#home")))
+             rcirc-authinfo
+             '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")
+               ("localhost" bitlbee "Renzix" ("Akeyla10!"))))
+       ;; Include date in time stamp.
+       (setq rcirc-time-format "%Y-%m-%d %H:%M ")
+       ;; Keep input line at bottom.                                                                               
+       (add-hook 'rcirc-mode-hook
+                 (lambda ()
+                   (set (make-local-variable 'scroll-conservatively)
+                        8192)))
+       ;; Turn on spell checking.
+       (add-hook 'rcirc-mode-hook (lambda ()
+                                    (flyspell-mode 1)))
+     #+END_SRC
+
 ** Visual Helpers
 *** beacon
 
@@ -1547,7 +1635,9 @@ Some decisions are inspired by
 
   This is all of my defined keybinds. I use [[key-chord]] alot because its
   a good package for [[evil]]. People rarely do things like ;; (M-x ;) and
-  other stuff. 
+  other stuff. Btw the )) is on the end of the line because i may want
+  to comment out the last <<>> and that would actually comment ))
+  causing a syntax error.
 
   #+NAME: keybinds
   #+BEGIN_SRC emacs-lisp :noweb yes
@@ -1556,7 +1646,8 @@ Some decisions are inspired by
         <<keybinds-emacs>>
         <<keybinds-normal>>
         <<keybinds-insert>>
-        <<keybinds-org-mode>>
+        <<keybinds-org>>
+        <<keybinds-helm>>
         ))
   #+END_SRC
   
@@ -1610,10 +1701,11 @@ Some decisions are inspired by
       "C-x C-f" 'helm-find-files
       "C-x f" 'helm-locate
       "C-x C-b" 'helm-buffers-list
-      "C-x b" 'helm-mini
+      "C-x b" 'helm-multi-files
       "C-x g" 'magit-status
       "C-x C-g" 'magit-dispatch
       "C-x C-o" 'other-window
+      "C-x C-k" 'kill-this-buffer
       "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
       "C-o" 'my/smart-open-line
       "C-\\" 'er/expand-region
@@ -1621,11 +1713,15 @@ Some decisions are inspired by
       "<escape>" 'god-local-mode
       "C-=" 'my/smart-indent
       "C-j" 'avy-goto-char-2
-      "C-'" 'my/helm-projectile-find-file-or-project
-      "C-\"" 'my/helm-projectile-search-or-project
+      "C-'" 'my/helm-projectile-find-file-or-find-file
+      "C-\"" 'my/helm-projectile-find-file-or-project
+      "M-'" 'my/helm-projectile-search-or-project
+      "M-\"" 'helm-occur
+      "C-|" 'helm-mini
       "C-:" 'helm-bookmarks
       "M-p" 'projectile-command-map
       "M-m" 'evilmi-jump-items
+      "C-c h" 'helm-command-prefix
       "C-a" 'my/move-beginning-of-line)
    #+END_SRC
 
@@ -1689,7 +1785,7 @@ Some decisions are inspired by
 
      The keybinds for org-mode.
     
-     #+NAME: keybinds-org-mode
+     #+NAME: keybinds-org
      #+BEGIN_SRC emacs-lisp :tangle no
        (general-define-key
         :keymaps 'org-mode-map
@@ -1740,7 +1836,27 @@ Some decisions are inspired by
 **** SOMEDAY matrix mode
 **** SOMEDAY irc mode
 *** Other
-**** SOMEDAY magit mode
-** Minor Modes
-*** TODO projectile mode
-*** TODO git-timemachine mode
+**** SOMEDAY magit
+** Other
+*** Helm
+
+    I have been doing helm wrong my whole life. Here is my attempt at
+    making some of the keybinds a bit better with doing stuff like
+    ag and switching between helm modes.
+
+    #+NAME: keybinds-helm
+    #+BEGIN_SRC emacs-lisp
+      (general-define-key
+       :keymaps 'helm-find-files-map
+       "C-'" 'my/helm-projectile-from-find-files
+       "C-s" 'helm-ff-run-grep-ag)
+      (general-define-key
+       :keymaps 'helm-projectile-find-file-map
+       "C-'" 'my/helm-goto-find-files)
+      (general-define-key
+       :keymaps 'helm-rg-map
+       "M-'" 'my/helm-goto-helm-occur)
+      (general-define-key
+       :keymaps 'helm-occur-map
+       "M-'" 'my/helm-goto-helm-rg)
+    #+END_SRC
