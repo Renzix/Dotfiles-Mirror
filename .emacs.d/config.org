@@ -48,6 +48,22 @@ when necessary.
   ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
 #+END_SRC
 
+* Plans
+
+  Some things I plan on doing or trying out.
+  - Let init.el byte compile file
+  - Add more language support
+  - Add macros to my config so i dont have to use use-package some
+    include.
+    - [ ] pkg! Defines a package which you can use! or cfg!. You can
+      either pass in a named repo or a git repo. Also maybe what minor modes and more
+    - [ ] use!  This package only loads when a specific requirement
+      is met ie major mode
+    - [ ] cfg! evaluates a list before and after the package is
+      loaded. Only runs if use! has been defined.
+    - [ ] key! defines a key depending on state and optionally map. Only runs
+      if use! has been defined and runs after cfg is loaded.
+    - [ ] ex! defines a ex command (just a alias basically)
 
 * Startup
 
@@ -69,7 +85,8 @@ when necessary.
 
 ** Configure package sources
 
-   Melpa is nice because its more bleeding edge.
+   Melpa is nice because its more bleeding edge. Elpa is the general
+   GNU repo which everyone should probably have anyway.
 
    #+NAME: melpa
    #+BEGIN_SRC emacs-lisp
@@ -286,6 +303,25 @@ when necessary.
          (setq cursor-type 'hbar))))
    #+END_SRC
 
+   Beeing able to see matching parens is nice so lets enable
+   parens-mode. I could only enable this for specific modes but i
+   think this is extremely useful always.
+   
+   #+NAME: show-paren-mode
+   #+BEGIN_SRC emacs-lisp
+     (show-paren-mode 1)
+   #+END_SRC
+
+   TODO and other stuff should have a different color so lets enable
+   that. Also there is a feature of emacs to highlight the current
+   line so lets also enable that.
+
+   #+NAME: highlight
+   #+BEGIN_SRC emacs-lisp
+     (global-hl-todo-mode)
+     (global-hl-line-mode)
+   #+END_SRC
+
 ** Other
 
    By default symlinks should always be followed. Makes it much easier
@@ -327,12 +363,8 @@ when necessary.
            kept-old-versions 10
            version-control t)
    #+END_SRC
-   
-   I probably shouldnt do this but warnings are annoying and i dont
-   like them so I disable them. Its mainly because a few plugins (im
-   talking to you ox-pandoc) will warn you for older versions of
-   software and other stupid stuff like that. Disabled because this is
-   awful.
+
+   Sometimes i enable this because warnings r annoying
    
    #+NAME: warn-level
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -346,6 +378,13 @@ when necessary.
    #+NAME: kill-whole-line
    #+BEGIN_SRC emacs-lisp
      (setq kill-whole-line t)
+   #+END_SRC
+
+   Use utf-8 when you can
+
+   #+NAME: prefer-coding-system
+   #+BEGIN_SRC emacs-lisp
+     (prefer-coding-system 'utf-8)
    #+END_SRC
 
 ** Useful Functions
@@ -944,6 +983,20 @@ when necessary.
          :init (setq evil-want-keybinding nil))
      #+END_SRC
 
+**** magit-todos
+
+     Magit todos is interesting as it reads TODO's from the source
+     code comments or org buffers. It also allows you to view and sort
+     them which is insanely useful. It also reads the author name. It
+     requires either GNU grep, git grep or ripgrep which i should have
+     one of those anyway(also needs PCRE support). 
+
+     #+NAME: magit-todos
+     #+BEGIN_SRC emacs-lisp
+       (use-package magit-todos
+         :config (magit-todos-mode))
+     #+END_SRC
+
 **** Git Timemachine
 
      This package allows you to go back and forth between a files git
@@ -1376,16 +1429,19 @@ when necessary.
     #+END_SRC
 
 ** Programming
-*** Autopair
+*** smartparens
 
-    Autopair just adds a closing ) to your (. It also supports other
-    types such as []{}<> and many more.
+    smartparens allows you to edit stuff inside and move around using
+    parens. This is pretty useful when programming so lets load that
+    hook here.
 
-    #+NAME: autopair
+    #+NAME: smartparens
     #+BEGIN_SRC emacs-lisp
       ;; Misc programming stuff
-      (use-package autopair
-        :config (autopair-global-mode t))
+      (use-package smartparens
+        :ghook 
+        ('prog-mode-hook #'smartparens-mode)
+        ('lisp-mode-hook #'smartparens-strict-mode))
     #+END_SRC
 
 *** LSP
@@ -1474,7 +1530,10 @@ when necessary.
      #+END_SRC
 
 **** SOMEDAY kotlin
-**** SOMEDAY clojure
+**** clojure
+     
+     see [[clojure]] in the lisps section.
+
 *** Scripting langs
 **** python
      <<python>>
@@ -1504,8 +1563,49 @@ when necessary.
      #+END_SRC
 
 **** SOMEDAY perl
-**** SOMEDAY common-lisp
 **** SOMEDAY shell
+
+*** lisps
+
+    Lisp is a really cool idea. They all have the same core idea just
+    change some fundemental things about it. The most used right now
+    are scheme, common lisp, clojure and emacs lisp. So here are the
+    configs for them.
+
+**** lisp rant
+     Emacs lisp is probably one of the worst designed languages on
+     here. It has some of the complexity of common lisp and clojure
+     but not the simplicity of a scheme. Some differences with scheme
+     is that scheme has #f and #t while in emacs everything thats not
+     a empty list is t. No module system so everything is in a single
+     namespace (scheme has nonstandard ones and cl has a standard
+     one). Scheme also has a single namespace for variables and
+     functions while elisp and cl have seperate ones. In comparison to
+     common lisp it has WAY less standard functions which do alot
+     less. Also tail end recursion is actually not possible as of
+     right now in elisp which makes alot of things alot more
+     difficult. In elisp everything is also dynamic scoping meaning
+     that if you define a variable it is added to a global state which
+     is awful(you can get around this with =let=. Concurrence in elisp
+     is also awful. You have to use a async library which is a base
+     install of emacs so it becomes very hard if you use external
+     libraries and you have to require them inside the async function. 
+
+**** emacs-lisp
+
+     See above for rant on elisp. This enables paredit mode for elisp
+     and other modes if they want it. Also does [[company]] stuff for autocompletion
+
+     #+NAME: emacs-lisp-mode
+     #+BEGIN_SRC emacs-lisp :tangle no :exports none
+       (eval-after-load "company"
+         (add-hook 'emacs-lisp-mode-hook #'company-elisp)
+         (add-hook 'ielm-mode-hook #'company-elisp))
+     #+END_SRC
+
+**** TODO common-lisp
+**** TODO clojure
+**** TODO scheme
 *** Microsoft/Dotnet
 **** csharp
      <<c#>><<omnisharp>>
@@ -1518,6 +1618,7 @@ when necessary.
      #+BEGIN_SRC emacs-lisp
        (use-package csharp-mode)
        (use-package omnisharp
+         :after 'company
          :hook (csharp-mode-hook . omnisharp-mode)
          :config
          (add-to-list 'company-backends 'company-omnisharp)
@@ -1748,6 +1849,7 @@ when necessary.
       "M-p" 'projectile-command-map
       "M-m" 'evilmi-jump-items
       "C-c h" 'helm-command-prefix
+      "C-x v" 'revert-buffer
       "C-a" 'my/move-beginning-of-line)
    #+END_SRC
 
@@ -1768,6 +1870,7 @@ when necessary.
       "g c c" 'comment-line
       "g c r" 'comment-or-uncomment-region
       "g =" 'my/smart-indent
+      "g r" 'revert-buffer
       "g p" 'projectile-command-map
       "\\" 'my/helm-projectile-search-or-project
       "U" 'undo-tree-visualize
