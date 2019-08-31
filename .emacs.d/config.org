@@ -45,7 +45,7 @@ when necessary.
   (org-export-to-file 'html "../docs/index.html")
   (org-export-to-file 'org "../docs/index.org")
   (org-export-to-file 'ascii "../docs/index.txt")
-  ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work @TODO(Renzix)
+  ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work especially async???@TODO(Renzix)
 #+END_SRC
 
 * Plans
@@ -55,15 +55,15 @@ when necessary.
   - Add more language support
   - Add macros to my config so i dont have to use use-package some
     include.
-    - [ ] pkg! Defines a package which you can use! or cfg!. You can
+    - [ ] [[pkg!]] Defines a package which you can use! or cfg!. You can
       either pass in a named repo or a git repo. Also maybe what minor modes and more
-    - [ ] use!  This package only loads when a specific requirement
+    - [ ] [[use!]]  This package only loads when a specific requirement
       is met ie major mode
-    - [ ] cfg! evaluates a list before and after the package is
+    - [ ] [[cfg!]] evaluates a list before and after the package is
       loaded. Only runs if use! has been defined.
-    - [ ] key! defines a key depending on state and optionally map. Only runs
+    - [ ] [[key!]] defines a key depending on state and optionally map. Only runs
       if use! has been defined and runs after cfg is loaded.
-    - [ ] ex! defines a ex command (just a alias basically)
+    - [ ] [[ex!]] defines a ex command (just a alias basically)
 
 * Startup
 
@@ -160,6 +160,57 @@ when necessary.
      (setq custom-file (make-temp-file "emacs-custom"))
    #+END_SRC
 
+** Package Macros
+   
+   These are my package macros which I will be using to download and
+   install packages. Preferably these will be as lazy loaded as
+   possible.
+
+*** TODO pkg!
+    
+    This defines a package which you can use! or cfg!. Ideally
+    disabling this doesnt actually load the package but tells you
+    where to find it. Doesnt load while im still testing it.
+
+    #+NAME: pkg!
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (defvar pkg!-list nil)
+      (setq pkg!-list nil)
+
+      (defun pkg! (&rest rest) ;; @TODO(Renzix:
+        "Defines the packages and save it as NAME and LOC.  LOC is the
+        location.  This accepts a unlimited amount of params throught REST"
+        (setq rest (seq-partition rest 2))
+        (cl-loop for x in rest do
+                 (let ((name (car x))
+                       (loc (car (cdr x))))
+                   (message "name: %s loc: %s" name loc)
+                   ;; Check if LOC is a defined repo if not then check if it is a
+                   ;; website (for git) if not then assume its a github user/reponame
+                   (cond ((string= loc "Melpa")
+                          (add-to-list 'pkg!-list `(,name ,loc)))
+                         (t (error-message-string (format "Location %s for %s not implemented" loc name)))))
+                 (setq rest (cdr rest))))
+      (pkg! "use-package" "Melpa" "ree" "Melpa")
+      (message "%s" pkg!-list)
+    #+END_SRC
+
+*** TODO use!
+    
+    First looks to see if the package is defined with pkg!. If it is
+    then define when you want to run the load code with a function
+    which returns true. Also define when that code will be checked ie
+    what hook. After all that run cfg! if it is defined.
+
+*** TODO cfg!
+
+    define 2 lists which will get evaluated. The first list will be
+    evaluated before the package is loaded. the second list will be
+    ran after the package is loaded.
+    
+
+*** TODO key!
+*** TODO ex!
 * Preferences
 
   Some preferences I like/dont like about emacs. Basically trying to
