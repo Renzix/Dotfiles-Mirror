@@ -815,7 +815,7 @@ SOMEDAY Open Buffer
   |     (progn
   |       (setq my:window-conf (current-window-configuration))
   |       (delete-other-windows)
-  |       (switch-to-vterm))))
+  |       (my/switch-to-vterm))))
   `----
 
   Opens magit status in a single buffer because its so much easier to
