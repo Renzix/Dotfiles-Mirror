@@ -1024,18 +1024,17 @@ god mode
 
   ,----
   | (defun god-mode-revert-if-buffer-changed (orig &rest args)
+  |   (apply orig args)
   |   (when (not (eq (current-buffer) god-mode-current-buffer))
-  |     (if god-local-mode
-  |         (progn
-  |           (god-local-mode)
-  |           (my/update-god-cursor))
-  |       (apply orig args))))
+  |     (when god-local-mode
+  |       (god-local-mode))
+  |     (my/update-god-cursor)))
   | 
   | (use-package god-mode
   |   :config
   |   (defvar god-mode-current-buffer nil)
   |   (add-hook 'post-command-hook 'my/update-god-cursor) ;; There is no good way to do this
-  |   (advice-add 'other-window :after 'my/update-god-cursor) 
+  |   (advice-add 'window-configuration-change-hook :after 'my/update-god-cursor)
   |   (advice-add 'god-mode-maybe-activate :around 'god-mode-revert-if-buffer-changed))
   `----
 
@@ -2125,6 +2124,9 @@ Emacs State
   |  "C-x C-g" 'magit-dispatch
   |  "C-x C-o" 'other-window
   |  "C-x C-k" 'kill-this-buffer
+  |  "C-x v" 'revert-buffer
+  |  "C-x t" 'my/eshell-toggle
+  |  "C-x C-t" 'my/vterm-toggle
   |  "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
   |  "C-o" 'my/smart-open-line
   |  "C-\\" 'er/expand-region
@@ -2133,15 +2135,14 @@ Emacs State
   |  "C-=" 'my/smart-indent
   |  "C-j" 'avy-goto-char-2
   |  "C-'" 'my/helm-projectile-find-file-or-find-file
-  |  "C-\"" 'my/helm-projectile-find-file-or-project
-  |  "M-'" 'my/helm-projectile-search-or-project
-  |  "M-\"" 'helm-occur
+  |  "M-'" 'my/helm-projectile-find-file-or-project
+  |  "M-\"" 'my/helm-projectile-search-or-project
+  |  "C-\"" 'helm-occur
   |  "C-|" 'helm-mini
   |  "C-:" 'helm-bookmarks
   |  "M-p" 'projectile-command-map
   |  "M-m" 'evilmi-jump-items
   |  "C-c h" 'helm-command-prefix
-  |  "C-x v" 'revert-buffer
   |  "C-a" 'my/move-beginning-of-line)
   `----
 
