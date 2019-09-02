@@ -1,4 +1,4 @@
-# Created 2019-09-02 Mon 14:40
+# Created 2019-09-02 Mon 14:45
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -626,10 +626,7 @@ that works properly on windows.
      (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 #+end_src
 
-*** SOMEDAY Open Buffer
-
-- Note taken on [2019-08-18 Sun 21:54]  \\
-  Add doas-edit or make [[sudo-edit]] check for bsd/doas
+*** Open Buffer
 
 I like using eshell and vterm but dealing with emacs buffers is
 actually insane. I made a coupld simple functions to switch to a

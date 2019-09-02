@@ -32,7 +32,7 @@ Preferences
 ..... Format Text
 ..... File Handling
 ..... SOMEDAY Projects
-..... SOMEDAY Open Buffer
+..... Open Buffer
 ..... SOMEDAY Eval
 ..... Redefined Functions
 Core
@@ -761,11 +761,8 @@ SOMEDAY Projects
   `----
 
 
-SOMEDAY Open Buffer
--------------------
-
-  - Note taken on [2019-08-18 Sun 21:54]
-    Add doas-edit or make 1 check for bsd/doas
+Open Buffer
+-----------
 
   I like using eshell and vterm but dealing with emacs buffers is
   actually insane. I made a coupld simple functions to switch to a

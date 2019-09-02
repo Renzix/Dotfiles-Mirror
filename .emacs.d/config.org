@@ -631,11 +631,8 @@ when necessary.
          (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
     #+END_SRC
 
-*** SOMEDAY Open Buffer
+*** Open Buffer
     
-    - Note taken on [2019-08-18 Sun 21:54] \\
-      Add doas-edit or make [[sudo-edit]] check for bsd/doas
-
     I like using eshell and vterm but dealing with emacs buffers is
     actually insane. I made a coupld simple functions to switch to a
     vterm/eshell window and then be able to switch back. This makes
