@@ -1,4 +1,4 @@
-# Created 2019-09-03 Tue 13:22
+# Created 2019-09-03 Tue 14:12
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -17,10 +17,10 @@ versions of this file including [[file:index.html][readtheorg]], [[file:index.tx
 for now.
 
 Some decisions are inspired by
-
+[[https://github.com/hlissner/doom-emacs][
+Doom]]: Heavily Inspired keybindings and other stuff \\
 [[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout \\
 [[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help \\
-[[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff \\
 [[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas \\
 [[https://github.com/bbatsov/crux][Crux]]: Alot of my redefined functions are based off of it \\
 

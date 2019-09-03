@@ -110,11 +110,10 @@ it will ever be good enough but here it is. Note this is available on
 versions of this file including [readtheorg], [plain text] and
 [markdown] for now.
 
-Some decisions are inspired by
-
+Some decisions are inspired by [ Doom]: Heavily Inspired keybindings and
+other stuff
 [jamiecollinson]: General layout
 [Buffet]: Random stuff and Actual help
-[Doom]: Heavily Inspired keybindings and other stuff
 [Sacha Chua]: Random things and ideas
 [Crux]: Alot of my redefined functions are based off of it
 
@@ -145,12 +144,12 @@ necessary.
 
 [markdown] <file:index.md>
 
+[ Doom] <https://github.com/hlissner/doom-emacs>
+
 [jamiecollinson] <https://jamiecollinson.com/blog/my-emacs-config/>
 
 [Buffet]
 <https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org>
-
-[Doom] <https://github.com/hlissner/doom-emacs>
 
 [Sacha Chua] <https://pages.sachachua.com/.emacs.d/Sacha.html>
 
