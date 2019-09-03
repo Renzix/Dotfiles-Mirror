@@ -701,19 +701,48 @@ when necessary.
     #+END_SRC
 
     Opens the current buffer with sudo. Again this probably should be
-    default or at least some form of it as this doesnt work if you dont
-    have sudo. Maybe there is a cross platform su thing for tramp? idk
+    default or at least some form of it as this doesnt work if you
+    dont have sudo. This now works with [[https://www.emacswiki.org/emacs/TrampMode#toc17][tramp]] as before it doesnt work
+    without editing the file path.
    
     #+NAME: sudo-edit
     #+BEGIN_SRC emacs-lisp
-      (defun my/sudo-edit (&optional arg)
-        "Edits a file with sudo priv.  Optionally take a ARG for the filename."
-        (interactive "P")
-        (if (or arg (not buffer-file-name))
-            (find-file
-             (concat "/sudo:root@localhost:"
-                     (ido-read-file-name "Find file(as root): ")))
-          (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+      (defvar sudo-edit-prefix (if (featurep 'xemacs) "/[sudo/root@localhost]" "/sudo:root@localhost:" )
+        "*The filename prefix used to open a file with `sudo-edit.")
+
+      (defvar sudo-edit-history nil
+        "History list for files found using `sudo-edit'.")
+
+      (defvar sudo-edit-hook nil
+        "Normal hook for functions to run after finding a \"root\" file.")
+
+      (defun sudo-edit ()
+        "*Open a file as the root user.
+               Prepends `sudo-edit-prefix' to the selected file name so that it
+               maybe accessed via the corresponding tramp method."
+
+        (interactive)
+        (require 'tramp)
+        (let* ( ;; We bind the variable `file-name-history' locally so we can
+               ;; use a separate history list for "root" files.
+               (file-name-history sudo-edit-history)
+               (name (or buffer-file-name default-directory))
+               (tramp (and (tramp-tramp-file-p name)
+                           (tramp-dissect-file-name name)))
+               path dir file)
+
+          ;; If called from a "root" file, we need to fix up the path.
+          (when tramp
+            (setq path (tramp-file-name-localname tramp)
+                  dir (file-name-directory path)))
+
+          (when (setq file (read-file-name "Find file (UID = 0): " dir path))
+            (find-file (concat sudo-edit-prefix file))
+            ;; If this all succeeded save our new history list.
+            (setq sudo-edit-history file-name-history)
+            ;; allow some user customization
+            (run-hooks 'sudo-edit-hook))))
     #+END_SRC
     
     Opens my emacs configuration for editing.
@@ -822,7 +851,7 @@ when necessary.
     #+BEGIN_SRC emacs-lisp
       (use-package evil
         :config 
-        (setq evil-default-state 'emacs) ;; For now this will always be emacs state so i get used to it
+        (setq evil-default-state 'god)
         (evil-mode 1))
     #+END_SRC
     
@@ -874,7 +903,86 @@ when necessary.
     a yellow box and a green underscore for normal emacs mode. There
     is no good way of telling when you change buffer focus so I just
     have it run after every command.
-    
+
+    #+NAME: evil-god-mode
+    #+BEGIN_SRC emacs-lisp
+      ;; @TODO(Renzix): make this always load after evil and stuff???
+      (evil-define-state god
+        "God State"
+        :tag " <G> "
+        :message "-- GOD MODE --"
+        :entry-hook (evil-god-start-hook)
+        :exit-hook (evil-god-stop-hook)
+        :input-method t
+        :intercept-esc nil)
+
+      (defun evil-god-start-hook ()
+        "Run before entering `evil-god-state'."
+        (god-local-mode 1)
+        (my/update-god-cursor))
+
+      (defun evil-god-stop-hook ()
+        "Run before exiting `evil-god-state'."
+        (god-local-mode -1))
+
+      (defvar evil-execute-in-god-state-buffer nil)
+
+      (defvar evil-god-last-command nil)
+
+      (defun evil-god-fix-last-command ()
+        "Change `last-command' to be the command before `evil-execute-in-god-state'."
+        (setq last-command evil-god-last-command))
+
+      (defun evil-stop-execute-in-god-state ()
+        "Switch back to previous evil state."
+        (unless (or (eq this-command #'evil-execute-in-god-state)
+                    (eq this-command #'universal-argument)
+                    (eq this-command #'universal-argument-minus)
+                    (eq this-command #'universal-argument-more)
+                    (eq this-command #'universal-argument-other-key)
+                    (eq this-command #'digit-argument)
+                    (eq this-command #'negative-argument)
+                    (minibufferp))
+          (remove-hook 'pre-command-hook 'evil-god-fix-last-command)
+          (remove-hook 'post-command-hook 'evil-stop-execute-in-god-state)
+          (when (buffer-live-p evil-execute-in-god-state-buffer)
+            (with-current-buffer evil-execute-in-god-state-buffer
+              (if (and (eq evil-previous-state 'visual)
+                       (not (use-region-p)))
+                  (progn
+                    (evil-change-to-previous-state)
+                    (evil-exit-visual-state))
+                (evil-change-to-previous-state))))
+          (setq evil-execute-in-god-state-buffer nil)))
+
+      ;;;###autoload
+      (defun evil-execute-in-god-state ()
+        "Execute the next command in God state."
+        (interactive)
+        (add-hook 'pre-command-hook #'evil-god-fix-last-command t)
+        (setq evil-execute-in-god-state-buffer (current-buffer))
+        (setq evil-god-last-command last-command)
+        (cond
+         ((evil-visual-state-p)
+          (let ((mrk (mark))
+                (pnt (point)))
+            (evil-god-state)
+            (set-mark mrk)
+            (goto-char pnt)))
+         (t
+          (evil-god-state)))
+        (evil-echo "Switched to God state..."))
+
+      ;;; Unconditionally exit Evil-God state.
+      (defun evil-god-state-bail ()
+        "Stop current God command and exit God state."
+        (interactive)
+        (evil-stop-execute-in-god-state)
+        (evil-god-stop-hook)
+        (evil-emacs-state)
+        (my/update-god-cursor))
+    #+END_SRC
+
     #+NAME: god-mode
     #+BEGIN_SRC emacs-lisp
       (defun god-mode-revert-if-buffer-changed (orig &rest args)
@@ -884,12 +992,7 @@ when necessary.
             (god-local-mode))
           (my/update-god-cursor)))
 
-      (use-package god-mode
-        :config
-        (defvar god-mode-current-buffer nil)
-        (add-hook 'post-command-hook 'my/update-god-cursor) ;; There is no good way to do this
-        (advice-add 'window-configuration-change-hook :after 'my/update-god-cursor)
-        (advice-add 'god-mode-maybe-activate :around 'god-mode-revert-if-buffer-changed))
+      (use-package god-mode)
     #+END_SRC
 
 *** general
@@ -1429,6 +1532,17 @@ when necessary.
                                     (flyspell-mode 1)))
      #+END_SRC
 
+** OS related stuff
+*** spotify
+
+    Spotify player thingy
+
+    #+NAME: spotify
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm-spotify-plus)
+    #+END_SRC
+
+
 ** Visual Helpers
 *** beacon
 
@@ -1870,7 +1984,7 @@ when necessary.
    #+NAME: keybinds-emacs
    #+BEGIN_SRC emacs-lisp :tangle no
      (general-define-key
-      :states '(emacs)
+      :states '(emacs god)
       "M-x" 'helm-M-x
       "C-x C-f" 'helm-find-files
       "C-x f" 'helm-locate
@@ -1887,7 +2001,6 @@ when necessary.
       "C-o" 'my/smart-open-line
       "C-\\" 'er/expand-region
       "C-." 'repeat
-      "<escape>" 'god-local-mode
       "C-=" 'my/smart-indent
       "C-j" 'avy-goto-char-2
       "C-'" 'my/helm-projectile-find-file-or-find-file
@@ -1900,6 +2013,8 @@ when necessary.
       "M-m" 'evilmi-jump-items
       "C-c h" 'helm-command-prefix
       "C-a" 'my/move-beginning-of-line)
+   (general-define-key :states 'emacs (kbd "<escape>") 'evil-god-state)
+   (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
    #+END_SRC
 
 ** Normal/Visual State
@@ -2027,6 +2142,7 @@ when necessary.
       (general-define-key
        :keymaps 'helm-find-files-map
        "C-'" 'my/helm-projectile-from-find-files
+       "C-r" 'helm-find-file-as-root
        "C-s" 'helm-ff-run-grep-ag)
       (general-define-key
        :keymaps 'helm-projectile-find-file-map
