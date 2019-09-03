@@ -1,4 +1,4 @@
-# Created 2019-09-03 Tue 12:59
+# Created 2019-09-03 Tue 13:13
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -335,18 +335,10 @@ way of doing this so i have a function to update it.
         evil-replace-state-cursor '(hollow "#bf2222")
         evil-operator-state-cursor '(box "#F5F5DC")
         evil-visual-state-cursor '(hollow "#ffffff")
+        evil-god-state-cursor '(box "#FFFF00")
         evil-emacs-state-cursor '(hbar "#43DE43"))
   (setq-default cursor-type 'hbar)
   (set-cursor-color "#43DE43")
-  (defun my/update-god-cursor (&rest args)
-    "Update the cursor from god-mode."
-    (cond 
-     ((eq god-local-mode t) ;; if i just do god-local-mode it thinks its a function
-      (set-cursor-color "#FFFF00")
-      (setq cursor-type 'box))
-     ((eq evil-state 'emacs)
-      (set-cursor-color "#43DE43")
-      (setq cursor-type 'hbar))))
 #+end_src
 
 Beeing able to see matching parens is nice so lets enable
@@ -913,8 +905,7 @@ have it run after every command.
 
   (defun evil-god-start-hook ()
     "Run before entering `evil-god-state'."
-    (god-local-mode 1)
-    (my/update-god-cursor))
+    (god-local-mode 1))
 
   (defun evil-god-stop-hook ()
     "Run before exiting `evil-god-state'."
@@ -974,8 +965,7 @@ have it run after every command.
     (interactive)
     (evil-stop-execute-in-god-state)
     (evil-god-stop-hook)
-    (evil-emacs-state)
-    (my/update-god-cursor))
+    (evil-emacs-state))
 #+end_src
 
 #+name: god-mode
@@ -1536,7 +1526,6 @@ Spotify player thingy
 #+begin_src emacs-lisp
   (use-package helm-spotify-plus)
 #+end_src
-
 
 ** Visual Helpers
 *** beacon
