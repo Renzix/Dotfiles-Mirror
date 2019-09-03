@@ -1,4 +1,4 @@
-# Created 2019-09-03 Tue 13:13
+# Created 2019-09-03 Tue 13:22
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -329,14 +329,14 @@ way of doing this so i have a function to update it.
 
 #+name: evil-cursor
 #+begin_src emacs-lisp
-  (setq evil-insert-state-cursor '(bar "#ff00ff")
-        evil-normal-state-cursor '(box "#6666f6")
-        evil-motion-state-cursor '(hollow "#87d7ff")
-        evil-replace-state-cursor '(hollow "#bf2222")
+  (setq evil-insert-state-cursor   '(bar "#FF00FF")
+        evil-normal-state-cursor   '(box "#6666F6")
+        evil-motion-state-cursor   '(hollow "#87D7FF")
+        evil-replace-state-cursor  '(hollow "#BF2222")
         evil-operator-state-cursor '(box "#F5F5DC")
-        evil-visual-state-cursor '(hollow "#ffffff")
-        evil-god-state-cursor '(box "#FFFF00")
-        evil-emacs-state-cursor '(hbar "#43DE43"))
+        evil-visual-state-cursor   '(hollow "#FFFFFF")
+        evil-god-state-cursor      '(box "#FFFF00")
+        evil-emacs-state-cursor    '(hbar "#43DE43"))
   (setq-default cursor-type 'hbar)
   (set-cursor-color "#43DE43")
 #+end_src
@@ -839,6 +839,7 @@ outside of vi itself and very extendable/fast.
   (use-package evil
     :config 
     (setq evil-default-state 'god)
+    (evil-set-initial-state 'term-mode 'emacs)
     (evil-mode 1))
 #+end_src
 
@@ -964,19 +965,12 @@ have it run after every command.
     "Stop current God command and exit God state."
     (interactive)
     (evil-stop-execute-in-god-state)
-    (evil-god-stop-hook)
-    (evil-emacs-state))
+    (evil-emacs-state)
+    (evil-god-stop-hook))
 #+end_src
 
 #+name: god-mode
 #+begin_src emacs-lisp
-  (defun god-mode-revert-if-buffer-changed (orig &rest args)
-    (apply orig args)
-    (when (not (eq (current-buffer) god-mode-current-buffer))
-      (when god-local-mode
-        (god-local-mode))
-      (my/update-god-cursor)))
-
   (use-package god-mode)
 #+end_src
 
