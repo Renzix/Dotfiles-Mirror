@@ -1,4 +1,4 @@
-# Created 2019-09-03 Tue 14:12
+# Created 2019-09-03 Tue 22:24
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -17,8 +17,8 @@ versions of this file including [[file:index.html][readtheorg]], [[file:index.tx
 for now.
 
 Some decisions are inspired by
-[[https://github.com/hlissner/doom-emacs][
-Doom]]: Heavily Inspired keybindings and other stuff \\
+
+[[https://github.com/hlissner/doom-emacs][Doom]]: Heavily Inspired keybindings and other stuff \\
 [[https://jamiecollinson.com/blog/my-emacs-config/][jamiecollinson]]: General layout \\
 [[https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org][Buffet]]: Random stuff and Actual help \\
 [[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas \\
@@ -1933,7 +1933,8 @@ may however be easier to understand at first.
 - context (org mode C-c C-c or [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][this]])
 - mouse (plan 9's acme?)
 
-** Emacs State
+** Global
+*** Emacs State
 
 Yes i want to be able to use emacs because i think its important to
 understand different ways of doing things. Because of this I am
@@ -1948,7 +1949,7 @@ or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybind
      "C-x C-f" 'helm-find-files
      "C-x f" 'helm-locate
      "C-x C-b" 'helm-buffers-list
-     "C-x b" 'helm-multi-files
+     "C-x b" 'helm-mini
      "C-x g" 'magit-status
      "C-x C-g" 'magit-dispatch
      "C-x C-o" 'other-window
@@ -1962,11 +1963,11 @@ or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybind
      "C-." 'repeat
      "C-=" 'my/smart-indent
      "C-j" 'avy-goto-char-2
-     "C-'" 'my/helm-projectile-find-file-or-find-file
+     "C-'" 'helm-find-files
+     "C-\"" 'helm-mini
      "M-'" 'my/helm-projectile-find-file-or-project
      "M-\"" 'my/helm-projectile-search-or-project
-     "C-\"" 'helm-occur
-     "C-|" 'helm-mini
+     "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
      "C-:" 'helm-bookmarks
      "M-p" 'projectile-command-map
      "M-m" 'evilmi-jump-items
@@ -1976,7 +1977,7 @@ or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybind
   (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
 #+end_src
 
-** Normal/Visual State
+*** Normal/Visual State
 
 General evil overided global keybinds. 
 
@@ -2006,7 +2007,7 @@ General evil overided global keybinds.
    (general-chord "``") 'magit-status)
 #+end_src
 
-** Insert State
+*** Insert State
 
 These are my keys for insert mode. They should be specifically
 about entering or deleting text.
@@ -2031,8 +2032,9 @@ useful but do not require much context.
   (evil-ex-define-cmd "bd" 'kill-this-buffer)
 #+end_src
 
-** Major Modes
-*** Plain Text
+** Modes
+*** Major Modes
+**** Plain Text
 **** Org mode
 
 The keybinds for org-mode.
@@ -2068,7 +2070,7 @@ The keybinds for org-mode.
 **** SOMEDAY latex mode
 TeX-command-master
 **** SOMEDAY markdown mode
-*** Programming
+**** Programming
 **** NEXT csharp mode
 **** TODO rustic mode
 **** SOMEDAY c/cpp mode
@@ -2084,13 +2086,12 @@ TeX-command-master
 **** SOMEDAY emacs lisp mode
 **** SOMEDAY common lisp mode
 **** SOMEDAY perl6 mode
-*** Messaging
+**** Messaging
 **** SOMEDAY matrix mode
 **** SOMEDAY irc mode
-*** Other
-**** SOMEDAY magit
-** Other
-*** Helm
+**** SOMEDAY VCS
+*** Minor Modes/Other
+**** Helm
 
 I have been doing helm wrong my whole life. Here is my attempt at
 making some of the keybinds a bit better with doing stuff like
@@ -2112,4 +2113,38 @@ ag and switching between helm modes.
   (general-define-key
    :keymaps 'helm-occur-map
    "M-'" 'my/helm-goto-helm-rg)
+#+end_src
+**** SmartParens
+
+Allows me to edit sexp's really nicely. Mainly for
+emacs/god-state. For Evil i will install vim surround.
+
+#+name: keybinds-smartparens
+#+begin_src emacs-lisp
+  (general-define-key
+   :states '(emacs god)
+   :prefix "C-]"
+   :map smartparens-mode-map
+   "a" 'sp-beginning-of-sexp
+   "e" 'sp-end-of-sexp
+   "C-a" 'sp-previous-sexp
+   "C-e" 'sp-next-sexp
+   "C-n" 'sp-forward-sexp
+   "C-p" 'sp-backward-sexp
+   "n" 'sp-forward-symbol
+   "p" 'sp-backward-symbol
+   "C-f" 'sp-forward-slurp-sexp
+   "f" 'sp-forward-barf-sexp
+   "C-b" 'sp-backward-slup-sexp
+   "b" 'sp-backward-barf-sexp
+   "C-k" 'sp-kill-sexp
+   "k" 'sp-kill-hybrid-sexp
+   "C-w" 'sp-unwrap-sexp
+   "}" 'sp-wrap-curly
+   ")" 'sp-wrap-round
+   "]" 'sp-wrap-square
+   "'" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))
+   "\"" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
+   "`" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
+   "_" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
 #+end_src

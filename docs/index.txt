@@ -91,17 +91,14 @@ Core
 ..... imenu
 Keybindings
 .. Rant on keybindings
-.. Emacs State
-.. Normal/Visual State
-.. Insert State
+.. Global
+..... Emacs State
+..... Normal/Visual State
+..... Insert State
 .. Ex commands
-.. Major Modes
-..... Plain Text
-..... Programming
-..... Messaging
-..... Other
-.. Other
-..... Helm
+.. Modes
+..... Major Modes
+..... Minor Modes/Other
 
 
 Hello This is my second real attempt to make a "Perfect" config. Idk if
@@ -110,8 +107,9 @@ it will ever be good enough but here it is. Note this is available on
 versions of this file including [readtheorg], [plain text] and
 [markdown] for now.
 
-Some decisions are inspired by [ Doom]: Heavily Inspired keybindings and
-other stuff
+Some decisions are inspired by
+
+[Doom]: Heavily Inspired keybindings and other stuff
 [jamiecollinson]: General layout
 [Buffet]: Random stuff and Actual help
 [Sacha Chua]: Random things and ideas
@@ -144,7 +142,7 @@ necessary.
 
 [markdown] <file:index.md>
 
-[ Doom] <https://github.com/hlissner/doom-emacs>
+[Doom] <https://github.com/hlissner/doom-emacs>
 
 [jamiecollinson] <https://jamiecollinson.com/blog/my-emacs-config/>
 
@@ -2205,8 +2203,11 @@ Rant on keybindings
 <https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/>
 
 
+Global
+~~~~~~
+
 Emacs State
-~~~~~~~~~~~
+-----------
 
   Yes i want to be able to use emacs because i think its important to
   understand different ways of doing things. Because of this I am going
@@ -2220,7 +2221,7 @@ Emacs State
   |    "C-x C-f" 'helm-find-files
   |    "C-x f" 'helm-locate
   |    "C-x C-b" 'helm-buffers-list
-  |    "C-x b" 'helm-multi-files
+  |    "C-x b" 'helm-mini
   |    "C-x g" 'magit-status
   |    "C-x C-g" 'magit-dispatch
   |    "C-x C-o" 'other-window
@@ -2234,11 +2235,11 @@ Emacs State
   |    "C-." 'repeat
   |    "C-=" 'my/smart-indent
   |    "C-j" 'avy-goto-char-2
-  |    "C-'" 'my/helm-projectile-find-file-or-find-file
+  |    "C-'" 'helm-find-files
+  |    "C-\"" 'helm-mini
   |    "M-'" 'my/helm-projectile-find-file-or-project
   |    "M-\"" 'my/helm-projectile-search-or-project
-  |    "C-\"" 'helm-occur
-  |    "C-|" 'helm-mini
+  |    "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
   |    "C-:" 'helm-bookmarks
   |    "M-p" 'projectile-command-map
   |    "M-m" 'evilmi-jump-items
@@ -2254,7 +2255,7 @@ Emacs State
 
 
 Normal/Visual State
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
   General evil overided global keybinds.
 
@@ -2285,7 +2286,7 @@ Normal/Visual State
 
 
 Insert State
-~~~~~~~~~~~~
+------------
 
   These are my keys for insert mode. They should be specifically about
   entering or deleting text.
@@ -2311,11 +2312,14 @@ Ex commands
   `----
 
 
-Major Modes
-~~~~~~~~~~~
+Modes
+~~~~~
 
-Plain Text
-----------
+Major Modes
+-----------
+
+* Plain Text
+
 
 * Org mode
 
@@ -2359,8 +2363,8 @@ Plain Text
 * SOMEDAY markdown mode
 
 
-Programming
------------
+* Programming
+
 
 * NEXT csharp mode
 
@@ -2407,8 +2411,8 @@ Programming
 * SOMEDAY perl6 mode
 
 
-Messaging
----------
+* Messaging
+
 
 * SOMEDAY matrix mode
 
@@ -2416,17 +2420,13 @@ Messaging
 * SOMEDAY irc mode
 
 
-Other
------
-
-* SOMEDAY magit
+* SOMEDAY VCS
 
 
-Other
-~~~~~
+Minor Modes/Other
+-----------------
 
-Helm
-----
+* Helm
 
   I have been doing helm wrong my whole life. Here is my attempt at
   making some of the keybinds a bit better with doing stuff like ag and
@@ -2447,4 +2447,39 @@ Helm
   | (general-define-key
   |  :keymaps 'helm-occur-map
   |  "M-'" 'my/helm-goto-helm-rg)
+  `----
+
+
+* SmartParens
+
+  Allows me to edit sexp's really nicely. Mainly for
+  emacs/god-state. For Evil i will install vim surround.
+
+  ,----
+  | (general-define-key
+  |  :states '(emacs god)
+  |  :prefix "C-]"
+  |  :map smartparens-mode-map
+  |  "a" 'sp-beginning-of-sexp
+  |  "e" 'sp-end-of-sexp
+  |  "C-a" 'sp-previous-sexp
+  |  "C-e" 'sp-next-sexp
+  |  "C-n" 'sp-forward-sexp
+  |  "C-p" 'sp-backward-sexp
+  |  "n" 'sp-forward-symbol
+  |  "p" 'sp-backward-symbol
+  |  "C-f" 'sp-forward-slurp-sexp
+  |  "f" 'sp-forward-barf-sexp
+  |  "C-b" 'sp-backward-slup-sexp
+  |  "b" 'sp-backward-barf-sexp
+  |  "C-k" 'sp-kill-sexp
+  |  "k" 'sp-kill-hybrid-sexp
+  |  "C-w" 'sp-unwrap-sexp
+  |  "}" 'sp-wrap-curly
+  |  ")" 'sp-wrap-round
+  |  "]" 'sp-wrap-square
+  |  "'" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))
+  |  "\"" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
+  |  "`" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
+  |  "_" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
   `----
