@@ -35,13 +35,26 @@ else
 	alias ll='ls -lh'
 fi
 
-
+if hash "nvim" 2>/dev/null ; then
+    info "Neovim found"
+    alias v="neovim"
+else
+    if hash "vim" 2>/dev/null ; then
+        info "Vim found"
+        alias v="vim"
+    else
+        info "using vi"
+        alias v="vi"
+    fi
+fi
+    
 # Some nice keybindings and aliases
 # emacs keybindings
-alias e="emacsclient -nw -ca \"\""
-bind -m emacs -x '"\ee":"emacsclient -c -nw ."'
-alias f="emacsclient -nw -ca \"\" ."
-bind -m emacs -x '"\C-xd":"emacsclient -c -nw ."'
+alias e="emacs -nw"
+bind -m emacs -x '"\ee":"emacs -nw ."'
+alias f="emacs -nw ."
+bind -m emacs -x '"\C-xd":"emacs -nw ."'
+alias v=""
 
 # System Shutdown stuff
 alias rb="sudo reboot"
@@ -53,8 +66,10 @@ alias gp="git push"
 
 #Other
 alias ht="htop"
-alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k" # because im lazy only works on 1 cpu
-alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k" # because im lazy only works on 1 cpu
+
+## im lazy xd ##
+alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
+alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k"
 alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
 alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
 

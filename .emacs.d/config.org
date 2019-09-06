@@ -692,51 +692,6 @@ when necessary.
         (delete-other-windows))
     #+END_SRC
 
-    Opens the current buffer with sudo. Again this probably should be
-    default or at least some form of it as this doesnt work if you
-    dont have sudo. This now works with [[https://www.emacswiki.org/emacs/TrampMode#toc17][tramp]] as before it doesnt work
-    without editing the file path.
-   
-    #+NAME: sudo-edit
-    #+BEGIN_SRC emacs-lisp
-
-      (defvar sudo-edit-prefix (if (featurep 'xemacs) "/[sudo/root@localhost]" "/sudo:root@localhost:" )
-        "*The filename prefix used to open a file with `sudo-edit.")
-
-      (defvar sudo-edit-history nil
-        "History list for files found using `sudo-edit'.")
-
-      (defvar sudo-edit-hook nil
-        "Normal hook for functions to run after finding a \"root\" file.")
-
-      (defun sudo-edit ()
-        "*Open a file as the root user.
-               Prepends `sudo-edit-prefix' to the selected file name so that it
-               maybe accessed via the corresponding tramp method."
-
-        (interactive)
-        (require 'tramp)
-        (let* ( ;; We bind the variable `file-name-history' locally so we can
-               ;; use a separate history list for "root" files.
-               (file-name-history sudo-edit-history)
-               (name (or buffer-file-name default-directory))
-               (tramp (and (tramp-tramp-file-p name)
-                           (tramp-dissect-file-name name)))
-               path dir file)
-
-          ;; If called from a "root" file, we need to fix up the path.
-          (when tramp
-            (setq path (tramp-file-name-localname tramp)
-                  dir (file-name-directory path)))
-
-          (when (setq file (read-file-name "Find file (UID = 0): " dir path))
-            (find-file (concat sudo-edit-prefix file))
-            ;; If this all succeeded save our new history list.
-            (setq sudo-edit-history file-name-history)
-            ;; allow some user customization
-            (run-hooks 'sudo-edit-hook))))
-    #+END_SRC
-    
     Opens my emacs configuration for editing.
 
     #+NAME: open-emacs-config
@@ -1458,7 +1413,7 @@ when necessary.
     is actually amazing...
     
     #+NAME: matrix-client
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (when (not (string-equal system-type "windows-nt"))
         (use-package matrix-client
           :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
@@ -1561,6 +1516,15 @@ when necessary.
       (use-package which-key
         :config (which-key-mode))
     #+END_SRC
+
+*** hl-todo
+
+    Shows TODO in code with a different color (is comment aware)
+
+    #+NAME: hl-todo
+    #+BEGIN_SRC emacs-lisp
+      (use-package hl-todo)
+    #+END_SRC
     
 ** Should Be in Emacs
 *** expand-region
@@ -1601,7 +1565,6 @@ when necessary.
       (use-package lsp-mode
         :hook
         ((scala-mode . lsp)
-         (java-mode . lsp)
          (python-mode . lsp)
          (c-mode . lsp))
         :config (setq lsp-prefer-flymake nil))
@@ -1634,7 +1597,6 @@ when necessary.
         (dap-mode 1)
         (dap-ui-mode 1)
         (require 'dap-python)
-        (require 'dap-java)
         (require 'dap-lldb))
     #+END_SRC
 
@@ -1646,7 +1608,18 @@ when necessary.
    
      #+NAME: lsp-java
      #+BEGIN_SRC emacs-lisp
-       (use-package lsp-java)
+       (use-package eclim
+         :config
+         (setq eclim-autostart t
+               help-at-pt-when-idle t
+               help-at-pt-timer-delay 0.1
+               eclimd-default-workspace "Projects/Mine")
+         (help-at-pt-set-timer))
+
+       (use-package company-emacs-eclim
+         :after '(company eclim)
+         :config
+         (company-emacs-eclim-setup))
      #+END_SRC
 
 **** scala
@@ -1961,88 +1934,88 @@ when necessary.
 ** Global
 *** Emacs State
 
-   Yes i want to be able to use emacs because i think its important to
-   understand different ways of doing things. Because of this I am
-   going to make it a 66% on startup of whether evil mode is enabled
-   or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybinds]].
+    Yes i want to be able to use emacs because i think its important to
+    understand different ways of doing things. Because of this I am
+    going to make it a 66% on startup of whether evil mode is enabled
+    or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybinds]].
 
-   #+NAME: keybinds-emacs
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (general-define-key
-      :states '(emacs god)
-      "M-x" 'helm-M-x
-      "C-x C-f" 'helm-find-files
-      "C-x f" 'helm-locate
-      "C-x C-b" 'helm-buffers-list
-      "C-x b" 'helm-mini
-      "C-x g" 'magit-status
-      "C-x C-g" 'magit-dispatch
-      "C-x C-o" 'other-window
-      "C-x C-k" 'kill-this-buffer
-      "C-x v" 'revert-buffer
-      "C-x t" 'my/eshell-toggle
-      "C-x C-t" 'my/vterm-toggle
-      "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
-      "C-o" 'my/smart-open-line
-      "C-\\" 'er/expand-region
-      "C-." 'repeat
-      "C-=" 'my/smart-indent
-      "C-j" 'avy-goto-char-2
-      "C-'" 'helm-find-files
-      "C-\"" 'helm-mini
-      "M-'" 'my/helm-projectile-find-file-or-project
-      "M-\"" 'my/helm-projectile-search-or-project
-      "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
-      "C-:" 'helm-bookmarks
-      "M-p" 'projectile-command-map
-      "M-m" 'evilmi-jump-items
-      "C-c h" 'helm-command-prefix
-      "C-a" 'my/move-beginning-of-line)
-   (general-define-key :states 'emacs (kbd "<escape>") 'evil-god-state)
-   (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
-   #+END_SRC
+    #+NAME: keybinds-emacs
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (general-define-key
+       :states '(emacs god)
+       "M-x" 'helm-M-x
+       "C-x C-f" 'helm-find-files
+       "C-x f" 'helm-locate
+       "C-x C-b" 'helm-buffers-list
+       "C-x b" 'helm-mini
+       "C-x g" 'magit-status
+       "C-x C-g" 'magit-dispatch
+       "C-x C-o" 'other-window
+       "C-x C-k" 'kill-this-buffer
+       "C-x v" 'revert-buffer
+       "C-x t" 'my/eshell-toggle
+       "C-x C-t" 'my/vterm-toggle
+       "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
+       "C-o" 'my/smart-open-line
+       "C-\\" 'er/expand-region
+       "C-." 'repeat
+       "C-=" 'my/smart-indent
+       "C-j" 'avy-goto-char-2
+       "C-'" 'helm-find-files
+       "C-\"" 'helm-mini
+       "M-'" 'my/helm-projectile-find-file-or-project
+       "M-\"" 'my/helm-projectile-search-or-project
+       "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
+       "C-:" 'helm-bookmarks
+       "M-p" 'projectile-command-map
+       "M-m" 'evilmi-jump-items
+       "C-c h" 'helm-command-prefix
+       "C-a" 'my/move-beginning-of-line)
+      (general-define-key :states 'emacs (kbd "<escape>") 'evil-god-state)
+      (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
+    #+END_SRC
 
 *** Normal/Visual State
    
-   General evil overided global keybinds. 
+    General evil overided global keybinds. 
 
-   #+NAME: keybinds-normal
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (general-define-key
-      :states '(normal visual)
-      "|" 'helm-mini
-      "SPC" 'helm-imenu
-      ;; "_" 'my/evil-jump-backward
-      "s" 'my/eshell-toggle
-      "S" 'my/helm-projectile-find-file-or-find-file
-      ";" 'helm-M-x
-      "g c c" 'comment-line
-      "g c r" 'comment-or-uncomment-region
-      "g =" 'my/smart-indent
-      "g r" 'revert-buffer
-      "g p" 'projectile-command-map
-      "\\" 'my/helm-projectile-search-or-project
-      "U" 'undo-tree-visualize
-      "Q" 'save-buffers-kill-terminal
-      ", , c" 'org-capture
-      ", , l" 'org-store-link
-      (general-chord ";;") 'eval-expression
-      (general-chord "SS") 'my/helm-projectile-find-file-or-project
-      (general-chord "ss") 'my/vterm-toggle
-      (general-chord "``") 'magit-status)
-   #+END_SRC
+    #+NAME: keybinds-normal
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (general-define-key
+       :states '(normal visual)
+       "|" 'helm-mini
+       "SPC" 'helm-imenu
+       ;; "_" 'my/evil-jump-backward
+       "s" 'my/eshell-toggle
+       "S" 'my/helm-projectile-find-file-or-find-file
+       ";" 'helm-M-x
+       "g c c" 'comment-line
+       "g c r" 'comment-or-uncomment-region
+       "g =" 'my/smart-indent
+       "g r" 'revert-buffer
+       "g p" 'projectile-command-map
+       "\\" 'my/helm-projectile-search-or-project
+       "U" 'undo-tree-visualize
+       "Q" 'save-buffers-kill-terminal
+       ", , c" 'org-capture
+       ", , l" 'org-store-link
+       (general-chord ";;") 'eval-expression
+       (general-chord "SS") 'my/helm-projectile-find-file-or-project
+       (general-chord "ss") 'my/vterm-toggle
+       (general-chord "``") 'magit-status)
+    #+END_SRC
    
 *** Insert State
 
-   These are my keys for insert mode. They should be specifically
-   about entering or deleting text.
+    These are my keys for insert mode. They should be specifically
+    about entering or deleting text.
 
-   #+NAME: keybinds-insert
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (general-define-key
-      :states '(insert)
-      (general-chord "uu") 'my/evil-insert-delete-back-word)
-   #+END_SRC
+    #+NAME: keybinds-insert
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (general-define-key
+       :states '(insert)
+       (general-chord "uu") 'my/evil-insert-delete-back-word)
+    #+END_SRC
   
 ** Ex commands
    
@@ -2118,27 +2091,27 @@ when necessary.
 *** Minor Modes/Other
 **** Helm
 
-    I have been doing helm wrong my whole life. Here is my attempt at
-    making some of the keybinds a bit better with doing stuff like
-    ag and switching between helm modes.
+     I have been doing helm wrong my whole life. Here is my attempt at
+     making some of the keybinds a bit better with doing stuff like
+     ag and switching between helm modes.
 
-    #+NAME: keybinds-helm
-    #+BEGIN_SRC emacs-lisp
-      (general-define-key
-       :keymaps 'helm-find-files-map
-       "C-'" 'my/helm-projectile-from-find-files
-       "C-r" 'helm-find-file-as-root
-       "C-s" 'helm-ff-run-grep-ag)
-      (general-define-key
-       :keymaps 'helm-projectile-find-file-map
-       "C-'" 'my/helm-goto-find-files)
-      (general-define-key
-       :keymaps 'helm-rg-map
-       "M-'" 'my/helm-goto-helm-occur)
-      (general-define-key
-       :keymaps 'helm-occur-map
-       "M-'" 'my/helm-goto-helm-rg)
-    #+END_SRC
+     #+NAME: keybinds-helm
+     #+BEGIN_SRC emacs-lisp
+       (general-define-key
+        :keymaps 'helm-find-files-map
+        "C-'" 'my/helm-projectile-from-find-files
+        "C-r" 'helm-find-file-as-root
+        "C-s" 'helm-ff-run-grep-ag)
+       (general-define-key
+        :keymaps 'helm-projectile-find-file-map
+        "C-'" 'my/helm-goto-find-files)
+       (general-define-key
+        :keymaps 'helm-rg-map
+        "M-'" 'my/helm-goto-helm-occur)
+       (general-define-key
+        :keymaps 'helm-occur-map
+        "M-'" 'my/helm-goto-helm-rg)
+     #+END_SRC
 **** SmartParens
 
      Allows me to edit sexp's really nicely. Mainly for

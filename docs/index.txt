@@ -74,6 +74,7 @@ Core
 ..... rainbow-delimiters
 ..... TODO wilfred
 ..... which-key
+..... hl-todo
 .. Should Be in Emacs
 ..... expand-region
 .. Programming
@@ -817,50 +818,6 @@ Open Buffer
   |   (delete-other-windows))
   `----
 
-  Opens the current buffer with sudo. Again this probably should be
-  default or at least some form of it as this doesnt work if you dont
-  have sudo. This now works with [tramp] as before it doesnt work
-  without editing the file path.
-
-  ,----
-  | 
-  | (defvar sudo-edit-prefix (if (featurep 'xemacs) "/[sudo/root@localhost]" "/sudo:root@localhost:" )
-  |   "*The filename prefix used to open a file with `sudo-edit.")
-  | 
-  | (defvar sudo-edit-history nil
-  |   "History list for files found using `sudo-edit'.")
-  | 
-  | (defvar sudo-edit-hook nil
-  |   "Normal hook for functions to run after finding a \"root\" file.")
-  | 
-  | (defun sudo-edit ()
-  |   "*Open a file as the root user.
-  |          Prepends `sudo-edit-prefix' to the selected file name so that it
-  |          maybe accessed via the corresponding tramp method."
-  | 
-  |   (interactive)
-  |   (require 'tramp)
-  |   (let* ( ;; We bind the variable `file-name-history' locally so we can
-  |          ;; use a separate history list for "root" files.
-  |          (file-name-history sudo-edit-history)
-  |          (name (or buffer-file-name default-directory))
-  |          (tramp (and (tramp-tramp-file-p name)
-  |                      (tramp-dissect-file-name name)))
-  |          path dir file)
-  | 
-  |     ;; If called from a "root" file, we need to fix up the path.
-  |     (when tramp
-  |       (setq path (tramp-file-name-localname tramp)
-  |             dir (file-name-directory path)))
-  | 
-  |     (when (setq file (read-file-name "Find file (UID = 0): " dir path))
-  |       (find-file (concat sudo-edit-prefix file))
-  |       ;; If this all succeeded save our new history list.
-  |       (setq sudo-edit-history file-name-history)
-  |       ;; allow some user customization
-  |       (run-hooks 'sudo-edit-hook))))
-  `----
-
   Opens my emacs configuration for editing.
 
   ,----
@@ -869,9 +826,6 @@ Open Buffer
   |   (interactive)
   |   (find-file "~/Dotfiles/.emacs.d/config.org"))
   `----
-
-
-[tramp] <https://www.emacswiki.org/emacs/TrampMode#toc17>
 
 
 SOMEDAY Eval
@@ -1778,6 +1732,16 @@ which-key
   `----
 
 
+hl-todo
+-------
+
+  Shows TODO in code with a different color (is comment aware)
+
+  ,----
+  | (use-package hl-todo)
+  `----
+
+
 Should Be in Emacs
 ~~~~~~~~~~~~~~~~~~
 
@@ -1824,7 +1788,6 @@ LSP
   | (use-package lsp-mode
   |   :hook
   |   ((scala-mode . lsp)
-  |    (java-mode . lsp)
   |    (python-mode . lsp)
   |    (c-mode . lsp))
   |   :config (setq lsp-prefer-flymake nil))
@@ -1854,7 +1817,6 @@ LSP
   |   (dap-mode 1)
   |   (dap-ui-mode 1)
   |   (require 'dap-python)
-  |   (require 'dap-java)
   |   (require 'dap-lldb))
   `----
 
@@ -1871,7 +1833,18 @@ JVM
   the entire eclipse server thing too.
 
   ,----
-  | (use-package lsp-java)
+  | (use-package eclim
+  |   :config
+  |   (setq eclim-autostart t
+  |         help-at-pt-when-idle t
+  |         help-at-pt-timer-delay 0.1
+  |         eclimd-default-workspace "Projects/Mine")
+  |   (help-at-pt-set-timer))
+  | 
+  | (use-package company-emacs-eclim
+  |   :after '(company eclim)
+  |   :config
+  |   (company-emacs-eclim-setup))
   `----
 
 
@@ -2215,36 +2188,36 @@ Emacs State
   not. [This is nice if I forget keybinds].
 
   ,----
-  |   (general-define-key
-  |    :states '(emacs god)
-  |    "M-x" 'helm-M-x
-  |    "C-x C-f" 'helm-find-files
-  |    "C-x f" 'helm-locate
-  |    "C-x C-b" 'helm-buffers-list
-  |    "C-x b" 'helm-mini
-  |    "C-x g" 'magit-status
-  |    "C-x C-g" 'magit-dispatch
-  |    "C-x C-o" 'other-window
-  |    "C-x C-k" 'kill-this-buffer
-  |    "C-x v" 'revert-buffer
-  |    "C-x t" 'my/eshell-toggle
-  |    "C-x C-t" 'my/vterm-toggle
-  |    "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
-  |    "C-o" 'my/smart-open-line
-  |    "C-\\" 'er/expand-region
-  |    "C-." 'repeat
-  |    "C-=" 'my/smart-indent
-  |    "C-j" 'avy-goto-char-2
-  |    "C-'" 'helm-find-files
-  |    "C-\"" 'helm-mini
-  |    "M-'" 'my/helm-projectile-find-file-or-project
-  |    "M-\"" 'my/helm-projectile-search-or-project
-  |    "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
-  |    "C-:" 'helm-bookmarks
-  |    "M-p" 'projectile-command-map
-  |    "M-m" 'evilmi-jump-items
-  |    "C-c h" 'helm-command-prefix
-  |    "C-a" 'my/move-beginning-of-line)
+  | (general-define-key
+  |  :states '(emacs god)
+  |  "M-x" 'helm-M-x
+  |  "C-x C-f" 'helm-find-files
+  |  "C-x f" 'helm-locate
+  |  "C-x C-b" 'helm-buffers-list
+  |  "C-x b" 'helm-mini
+  |  "C-x g" 'magit-status
+  |  "C-x C-g" 'magit-dispatch
+  |  "C-x C-o" 'other-window
+  |  "C-x C-k" 'kill-this-buffer
+  |  "C-x v" 'revert-buffer
+  |  "C-x t" 'my/eshell-toggle
+  |  "C-x C-t" 'my/vterm-toggle
+  |  "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
+  |  "C-o" 'my/smart-open-line
+  |  "C-\\" 'er/expand-region
+  |  "C-." 'repeat
+  |  "C-=" 'my/smart-indent
+  |  "C-j" 'avy-goto-char-2
+  |  "C-'" 'helm-find-files
+  |  "C-\"" 'helm-mini
+  |  "M-'" 'my/helm-projectile-find-file-or-project
+  |  "M-\"" 'my/helm-projectile-search-or-project
+  |  "C-|" 'helm-mini ;; @TODO(Renzix): Free keybind
+  |  "C-:" 'helm-bookmarks
+  |  "M-p" 'projectile-command-map
+  |  "M-m" 'evilmi-jump-items
+  |  "C-c h" 'helm-command-prefix
+  |  "C-a" 'my/move-beginning-of-line)
   | (general-define-key :states 'emacs (kbd "<escape>") 'evil-god-state)
   | (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
   `----
