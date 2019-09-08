@@ -96,7 +96,7 @@ Keybindings
 ..... Emacs State
 ..... Normal/Visual State
 ..... Insert State
-.. Ex commands
+..... Ex commands
 .. Modes
 ..... Major Modes
 ..... Minor Modes/Other
@@ -668,7 +668,7 @@ File Handling
   open.
 
   ,----
-  | (defun delete-file-and-buffer ()
+  | (defun my/delete-file-and-buffer ()
   |   "Kill the current buffer and deletes the file it is visiting."
   |   (interactive)
   |   (let ((filename (buffer-file-name)))
@@ -937,7 +937,7 @@ evil
   ,----
   | (use-package evil
   |   :config 
-  |   (setq evil-default-state 'god)
+  |   (setq evil-default-state 'emacs)
   |   (evil-set-initial-state 'term-mode 'emacs)
   |   (evil-mode 1))
   `----
@@ -1295,14 +1295,7 @@ Company
   |         company-tooltip-align-annotations t
   |         company-idle-delay 1
   |         company-tooltip-limit 20
-  |         global-company-mode t)
-  |   :bind (:map company-active-map
-  |               ("S-TAB" . company-select-previous)
-  |               ("<backtab>" . company-select-previous)
-  |               ("<return>" . nil)
-  |               ("RET" . nil)
-  |               ("C-SPC" . company-complete-selection)
-  |               ("TAB" . company-complete-common-or-cycle)))
+  |         global-company-mode t))
   `----
 
   This is also intergrated with 1 for a whole bunhc of functions.
@@ -1388,6 +1381,7 @@ Org
   |                 org-confirm-babel-evaluate nil
   |                 org-return-follows-link t)
   |   (setq org-log-done 'time
+  |         org-src-window-setup 'current-window
   |         org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
   |                             (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
   |                             (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
@@ -1789,8 +1783,16 @@ LSP
   |   :hook
   |   ((scala-mode . lsp)
   |    (python-mode . lsp)
+  |    (java-mode . lsp)
   |    (c-mode . lsp))
-  |   :config (setq lsp-prefer-flymake nil))
+  |   :config 
+  |   (setq lsp-prefer-flymake nil
+  |         lsp-enable-snippet t
+  |         lsp-auto-execute-action t
+  |         lsp-eldoc-render-all t
+  |         lsp-enable-completion-at-point t
+  |         lsp-enable-xref t
+  |         lsp-enable-indentation t))
   `----
 
   `lsp-ui' adds a inline ui element so you can see it.
@@ -1805,7 +1807,19 @@ LSP
 
   ,----
   | (use-package company-lsp
-  |   :after '(company lsp-mode))
+  |   :after '(company lsp-mode)
+  |   :config
+  |   (setq company-lsp-cache-candidates t
+  |         company-lsp-async t
+  |         company-lsp-enable-snippet t)
+  |   (push 'company-lsp company-backends))
+  `----
+
+  icons r cool so lets add them with `company-box'
+
+  ,----
+  | (use-package company-box
+  |   :hook (company-mode . company-box-mode))
   `----
 
   ??? also has `dap-mode' which is in [alpha] and can be used to
@@ -1829,23 +1843,36 @@ JVM
 
 * java
 
-  All i have for java is a simple ???. Maybe eventually I will hook up
-  the entire eclipse server thing too.
+  There are 3 popular java thingys and im going to try out 2 of
+  them. lsp-java, meghanada and eclim. For now eclim is disabled as its
+  annoying installing and confiuring it properly.
 
-  ,----
-  | (use-package eclim
-  |   :config
-  |   (setq eclim-autostart t
-  |         help-at-pt-when-idle t
-  |         help-at-pt-timer-delay 0.1
-  |         eclimd-default-workspace "Projects/Mine")
-  |   (help-at-pt-set-timer))
-  | 
-  | (use-package company-emacs-eclim
-  |   :after '(company eclim)
-  |   :config
-  |   (company-emacs-eclim-setup))
-  `----
+
+  + lsp-java
+
+    lsp-java is simple and really nice.
+
+    ,----
+    | (use-package lsp-java)
+    `----
+
+
+  + eclim
+
+    ,----
+    | (use-package eclim
+    |   :config
+    |   (setq eclim-autostart t
+    |         help-at-pt-when-idle t
+    |         help-at-pt-timer-delay 0.1
+    |         eclimd-default-workspace "~/Projects")
+    |   (help-at-pt-set-timer))
+    | 
+    | (use-package company-emacs-eclim
+    |   :after '(company eclim)
+    |   :config
+    |   (company-emacs-eclim-setup))
+    `----
 
 
 * scala
@@ -2016,12 +2043,14 @@ c and cpp
 
 
   This one uses irony server which needs to be installed. Note that it
-  can be installed inside emacs. Uses ??? to do stuff.
+  can be installed inside emacs. Uses ??? to do stuff. THIS IS DISABLED
+  CUZ LSP IS AWESOME.
 
   ,----
   | (use-package irony
   |   :hook (c++-mode-hook . irony-mode)
   |   :hook (objc-mode-hook . irony-mode)
+  |   :hook (irony-mode . irony-cdb-autosetup-compile-options)
   |   :hook (c-mode-hook . irony-mode))
   `----
 
@@ -2029,7 +2058,8 @@ c and cpp
 
   ,----
   | (use-package company-irony
-  |   :after '(company irony))
+  |   :after '(company irony)
+  |   :config (add-to-list 'company-backends 'company-irony))
   `----
 
   This allows us to read docs while irony is working.
@@ -2272,7 +2302,7 @@ Insert State
 
 
 Ex commands
-~~~~~~~~~~~
+-----------
 
   The rest is my ex commands. These are things that are pretty useful
   but do not require much context.
@@ -2325,7 +2355,16 @@ Major Modes
   `----
 
 
-* TODO Org src mode
+* Org src mode
+
+  Rebind C-c ' to C-c C-c because C-c C-c is also in magit and alot
+  easier to type.
+
+  ,----
+  | (general-define-key
+  |  :map org-src-mode-map
+  |  "C-c C-c" 'org-edit-src-exit)
+  `----
 
 
 * SOMEDAY latex mode
@@ -2455,4 +2494,17 @@ Minor Modes/Other
   |  "\"" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
   |  "`" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
   |  "_" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
+  `----
+
+
+* Company
+
+  Arrow keys are annoying so im using C-n and C-p to switch selection of
+  company autocompletions.
+
+  ,----
+  | (general-define-key
+  |  :map '(company-active-map company-search-map)
+  |  "C-n" 'company-select-next
+  |  "C-p" 'company-select-previous)
   `----

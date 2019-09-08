@@ -2,7 +2,197 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
+(("config-c-cpp"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "*** c and cpp\n  ")
+ (rear-context-string . "\n    #+END_SRC\n\n")
+ (position . 60073))
+("config-java"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** java\n    \n ")
+ (rear-context-string . "ND_SRC\n\n*** JVM\n")
+ (position . 54761))
+("config-god-mode"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "*** god mode\n\n  ")
+ (rear-context-string . "\n    #+END_SRC\n\n")
+ (position . 32713))
+("config-keybinds"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "* Keybindings\n\n ")
+ (rear-context-string . "\n    #+END_SRC\n\n")
+ (position . 55555))
+("keybinds-magit"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY mag")
+ (rear-context-string . " mode\n*** Other\n")
+ (position . 62407))
+("keybinds-irc"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY irc")
+ (rear-context-string . "DAY matrix mode\n")
+ (position . 62375))
+("keybinds-matrix"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY mat")
+ (rear-context-string . "e\n*** Messaging\n")
+ (position . 62350))
+("keybinds-raku"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY per")
+ (rear-context-string . "ommon lisp mode\n")
+ (position . 62312))
+("keybinds-perl6"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY per")
+ (rear-context-string . "ommon lisp mode\n")
+ (position . 62312))
+("keybinds-cl"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY com")
+ (rear-context-string . "emacs lisp mode\n")
+ (position . 62282))
+("keybinds-elisp"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY ema")
+ (rear-context-string . "MEDAY dart mode\n")
+ (position . 62253))
+("keybinds-dart"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY dar")
+ (rear-context-string . "DAY golang mode\n")
+ (position . 62230))
+("keybinds-golang"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY gol")
+ (rear-context-string . "EDAY shell mode\n")
+ (position . 62205))
+("keybinds-shell"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY she")
+ (rear-context-string . "powershell mode\n")
+ (position . 62181))
+("keybinds-powershell"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY pow")
+ (rear-context-string . "AY clojure mode\n")
+ (position . 62152))
+("keybinds-clojure"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY clo")
+ (rear-context-string . "DAY kotlin mode\n")
+ (position . 62126))
+("keybinds-kotlin"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY kot")
+ (rear-context-string . "EDAY scala mode\n")
+ (position . 62101))
+("keybinds-scala"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY sca")
+ (rear-context-string . "MEDAY java mode\n")
+ (position . 62077))
+("keybinds-java"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY jav")
+ (rear-context-string . "AY haskell mode\n")
+ (position . 62054))
+("keybinds-haskell"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY has")
+ (rear-context-string . "EDAY c/cpp mode\n")
+ (position . 62028))
+("keybinds-c-cpp"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY c/c")
+ (rear-context-string . "ODO rustic mode\n")
+ (position . 62004))
+("keybinds-rust"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** TODO rustic")
+ (rear-context-string . "EXT csharp mode\n")
+ (position . 61982))
+("keybinds-csharp"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** NEXT csharp")
+ (rear-context-string . "*** Programming\n")
+ (position . 61960))
+("keybinds-markdown"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY mar")
+ (rear-context-string . "-command-master\n")
+ (position . 61917))
+("keybinds-latex"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** SOMEDAY lat")
+ (rear-context-string . "DO Org src mode\n")
+ (position . 61869))
+("keybinds-org-src"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** TODO Org sr")
+ (rear-context-string . "     #+END_SRC\n\n")
+ (position . 61846))
+("keybinds-org"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** Org mode\n\n ")
+ (rear-context-string . "\n*** Plain Text\n")
+ (position . 61014))
+("keybinds-ex-commands"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "** Ex commands\n ")
+ (rear-context-string . "   #+END_SRC\n  \n")
+ (position . 60592))
+("keybinds-insert"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "** Insert State\n")
+ (rear-context-string . "  #+END_SRC\n   \n")
+ (position . 60282))
+("keybinds-normal"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "** Normal/Visual")
+ (rear-context-string . ")\n   #+END_SRC\n\n")
+ (position . 59383))
+("config-programming"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "** Programming\n*")
+ (rear-context-string . "\n    #+END_SRC\n\n")
+ (position . 48393))
+("config-magit-todos"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** magit-todos")
+ (rear-context-string . "     #+END_SRC\n\n")
+ (position . 33941))
+("config-magit"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "**** Magit\n     ")
+ (rear-context-string . "Control\n*** Git\n")
+ (position . 32835))
+("config-org"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "*** Org\n    \n   ")
+ (rear-context-string . "lain Text Modes\n")
+ (position . 35880))
+("keybinds-emacs"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "** Emacs State\n\n")
+ (rear-context-string . "lan 9's acme?)\n\n")
+ (position . 55377))
+("keybinds-helm"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "*** Helm\n\n    I ")
+ (rear-context-string . " magit\n** Other\n")
+ (position . 62435))
+("cfg"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "#+TITLE: Emacs c")
+ (rear-context-string)
+ (position . 1))
+("config-helm"
+ (filename . "~/Dotfiles/.emacs.d/config.org")
+ (front-context-string . "*** helm\n\n    He")
+ (rear-context-string . "\n\n** Fuzzy Find\n")
+ (position . 28839))
+("org-capture-last-stored"
  (filename . "~/.notes")
  (front-context-string . "** TODO z for wi")
  (rear-context-string . "\n   prefix key.\n")

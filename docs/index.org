@@ -1,4 +1,4 @@
-# Created 2019-09-05 Thu 22:19
+# Created 2019-09-08 Sun 15:24
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -531,7 +531,7 @@ is open.
 
 #+name: delete-file-and-buffer
 #+begin_src emacs-lisp
-  (defun delete-file-and-buffer ()
+  (defun my/delete-file-and-buffer ()
     "Kill the current buffer and deletes the file it is visiting."
     (interactive)
     (let ((filename (buffer-file-name)))
@@ -793,7 +793,7 @@ outside of vi itself and very extendable/fast.
 #+begin_src emacs-lisp
   (use-package evil
     :config 
-    (setq evil-default-state 'god)
+    (setq evil-default-state 'emacs)
     (evil-set-initial-state 'term-mode 'emacs)
     (evil-mode 1))
 #+end_src
@@ -1122,14 +1122,7 @@ completion.
           company-tooltip-align-annotations t
           company-idle-delay 1
           company-tooltip-limit 20
-          global-company-mode t)
-    :bind (:map company-active-map
-                ("S-TAB" . company-select-previous)
-                ("<backtab>" . company-select-previous)
-                ("<return>" . nil)
-                ("RET" . nil)
-                ("C-SPC" . company-complete-selection)
-                ("TAB" . company-complete-common-or-cycle)))
+          global-company-mode t))
 #+end_src
 
 This is also intergrated with [[yasnippet]] for a whole bunhc of
@@ -1210,6 +1203,7 @@ Literite Programming and much [[https://orgmode.org/][more]].
                   org-confirm-babel-evaluate nil
                   org-return-follows-link t)
     (setq org-log-done 'time
+          org-src-window-setup 'current-window
           org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
                               (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
                               (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
@@ -1560,8 +1554,16 @@ editors can improve it making it alot better.
     :hook
     ((scala-mode . lsp)
      (python-mode . lsp)
+     (java-mode . lsp)
      (c-mode . lsp))
-    :config (setq lsp-prefer-flymake nil))
+    :config 
+    (setq lsp-prefer-flymake nil
+          lsp-enable-snippet t
+          lsp-auto-execute-action t
+          lsp-eldoc-render-all t
+          lsp-enable-completion-at-point t
+          lsp-enable-xref t
+          lsp-enable-indentation t))
 #+end_src
 
 =lsp-ui= adds a inline ui element so you can see it.
@@ -1578,7 +1580,20 @@ lsp also has [[company]] support
 #+name: company-lsp
 #+begin_src emacs-lisp
   (use-package company-lsp
-    :after '(company lsp-mode))
+    :after '(company lsp-mode)
+    :config
+    (setq company-lsp-cache-candidates t
+          company-lsp-async t
+          company-lsp-enable-snippet t)
+    (push 'company-lsp company-backends))
+#+end_src
+
+icons r cool so lets add them with =company-box=
+
+#+name: company-box
+#+begin_src emacs-lisp
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
 #+end_src
 
 [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
@@ -1597,17 +1612,28 @@ debug. Hopefully it gets really good eventually.
 *** JVM
 **** java
 
-All i have for java is a simple [[lsp]]. Maybe eventually I will hook
-up the entire eclipse server thing too.
+There are 3 popular java thingys and im going to try out 2 of
+them. lsp-java, meghanada and eclim. For now eclim is disabled as
+its annoying installing and confiuring it properly.
+
+***** lsp-java
+
+lsp-java is simple and really nice.
 
 #+name: lsp-java
+#+begin_src emacs-lisp
+  (use-package lsp-java)
+#+end_src
+
+***** eclim
+#+name: eclim
 #+begin_src emacs-lisp
   (use-package eclim
     :config
     (setq eclim-autostart t
           help-at-pt-when-idle t
           help-at-pt-timer-delay 0.1
-          eclimd-default-workspace "Projects/Mine")
+          eclimd-default-workspace "~/Projects")
     (help-at-pt-set-timer))
 
   (use-package company-emacs-eclim
@@ -1754,13 +1780,15 @@ and [[lsp-mode]].
 <<c>><<cpp>>
 
 This one uses irony server which needs to be installed. Note that
-it can be installed inside emacs. Uses [[lsp]] to do stuff.
+it can be installed inside emacs. Uses [[lsp]] to do stuff. THIS IS
+DISABLED CUZ LSP IS AWESOME.
 
 #+name: irony
 #+begin_src emacs-lisp
   (use-package irony
     :hook (c++-mode-hook . irony-mode)
     :hook (objc-mode-hook . irony-mode)
+    :hook (irony-mode . irony-cdb-autosetup-compile-options)
     :hook (c-mode-hook . irony-mode))
 #+end_src
 
@@ -1769,7 +1797,8 @@ Irony also has support for [[company]].
 #+name: compnay-irony
 #+begin_src emacs-lisp
   (use-package company-irony
-    :after '(company irony))
+    :after '(company irony)
+    :config (add-to-list 'company-backends 'company-irony))
 #+end_src
 
 This allows us to read docs while irony is working.
@@ -1992,7 +2021,7 @@ about entering or deleting text.
    (general-chord "uu") 'my/evil-insert-delete-back-word)
 #+end_src
 
-** Ex commands
+*** Ex commands
 
 The rest is my ex commands. These are things that are pretty
 useful but do not require much context.
@@ -2039,7 +2068,18 @@ The keybinds for org-mode.
    "C-c r" 'helm-org-rifle)
 #+end_src
 
-**** TODO Org src mode
+**** Org src mode
+
+Rebind C-c ' to C-c C-c because C-c C-c is also in magit and alot
+easier to type.
+
+#+name: keybinds-org-src
+#+begin_src emacs-lisp
+  (general-define-key
+   :map org-src-mode-map
+   "C-c C-c" 'org-edit-src-exit)
+#+end_src
+
 **** SOMEDAY latex mode
 TeX-command-master
 **** SOMEDAY markdown mode
@@ -2120,4 +2160,17 @@ emacs/god-state. For Evil i will install vim surround.
    "\"" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
    "`" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
    "_" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
+#+end_src
+
+**** Company
+
+Arrow keys are annoying so im using C-n and C-p to switch
+selection of company autocompletions.
+
+#+name: keybinds-company
+#+begin_src emacs-lisp
+  (general-define-key
+   :map '(company-active-map company-search-map)
+   "C-n" 'company-select-next
+   "C-p" 'company-select-previous)
 #+end_src
