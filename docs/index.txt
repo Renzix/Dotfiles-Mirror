@@ -2502,9 +2502,12 @@ Minor Modes/Other
   Arrow keys are annoying so im using C-n and C-p to switch selection of
   company autocompletions.
 
+  @TODO(renzix): Make this work as rn it rebinds C-n and C-p in emacs
+  state.
+
   ,----
   | (general-define-key
-  |  :map '(company-active-map company-search-map)
+  |  :map '(company-active-map)
   |  "C-n" 'company-select-next
   |  "C-p" 'company-select-previous)
   `----
