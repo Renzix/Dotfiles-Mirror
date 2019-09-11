@@ -11,6 +11,7 @@ _________________
 
 Plans
 Startup
+.. init.el
 .. Enable local variable check
 .. Configure package sources
 .. Bootstrap use-package
@@ -185,6 +186,30 @@ Startup
 
 [bug]
 https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package
+
+init.el
+~~~~~~~
+
+  Including my init.el for documentation purposes. Note that this is NOT
+  in my config.org file.
+
+  ,----
+  | (if (<= emacs-major-version 26)
+  |     (package-initialize)
+  |   (package-refresh-contents))
+  | (setq enable-local-eval nil
+  |       enable-local-variables nil)
+  | (let ((elc-loc "~/Dotfiles/.emacs.d/config.elc")
+  |       (org-loc "~/Dotfiles/.emacs.d/config.org"))
+  |   (when (not (file-exists-p elc-loc))
+  |     (org-babel-load-file org-loc t))
+  |   (let* ((org-time (time-convert (file-attribute-modification-time (file-attributes org-loc)) 'integer))
+  |          (elc-time (time-convert (file-attribute-modification-time (file-attributes elc-loc)) 'integer)))
+  |     (if (> org-time (+ 20 elc-time))
+  |         (org-babel-load-file org-loc t)
+  |       (load-file elc-loc))))
+  `----
+
 
 Enable local variable check
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -554,18 +579,6 @@ Other
 
 Useful Functions
 ~~~~~~~~~~~~~~~~
-
-  One misc useful function is recompile my org file so that its startup
-  is alot faster. This does tangle and byte compile.
-
-  ,----
-  | (defun my/config-reload ()
-  |   "Reload the config. "
-  |   (interactive)
-  |   (org-babel-tangle-file "~/Dotfiles/.emacs.d/config.org")
-  |   (byte-compile-file "~/Dotfiles/.emacs.d/config.el"))
-  `----
-
 
 Edit Text
 ---------

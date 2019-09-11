@@ -68,7 +68,13 @@ when necessary.
   Starts up emacs. This should be somewhat small and only for
   proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
   which is annoying.
-  
+** init.el
+
+   Including my init.el for documentation purposes. Note that this is
+   NOT in my config.org file.
+
+#+INCLUDE: "~/Dotfiles/.emacs.d/init.el" src emacs-lisp :tangle no
+
 ** Enable local variable check
 
    I disable the check for safety in [[file:init.el][init.el]] so that I dont have to
@@ -425,21 +431,7 @@ when necessary.
      (prefer-coding-system 'utf-8)
    #+END_SRC
 
-** Useful Functions
-
-   One misc useful function is recompile my org file so that its
-   startup is alot faster. This does tangle and byte compile.
-
-   #+NAME: config-reload
-   #+BEGIN_SRC emacs-lisp
-     (defun my/config-reload ()
-       "Reload the config. "
-       (interactive)
-       (org-babel-tangle-file "~/Dotfiles/.emacs.d/config.org")
-       (byte-compile-file "~/Dotfiles/.emacs.d/config.el"))
-   #+END_SRC
-
-   
+** Useful Functions   
 *** Edit Text
 
     Made specifically for insert state but works in other

@@ -1,4 +1,4 @@
-# Created 2019-09-10 Tue 20:50
+# Created 2019-09-10 Tue 21:25
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -63,6 +63,27 @@ Some things I plan on doing or trying out.
 Starts up emacs. This should be somewhat small and only for
 proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
 which is annoying.
+** init.el
+
+Including my init.el for documentation purposes. Note that this is
+NOT in my config.org file.
+
+#+BEGIN_SRC emacs-lisp
+  (if (<= emacs-major-version 26)
+      (package-initialize)
+    (package-refresh-contents))
+  (setq enable-local-eval nil
+        enable-local-variables nil)
+  (let ((elc-loc "~/Dotfiles/.emacs.d/config.elc")
+        (org-loc "~/Dotfiles/.emacs.d/config.org"))
+    (when (not (file-exists-p elc-loc))
+      (org-babel-load-file org-loc t))
+    (let* ((org-time (time-convert (file-attribute-modification-time (file-attributes org-loc)) 'integer))
+           (elc-time (time-convert (file-attribute-modification-time (file-attributes elc-loc)) 'integer)))
+      (if (> org-time (+ 20 elc-time))
+          (org-babel-load-file org-loc t)
+        (load-file elc-loc))))
+#+END_SRC
 
 ** Enable local variable check
 
@@ -421,20 +442,6 @@ Use utf-8 when you can
 #+END_SRC
 
 ** Useful Functions
-
-One misc useful function is recompile my org file so that its
-startup is alot faster. This does tangle and byte compile.
-
-#+NAME: config-reload
-#+BEGIN_SRC emacs-lisp
-  (defun my/config-reload ()
-    "Reload the config. "
-    (interactive)
-    (org-babel-tangle-file "~/Dotfiles/.emacs.d/config.org")
-    (byte-compile-file "~/Dotfiles/.emacs.d/config.el"))
-#+END_SRC
-
-
 *** Edit Text
 
 Made specifically for insert state but works in other
