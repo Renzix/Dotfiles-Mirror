@@ -1,14 +1,14 @@
-# Created 2019-09-10 Tue 21:25
+# Created 2019-09-11 Wed 19:10
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
-#+DESCRIPTION: My org mode config file
-#+LANGUAGE: en
-#+EXPORT_FILE_NAME: ../docs/index.html
+#+description: My org mode config file
+#+language: en
+#+export_file_name: ../docs/index.html
 
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+setupfile: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
-#+PROPERTY: header-args :results silent
+#+property: header-args :results silent
 
 Hello This is my second real attempt to make a "Perfect" config. Idk
 if it will ever be good enough but here it is. Note this is available
@@ -24,9 +24,9 @@ Some decisions are inspired by
 [[https://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]]: Random things and ideas \\
 [[https://github.com/bbatsov/crux][Crux]]: Alot of my redefined functions are based off of it \\
 
-#+BEGIN_attention
+#+begin_attention
 Made to work with emacs 26 and 27 on windows, linux, and macos
-#+END_attention
+#+end_attention
 
 I automatically export my themes to my [[https:renzix.github.io/Dotfiles-Mirror][github pages]] docs directory on
 save. This is not async because emacs sucks with async and it will
@@ -35,12 +35,12 @@ but it keeps my config/website up to date. This block is not tangled
 so it only runs on save of the file. Maybe this will make me only save
 when necessary.
 
-#+NAME: export-to-docs
-#+BEGIN_SRC emacs-lisp
+#+name: export-to-docs
+#+begin_src emacs-lisp
   (org-export-to-file 'html "../docs/index.html")
   (org-export-to-file 'org "../docs/index.org")
   (org-export-to-file 'ascii "../docs/index.txt")
-#+END_SRC
+#+end_src
 
 * Plans
 
@@ -68,7 +68,7 @@ which is annoying.
 Including my init.el for documentation purposes. Note that this is
 NOT in my config.org file.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (if (<= emacs-major-version 26)
       (package-initialize)
     (package-refresh-contents))
@@ -83,7 +83,7 @@ NOT in my config.org file.
       (if (> org-time (+ 20 elc-time))
           (org-babel-load-file org-loc t)
         (load-file elc-loc))))
-#+END_SRC
+#+end_src
 
 ** Enable local variable check
 
@@ -91,19 +91,19 @@ I disable the check for safety in [[file:init.el][init.el]] so that I dont have 
 press y/n on startup. I would like to be somewhat safe and eval
 code at the top so I reactivate the check here.
 
-#+NAME: enable-local-eval
-#+BEGIN_SRC emacs-lisp
+#+name: enable-local-eval
+#+begin_src emacs-lisp
   (setq enable-local-eval 'maybe
         enable-local-variables t)
-#+END_SRC
+#+end_src
 
 ** Configure package sources
 
 Melpa is nice because its more bleeding edge. Elpa is the general
 GNU repo which everyone should probably have anyway.
 
-#+NAME: melpa
-#+BEGIN_SRC emacs-lisp
+#+name: melpa
+#+begin_src emacs-lisp
   (setq package-enable-at-startup nil)
   (setq package-archives
         '(("elpa"     . "https://elpa.gnu.org/packages/")
@@ -113,54 +113,54 @@ GNU repo which everyone should probably have anyway.
   ;; bug in macos
   (when (string= system-type "darwin")
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-#+END_SRC
+#+end_src
 
 ** Bootstrap use-package
 
 install =use-package= if not already installed.
 
-#+NAME: use-package
-#+BEGIN_SRC emacs-lisp
+#+name: use-package
+#+begin_src emacs-lisp
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
   (require 'use-package-ensure)
-#+END_SRC
+#+end_src
 
 Makes sure that =use-package= always downloads the package if not available
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq use-package-always-ensure t)
-#+END_SRC
+#+end_src
 ** quelpa
 
 Quelpa is another way to get packages and it basically wraps around
 git repositories. Its really nice if you want bleeding edge stuff
 and also it has a [[use-package]] with the keyword :quelpa.
 
-#+NAME: quelpa-use-package
-#+BEGIN_SRC emacs-lisp
+#+name: quelpa-use-package
+#+begin_src emacs-lisp
   (use-package quelpa
     :init (setq quelpa-upgrade-p t))
   (use-package quelpa-use-package) 
-#+END_SRC
+#+end_src
 ** Increase garbage collector threshold
 
 The default garbage collection threshold is 800kB, increasing this
 to 10MB for startup increases speed.
 
-#+NAME: garbage-collection
-#+BEGIN_SRC emacs-lisp
+#+name: garbage-collection
+#+begin_src emacs-lisp
   (setq gc-cons-threshold 10000000)
-  
+
   ;; Restore after startup
   (add-hook 'after-init-hook
             (lambda ()
               (setq gc-cons-threshold 1000000)
               (message "gc-cons-threshold restored to %S"
                        gc-cons-threshold)))
-#+END_SRC
+#+end_src
 
 ** Set custom settings to load in own file
 
@@ -169,10 +169,10 @@ avoid using customize anyway, preferring programmatic control of
 variables. Creating it as a temporary file effectively disables it
 (i.e. any changes are session local).
 
-#+NAME: custom
-#+BEGIN_SRC emacs-lisp
+#+name: custom
+#+begin_src emacs-lisp
   (setq custom-file (make-temp-file "emacs-custom"))
-#+END_SRC
+#+end_src
 
 ** Package Macros
 
@@ -186,11 +186,11 @@ This defines a package which you can use! or cfg!. Ideally
 disabling this doesnt actually load the package but tells you
 where to find it. Doesnt load while im still testing it.
 
-#+NAME: pkg!
-#+BEGIN_SRC emacs-lisp
+#+name: pkg!
+#+begin_src emacs-lisp
   (defvar pkg!-list nil)
   (setq pkg!-list nil)
-  
+
   (defun pkg! (&rest rest) ;; @TODO(Renzix:
     "Defines the packages and save it as NAME and LOC.  LOC is the
     location.  This accepts a unlimited amount of params throught REST"
@@ -207,7 +207,7 @@ where to find it. Doesnt load while im still testing it.
              (setq rest (cdr rest))))
   (pkg! "use-package" "Melpa" "ree" "Melpa")
   (message "%s" pkg!-list)
-#+END_SRC
+#+end_src
 
 *** TODO use!
 
@@ -232,51 +232,51 @@ make the defaults better.
 
 ** SOMEDAY Buffers
 
-- Note taken on [2019-08-18 Sun 21:53] \\
+- Note taken on [2019-08-18 Sun 21:53]  \\
   Make it so this only triggers on laptop? Also add a section for my variables.
 
 Dont display startscreen on startup. I used to use eshell but now
 that I have ss as a keybinding I don't think its nessisary.
 
-#+NAME: initial-buffer
-#+BEGIN_SRC emacs-lisp
+#+name: initial-buffer
+#+begin_src emacs-lisp
   (setq inhibit-startup-screen t
         initial-buffer-choice nil)
-#+END_SRC
+#+end_src
 
 Buffers dont ask for confirmation when killed while doing a
 job. Makes things much easier/simpler and when I close one i know
 im closing it.
 
-#+NAME: confirm-kill-processes
-#+BEGIN_SRC emacs-lisp
+#+name: confirm-kill-processes
+#+begin_src emacs-lisp
   (setq confirm-kill-processes nil)
-#+END_SRC
+#+end_src
 
 Nice little display for my battery.
 
-#+NAME: battery
-#+BEGIN_SRC emacs-lisp
+#+name: battery
+#+begin_src emacs-lisp
   (display-battery-mode)
-#+END_SRC
+#+end_src
 
 ** Display
 
 Some things that nobody ever should enable. Ever. menu-bar,
 tool-bar and scroll-bar all require a mouse so they suck.
 
-#+NAME: bar-disable
-#+BEGIN_SRC emacs-lisp
+#+name: bar-disable
+#+begin_src emacs-lisp
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
-#+END_SRC
+#+end_src
 
 Disables more then 2 windows spawning as this makes magit alot more
 annoying and in general only 2 windows are nessisary.
 
-#+NAME: two-windows
-#+BEGIN_SRC emacs-lisp
+#+name: two-windows
+#+begin_src emacs-lisp
   (setq split-width-threshold (- (window-width) 10))
   (setq split-height-threshold nil)
   (defun count-visible-buffers (&optional frame)
@@ -288,22 +288,22 @@ annoying and in general only 2 windows are nessisary.
         nil
       t))
   (advice-add 'window-splittable-p :before-while #'do-not-split-more-than-two-windows)
-#+END_SRC
+#+end_src
 
 In evil relative line numbers are really nice. This also allows the
 current line number to not be 0 but whatever the actual line number
 it is. Having 0 is kinda useless in relative line numbers. This is
 disabled for [[vterm]] because it doesnt deal with it well.
 
-#+NAME: line-numbers
-#+BEGIN_SRC emacs-lisp
+#+name: line-numbers
+#+begin_src emacs-lisp
   (when (>= emacs-major-version 26)
     (global-display-line-numbers-mode)
     (setq-default display-line-numbers-type 'relative
                   display-line-numbers-current-absolute t
                   display-line-numbers-width 3
                   display-line-numbers-widen t))
-#+END_SRC
+#+end_src
 
 There are alot of good themes out there and having a single theme
 is boring so I make it switch depending on the day of the
@@ -313,8 +313,8 @@ good enough. There is a bug with monokai on macos and windows where
 it loads without me telling it to. Because of this i have to
 enable/disable it...
 
-#+NAME: theme
-#+BEGIN_SRC emacs-lisp
+#+name: theme
+#+begin_src emacs-lisp
   (when (display-graphic-p)
     (defvar renzix-weekday (format-time-string "%w"))
     (use-package doom-themes)
@@ -337,7 +337,7 @@ enable/disable it...
            (load-theme 'monokai t))
           ((string= "6" renzix-weekday) ;; Saturday
            (load-theme 'doom-one t))))
-#+END_SRC
+#+end_src
 
 Evil is cool and i want to be able to tell what state I am in
 without having to look at the bottom left. One easy way to do this
@@ -346,8 +346,8 @@ not the color by default and normal is the same as emacs
 state. However because i have god-mode It does not come with a easy
 way of doing this so i have a function to update it.
 
-#+NAME: evil-cursor
-#+BEGIN_SRC emacs-lisp
+#+name: evil-cursor
+#+begin_src emacs-lisp
   (setq evil-insert-state-cursor   '(bar "#FF00FF")
         evil-normal-state-cursor   '(box "#6666F6")
         evil-motion-state-cursor   '(hollow "#87D7FF")
@@ -358,23 +358,23 @@ way of doing this so i have a function to update it.
         evil-emacs-state-cursor    '(hbar "#43DE43"))
   (setq-default cursor-type 'hbar)
   (set-cursor-color "#43DE43")
-#+END_SRC
+#+end_src
 
 Beeing able to see matching parens is nice so lets enable
 parens-mode. I could only enable this for specific modes but i
 think this is extremely useful always.
 
-#+NAME: show-paren-mode
-#+BEGIN_SRC emacs-lisp
+#+name: show-paren-mode
+#+begin_src emacs-lisp
   (show-paren-mode 1)
-#+END_SRC
+#+end_src
 
 Highlight current line thingy
 
-#+NAME: highlight
-#+BEGIN_SRC emacs-lisp
+#+name: highlight
+#+begin_src emacs-lisp
   (global-hl-line-mode)
-#+END_SRC
+#+end_src
 
 ** Other
 
@@ -382,64 +382,65 @@ By default symlinks should always be followed. Makes it much easier
 to deal with dynamic stuff like my config. Instead of asking me if
 I want to follow it.
 
-#+NAME: symlinks
-#+BEGIN_SRC emacs-lisp
+#+name: symlinks
+#+begin_src emacs-lisp
   (setq vc-follow-symlinks t)
-#+END_SRC
+#+end_src
 
 Typing yes or no is hard and y or n is easier so lets do that
 instead.
 
-#+NAME: yes-or-no-p
-#+BEGIN_SRC emacs-lisp
+#+name: yes-or-no-p
+#+begin_src emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
+#+end_src
 
 Use spaces instead of tabs by default. Either is fine to me however
 I have to choose one and only one.
 
-#+NAME: indent-default
-#+BEGIN_SRC emacs-lisp
+#+name: indent-default
+#+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil)
-#+END_SRC
+#+end_src
 
 Emacs backups are kinda weird by default as they apear in the same
 directory as the file. Also the tilda is kinda weird syntax so I
 make it a single folder and have lots of backups as I dont need the
 space.
 
-#+NAME: backups
-#+BEGIN_SRC emacs-lisp
+#+name: backups
+#+begin_src emacs-lisp
   (setq backup-directory-alist `(("." . "~/.saves"))
         backup-by-copying t
         delete-old-versions t
         kept-new-versions 10
         kept-old-versions 10
-        version-control t)
-#+END_SRC
+        version-control t
+        auto-save-list-file-prefix nil)
+#+end_src
 
 Sometimes i enable this because warnings r annoying
 
-#+NAME: warn-level
-#+BEGIN_SRC emacs-lisp
+#+name: warn-level
+#+begin_src emacs-lisp
   (setq warning-minimum-level :error)
-#+END_SRC
+#+end_src
 
 If you set the variable kill-whole-line then the kill-line will
 delete the entire line including newline if at the beginning of the
 line.
 
-#+NAME: kill-whole-line
-#+BEGIN_SRC emacs-lisp
+#+name: kill-whole-line
+#+begin_src emacs-lisp
   (setq kill-whole-line t)
-#+END_SRC
+#+end_src
 
 Use utf-8 when you can
 
-#+NAME: prefer-coding-system
-#+BEGIN_SRC emacs-lisp
+#+name: prefer-coding-system
+#+begin_src emacs-lisp
   (prefer-coding-system 'utf-8)
-#+END_SRC
+#+end_src
 
 ** Useful Functions
 *** Edit Text
@@ -448,8 +449,8 @@ Made specifically for insert state but works in other
 states. Deletes backwards until a space. Not a true vim word or
 WORD.
 
-#+NAME: evil-insert-delete-back-word
-#+BEGIN_SRC emacs-lisp
+#+name: evil-insert-delete-back-word
+#+begin_src emacs-lisp
   (defun my/evil-insert-delete-back-word ()
     "Made specifically for insert state but works in other
   states. Deletes backwards until a space. Not a true vim word or
@@ -458,13 +459,13 @@ WORD.
     (delete-region
      (point)
      (save-excursion (skip-syntax-backward "^ ") (point))))
-#+END_SRC
+#+end_src
 
 This is in vim but not in evil. Reverts any changes that were made
 on the current line in insert mode.
 
-#+NAME: evil-insert-undo-line
-#+BEGIN_SRC emacs-lisp
+#+name: evil-insert-undo-line
+#+begin_src emacs-lisp
   (defun my/evil-insert-undo-line ()
     "Undo a line in insert mode."
     (interactive)
@@ -474,12 +475,12 @@ on the current line in insert mode.
           (delete-region (point) (line-beginning-position))
         (evil-delete
          (+ (line-beginning-position) (current-indentation)) (point)))))
-#+END_SRC
+#+end_src
 
 *** Format Text
 
-#+NAME: indent-buffer
-#+BEGIN_SRC emacs-lisp
+#+name: indent-buffer
+#+begin_src emacs-lisp
   (defun my/smart-indent ()
     "If a region is selected indent that.
   If given ARG indent the current line.
@@ -496,20 +497,20 @@ on the current line in insert mode.
         (progn
           (indent-region (point-min) (point-max))
           (message "Identing buffer")))))
-#+END_SRC
+#+end_src
 
 Smart indentation that i found [[https://www.emacswiki.org/emacs/NoTabs][here]]. Infers indentation based on
 the amount of tabs/spaces in the current buffer. If its a new
 buffer then use the [[indent-default][default value]].
 
-#+NAME: infer-identation-style
-#+BEGIN_SRC emacs-lisp
+#+name: infer-identation-style
+#+begin_src emacs-lisp
   (defun my/infer-indentation-style ()
     (let ((space-count (how-many "^  " (point-min) (point-max)))
           (tab-count (how-many "^\t" (point-min) (point-max))))
       (if (> space-count tab-count) (setq indent-tabs-mode nil))
       (if (> tab-count space-count) (setq indent-tabs-mode t))))
-#+END_SRC
+#+end_src
 
 *** File Handling
 
@@ -518,8 +519,8 @@ wont effect the buffer. You then end up with 2 files and you have
 to either close or rename the buffer. This should be in emacs by
 default idk why its not.
 
-#+NAME: rename-file-and-buffer
-#+BEGIN_SRC emacs-lisp
+#+name: rename-file-and-buffer
+#+begin_src emacs-lisp
   (defun my/rename-file-and-buffer ()
     "Renames current buffer and file it is visiting."
     (interactive)
@@ -538,15 +539,15 @@ default idk why its not.
             (set-buffer-modified-p nil)
             (message "File '%s' successfully renamed to '%s'"
                      name (file-name-nondirectory new-name)))))))
-#+END_SRC
+#+end_src
 
 This is the same problem as the function above. Emacs does not
 close the buffer you have open if you delete the file so you might
 accidently save it. Better to just call this function if the buffer
 is open.
 
-#+NAME: delete-file-and-buffer
-#+BEGIN_SRC emacs-lisp
+#+name: delete-file-and-buffer
+#+begin_src emacs-lisp
   (defun my/delete-file-and-buffer ()
     "Kill the current buffer and deletes the file it is visiting."
     (interactive)
@@ -558,50 +559,50 @@ is open.
             (delete-file filename)
             (message "Deleted file %s" filename)
             (kill-buffer))))))
-#+END_SRC
+#+end_src
 
 Reads a string directly from a file then returns it as a string
 
-#+NAME: get-string-from-file
-#+BEGIN_SRC emacs-lisp
+#+name: get-string-from-file
+#+begin_src emacs-lisp
   (defun my/get-string-from-file (filePath)
     "Return filePath's file content."
     (with-temp-buffer
       (insert-file-contents filePath)
       (buffer-string)))
-#+END_SRC
+#+end_src
 
 *** SOMEDAY Projects
 
-- Note taken on [2019-08-18 Sun 21:53] \\
+- Note taken on [2019-08-18 Sun 21:53]  \\
   Make a =projectile-create-tags= that also works on windows
 
 This first sees if it is in a projectile project. If it isnt then
 it will ask for one then run =projectile-find-file=. If it is then
 it will just run =projectile-find-file=. Just a better default.
 
-#+NAME: helm-projectile-find-file-or-project
-#+BEGIN_SRC emacs-lisp
+#+name: helm-projectile-find-file-or-project
+#+begin_src emacs-lisp
   (defun my/helm-projectile-find-file-or-project ()
     "Does switch project if not in a project and 'find-file' if in one."
     (interactive)
     (if (projectile-project-p)
         (helm-projectile-find-file)
       (helm-projectile-switch-project)))
-#+END_SRC
+#+end_src
 
 This one runs =helm-projectile-find-file= if in a project but
 normal =helm-find-file= if not inside a project.
 
-#+NAME: helm-projectile-find-file-or-find-file
-#+BEGIN_SRC emacs-lisp
+#+name: helm-projectile-find-file-or-find-file
+#+begin_src emacs-lisp
   (defun my/helm-projectile-find-file-or-find-file ()
     "Does switch project if not in a project and 'find-file' if in one."
     (interactive)
     (if (projectile-project-p)
         (helm-projectile-find-file)
       (helm-find-files nil)))
-#+END_SRC
+#+end_src
 
 This first sees if it is in a projectile project. If it isnt then
 it will ask for one then both of them run =helm-projectile-ag= or
@@ -610,8 +611,8 @@ something else. I made this fix because helm-projectile-rg didnt
 work on windows but maybe i should try again later (rg does work
 on windows just not the emacs plugin).
 
-#+NAME: helm-projectile-search-or-project
-#+BEGIN_SRC emacs-lisp
+#+name: helm-projectile-search-or-project
+#+begin_src emacs-lisp
   (defun my/helm-projectile-search-or-project ()
     "Does switch project if not in a project and search all files in said project."
     (interactive)
@@ -620,19 +621,19 @@ on windows just not the emacs plugin).
             (helm-projectile-ag)
           (helm-projectile-rg))
       (helm-projectile-switch-project)))
-#+END_SRC
+#+end_src
 
 Creates tags for all the files. I need to get something like this
 that works properly on windows.
 
-#+NAME: create-tags
-#+BEGIN_SRC emacs-lisp
+#+name: create-tags
+#+begin_src emacs-lisp
   (defun my/create-tags (dir-name)
     "Create tags file in DIR-NAME."
     (interactive "DDirectory: ")
     (eshell-command
      (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
-#+END_SRC
+#+end_src
 
 *** Open Buffer
 
@@ -642,16 +643,16 @@ vterm/eshell window and then be able to switch back. This makes
 them fullscreen which is hella nice. This is the variable that
 stores the perspective.
 
-#+NAME: my:window-conf
-#+BEGIN_SRC emacs-lisp
+#+name: my:window-conf
+#+begin_src emacs-lisp
   (defvar my/window-conf nil)
-#+END_SRC
+#+end_src
 
 Here is the eshell toggle function which uses said variable to
 switch if not already in a eshell buffer fullscreen.
 
-#+NAME: eshell-toggle
-#+BEGIN_SRC emacs-lisp
+#+name: eshell-toggle
+#+begin_src emacs-lisp
   (defun my/eshell-toggle (buf-name)
     "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
     (interactive (list (buffer-name)))
@@ -661,25 +662,25 @@ switch if not already in a eshell buffer fullscreen.
         (setq my/window-conf (current-window-configuration))
         (delete-other-windows)
         (eshell))))
-#+END_SRC
+#+end_src
 
 This is for the next funciton. vterm doesnt automatically switch
 if called and open so i need a helper function.
 
-#+NAME: switch-to-vterm
-#+BEGIN_SRC emacs-lisp
+#+name: switch-to-vterm
+#+begin_src emacs-lisp
   (defun my/switch-to-vterm ()
     "Switch to vterm."
     (if (get-buffer "vterm")
         (switch-to-buffer "vterm")
       (vterm)))
-#+END_SRC
+#+end_src
 
 Function to switch to a fullscreen terminal and back again without
 losing your current layout.
 
-#+NAME: vterm-toggle
-#+BEGIN_SRC emacs-lisp
+#+name: vterm-toggle
+#+begin_src emacs-lisp
   (defun my/vterm-toggle (buf-name)
     "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
     (interactive (list (buffer-name)))
@@ -689,29 +690,29 @@ losing your current layout.
         (setq my:window-conf (current-window-configuration))
         (delete-other-windows)
         (my/switch-to-vterm))))
-#+END_SRC
+#+end_src
 
 Opens magit status in a single buffer because its so much easier to
 work with a do git things. I dont really need to see the file I was
 working on as I can just see the changes in =magit-status=
 
-#+NAME: magit-status-only
-#+BEGIN_SRC emacs-lisp
+#+name: magit-status-only
+#+begin_src emacs-lisp
   (defun my/magit-status-only ()
     "Opens magit-status in a single buffer."
     (magit-status)
     (delete-other-windows))
-#+END_SRC
+#+end_src
 
 Opens my emacs configuration for editing.
 
-#+NAME: open-emacs-config
-#+BEGIN_SRC emacs-lisp
+#+name: open-emacs-config
+#+begin_src emacs-lisp
   (defun my/open-emacs-config ()
     "Opens my Emacs config uwu."
     (interactive)
     (find-file "~/Dotfiles/.emacs.d/config.org"))
-#+END_SRC
+#+end_src
 
 *** SOMEDAY Eval
 
@@ -719,18 +720,18 @@ Helper function for smart-eval. Says if its valid lisp or not.
 Functions that help you do evalution of functions and deal with
 stuff.
 
-#+NAME: valid-elisp-p :tangle no
-#+BEGIN_SRC emacs-lisp
+#+name: valid-elisp-p :tangle no
+#+begin_src emacs-lisp
   (defun my/valid-elisp-p (s)
     "S is a string."
     (and (listp (read s))
          (not (booleanp (read s)))))
-#+END_SRC
+#+end_src
 
 @TODO(renzix): Finish this
 
-#+NAME: smart-eval
-#+BEGIN_SRC emacs-lisp
+#+name: smart-eval
+#+begin_src emacs-lisp
   (defun my/smart-eval ()
     "This function interactively evaluates elisp.  First it checks
               to see if there is anything in the kill-ring that is valid elisp."
@@ -743,46 +744,46 @@ stuff.
        ((t) (call-interactively 'eval-expression)))
       (message "%s" (car values))
       (kill-new (prin1-to-string (car values)))))
-#+END_SRC
+#+end_src
 
 *** Redefined Functions
 
 This is C-a redefined to go to first nonwhitespace then if pressed
 again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]] and from [[https://github.com/bbatsov/crux][crux]].
 
-#+NAME: move-beginning-of-line
-#+BEGIN_SRC emacs-lisp
+#+name: move-beginning-of-line
+#+begin_src emacs-lisp
   (defun my/move-beginning-of-line (arg)
     "Move point back to indentation of beginning of line.
-  
+
   Move point to the first non-whitespace character on this line.
   If point is already there, move to the beginning of the line.
   Effectively toggle between the first non-whitespace character and
   the beginning of the line.
-  
+
   If ARG is not nil or 1, move forward ARG - 1 lines first.  If
   point reaches the beginning or end of the buffer, stop there."
     (interactive "^p")
     (setq arg (or arg 1))
-  
+
     ;; Move lines first
     (when (/= arg 1)
       (let ((line-move-visual nil))
         (forward-line (1- arg))))
-  
+
     (let ((orig-point (point)))
       (move-beginning-of-line 1)
       (when (= orig-point (point))
         (back-to-indentation))))
-#+END_SRC
+#+end_src
 
 This is a function close to evil o and O which is pretty useful in
 alot of scenerios. I have 0 idea why this isnt in emacs already. This
 was also mainly stolen from [[https://emacsredux.com/blog/2013/03/26/smarter-open-line/][this]] and [[https://emacsredux.com/blog/2013/06/15/open-line-above/][this]] which was based off of [[https://github.com/bbatsov/crux][crux]] emacs
 extension.
 
-#+NAME: smart-open-line
-#+BEGIN_SRC emacs-lisp
+#+name: smart-open-line
+#+begin_src emacs-lisp
   (defun my/smart-open-line (arg)
     "Insert an empty line after the current line.
   Position the cursor at its beginning, according to the current mode."
@@ -796,7 +797,7 @@ extension.
       (progn
         (move-end-of-line nil)
         (newline-and-indent))))
-#+END_SRC
+#+end_src
 
 * Core
 ** Key Packages
@@ -805,14 +806,15 @@ extension.
 Evil is vi emulation in emacs. It is by far the best vi emulation
 outside of vi itself and very extendable/fast.
 
-#+NAME: evil
-#+BEGIN_SRC emacs-lisp
+#+name: evil
+#+begin_src emacs-lisp
   (use-package evil
     :config 
     (setq evil-default-state 'emacs)
     (evil-set-initial-state 'term-mode 'emacs)
+    (evil-set-initial-state 'eshell-mode 'emacs)
     (evil-mode 1))
-#+END_SRC
+#+end_src
 
 =evil-collection= is a project which provides evil keybindings for
 almost every popular plugin in emacs outside of a few. Its really
@@ -822,35 +824,35 @@ list of all keybindings and supported packages can be found
 [[file:config.org::*evil-magit][evil-magit]] config. Also [[evil-magit]] has to load before evil so it
 needs to set evil-want-keybinding to nil.
 
-#+NAME: evil-collection
-#+BEGIN_SRC emacs-lisp
+#+name: evil-collection
+#+begin_src emacs-lisp
   (use-package evil-collection
     :after '(evil evil-magit)
     :config (evil-collection-init))
-#+END_SRC
+#+end_src
 
 =evil-goggles= makes it so that every edit you do is highlighted
 for a brief period of time. This makes it much easier to know
 exactly what you are doing and also looks cool af.
 
-#+NAME: evil-goggles
-#+BEGIN_SRC emacs-lisp
+#+name: evil-goggles
+#+begin_src emacs-lisp
   (use-package evil-goggles
     :after evil
     :config (progn
               (evil-goggles-mode)
               (evil-goggles-use-diff-faces)))
-#+END_SRC
+#+end_src
 
 =evil-matchit= makes % work for alot of different things. All of
 them are listed [[https://github.com/redguardtoo/evil-matchit][here]].
 
-#+NAME: evil-matchit
-#+BEGIN_SRC emacs-lisp
+#+name: evil-matchit
+#+begin_src emacs-lisp
   (use-package evil-matchit
     :after evil
     :config (global-evil-matchit-mode 1))
-#+END_SRC
+#+end_src
 
 *** god mode
 
@@ -863,8 +865,8 @@ a yellow box and a green underscore for normal emacs mode. There
 is no good way of telling when you change buffer focus so I just
 have it run after every command.
 
-#+NAME: evil-god-mode
-#+BEGIN_SRC emacs-lisp
+#+name: evil-god-mode
+#+begin_src emacs-lisp
   ;; @TODO(Renzix): make this always load after evil and stuff???
   (evil-define-state god
     "God State"
@@ -874,23 +876,23 @@ have it run after every command.
     :exit-hook (evil-god-stop-hook)
     :input-method t
     :intercept-esc nil)
-  
+
   (defun evil-god-start-hook ()
     "Run before entering `evil-god-state'."
     (god-local-mode 1))
-  
+
   (defun evil-god-stop-hook ()
     "Run before exiting `evil-god-state'."
     (god-local-mode -1))
-  
+
   (defvar evil-execute-in-god-state-buffer nil)
-  
+
   (defvar evil-god-last-command nil)
-  
+
   (defun evil-god-fix-last-command ()
     "Change `last-command' to be the command before `evil-execute-in-god-state'."
     (setq last-command evil-god-last-command))
-  
+
   (defun evil-stop-execute-in-god-state ()
     "Switch back to previous evil state."
     (unless (or (eq this-command #'evil-execute-in-god-state)
@@ -912,7 +914,7 @@ have it run after every command.
                 (evil-exit-visual-state))
             (evil-change-to-previous-state))))
       (setq evil-execute-in-god-state-buffer nil)))
-  
+
   ;;;###autoload
   (defun evil-execute-in-god-state ()
     "Execute the next command in God state."
@@ -930,7 +932,7 @@ have it run after every command.
      (t
       (evil-god-state)))
     (evil-echo "Switched to God state..."))
-  
+
   ;;; Unconditionally exit Evil-God state.
   (defun evil-god-state-bail ()
     "Stop current God command and exit God state."
@@ -938,12 +940,12 @@ have it run after every command.
     (evil-stop-execute-in-god-state)
     (evil-emacs-state)
     (evil-god-stop-hook))
-#+END_SRC
+#+end_src
 
-#+NAME: god-mode
-#+BEGIN_SRC emacs-lisp
+#+name: god-mode
+#+begin_src emacs-lisp
   (use-package god-mode)
-#+END_SRC
+#+end_src
 
 *** general
 
@@ -951,10 +953,10 @@ General keybindings most of the ones i use are going to be defined here
 as a general rule of thumb i am using , instead of C-c and those are going
 to be defined in other packages.
 
-#+NAME: general
-#+BEGIN_SRC emacs-lisp
+#+name: general
+#+begin_src emacs-lisp
   (use-package general)
-#+END_SRC
+#+end_src
 
 *** key-chord
 
@@ -964,20 +966,20 @@ ideas and allows you to bind a nonprefix key to a prefix. This is
 a very underused package imo because pressing the same character 2
 times in a row is very easy.
 
-#+NAME: key-chord
-#+BEGIN_SRC emacs-lisp
+#+name: key-chord
+#+begin_src emacs-lisp
   (use-package key-chord
     :config (key-chord-mode 1))
-#+END_SRC
+#+end_src
 
 *** avy
 
 
 Avy is nice to use. Its hard to explain just look at the [[https://github.com/abo-abo/avy][github]] gifs.
-#+NAME: avy
-#+BEGIN_SRC emacs-lisp
+#+name: avy
+#+begin_src emacs-lisp
   (use-package avy)
-#+END_SRC
+#+end_src
 
 ** Fuzzy Find
 *** helm
@@ -993,8 +995,8 @@ the fastest but has a more complex code base then ivy.
 Helm has actions based on whatever you want to do at that
 point. You can think of it like a litteral search based tui.
 
-#+NAME: helm
-#+BEGIN_SRC emacs-lisp
+#+name: helm
+#+begin_src emacs-lisp
   (defun my/helm-projectile-from-find-files ()
     (interactive)
     (helm-run-after-exit
@@ -1009,19 +1011,19 @@ point. You can think of it like a litteral search based tui.
      (lambda ()
        (let ((default-directory (helm-basedir (helm-get-selection))))
          (helm-find-files nil)))))
-  
+
   (defun my/helm-goto-helm-occur ()
     (interactive)
     (helm-run-after-exit
      (lambda ()
        (helm-occur))))
-  
+
   (defun my/helm-goto-helm-rg ()
     (interactive)
     (helm-run-after-exit
      (lambda ()
        (my/helm-projectile-search-or-project))))
-  
+
   (use-package helm
     :init
     (setq helm-follow-mode-persistent t
@@ -1032,16 +1034,16 @@ point. You can think of it like a litteral search based tui.
     (helm-autoresize-mode t)
     (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
     (helm-mode t))
-#+END_SRC
+#+end_src
 
 Helm has a plugin you can use to use ripgrep as the search
 tool. This is required if I want to use helm-projectile-rg.
 
-#+NAME: helm-rg
-#+BEGIN_SRC emacs-lisp
+#+name: helm-rg
+#+begin_src emacs-lisp
   (use-package helm-rg
     :after helm)
-#+END_SRC
+#+end_src
 
 *** SOMEDAY ido
 *** SOMEDAY ivy
@@ -1051,23 +1053,23 @@ tool. This is required if I want to use helm-projectile-rg.
 
 Magit is one of the greatest emacs packages to exist. It allows
 the power of git in a tui/gui/cli form depending on what is
-needed. Note this is disabled because it is not [[evil]] enough
+needed.
 
-#+NAME: magit
-#+BEGIN_SRC emacs-lisp
+#+name: magit
+#+begin_src emacs-lisp
   (use-package magit)
-#+END_SRC
+#+end_src
 
 **** Forge
 
 This is in beta but forge allows [[magit]] to talk to github and
 gitlab in order to deal with Pull Requests and Issues.
 
-#+NAME: forge
-#+BEGIN_SRC emacs-lisp
+#+name: forge
+#+begin_src emacs-lisp
   (use-package forge
     :after magit)
-#+END_SRC
+#+end_src
 **** evil-magit
 
 [[Magit]] isnt [[evil]] enough. It doesnt have standard [[evil]] keybindings
@@ -1077,11 +1079,10 @@ supported by [[evil-collection]]. For some fucking reason this has to
 load before evil so it also needs evil-want-keybinding for
 [[evil-collection]].
 
-#+NAME: evil-magit
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :init (setq evil-want-keybinding nil))
-#+END_SRC
+#+name: evil-magit
+#+begin_src "tangle no"lang"tangle no"switches"tangle no"flags
+  "tangle no"body
+#+end_src
 
 **** magit-todos
 
@@ -1091,22 +1092,22 @@ them which is insanely useful. It also reads the author name. It
 requires either GNU grep, git grep or ripgrep which i should have
 one of those anyway(also needs PCRE support). 
 
-#+NAME: magit-todos
-#+BEGIN_SRC emacs-lisp
+#+name: magit-todos
+#+begin_src emacs-lisp
   (use-package magit-todos
     :config (magit-todos-mode))
-#+END_SRC
+#+end_src
 
 **** Git Timemachine
 
 This package allows you to go back and forth between a files git
 history. 
 
-#+NAME: git-timemachine
-#+BEGIN_SRC emacs-lisp
+#+name: git-timemachine
+#+begin_src emacs-lisp
   (use-package git-timemachine
     :bind ("C-c g t" . 'git-timemachine-toggle))
-#+END_SRC
+#+end_src
 
 **** Git Gutter
 
@@ -1114,11 +1115,11 @@ Shows changes, deletions or additions from master. Really useful
 to see what you did and what will or wont be committed without
 having to open up [[magit]].
 
-#+NAME: git-gutter
-#+BEGIN_SRC emacs-lisp
+#+name: git-gutter
+#+begin_src emacs-lisp
   (use-package git-gutter 
     :config (global-git-gutter-mode)) 
-#+END_SRC
+#+end_src
 *** SOMEDAY vcmode
 ** Autocompletion
 *** Company
@@ -1128,8 +1129,8 @@ emacs. Technically these have binds but I am not really counting
 those as real keybindings because its only in effect during a
 completion.
 
-#+NAME: company
-#+BEGIN_SRC emacs-lisp
+#+name: company
+#+begin_src emacs-lisp
   (use-package company
     :init
     (add-hook 'after-init-hook 'global-company-mode)
@@ -1139,23 +1140,23 @@ completion.
           company-idle-delay 1
           company-tooltip-limit 20
           global-company-mode t))
-#+END_SRC
+#+end_src
 
 This is also intergrated with [[yasnippet]] for a whole bunhc of
 functions.
 
-#+NAME: company-mode-with-yas
-#+BEGIN_SRC emacs-lisp
+#+name: company-mode-with-yas
+#+begin_src emacs-lisp
   (defun company-mode-with-yas (backend)
     (if (and (listp backend) (member 'company-yasnippet backend))
         backend
       (append (if (consp backend) backend (list backend))
               '(:with company-yasnippet))))
-  
+
   (with-eval-after-load "company"
     (with-eval-after-load "yasnippet"
       '(setq company-backends (mapcar #'company-mode-with-yas company-backends))))
-#+END_SRC
+#+end_src
 
 ** Projects
 *** projectile
@@ -1166,8 +1167,8 @@ project. A project is any folder with a source control or a
 however it also installs projectile. This is also intergrated into
 [[helm]].
 
-#+NAME: helm-projectile
-#+BEGIN_SRC emacs-lisp
+#+name: helm-projectile
+#+begin_src emacs-lisp
   (use-package helm-projectile
     :init
     (setq projectile-enable-caching t
@@ -1178,7 +1179,7 @@ however it also installs projectile. This is also intergrated into
     :config
     (projectile-mode t)
     (helm-projectile-on))
-#+END_SRC
+#+end_src
 
 *** treemacs
 <<treemacs-evil>><<treemacs-projectile>><<treemacs-magit>>
@@ -1188,8 +1189,8 @@ and has TONS of plugins to work with other plugins. It works with
 [[evil]],[[projectile]], and [[magit]]. It also should have =all-the-icons= to
 look pretty :p.
 
-#+NAME: treemacs
-#+BEGIN_SRC emacs-lisp
+#+name: treemacs
+#+begin_src emacs-lisp
   (use-package treemacs)
   (use-package treemacs-evil
     :after '(treemacs evil))
@@ -1199,7 +1200,7 @@ look pretty :p.
     :after '(treemacs magit))
   ;; Icons for treemacs
   (use-package all-the-icons)
-#+END_SRC
+#+end_src
 
 ** Plain Text Modes
 *** Org
@@ -1208,8 +1209,8 @@ Org mode is the best thing since sliced bread. It allows you to do
 Outlines, Planning, Capturing, Spreadsheets, Markup, Exporting,
 Literite Programming and much [[https://orgmode.org/][more]].
 
-#+NAME: org
-#+BEGIN_SRC emacs-lisp
+#+name: org
+#+begin_src emacs-lisp
   (use-package org
     :ghook #'org-indent-mode
     :init
@@ -1234,18 +1235,18 @@ Literite Programming and much [[https://orgmode.org/][more]].
        (sql . t)
        (shell . t)
        (python . t))))
-#+END_SRC
+#+end_src
 <<org-rifle>>
 
 Org rifle is a thing that helps me search a org mode multiple org
 mode buffers with [[helm]] I am mainly gonna use it to search for
 locations. Note this requires [[helm]]
 
-#+NAME: helm-org-rifle
-#+BEGIN_SRC emacs-lisp
+#+name: helm-org-rifle
+#+begin_src emacs-lisp
   (use-package helm-org-rifle
     :after '(org helm))
-#+END_SRC
+#+end_src
 
 **** Org Exports
 <<ox-pandoc>><<htmlize>><<ox-twbs>><<ox-hugo>>
@@ -1256,8 +1257,8 @@ twitter-bootstrap. ox-hugo because the markdown specs are awful
 and very vague so this one works on the static site generator
 [[https://gohugo.io][hugo]]. See [[https://ox-hugo.scripter.co][here]] for doucmentation on it.
 
-#+NAME: org-exports
-#+BEGIN_SRC emacs-lisp
+#+name: org-exports
+#+begin_src emacs-lisp
   (use-package ox-pandoc
     :after org)
   (use-package htmlize
@@ -1266,7 +1267,7 @@ and very vague so this one works on the static site generator
     :after org)
   (use-package ox-hugo
     :after org)
-#+END_SRC
+#+end_src
 
 **** Evil org mode
 
@@ -1274,26 +1275,26 @@ and very vague so this one works on the static site generator
 other one then [[magit]] that doesnt have [[evil-collection]]
 keybindings.
 
-#+NAME: evil-org
-#+BEGIN_SRC emacs-lisp
+#+name: evil-org
+#+begin_src emacs-lisp
   (use-package evil-org
     :after '(org evil)
     :ghook ('org-mode-hook #'evil-org-mode)
     :config
     (evil-org-set-key '(navigation insert textobjects additional calendar))
     (evil-org-agenda-set-keys))
-#+END_SRC
+#+end_src
 *** LaTeX
 **** TODO Auctex
-- Note taken on [2019-08-18 Sun 21:52] \\
+- Note taken on [2019-08-18 Sun 21:52]  \\
   Add MLA style LaTeX template
 <<latex>>
 
 Auctex is supposed to be really good at showing and displaying
 LaTeX. I should use latex but I normally just use org-mode.
 
-#+NAME: auctex
-#+BEGIN_SRC emacs-lisp
+#+name: auctex
+#+begin_src emacs-lisp
   (use-package tex
     :ensure auctex
     :config
@@ -1307,16 +1308,16 @@ LaTeX. I should use latex but I normally just use org-mode.
                                        (output-pdf "mupdf")
                                        (output-html "xdg-open")))
     (add-to-list 'TeX-view-program-list '("mupdf" "mupdf %o")))
-#+END_SRC
+#+end_src
 
 It also has a [[company]] backend
 
-#+NAME: company-auctex
-#+BEGIN_SRC emacs-lisp
+#+name: company-auctex
+#+begin_src emacs-lisp
   (use-package company-auctex
     :after '(company tex)
     :config (company-auctex-init))
-#+END_SRC
+#+end_src
 
 *** Markdown
 <<markdown>>
@@ -1324,10 +1325,10 @@ It also has a [[company]] backend
 Markdown is dope and even though I would love to use org-mode for
 everything sometimes I have to edit/view markdown.
 
-#+NAME: markdown-mode
-#+BEGIN_SRC emacs-lisp
+#+name: markdown-mode
+#+begin_src emacs-lisp
   (use-package markdown-mode)
-#+END_SRC
+#+end_src
 
 ** Terminals
 *** vterm
@@ -1339,8 +1340,8 @@ install properly so you have to [[https://github.com/akermu/emacs-libvterm][manu
 also don't count. [[line-numbers][Line numbers]] also dont work properly so we
 disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/pull/129][fixed soon]].
 
-#+NAME: vterm
-#+BEGIN_SRC emacs-lisp
+#+name: vterm
+#+begin_src emacs-lisp
   ;;(use-package vterm)
   (eval-after-load "general"
     '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
@@ -1355,7 +1356,7 @@ disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/p
         "<return>" #'evil-insert-resume)
        (add-hook 'doc-view-mode-hook (lambda ()
                                        (global-linum-relative-mode -1)))))
-#+END_SRC
+#+end_src
 
 *** eshell
 
@@ -1363,8 +1364,8 @@ Eshell is a nice interactive prompt to use with emacs. Imo this is
 a really useful package as you can run shell and elisp commands
 pretty easily.
 
-#+NAME: eshell
-#+BEGIN_SRC emacs-lisp
+#+name: eshell
+#+begin_src emacs-lisp
   (defun eshell/e (file)
     (find-file file))
   (defun eshell-maybe-bol ()
@@ -1375,7 +1376,7 @@ pretty easily.
           (beginning-of-line))))
   (add-hook 'eshell-mode-hook
             '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
-#+END_SRC
+#+end_src
 
 ** Templates/Snippets
 
@@ -1384,30 +1385,30 @@ Yasnippets is possibly cool? It's supposed to intergrate with
 add the abillity to add predefined definitions in a whole bunch of
 languages.
 
-#+NAME: yasnippet
-#+BEGIN_SRC emacs-lisp
+#+name: yasnippet
+#+begin_src emacs-lisp
   (use-package yasnippet
     :config (yas-global-mode))
-#+END_SRC
+#+end_src
 
 Yasnippets requires another package for some predefined snippets so
 I can actually use it without defining it myself.
 
-#+NAME: yasnippet-snippets
-#+BEGIN_SRC emacs-lisp
+#+name: yasnippet-snippets
+#+begin_src emacs-lisp
   (use-package yasnippet-snippets
     :config (yasnippet-snippets-initialize))
-#+END_SRC
+#+end_src
 
 *** Gentoo Snippets
 
 Gentoo comes with a skeleton for ebuilds which is nice. I would
 like to include it by default.
 
-#+NAME: gentoo-snippets
-#+BEGIN_SRC emacs-lisp
+#+name: gentoo-snippets
+#+begin_src emacs-lisp
   (add-hook 'ebuild-mode-hook 'ebuild-mode-insert-skeleton)
-#+END_SRC
+#+end_src
 
 ** Chat programs
 *** Matrix
@@ -1416,37 +1417,37 @@ like to include it by default.
 Matrix is nice but I know nobody on it. Too bad the emacs cilient
 is actually amazing...
 
-#+NAME: matrix-client
-#+BEGIN_SRC emacs-lisp
+#+name: matrix-client
+#+begin_src emacs-lisp
   (when (not (string-equal system-type "windows-nt"))
     (use-package matrix-client
       :quelpa ((matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
                               :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))))
-#+END_SRC
+#+end_src
 
 *** Discord
 **** Elcord
 
 elcord is rich presence in discord.
 
-#+NAME: elcord
-#+BEGIN_SRC emacs-lisp
+#+name: elcord
+#+begin_src emacs-lisp
   (use-package elcord
     :config
     (setq elcord-use-major-mode-as-main-icon t)
     (elcord-mode))
-#+END_SRC
+#+end_src
 
 **** Discord-api
 
 A project i have been working on uwu
 
-#+NAME: discord-api
-#+BEGIN_SRC emacs-lisp
+#+name: discord-api
+#+begin_src emacs-lisp
   (when (file-directory-p "~/Projects/Mine/rencord")
     (add-to-list 'load-path "~/Projects/Mine/rencord")
     (require 'rencord))
-#+END_SRC
+#+end_src
 
 *** IRC
 **** rcirc
@@ -1455,8 +1456,8 @@ This is the lightest irc client i think and comes
 preinstalled. Also works pretty nice and barely requires a
 config.
 
-#+NAME: rcirc
-#+BEGIN_SRC emacs-lisp
+#+name: rcirc
+#+begin_src emacs-lisp
   (setq rcirc-default-nick "Renzix"
         rcirc-server-alist
         '(("irc.freenode.net" :channels ("#emacs"))
@@ -1474,17 +1475,17 @@ config.
   ;; Turn on spell checking.
   (add-hook 'rcirc-mode-hook (lambda ()
                                (flyspell-mode 1)))
-#+END_SRC
+#+end_src
 
 ** OS related stuff
 *** spotify
 
 Spotify player thingy
 
-#+NAME: spotify
-#+BEGIN_SRC emacs-lisp
+#+name: spotify
+#+begin_src emacs-lisp
   (use-package helm-spotify-plus)
-#+END_SRC
+#+end_src
 
 ** Visual Helpers
 *** beacon
@@ -1492,22 +1493,22 @@ Spotify player thingy
 Beacon just shos a light to the location where the cursor moved
 to. Simple as that.
 
-#+NAME: beacon
-#+BEGIN_SRC emacs-lisp
+#+name: beacon
+#+begin_src emacs-lisp
   (use-package beacon
     :config (beacon-mode 1))
-#+END_SRC
+#+end_src
 
 *** rainbow-delimiters
 
 closing things get different highlighting so you can tell if it is
 closed or not.
 
-#+NAME: rainbow-delimiters
-#+BEGIN_SRC emacs-lisp
+#+name: rainbow-delimiters
+#+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :ghook 'prog-mode-hook)
-#+END_SRC
+#+end_src
 
 *** TODO wilfred
 *** which-key
@@ -1515,33 +1516,33 @@ closed or not.
 which-key shows keybindings as you press them making it much
 easier. Helps ALOT when learning keybinds
 
-#+NAME: which-key
-#+BEGIN_SRC emacs-lisp
+#+name: which-key
+#+begin_src emacs-lisp
   (use-package which-key
     :config (which-key-mode))
-#+END_SRC
+#+end_src
 
 *** hl-todo
 
 Shows TODO in code with a different color (is comment aware)
 
-#+NAME: hl-todo
-#+BEGIN_SRC emacs-lisp
+#+name: hl-todo
+#+begin_src emacs-lisp
   (use-package hl-todo
     :config
     (global-hl-todo-mode))
-#+END_SRC
+#+end_src
 
 ** Should Be in Emacs
 *** expand-region
 
 This is a single function package which expands the current region
 
-#+NAME: expand-region
-#+BEGIN_SRC emacs-lisp
+#+name: expand-region
+#+begin_src emacs-lisp
   (use-package expand-region
     :config (delete-selection-mode 1))
-#+END_SRC
+#+end_src
 
 ** Programming
 *** smartparens
@@ -1550,14 +1551,14 @@ smartparens allows you to edit stuff inside and move around using
 parens. This is pretty useful when programming so lets load that
 hook here.
 
-#+NAME: smartparens
-#+BEGIN_SRC emacs-lisp
+#+name: smartparens
+#+begin_src emacs-lisp
   ;; Misc programming stuff
   (use-package smartparens
     :ghook 
     ('prog-mode-hook #'smartparens-mode)
     ('lisp-mode-hook #'smartparens-strict-mode))
-#+END_SRC
+#+end_src
 
 *** LSP
 <<lsp>>
@@ -1566,8 +1567,8 @@ lsp is basically a server that does syntax checking and stuff. The
 best part about it is its editor independant so that all the
 editors can improve it making it alot better.
 
-#+NAME: lsp-mode
-#+BEGIN_SRC emacs-lisp
+#+name: lsp-mode
+#+begin_src emacs-lisp
   (use-package lsp-mode
     :hook
     ((scala-mode . lsp)
@@ -1582,21 +1583,21 @@ editors can improve it making it alot better.
           lsp-enable-completion-at-point t
           lsp-enable-xref t
           lsp-enable-indentation t))
-#+END_SRC
+#+end_src
 
 =lsp-ui= adds a inline ui element so you can see it.
 
-#+NAME: lsp-ui
-#+BEGIN_SRC emacs-lisp
+#+name: lsp-ui
+#+begin_src emacs-lisp
   (use-package lsp-ui
     :after lsp-mode
     :hook (lsp-mode-hook . lsp-ui-mode))
-#+END_SRC
+#+end_src
 
 lsp also has [[company]] support
 
-#+NAME: company-lsp
-#+BEGIN_SRC emacs-lisp
+#+name: company-lsp
+#+begin_src emacs-lisp
   (use-package company-lsp
     :after '(company lsp-mode)
     :config
@@ -1604,28 +1605,28 @@ lsp also has [[company]] support
           company-lsp-async t
           company-lsp-enable-snippet t)
     (push 'company-lsp company-backends))
-#+END_SRC
+#+end_src
 
 icons r cool so lets add them with =company-box=
 
-#+NAME: company-box
-#+BEGIN_SRC emacs-lisp
+#+name: company-box
+#+begin_src emacs-lisp
   (use-package company-box
     :hook (company-mode . company-box-mode))
-#+END_SRC
+#+end_src
 
 [[lsp]] also has =dap-mode= which is in [[https://github.com/emacs-lsp/dap-mode][alpha]] and can be used to
 debug. Hopefully it gets really good eventually.
 
-#+NAME: dap-mode
-#+BEGIN_SRC emacs-lisp
+#+name: dap-mode
+#+begin_src emacs-lisp
   (use-package dap-mode
     :config
     (dap-mode 1)
     (dap-ui-mode 1)
     (require 'dap-python)
     (require 'dap-lldb))
-#+END_SRC
+#+end_src
 
 *** JVM
 **** java
@@ -1638,14 +1639,14 @@ its annoying installing and confiuring it properly.
 
 lsp-java is simple and really nice.
 
-#+NAME: lsp-java
-#+BEGIN_SRC emacs-lisp
+#+name: lsp-java
+#+begin_src emacs-lisp
   (use-package lsp-java)
-#+END_SRC
+#+end_src
 
 ***** eclim
-#+NAME: eclim
-#+BEGIN_SRC emacs-lisp
+#+name: eclim
+#+begin_src emacs-lisp
   (use-package eclim
     :config
     (setq eclim-autostart t
@@ -1653,27 +1654,27 @@ lsp-java is simple and really nice.
           help-at-pt-timer-delay 0.1
           eclimd-default-workspace "~/Projects")
     (help-at-pt-set-timer))
-  
+
   (use-package company-emacs-eclim
     :after '(company eclim)
     :config
     (company-emacs-eclim-setup))
-#+END_SRC
+#+end_src
 
 **** scala
 
 Scala lsp is part of [[lsp-mode]] so you can enable/disable it from
 there. Here is just syntax highlighting for scala.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package scala-mode
     :mode "\\.s\\(cala\\|bt\\)$")
-#+END_SRC
+#+end_src
 <<sbt>><<sbt-mode>>
 
 this is a mode for [[scala]] package manager sbt.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package sbt-mode
     :commands sbt-start sbt-command
     :config
@@ -1683,7 +1684,7 @@ this is a mode for [[scala]] package manager sbt.
      'minibuffer-complete-word
      'self-insert-command
      minibuffer-local-completion-map))
-#+END_SRC
+#+end_src
 
 **** SOMEDAY kotlin
 **** clojure
@@ -1698,10 +1699,10 @@ We are using [[https://github.com/microsoft/language-server-protocol][microsofts
 about it probably should add more. Also this is partially configured
 in [[lsp-mode]]
 
-#+NAME: lsp-python-ms
-#+BEGIN_SRC emacs-lisp
+#+name: lsp-python-ms
+#+begin_src emacs-lisp
   (use-package lsp-python-ms)
-#+END_SRC
+#+end_src
 
 **** rakudo
 <<perl6-mode>><<flycheck-perl6>>
@@ -1711,12 +1712,12 @@ eventually it becomes fast and good enough to be used in
 industry. Note this doesnt have that good syntax highlighting and
 no lsp.
 
-#+NAME: perl6
-#+BEGIN_SRC emacs-lisp
+#+name: perl6
+#+begin_src emacs-lisp
   (use-package perl6-mode)
   (use-package flycheck-perl6
     :after flycheck)
-#+END_SRC
+#+end_src
 
 **** SOMEDAY perl
 **** SOMEDAY shell
@@ -1763,8 +1764,8 @@ csharp is still growing a emacs presence. For right now omnisharp
 is what we got and its still in beta. We also have standard syntax
 highlighting for it.
 
-#+NAME: csharp-mode
-#+BEGIN_SRC emacs-lisp
+#+name: csharp-mode
+#+begin_src emacs-lisp
   (use-package csharp-mode)
   (use-package omnisharp
     :after 'company
@@ -1772,27 +1773,27 @@ highlighting for it.
     :config
     (add-to-list 'company-backends 'company-omnisharp)
     (add-to-list 'auto-mode-alist '("\\.xaml\\'" . xml-mode)))
-#+END_SRC
+#+end_src
 
 **** powershell
 
 Just a major mode and simple repl for powershell. Nothing too
 major.
 
-#+NAME: powershell
-#+BEGIN_SRC emacs-lisp
+#+name: powershell
+#+begin_src emacs-lisp
   (use-package powershell)
-#+END_SRC
+#+end_src
 
 *** rust
 
 Rust support is alright. Most things should work ootb with rustic
 and [[lsp-mode]].
 
-#+NAME: rustic
-#+BEGIN_SRC emacs-lisp
+#+name: rustic
+#+begin_src emacs-lisp
   (use-package rustic)
-#+END_SRC
+#+end_src
 
 *** c and cpp
 <<c>><<cpp>>
@@ -1801,31 +1802,31 @@ This one uses irony server which needs to be installed. Note that
 it can be installed inside emacs. Uses [[lsp]] to do stuff. THIS IS
 DISABLED CUZ LSP IS AWESOME.
 
-#+NAME: irony
-#+BEGIN_SRC emacs-lisp
+#+name: irony
+#+begin_src emacs-lisp
   (use-package irony
     :hook (c++-mode-hook . irony-mode)
     :hook (objc-mode-hook . irony-mode)
     :hook (irony-mode . irony-cdb-autosetup-compile-options)
     :hook (c-mode-hook . irony-mode))
-#+END_SRC
+#+end_src
 
 Irony also has support for [[company]].
 
-#+NAME: compnay-irony
-#+BEGIN_SRC emacs-lisp
+#+name: compnay-irony
+#+begin_src emacs-lisp
   (use-package company-irony
     :after '(company irony)
     :config (add-to-list 'company-backends 'company-irony))
-#+END_SRC
+#+end_src
 
 This allows us to read docs while irony is working.
 
-#+NAME: irony-eldoc
-#+BEGIN_SRC emacs-lisp
+#+name: irony-eldoc
+#+begin_src emacs-lisp
   (use-package irony-eldoc
     :after '(irony))
-#+END_SRC
+#+end_src
 
 *** haskell
 <<lsp-haskell>><<flycheck-haskell>>
@@ -1833,14 +1834,14 @@ This allows us to read docs while irony is working.
 Haskell is a cool language. I should probably actually learn it one
 day.
 
-#+NAME: haskell-mode
-#+BEGIN_SRC emacs-lisp
+#+name: haskell-mode
+#+begin_src emacs-lisp
   (use-package haskell-mode)
   (use-package lsp-haskell
     :after lsp-mode)
   (use-package flycheck-haskell
     :after flycheck)
-#+END_SRC
+#+end_src
 
 *** Google
 **** dart
@@ -1848,41 +1849,41 @@ day.
 Dart is googles new language. I doubt im ever going to use it but
 it seems cool enough to try out.
 
-#+NAME: dart-mode
-#+BEGIN_SRC emacs-lisp
+#+name: dart-mode
+#+begin_src emacs-lisp
   (use-package dart-mode)
-#+END_SRC
+#+end_src
 
 **** golang
 
 Go is fast/easy. First we can start off with the major mode.
 
-#+NAME: go-mode
-#+BEGIN_SRC emacs-lisp
+#+name: go-mode
+#+begin_src emacs-lisp
   (use-package go-mode)
-#+END_SRC
+#+end_src
 
 Then we can give it documentation popups.
 
-#+NAME: go-eldoc
-#+BEGIN_SRC emacs-lisp
+#+name: go-eldoc
+#+begin_src emacs-lisp
   (use-package go-eldoc)
-#+END_SRC
+#+end_src
 
 flymake-go is good i guess.
 
-#+NAME: flymake-go
-#+BEGIN_SRC emacs-lisp
+#+name: flymake-go
+#+begin_src emacs-lisp
   (use-package flymake-go)
-#+END_SRC
+#+end_src
 
 and finally we can give it [[company]] completion. It should
 recognize it however I havent tested it yet.
 
-#+NAME: company-go
-#+BEGIN_SRC emacs-lisp
+#+name: company-go
+#+begin_src emacs-lisp
   (use-package company-go)
-#+END_SRC
+#+end_src
 
 *** Flycheck
 <<flycheck-pos-tip>>
@@ -1890,14 +1891,14 @@ recognize it however I havent tested it yet.
 These are my flycheck settings although most packages have their
 flycheck set to start in their own packages.
 
-#+NAME: flycheck
-#+BEGIN_SRC emacs-lisp
+#+name: flycheck
+#+begin_src emacs-lisp
   (use-package flycheck
     :init (global-flycheck-mode))
   (use-package flycheck-pos-tip
     :after flycheck
     :config (flycheck-pos-tip-mode))
-#+END_SRC
+#+end_src
 
 *** imenu
 
@@ -1905,10 +1906,10 @@ Imenu is nice to have because you can intelligently view and move
 to parts of your program. This one in perticular is able to do it
 anywhere and have helm support.
 
-#+NAME: imenu-anywhere
-#+BEGIN_SRC emacs-lisp
+#+name: imenu-anywhere
+#+begin_src emacs-lisp
   (use-package imenu-anywhere)
-#+END_SRC
+#+end_src
 
 * Keybindings
 
@@ -1961,8 +1962,8 @@ understand different ways of doing things. Because of this I am
 going to make it a 66% on startup of whether evil mode is enabled
 or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybinds]].
 
-#+NAME: keybinds-emacs
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-emacs
+#+begin_src emacs-lisp
   (general-define-key
    :states '(emacs god)
    "M-x" 'helm-M-x
@@ -1995,14 +1996,14 @@ or not. [[http://www.elmindreda.org/emacs.html][This is nice if I forget keybind
    "C-a" 'my/move-beginning-of-line)
   (general-define-key :states 'emacs (kbd "<escape>") 'evil-god-state)
   (general-define-key :states 'god  (kbd "<escape>") 'evil-god-state-bail)
-#+END_SRC
+#+end_src
 
 *** Normal/Visual State
 
 General evil overided global keybinds. 
 
-#+NAME: keybinds-normal
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-normal
+#+begin_src emacs-lisp
   (general-define-key
    :states '(normal visual)
    "|" 'helm-mini
@@ -2025,32 +2026,32 @@ General evil overided global keybinds.
    (general-chord "SS") 'my/helm-projectile-find-file-or-project
    (general-chord "ss") 'my/vterm-toggle
    (general-chord "``") 'magit-status)
-#+END_SRC
+#+end_src
 
 *** Insert State
 
 These are my keys for insert mode. They should be specifically
 about entering or deleting text.
 
-#+NAME: keybinds-insert
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-insert
+#+begin_src emacs-lisp
   (general-define-key
    :states '(insert)
    (general-chord "uu") 'my/evil-insert-delete-back-word)
-#+END_SRC
+#+end_src
 
 *** Ex commands
 
 The rest is my ex commands. These are things that are pretty
 useful but do not require much context.
 
-#+NAME: ex-commands
-#+BEGIN_SRC emacs-lisp
+#+name: ex-commands
+#+begin_src emacs-lisp
   (evil-ex-define-cmd "cfg" 'my/open-emacs-config)
   (evil-ex-define-cmd "a[genda]" 'org-agenda)
   (evil-ex-define-cmd "q[uit]" 'delete-window)
   (evil-ex-define-cmd "bd" 'kill-this-buffer)
-#+END_SRC
+#+end_src
 
 ** Modes
 *** Major Modes
@@ -2059,8 +2060,8 @@ useful but do not require much context.
 
 The keybinds for org-mode.
 
-#+NAME: keybinds-org
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-org
+#+begin_src emacs-lisp
   (general-define-key
    :keymaps 'org-mode-map
    :states '(normal visual)
@@ -2084,19 +2085,19 @@ The keybinds for org-mode.
    :keymaps 'org-mode-map
    :states 'emacs
    "C-c r" 'helm-org-rifle)
-#+END_SRC
+#+end_src
 
 **** Org src mode
 
 Rebind C-c ' to C-c C-c because C-c C-c is also in magit and alot
 easier to type.
 
-#+NAME: keybinds-org-src
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-org-src
+#+begin_src emacs-lisp
   (general-define-key
    :map org-src-mode-map
    "C-c C-c" 'org-edit-src-exit)
-#+END_SRC
+#+end_src
 
 **** SOMEDAY latex mode
 TeX-command-master
@@ -2128,8 +2129,8 @@ I have been doing helm wrong my whole life. Here is my attempt at
 making some of the keybinds a bit better with doing stuff like
 ag and switching between helm modes.
 
-#+NAME: keybinds-helm
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-helm
+#+begin_src emacs-lisp
   (general-define-key
    :keymaps 'helm-find-files-map
    "C-'" 'my/helm-projectile-from-find-files
@@ -2144,14 +2145,14 @@ ag and switching between helm modes.
   (general-define-key
    :keymaps 'helm-occur-map
    "M-'" 'my/helm-goto-helm-rg)
-#+END_SRC
+#+end_src
 **** SmartParens
 
 Allows me to edit sexp's really nicely. Mainly for
 emacs/god-state. For Evil i will install vim surround.
 
-#+NAME: keybinds-smartparens
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-smartparens
+#+begin_src emacs-lisp
   (general-define-key
    :states '(emacs god)
    :prefix "C-]"
@@ -2178,7 +2179,7 @@ emacs/god-state. For Evil i will install vim surround.
    "\"" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
    "`" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
    "_" (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
-#+END_SRC
+#+end_src
 
 **** Company
 
@@ -2188,10 +2189,10 @@ selection of company autocompletions.
 @TODO(renzix): Make this work as rn it rebinds C-n and C-p in
 emacs state.
 
-#+NAME: keybinds-company
-#+BEGIN_SRC emacs-lisp
+#+name: keybinds-company
+#+begin_src emacs-lisp
   (general-define-key
    :map '(company-active-map)
    "C-n" 'company-select-next
    "C-p" 'company-select-previous)
-#+END_SRC
+#+end_src
