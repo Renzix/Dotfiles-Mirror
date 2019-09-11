@@ -129,39 +129,37 @@ necessary.
 | (org-export-to-file 'html "../docs/index.html")
 | (org-export-to-file 'org "../docs/index.org")
 | (org-export-to-file 'ascii "../docs/index.txt")
-| ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work especially async???@TODO(Renzix)
 `----
 
 
-[gitlab] <https://gitlab.com/Renzix/Dotfiles>
+[gitlab] https://gitlab.com/Renzix/Dotfiles
 
-[github] <https://github.com/Renzix/Dotfiles-Mirror>
+[github] https://github.com/Renzix/Dotfiles-Mirror
 
-[readtheorg] <file:index.html>
+[readtheorg] file:index.html
 
-[plain text] <file:index.txt>
+[plain text] file:index.txt
 
-[markdown] <file:index.md>
+[markdown] file:index.md
 
-[Doom] <https://github.com/hlissner/doom-emacs>
+[Doom] https://github.com/hlissner/doom-emacs
 
-[jamiecollinson] <https://jamiecollinson.com/blog/my-emacs-config/>
+[jamiecollinson] https://jamiecollinson.com/blog/my-emacs-config/
 
 [Buffet]
-<https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org>
+https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org
 
-[Sacha Chua] <https://pages.sachachua.com/.emacs.d/Sacha.html>
+[Sacha Chua] https://pages.sachachua.com/.emacs.d/Sacha.html
 
-[Crux] <https://github.com/bbatsov/crux>
+[Crux] https://github.com/bbatsov/crux
 
-[github pages] <https:renzix.github.io/Dotfiles-Mirror>
+[github pages] https:renzix.github.io/Dotfiles-Mirror
 
 
 Plans
 =====
 
   Some things I plan on doing or trying out.
-  - Let init.el byte compile file
   - Add more language support
   - Add macros to my config so i dont have to use use-package some
     include.
@@ -186,7 +184,7 @@ Startup
 
 
 [bug]
-<https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package>
+https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package
 
 Enable local variable check
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,7 +199,7 @@ Enable local variable check
   `----
 
 
-[init.el] <file:init.el>
+[init.el] file:init.el
 
 
 Configure package sources
@@ -490,12 +488,9 @@ Display
   | (show-paren-mode 1)
   `----
 
-  TODO and other stuff should have a different color so lets enable
-  that. Also there is a feature of emacs to highlight the current line
-  so lets also enable that.
+  Highlight current line thingy
 
   ,----
-  | (global-hl-todo-mode)
   | (global-hl-line-mode)
   `----
 
@@ -559,6 +554,18 @@ Other
 
 Useful Functions
 ~~~~~~~~~~~~~~~~
+
+  One misc useful function is recompile my org file so that its startup
+  is alot faster. This does tangle and byte compile.
+
+  ,----
+  | (defun my/config-reload ()
+  |   "Reload the config. "
+  |   (interactive)
+  |   (org-babel-tangle-file "~/Dotfiles/.emacs.d/config.org")
+  |   (byte-compile-file "~/Dotfiles/.emacs.d/config.el"))
+  `----
+
 
 Edit Text
 ---------
@@ -628,7 +635,7 @@ Format Text
   `----
 
 
-[here] <https://www.emacswiki.org/emacs/NoTabs>
+[here] https://www.emacswiki.org/emacs/NoTabs
 
 [default value] See listing 1
 
@@ -913,13 +920,13 @@ Redefined Functions
 
 
 [here]
-<https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/>
+https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 
-[crux] <https://github.com/bbatsov/crux>
+[crux] https://github.com/bbatsov/crux
 
-[this] <https://emacsredux.com/blog/2013/03/26/smarter-open-line/>
+[this] https://emacsredux.com/blog/2013/03/26/smarter-open-line/
 
-[this] <https://emacsredux.com/blog/2013/06/15/open-line-above/>
+[this] https://emacsredux.com/blog/2013/06/15/open-line-above/
 
 
 Core
@@ -978,11 +985,11 @@ evil
   `----
 
 
-[here] <https://github.com/emacs-evil/evil-collection>
+[here] https://github.com/emacs-evil/evil-collection
 
-[evil-magit] <file:config.org::*evil-magit>
+[evil-magit] file:config.org::*evil-magit
 
-[here] <https://github.com/redguardtoo/evil-matchit>
+[here] https://github.com/redguardtoo/evil-matchit
 
 
 god mode
@@ -1116,7 +1123,7 @@ avy
   `----
 
 
-[github] <https://github.com/abo-abo/avy>
+[github] https://github.com/abo-abo/avy
 
 
 Fuzzy Find
@@ -1409,7 +1416,7 @@ Org
   `----
 
 
-[more] <https://orgmode.org/>
+[more] https://orgmode.org/
 
 * Org Exports
 
@@ -1433,9 +1440,9 @@ Org
   `----
 
 
-  [hugo] <https://gohugo.io>
+  [hugo] https://gohugo.io
 
-  [here] <https://ox-hugo.scripter.co>
+  [here] https://ox-hugo.scripter.co
 
 
 * Evil org mode
@@ -1534,13 +1541,13 @@ vterm
   `----
 
 
-[melpa] <https://melpa.org/>
+[melpa] https://melpa.org/
 
-[manually] <https://github.com/akermu/emacs-libvterm>
+[manually] https://github.com/akermu/emacs-libvterm
 
 [Line numbers] See listing 1
 
-[fixed soon] <https://github.com/akermu/emacs-libvterm/pull/129>
+[fixed soon] https://github.com/akermu/emacs-libvterm/pull/129
 
 
 eshell
@@ -1732,7 +1739,9 @@ hl-todo
   Shows TODO in code with a different color (is comment aware)
 
   ,----
-  | (use-package hl-todo)
+  | (use-package hl-todo
+  |   :config
+  |   (global-hl-todo-mode))
   `----
 
 
@@ -1835,7 +1844,7 @@ LSP
   `----
 
 
-[alpha] <https://github.com/emacs-lsp/dap-mode>
+[alpha] https://github.com/emacs-lsp/dap-mode
 
 
 JVM
@@ -1925,8 +1934,7 @@ Scripting langs
   `----
 
 
-  [microsofts lsp]
-  <https://github.com/microsoft/language-server-protocol>
+  [microsofts lsp] https://github.com/microsoft/language-server-protocol
 
 
 * rakudo
@@ -2203,7 +2211,7 @@ Rant on keybindings
 
 
 [this]
-<https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/>
+https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 
 
 Global
@@ -2253,8 +2261,7 @@ Emacs State
   `----
 
 
-[This is nice if I forget keybinds]
-<http://www.elmindreda.org/emacs.html>
+[This is nice if I forget keybinds] http://www.elmindreda.org/emacs.html
 
 
 Normal/Visual State

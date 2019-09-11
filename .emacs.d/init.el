@@ -3,4 +3,9 @@
   (package-refresh-contents))
 (setq enable-local-eval nil
       enable-local-variables nil)
-(org-babel-load-file "~/Dotfiles/.emacs.d/config.org")
+(let* ((org-time (time-convert (file-attribute-modification-time (file-attributes "~/Dotfiles/.emacs.d/config.org")) 'integer))
+       (elc-time (time-convert (file-attribute-modification-time (file-attributes "~/Dotfiles/.emacs.d/config.elc")) 'integer)))
+  (message "org-time:%s elc-time:%s" org-time elc-time)
+  (if (> org-time (+ 20 elc-time))
+      (org-babel-load-file "~/Dotfiles/.emacs.d/config.org" t)
+    (load-file "~/Dotfiles/.emacs.d/config.elc" )))

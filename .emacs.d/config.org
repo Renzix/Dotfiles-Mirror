@@ -45,13 +45,11 @@ when necessary.
   (org-export-to-file 'html "../docs/index.html")
   (org-export-to-file 'org "../docs/index.org")
   (org-export-to-file 'ascii "../docs/index.txt")
-  ;;(org-export-to-file 'latex "../docs/index.pdf") ;; Make this work especially async???@TODO(Renzix)
 #+END_SRC
 
 * Plans
 
   Some things I plan on doing or trying out.
-  - Let init.el byte compile file
   - Add more language support
   - Add macros to my config so i dont have to use use-package some
     include.
@@ -355,13 +353,10 @@ when necessary.
      (show-paren-mode 1)
    #+END_SRC
 
-   TODO and other stuff should have a different color so lets enable
-   that. Also there is a feature of emacs to highlight the current
-   line so lets also enable that.
+   Highlight current line thingy
 
    #+NAME: highlight
    #+BEGIN_SRC emacs-lisp
-     (global-hl-todo-mode)
      (global-hl-line-mode)
    #+END_SRC
 
@@ -431,6 +426,20 @@ when necessary.
    #+END_SRC
 
 ** Useful Functions
+
+   One misc useful function is recompile my org file so that its
+   startup is alot faster. This does tangle and byte compile.
+
+   #+NAME: config-reload
+   #+BEGIN_SRC emacs-lisp
+     (defun my/config-reload ()
+       "Reload the config. "
+       (interactive)
+       (org-babel-tangle-file "~/Dotfiles/.emacs.d/config.org")
+       (byte-compile-file "~/Dotfiles/.emacs.d/config.el"))
+   #+END_SRC
+
+   
 *** Edit Text
 
     Made specifically for insert state but works in other
@@ -1517,7 +1526,9 @@ when necessary.
 
     #+NAME: hl-todo
     #+BEGIN_SRC emacs-lisp
-      (use-package hl-todo)
+      (use-package hl-todo
+        :config
+        (global-hl-todo-mode))
     #+END_SRC
     
 ** Should Be in Emacs
