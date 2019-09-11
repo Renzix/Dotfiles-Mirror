@@ -73,7 +73,7 @@ when necessary.
    Including my init.el for documentation purposes. Note that this is
    NOT in my config.org file.
 
-#+INCLUDE: "~/Dotfiles/.emacs.d/init.el" src emacs-lisp :tangle no
+   #+INCLUDE: "~/Dotfiles/.emacs.d/init.el" src emacs-lisp :tangle no
 
 ** Enable local variable check
 
@@ -799,6 +799,8 @@ when necessary.
     #+NAME: evil
     #+BEGIN_SRC emacs-lisp
       (use-package evil
+        :init
+        (setq evil-want-keybinding nil)
         :config 
         (setq evil-default-state 'emacs)
         (evil-set-initial-state 'term-mode 'emacs)
@@ -817,7 +819,7 @@ when necessary.
     #+NAME: evil-collection
     #+BEGIN_SRC emacs-lisp
       (use-package evil-collection
-        :after '(evil evil-magit)
+        :after '(evil) ;;evil-magit)
         :config (evil-collection-init))
     #+END_SRC
     
@@ -1071,7 +1073,7 @@ when necessary.
      [[evil-collection]].
 
      #+NAME: evil-magit
-     #+BEGIN_SRC emacs-lisp : tangle no
+     #+BEGIN_SRC emacs-lisp :tangle no
        (use-package evil-magit
          :init (setq evil-want-keybinding nil))
      #+END_SRC

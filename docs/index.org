@@ -1,4 +1,4 @@
-# Created 2019-09-11 Wed 19:10
+# Created 2019-09-11 Wed 19:37
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -809,6 +809,8 @@ outside of vi itself and very extendable/fast.
 #+name: evil
 #+begin_src emacs-lisp
   (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
     :config 
     (setq evil-default-state 'emacs)
     (evil-set-initial-state 'term-mode 'emacs)
@@ -827,7 +829,7 @@ needs to set evil-want-keybinding to nil.
 #+name: evil-collection
 #+begin_src emacs-lisp
   (use-package evil-collection
-    :after '(evil evil-magit)
+    :after '(evil) ;;evil-magit)
     :config (evil-collection-init))
 #+end_src
 
@@ -1080,8 +1082,9 @@ load before evil so it also needs evil-want-keybinding for
 [[evil-collection]].
 
 #+name: evil-magit
-#+begin_src "tangle no"lang"tangle no"switches"tangle no"flags
-  "tangle no"body
+#+begin_src emacs-lisp
+  (use-package evil-magit
+    :init (setq evil-want-keybinding nil))
 #+end_src
 
 **** magit-todos
