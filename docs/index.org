@@ -1,4 +1,4 @@
-# Created 2019-09-11 Wed 20:15
+# Created 2019-09-11 Wed 21:08
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -1577,6 +1577,7 @@ editors can improve it making it alot better.
     ((scala-mode . lsp)
      (python-mode . lsp)
      (java-mode . lsp)
+     (sh-mode . lsp)
      (c-mode . lsp))
     :config 
     (setq lsp-prefer-flymake nil

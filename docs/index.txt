@@ -1809,6 +1809,7 @@ LSP
   |   ((scala-mode . lsp)
   |    (python-mode . lsp)
   |    (java-mode . lsp)
+  |    (sh-mode . lsp)
   |    (c-mode . lsp))
   |   :config 
   |   (setq lsp-prefer-flymake nil
