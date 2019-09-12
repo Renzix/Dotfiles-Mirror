@@ -1542,8 +1542,8 @@ vterm
   ,----
   | ;;(use-package vterm)
   | (eval-after-load "general"
-  |   '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-  |      (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+  |   '(when (file-directory-p "/opt/emacs-libvterm")
+  |      (add-to-list 'load-path "/opt/emacs-libvterm")
   |      (require 'vterm)
   |      (general-define-key
   |       :states '(normal)

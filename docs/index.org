@@ -1,4 +1,4 @@
-# Created 2019-09-11 Wed 19:37
+# Created 2019-09-11 Wed 20:15
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -1347,8 +1347,8 @@ disable them. Hopefully it will get [[https://github.com/akermu/emacs-libvterm/p
 #+begin_src emacs-lisp
   ;;(use-package vterm)
   (eval-after-load "general"
-    '(when (file-directory-p "~/Projects/NotMine/emacs-libvterm")
-       (add-to-list 'load-path "~/Projects/NotMine/emacs-libvterm")
+    '(when (file-directory-p "/opt/emacs-libvterm")
+       (add-to-list 'load-path "/opt/emacs-libvterm")
        (require 'vterm)
        (general-define-key
         :states '(normal)
