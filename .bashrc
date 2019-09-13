@@ -50,8 +50,8 @@ fi
     
 # Some nice keybindings and aliases
 # emacs keybindings
-alias e="emacs -nw"
-bind -m emacs -x '"\ee":"emacs -nw ."'
+alias e="nvim"
+bind -m emacs -x '"\ee":"nvim"'
 alias f="emacs -nw ."
 bind -m emacs -x '"\C-xd":"emacs -nw ."'
 alias v=""
@@ -99,3 +99,5 @@ tw() {
 pwdp
 
 export NIX_AUTO_RUN=1
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
