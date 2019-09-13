@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # /etc/skel/.bashrc
 #
 # This file is sourced by all *interactive* bash shells on startup,
