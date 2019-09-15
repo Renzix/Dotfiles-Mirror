@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# Return if not interactive
+[ -z "$PS1" ] && return
+
+# Nice functions
+# DEBUG=t
+info() {
+    [ -z "$DEBUG" ] ||
+        printf "[%s]:$1\n" "$(date +'%D %T')";
+    }
+
+if hash "exa" 2>/dev/null ; then
+    info "Exa found"
+    alias ls="exa"
+    alias la="exa -a"
+    alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
+else
+    info "Exa not found"
+    alias l="ls --color=auto -h"
+    alias la="ls -ah"
+    alias ll='ls -lh'
+fi
+
+if hash "nvim" 2>/dev/null ; then
+    info "Neovim found"
+    alias v="neovim"
+else
+    if hash "vim" 2>/dev/null ; then
+        info "Vim found"
+        alias v="vim"
+    else
+        info "using vi"
+        alias v="vi"
+    fi
+fi
+
+# Some nice keybindings and aliases
+# emacs keybindings
+alias e="nvim"
+
+# System Shutdown stuff
+alias rb="sudo reboot"
+alias sd="sudo shutdown -h now"
+
+# git
+alias gc="git commit"
+alias gp="git push"
+
+#Other
+alias ht="htop"
+
+## im lazy xd ##
+alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
+alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k"
+alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
+alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
+
+
+# Check the shell and run shell specific commands there
+# note that some of this isnt posix but it is "posix" for
+# the shell specified
+if [ -n "$BASH_VERSION" ]; then 
+    info "Your using bash"
+    . "$HOME/Dotfiles/.bashrc"
+elif [ -n "$ZSH_VERSION" ]; then
+    info "Your using zsh"
+    . "$HOME/Dotfiles/.zshrc"
+else
+    info "Finish shellrc"
+    export PS1="\$ "
+fi
+
+export NIX_AUTO_RUN=1
