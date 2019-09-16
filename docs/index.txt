@@ -98,9 +98,8 @@ Keybindings
 ..... Normal/Visual State
 ..... Insert State
 ..... Ex commands
-.. Modes
-..... Major Modes
-..... Minor Modes/Other
+.. Major Modes
+.. Minor Modes/Other
 
 
 Hello This is my second real attempt to make a "Perfect" config. Idk if
@@ -542,6 +541,7 @@ Other
 
   ,----
   | (setq-default indent-tabs-mode nil)
+  | (setq tab-width 4)
   `----
 
   Emacs backups are kinda weird by default as they apear in the same
@@ -2341,11 +2341,8 @@ Ex commands
   `----
 
 
-Modes
-~~~~~
-
 Major Modes
------------
+~~~~~~~~~~~
 
 * Plain Text
 
@@ -2462,7 +2459,7 @@ Major Modes
 
 
 Minor Modes/Other
------------------
+~~~~~~~~~~~~~~~~~
 
 * Helm
 

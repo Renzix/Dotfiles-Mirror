@@ -68,6 +68,7 @@ when necessary.
   Starts up emacs. This should be somewhat small and only for
   proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
   which is annoying.
+  
 ** init.el
 
    Including my init.el for documentation purposes. Note that this is
@@ -391,6 +392,7 @@ when necessary.
    #+NAME: indent-default
    #+BEGIN_SRC emacs-lisp
      (setq-default indent-tabs-mode nil)
+     (setq tab-width 4)
    #+END_SRC
    
    Emacs backups are kinda weird by default as they apear in the same
@@ -2067,8 +2069,7 @@ when necessary.
       (evil-ex-define-cmd "bd" 'kill-this-buffer)
     #+END_SRC
 
-** Modes
-*** Major Modes
+** Major Modes
 **** Plain Text
 **** Org mode
 
@@ -2136,7 +2137,7 @@ when necessary.
 **** SOMEDAY matrix mode
 **** SOMEDAY irc mode
 **** SOMEDAY VCS
-*** Minor Modes/Other
+** Minor Modes/Other
 **** Helm
 
      I have been doing helm wrong my whole life. Here is my attempt at

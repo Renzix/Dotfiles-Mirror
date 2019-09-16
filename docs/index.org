@@ -1,4 +1,4 @@
-# Created 2019-09-11 Wed 21:08
+# Created 2019-09-16 Mon 16:38
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -63,6 +63,7 @@ Some things I plan on doing or trying out.
 Starts up emacs. This should be somewhat small and only for
 proccesses that are required to run first. Also there is a small [[https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package][bug]]
 which is annoying.
+
 ** init.el
 
 Including my init.el for documentation purposes. Note that this is
@@ -401,6 +402,7 @@ I have to choose one and only one.
 #+name: indent-default
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil)
+  (setq tab-width 4)
 #+end_src
 
 Emacs backups are kinda weird by default as they apear in the same
@@ -2057,8 +2059,7 @@ useful but do not require much context.
   (evil-ex-define-cmd "bd" 'kill-this-buffer)
 #+end_src
 
-** Modes
-*** Major Modes
+** Major Modes
 **** Plain Text
 **** Org mode
 
@@ -2126,7 +2127,7 @@ TeX-command-master
 **** SOMEDAY matrix mode
 **** SOMEDAY irc mode
 **** SOMEDAY VCS
-*** Minor Modes/Other
+** Minor Modes/Other
 **** Helm
 
 I have been doing helm wrong my whole life. Here is my attempt at
