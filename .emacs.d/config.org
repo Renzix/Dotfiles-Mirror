@@ -1230,7 +1230,10 @@ when necessary.
            (emacs-lisp . t)
            (sql . t)
            (shell . t)
+           (plantuml . t)
            (python . t))))
+    ;; In order to do plantuml we need to set the executable path
+    (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
     #+END_SRC
     <<org-rifle>>
     

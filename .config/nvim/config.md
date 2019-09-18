@@ -14,6 +14,7 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
+Plug 'skywind3000/asyncrun.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'dense-analysis/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -27,6 +28,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 Plug 'tpope/vim-commentary'
 Plug 'vim-airline/vim-airline'
 Plug 'jceb/vim-orgmode'
+Plug 'liuchengxu/vim-which-key'
+Plug 'LucHermitte/lh-vim-lib'
+Plug 'LucHermitte/local_vimrc'
 call plug#end()
 ```
 
@@ -71,12 +75,31 @@ let g:rooter_change_directory_for_non_project_files = ''
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'viml']
 ```
 
-# General Options
-    
-    Some better defaults to make vim more usable. , is a fine leader and ,/; are pretty useless imo
+### Which-Key
+
+    allows for a visual show of keybindings for leader key
 
 ```vim
-let mapleader = ","
+let mapleader = "\<Space>"
+let g:maplocalleader = ','
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+```
+
+### Async
+
+    Makes netrw and vim-fugitive faster. Also allows me to run async shell command
+
+```vim
+let g:asyncrun_open = 8
+let $PYTHONUNBUFFERED=1
+```
+
+# General Options
+    
+    Some better defaults to make vim more usable.
+
+```vim
 set path+=**
 ```
 
@@ -120,13 +143,13 @@ set shiftwidth=4 " size of a ident in spaces
     Give a little bit of breathing room for the cursor on the bottom. Makes a 3 line "padding" from the bottom.
 
 ```vim
-set so=3
+set so=2
 ```
 
-    Reload the config on save @TODO(Renzix): Fix this so it points to ~/Dotfiles/.config/nvim/config.md
+    Reload the config on save
 
 ```vim
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+autocmd! bufwritepost ~/Dotfiles/.config/nvim/config.md source $MYVIMRC
 ```
 
 # Commands
@@ -135,17 +158,25 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 ```vim
 command! Cfg :e~/Dotfiles/.config/nvim/config.md
+cmap w!! w !sudo tee > /dev/null %
 ```
 
 # Keybindings
 
     Here are my keybindings
 
+## Global
+
 ```vim
 nnoremap S :Files<CR>
+nnoremap s :te<CR>
 nnoremap \| :Buffers<CR>
 nnoremap \ :Ag<CR>
 nnoremap ; :Commands<CR>
+nnoremap <leader>g :G<CR>
+nnoremap <leader>c :AsyncRun ./.build-setup.sh; $VIM_BUILD<CR>
+nnoremap <leader>u :AsyncRun ./.build-setup.sh; $VIM_RUN<CR>
 ```
 
+## Local
 

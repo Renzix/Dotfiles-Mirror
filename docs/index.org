@@ -1,4 +1,4 @@
-# Created 2019-09-16 Mon 16:38
+# Created 2019-09-18 Wed 14:05
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -1216,30 +1216,33 @@ Literite Programming and much [[https://orgmode.org/][more]].
 
 #+name: org
 #+begin_src emacs-lisp
-  (use-package org
-    :ghook #'org-indent-mode
-    :init
-    (setq-default initial-major-mode 'org-mode
-                  initial-scratch-message ""
-                  org-src-tab-acts-natively t
-                  org-confirm-babel-evaluate nil
-                  org-return-follows-link t)
-    (setq org-log-done 'time
-          org-src-window-setup 'current-window
-          org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
-                              (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
-                              (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
-                              (sequence "|" "DONE(d)" "CANCEL(c@)")
-                              (sequence "|" "STUDY(y!)")))
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((org . t)
-       (C . t)
-       (latex . t)
-       (emacs-lisp . t)
-       (sql . t)
-       (shell . t)
-       (python . t))))
+    (use-package org
+      :ghook #'org-indent-mode
+      :init
+      (setq-default initial-major-mode 'org-mode
+                    initial-scratch-message ""
+                    org-src-tab-acts-natively t
+                    org-confirm-babel-evaluate nil
+                    org-return-follows-link t)
+      (setq org-log-done 'time
+            org-src-window-setup 'current-window
+            org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
+                                (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
+                                (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
+                                (sequence "|" "DONE(d)" "CANCEL(c@)")
+                                (sequence "|" "STUDY(y!)")))
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((org . t)
+         (C . t)
+         (latex . t)
+         (emacs-lisp . t)
+         (sql . t)
+         (shell . t)
+         (plantuml . t)
+         (python . t))))
+  ;; In order to do plantuml we need to set the executable path
+  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 #+end_src
 <<org-rifle>>
 
