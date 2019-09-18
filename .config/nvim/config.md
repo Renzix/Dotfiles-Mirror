@@ -71,6 +71,14 @@ let g:rooter_change_directory_for_non_project_files = ''
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'viml']
 ```
 
+### Markdowns
+
+    Make it so folding is disabled in markdown
+
+```vim
+let g:vim_markdown_folding_disabled = 1
+```
+
 # General Options
     
     Some better defaults to make vim more usable. , is a fine leader and ,/; are pretty useless imo
