@@ -142,7 +142,10 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
     Here are my EX commands
 
 ```vim
+" Edit config
 command! Cfg :e~/Dotfiles/.config/nvim/config.md
+" Save as sudo
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 ```
 
 # Keybindings
