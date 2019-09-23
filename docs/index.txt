@@ -1191,7 +1191,7 @@ helm
   | (use-package helm
   |   :init
   |   (setq helm-follow-mode-persistent t
-  |         helm-autoresize-max-height 40
+  |         helm-autoresize-max-height 20
   |         helm-display-header-line nil)
   |   :config
   |   (require 'helm-config)
@@ -1206,6 +1206,12 @@ helm
   ,----
   | (use-package helm-rg
   |   :after helm)
+  `----
+
+  ,----
+  | (use-package helm-swoop
+  |   :config (setq helm-swoop-pre-input-function
+  |                 (lambda () "")))
   `----
 
 
@@ -2255,9 +2261,11 @@ Emacs State
   |  "C-x C-g" 'magit-dispatch
   |  "C-x C-o" 'other-window
   |  "C-x C-k" 'kill-this-buffer
-  |  "C-x v" 'revert-buffer
+  |  "C-r" 'revert-buffer
   |  "C-x t" 'my/eshell-toggle
   |  "C-x C-t" 'my/vterm-toggle
+  |  "C-s" 'helm-swoop
+  |  "M-s" 'helm-multi-swoop-projectile
   |  "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
   |  "C-o" 'my/smart-open-line
   |  "C-\\" 'er/expand-region
@@ -2482,6 +2490,10 @@ Minor Modes/Other
   | (general-define-key
   |  :keymaps 'helm-occur-map
   |  "M-'" 'my/helm-goto-helm-rg)
+  | (general-define-key
+  |  :keymaps '(helm-multi-swoop-map helm-swoop-map)
+  |  "C-s" 'helm-next-line
+  |  "C-r" 'helm-previous-line)
   `----
 
 
