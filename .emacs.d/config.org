@@ -418,15 +418,6 @@ when necessary.
      (setq warning-minimum-level :error)
    #+END_SRC
  
-   If you set the variable kill-whole-line then the kill-line will
-   delete the entire line including newline if at the beginning of the
-   line.
-
-   #+NAME: kill-whole-line
-   #+BEGIN_SRC emacs-lisp
-     (setq kill-whole-line t)
-   #+END_SRC
-
    Use utf-8 when you can
 
    #+NAME: prefer-coding-system
@@ -1135,6 +1126,9 @@ when necessary.
     #+NAME: company
     #+BEGIN_SRC emacs-lisp
       (use-package company
+        :bind (:map company-active-map
+                    ("C-n" . company-select-next)
+                    ("C-p" . company-select-previous))
         :init
         (add-hook 'after-init-hook 'global-company-mode)
         (setq company-require-match 'never
@@ -1145,22 +1139,6 @@ when necessary.
               global-company-mode t))
     #+END_SRC
     
-    This is also intergrated with [[yasnippet]] for a whole bunhc of
-    functions.
-     
-    #+NAME: company-mode-with-yas
-    #+BEGIN_SRC emacs-lisp
-      (defun company-mode-with-yas (backend)
-        (if (and (listp backend) (member 'company-yasnippet backend))
-            backend
-          (append (if (consp backend) backend (list backend))
-                  '(:with company-yasnippet))))
-
-      (with-eval-after-load "company"
-        (with-eval-after-load "yasnippet"
-          '(setq company-backends (mapcar #'company-mode-with-yas company-backends))))
-    #+END_SRC
-
 ** Projects
 *** projectile
     
@@ -1399,8 +1377,17 @@ when necessary.
 
    #+NAME: yasnippet-snippets
    #+BEGIN_SRC emacs-lisp
+     (defun company-mode-with-yas (backend)
+       (if (and (listp backend) (member 'company-yasnippet backend))
+           backend
+         (append (if (consp backend) backend (list backend))
+                 '(:with company-yasnippet))))
+
      (use-package yasnippet-snippets
-       :config (yasnippet-snippets-initialize))
+       :after '(yasnippet company)
+       :config 
+       (yasnippet-snippets-initialize)
+       (setq company-backends (mapcar #'company-mode-with-yas company-backends)))
    #+END_SRC
     
 *** Gentoo Snippets
@@ -1547,6 +1534,17 @@ when necessary.
         :config (delete-selection-mode 1))
     #+END_SRC
 
+*** whole-line-or-region-mode
+
+    Makes it so M-w and C-w default to the current line instead of a
+    invisable point. Really nice cuz C-w is the same as dd now.
+
+    #+NAME: whole-line-or-region-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package whole-line-or-region
+        :config (whole-line-or-region-global-mode t))
+    #+END_SRC
+
 ** Programming
 *** smartparens
 
@@ -1577,6 +1575,8 @@ when necessary.
         ((scala-mode . lsp)
          (python-mode . lsp)
          (java-mode . lsp)
+         (js-mode . lsp)
+         (web-mode . lsp)
          (sh-mode . lsp)
          (c-mode . lsp))
         :config 
@@ -1629,7 +1629,8 @@ when necessary.
         (dap-mode 1)
         (dap-ui-mode 1)
         (require 'dap-python)
-        (require 'dap-lldb))
+        (require 'dap-lldb)
+        (require 'dap-java))
     #+END_SRC
 
 *** JVM
@@ -1725,6 +1726,29 @@ when necessary.
 
 **** SOMEDAY perl
 **** SOMEDAY shell
+
+*** Web
+**** js2-mode
+
+     Javascript stuff xd.
+     
+     #+NAME: js2-mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package js2-mode
+         :config   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+     #+END_SRC
+
+**** web-mode
+
+     Does all website stuff. For now im only using it for html/htm/css files
+
+     #+NAME: web-mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package web-mode
+         :config 
+         (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+         (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode)))
+     #+END_SRC
 
 *** lisps
 
