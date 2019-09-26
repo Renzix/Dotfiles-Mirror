@@ -14,7 +14,12 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
+Plug 'tpope/vim-vividchalk'
+Plug 'drewtempelmeyer/palenight.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'crusoexia/vim-monokai'
+Plug 'arcticicestudio/nord-vim'  
+Plug 'rakr/vim-one'
 Plug 'dense-analysis/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'airblade/vim-gitgutter'
@@ -27,6 +32,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 Plug 'tpope/vim-commentary'
 Plug 'vim-airline/vim-airline'
 Plug 'jceb/vim-orgmode'
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 ```
 
@@ -46,9 +52,27 @@ let g:netrw_liststyle=3 " tree view
 
 ### Color Scheme
 
-    For now Darcula is the default color scheme
+    The colorscheme changes per day.
+    
 ```vim
-color dracula
+let dayofweek = system("date +%w")
+if dayofweek==0
+    color dracula
+elseif dayofweek==1
+    set background=dark 
+    color palenight
+elseif dayofweek==2
+    color vividchalk
+elseif dayofweek==3
+    color monokai
+elseif dayofweek==4
+    color nord
+elseif dayofweek==5
+    color monokai
+elseif dayofweek==6
+    color one
+    set backgroud=dark
+endif
 ```
 
 ### Autocompletion
