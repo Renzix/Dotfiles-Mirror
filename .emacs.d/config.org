@@ -1034,6 +1034,7 @@ when necessary.
     #+NAME: helm-swoop
     #+BEGIN_SRC emacs-lisp
       (use-package helm-swoop
+        :after helm
         :config (setq helm-swoop-pre-input-function
                       (lambda () "")))
     #+END_SRC

@@ -120,6 +120,11 @@ set nu rnu
 set cursorline
 ```
 
+    Undo's should percist after closing vim so we can add that option
+```vim
+set undofile
+```
+
     Ctags is cool and I should probably learn how to use them
 
 ```vim
