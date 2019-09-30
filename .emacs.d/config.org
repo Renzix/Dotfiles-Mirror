@@ -1543,7 +1543,7 @@ when necessary.
     #+NAME: whole-line-or-region-mode
     #+BEGIN_SRC emacs-lisp
       (use-package whole-line-or-region
-        :config (whole-line-or-region-global-mode t))
+        :config (whole-line-or-region-global-mode 1))
     #+END_SRC
 
 ** Programming
