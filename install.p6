@@ -1,5 +1,7 @@
 #!/usr/bin/env perl6
 
+use experimental :macros;
+
 sub MAIN() {
     my IO::Path $*HOMEDIR;
     given $*KERNEL {
@@ -16,7 +18,7 @@ sub MAIN() {
     log "Finished installing";
 }
 
-multi sub install(Str $file, *@aliases) {
+sub install(Str $file, *@aliases) {
     my $fname = $file.IO;
     mkdir $_ when !"$*HOMEDIR/$fname".IO.parent.e;
     unlink "$*HOMEDIR/$fname".IO when "$*HOMEDIR/$fname".IO.e;
@@ -29,6 +31,6 @@ multi sub install(Str $file, *@aliases) {
     }
 }
 
-sub log($str) {
+macro log($str) {
     say $str;
 }
