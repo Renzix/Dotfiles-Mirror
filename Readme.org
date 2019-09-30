@@ -2,9 +2,10 @@
 This is my dotfiles. 
 Below are some planned/possible things i need to make good enough to add
 - [-] Editor configs
-  - [ ] neovim config
+  - [X] neovim config
+  - [ ] micro config
   - [X] emacs config
-  - [ ] spacemacs config?
+  - [X] Doom config
 - [-] Window Manager configs
   - [X] stumpwm
   - [X] bspwm
@@ -12,13 +13,17 @@ Below are some planned/possible things i need to make good enough to add
   - [ ] dwm (with patches and prob in a seperate repo)
   - [ ] xmonad 
   - [ ] openbox
-  - [ ] Awesomewm
+  - [X] Awesomewm
   - [ ] fvwm?
 - [-] Shell configs
+  - [X] posix sh
   - [X] bash
-  - [ ] zsh
+  - [X] zsh
   - [ ] xonsh
   - [ ] ion
 - [-] Misc
   - [X] Wallpaper
-  - [ ] Bin folder with actually useful scripts
+  - [ ] NixOS config
+  - [ ] Nix home manager config
+  - [ ] Bin folder with actually useful posix scripts
+  - [ ] Installer (perl6)
