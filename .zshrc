@@ -13,12 +13,16 @@ zstyle :compinstall filename '/home/archzix/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+# Syntax highlighting
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
 export PROMPT='%(?.$fg[cyan].$fg[yellow])%1d%#%{$reset_color%} '
 export RPROMPT="%F{yellow}%?%f"
 
+alias sudo="sudo "
 alias e="nvim"
 alias f="emacs -nw ."
 
