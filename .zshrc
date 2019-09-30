@@ -21,11 +21,3 @@ autoload -U colors && colors
 setopt PROMPT_SUBST
 export PROMPT='%(?.$fg[cyan].$fg[yellow])%1d%#%{$reset_color%} '
 export RPROMPT="%F{yellow}%?%f"
-
-alias sudo="sudo "
-alias e="nvim"
-alias f="emacs -nw ."
-
-alias ls="exa"
-alias ll="exa -al"
-alias ht="htop"
