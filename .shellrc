@@ -36,7 +36,9 @@ else
 fi
 
 # Some nice keybindings and aliases
-# emacs keybindings
+
+alias sudo="sudo "
+
 alias e="nvim"
 
 # System Shutdown stuff

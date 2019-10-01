@@ -174,7 +174,7 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 " Edit config
 command! Cfg :e~/Dotfiles/.config/nvim/config.md
 " Save as sudo
-cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+command W w !sudo tee % >/dev/null
 ```
 
 # Keybindings

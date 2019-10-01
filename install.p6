@@ -1,5 +1,7 @@
 #!/usr/bin/env perl6
 
+use experimental :macros;
+
 sub MAIN() {
     my IO::Path $*HOMEDIR;
     given $*KERNEL {
@@ -9,22 +11,26 @@ sub MAIN() {
         }
         default { die "Unimplemented Kernel/OS: $_" }
     }
-    say "installing to $*HOMEDIR";
+    log "installing to $*HOMEDIR";
     install(".emacs.d/init.el");
-    install(".bashrc");
+    install(".emacs.d/bookmarks");
+    install(".shellrc", ".bashrc", ".zshrc");
+    log "Finished installing";
 }
 
-multi sub install(IO::Path $fname, IO::Path $HOMEDIR) {
-    when "$HOMEDIR/$fname".IO ~~ :e {
-        unlink "$HOMEDIR/$fname".IO;
+sub install(Str $file, *@aliases) {
+    my $fname = $file.IO;
+    mkdir $_ when !"$*HOMEDIR/$fname".IO.parent.e;
+    unlink "$*HOMEDIR/$fname".IO when "$*HOMEDIR/$fname".IO.e;
+    symlink("$*HOMEDIR/Dotfiles/$fname", "$*HOMEDIR/$fname");
+    log "Installed $*HOMEDIR/Dotfiles/$fname to $*HOMEDIR/$fname";
+    for @aliases -> $alias {
+        unlink "$*HOMEDIR/$alias".IO when "$*HOMEDIR/$alias".IO.e;
+        symlink("$*HOMEDIR/$fname", "$*HOMEDIR/$alias" );
+        log "symlinked $*HOMEDIR/$fname to $*HOMEDIR/$alias";
     }
-    symlink("$HOMEDIR/Dotfiles/$fname", "$HOMEDIR/$fname");
 }
 
-multi sub install(Str $fname, IO::Path $HOMEDIR) {
-    install(IO::Path.new($fname),$HOMEDIR);
-}
-
-multi sub install(Str $fname) {
-    install(IO::Path.new($fname),$*HOMEDIR);
+macro log($str) {
+    say $str;
 }
