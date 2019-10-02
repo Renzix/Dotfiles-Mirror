@@ -34,7 +34,6 @@
         Plug 'jceb/vim-orgmode'
         Plug 'SirVer/ultisnips'
         Plug 'honza/vim-snippets'
-        Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
     call plug#end()
 ```
 
@@ -111,22 +110,9 @@
     let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 ```
 
-### which-key
-
-    which-key helps me learn keybinds in emacs so lets enable it for vim
-
-```vim
-    set notimeout
-    let g:mapleader = "\<Space>"
-    let g:maplocalleader = ","
-    nnoremap <silent> <leader>      :WhichKey '<Space>'<CR>
-    nnoremap <silent> <localleader> :WhichKey ','<CR>
-    nnoremap <silent> <C-w>         :WhichKey '<C-w>'<CR>
-```
-
 # General Options
     
-    Some better defaults to make vim more usable. Note that leader is in the which-key section
+    Some better defaults to make vim more usable.
 
 ```vim
     set path+=**
@@ -207,9 +193,6 @@
     nnoremap \| :Buffers<CR>
     nnoremap \ :Ag<CR>
     nnoremap ; :Commands<CR>
-    " Leader Keybinds
-    nnoremap <silent> <leader>fs :update<CR>
-    nnoremap <silent> <leader>fc :Cfg<CR>
 ```
 
 
