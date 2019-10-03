@@ -3,10 +3,6 @@
 # Return if not interactive
 [ -z "$PS1" ] && return
 
-if [ ! -z ${TRAMP-x} ] ; then
-    return
-fi
-
 # Nice functions
 # DEBUG=t
 info() {

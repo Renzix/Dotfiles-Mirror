@@ -84,10 +84,12 @@
     let g:deoplete#enable_at_startup = 1
 ```
 
-    Rooter allows us to change the default directory to a project (version control or wherever nvim was openned
+    Rooter allows us to change the default directory to a project only on command
 
 ```vim
     let g:rooter_change_directory_for_non_project_files = ''
+    let g:rooter_manual_only = 1
+    let g:rooter_resolve_links = 1
 ```
 
 ### Markdowns
@@ -181,6 +183,7 @@
     command! Cfg :e~/Dotfiles/.config/nvim/config.md
     " Save as sudo
     command W w !sudo tee % >/dev/null
+    command R Rooter
 ```
 
 # Keybindings
@@ -189,7 +192,7 @@
 
 ```vim
     " Simple keybinds
-    nnoremap S :Files<CR>
+    nnoremap S :cd %:p:h<CR>:Files<CR>
     nnoremap \| :Buffers<CR>
     nnoremap \ :Ag<CR>
     nnoremap ; :Commands<CR>

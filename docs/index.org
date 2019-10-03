@@ -1,4 +1,4 @@
-# Created 2019-09-25 Wed 17:31
+# Created 2019-10-02 Wed 20:39
 #+OPTIONS: num:nil
 #+TITLE: Emacs config
 #+AUTHOR: Daniel DeBruno (Renzix)
@@ -1043,6 +1043,7 @@ tool. This is required if I want to use helm-projectile-rg.
 #+name: helm-swoop
 #+begin_src emacs-lisp
   (use-package helm-swoop
+    :after helm
     :config (setq helm-swoop-pre-input-function
                   (lambda () "")))
 #+end_src
