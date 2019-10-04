@@ -1205,6 +1205,7 @@ helm
 
   ,----
   | (use-package helm-swoop
+  |   :after helm
   |   :config (setq helm-swoop-pre-input-function
   |                 (lambda () "")))
   `----
