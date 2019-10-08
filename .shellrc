@@ -73,5 +73,3 @@ else
 fi
 
 export NIX_AUTO_RUN=1
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
