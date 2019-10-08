@@ -7,3 +7,4 @@
 (package! apropospriate-theme)
 (package! monokai-theme)
 (package! whole-line-or-region)
+(package! command-log-mode)

@@ -79,6 +79,34 @@
     (insert-file-contents filePath)
     (buffer-string)))
 
+(defvar my/window-conf nil)
+
+(defun my/eshell-toggle (buf-name)
+  "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
+  (interactive (list (buffer-name)))
+  (if (string-equal buf-name "*eshell*")
+      (set-window-configuration my/window-conf)
+    (progn
+      (setq my/window-conf (current-window-configuration))
+      (delete-other-windows)
+      (eshell))))
+
+(defun my/switch-to-vterm ()
+  "Switch to vterm."
+  (if (get-buffer "vterm")
+      (switch-to-buffer "vterm")
+    (vterm)))
+
+(defun my/vterm-toggle (buf-name)
+  "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
+  (interactive (list (buffer-name)))
+  (if (string-equal buf-name "vterm")
+      (set-window-configuration my:window-conf)
+    (progn
+      (setq my:window-conf (current-window-configuration))
+      (delete-other-windows)
+      (my/switch-to-vterm))))
+
 (defun my/helm-projectile-find-file-or-project ()
   "Does switch project if not in a project and 'find-file' if in one."
   (interactive)

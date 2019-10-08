@@ -17,8 +17,12 @@
 
 Doom is litterally too good of me not to use it. There are alot of things i
 would like to change to add to it tho.
+
+
 Now that Im using doom all I have to do is worry about overriding some of the
 defaults I dont like. If you havent already join the DOOM discord cuz its dope.
+My old config can be found in my Dotfiles under =.emacs.d/config.org=. This
+config is apart of my Dotfiles which is on a self host [[https://git.renzix.com/Renzix/Dotfiles/][gitea]], [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and [[https://github.com/Renzix/Dotfiles-Mirror][github]].
 
 ** Preferences
 *** Nice Variables
@@ -164,6 +168,63 @@ Reads a string directly from a file then returns it as a string
     (insert-file-contents filePath)
     (buffer-string)))
 #+END_SRC
+
+**** Open Buffer
+
+    I like using eshell and vterm but dealing with emacs buffers is
+    actually insane. I made a coupld simple functions to switch to a
+    vterm/eshell window and then be able to switch back. This makes
+    them fullscreen which is hella nice. This is the variable that
+    stores the perspective.
+
+    #+NAME: my:window-conf
+    #+BEGIN_SRC emacs-lisp
+      (defvar my/window-conf nil)
+    #+END_SRC
+
+    Here is the eshell toggle function which uses said variable to
+    switch if not already in a eshell buffer fullscreen.
+
+    #+NAME: eshell-toggle
+    #+BEGIN_SRC emacs-lisp
+      (defun my/eshell-toggle (buf-name)
+        "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
+        (interactive (list (buffer-name)))
+        (if (string-equal buf-name "*eshell*")
+            (set-window-configuration my/window-conf)
+          (progn
+            (setq my/window-conf (current-window-configuration))
+            (delete-other-windows)
+            (eshell))))
+    #+END_SRC
+
+    This is for the next funciton. vterm doesnt automatically switch
+    if called and open so i need a helper function.
+
+    #+NAME: switch-to-vterm
+    #+BEGIN_SRC emacs-lisp
+      (defun my/switch-to-vterm ()
+        "Switch to vterm."
+        (if (get-buffer "vterm")
+            (switch-to-buffer "vterm")
+          (vterm)))
+    #+END_SRC
+
+    Function to switch to a fullscreen terminal and back again without
+    losing your current layout.
+
+    #+NAME: vterm-toggle
+    #+BEGIN_SRC emacs-lisp
+      (defun my/vterm-toggle (buf-name)
+        "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
+        (interactive (list (buffer-name)))
+        (if (string-equal buf-name "vterm")
+            (set-window-configuration my:window-conf)
+          (progn
+            (setq my:window-conf (current-window-configuration))
+            (delete-other-windows)
+            (my/switch-to-vterm))))
+    #+END_SRC
 
 **** Projects
 
