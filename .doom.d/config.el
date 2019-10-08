@@ -164,6 +164,7 @@ Else indent the entire buffer."
  :e "C-x C-k" #'kill-this-buffer
  :e "C-x t"   #'my/eshell-toggle
  :e "C-x C-t" #'my/vterm-toggle
+ :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-j"     #'avy-goto-char-2
  :e "C-="     #'my/smart-indent
