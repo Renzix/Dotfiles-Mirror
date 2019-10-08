@@ -171,60 +171,60 @@ Reads a string directly from a file then returns it as a string
 
 **** Open Buffer
 
-    I like using eshell and vterm but dealing with emacs buffers is
-    actually insane. I made a coupld simple functions to switch to a
-    vterm/eshell window and then be able to switch back. This makes
-    them fullscreen which is hella nice. This is the variable that
-    stores the perspective.
+I like using eshell and vterm but dealing with emacs buffers is
+actually insane. I made a coupld simple functions to switch to a
+vterm/eshell window and then be able to switch back. This makes
+them fullscreen which is hella nice. This is the variable that
+stores the perspective.
 
-    #+NAME: my:window-conf
-    #+BEGIN_SRC emacs-lisp
-      (defvar my/window-conf nil)
-    #+END_SRC
+#+NAME: my:window-conf
+#+BEGIN_SRC emacs-lisp
+(defvar my/window-conf nil)
+#+END_SRC
 
-    Here is the eshell toggle function which uses said variable to
-    switch if not already in a eshell buffer fullscreen.
+Here is the eshell toggle function which uses said variable to
+switch if not already in a eshell buffer fullscreen.
 
-    #+NAME: eshell-toggle
-    #+BEGIN_SRC emacs-lisp
-      (defun my/eshell-toggle (buf-name)
-        "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
-        (interactive (list (buffer-name)))
-        (if (string-equal buf-name "*eshell*")
-            (set-window-configuration my/window-conf)
-          (progn
-            (setq my/window-conf (current-window-configuration))
-            (delete-other-windows)
-            (eshell))))
-    #+END_SRC
+#+NAME: eshell-toggle
+#+BEGIN_SRC emacs-lisp
+(defun my/eshell-toggle (buf-name)
+  "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
+  (interactive (list (buffer-name)))
+  (if (string-equal buf-name "*eshell*")
+      (set-window-configuration my/window-conf)
+    (progn
+      (setq my/window-conf (current-window-configuration))
+      (delete-other-windows)
+      (eshell))))
+#+END_SRC
 
-    This is for the next funciton. vterm doesnt automatically switch
-    if called and open so i need a helper function.
+This is for the next funciton. vterm doesnt automatically switch
+if called and open so i need a helper function.
 
-    #+NAME: switch-to-vterm
-    #+BEGIN_SRC emacs-lisp
-      (defun my/switch-to-vterm ()
-        "Switch to vterm."
-        (if (get-buffer "vterm")
-            (switch-to-buffer "vterm")
-          (vterm)))
-    #+END_SRC
+#+NAME: switch-to-vterm
+#+BEGIN_SRC emacs-lisp
+(defun my/switch-to-vterm ()
+  "Switch to vterm."
+  (if (get-buffer "vterm")
+      (switch-to-buffer "vterm")
+    (vterm)))
+#+END_SRC
 
-    Function to switch to a fullscreen terminal and back again without
-    losing your current layout.
+Function to switch to a fullscreen terminal and back again without
+losing your current layout.
 
-    #+NAME: vterm-toggle
-    #+BEGIN_SRC emacs-lisp
-      (defun my/vterm-toggle (buf-name)
-        "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
-        (interactive (list (buffer-name)))
-        (if (string-equal buf-name "vterm")
-            (set-window-configuration my:window-conf)
-          (progn
-            (setq my:window-conf (current-window-configuration))
-            (delete-other-windows)
-            (my/switch-to-vterm))))
-    #+END_SRC
+#+NAME: vterm-toggle
+#+BEGIN_SRC emacs-lisp
+(defun my/vterm-toggle (buf-name)
+  "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
+  (interactive (list (buffer-name)))
+  (if (string-equal buf-name "vterm")
+      (set-window-configuration my:window-conf)
+    (progn
+      (setq my:window-conf (current-window-configuration))
+      (delete-other-windows)
+      (my/switch-to-vterm))))
+#+END_SRC
 
 **** Projects
 
@@ -350,6 +350,40 @@ Else indent the entire buffer."
 #+END_SRC
 
 ** Packages
+*** IRC
+
+Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
+:pass. Note that TLS 1.1 is not working in emacs without that setq
+
+
+#+NAME: irc
+#+BEGIN_SRC emacs-lisp
+(setq tls-end-of-info
+      (concat
+       "\\("
+       ;; `openssl s_client' regexp.  See ssl/ssl_txt.c lines 219-220.
+       ;; According to apps/s_client.c line 1515 `---' is always the last
+       ;; line that is printed by s_client before the real data.
+       "^    Verify return code: .+\n\\(\\|^    Extended master secret: .+\n\\)---\n\\|"
+       ;; `gnutls' regexp. See src/cli.c lines 721-.
+       "^- Simple Client Mode:\n"
+       "\\(\n\\|"                           ; ignore blank lines
+       ;; According to GnuTLS v2.1.5 src/cli.c lines 640-650 and 705-715
+       ;; in `main' the handshake will start after this message.  If the
+       ;; handshake fails, the programs will abort.
+       "^\\*\\*\\* Starting TLS handshake\n\\)*"
+       "\\)"))
+
+(set-irc-server! "chat.freenode.net"
+                 `(
+                        :tls t
+                        :port 6697
+                        :nick "Renzix"
+                        :sasl-username ,(+pass-get-user "irc/freenode.net")
+                        :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
+                        :channels ("#emacs" "#kisslinux")))
+#+END_SRC
+
 *** Helm
 
 Helm is dope. I want to make it look better as I dont like the "minimal" look

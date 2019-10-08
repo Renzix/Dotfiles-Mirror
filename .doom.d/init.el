@@ -149,7 +149,7 @@
        ;; should be loaded late.
        :app
        ;;(email +gmail)    ; emacs as an email client
-       ;; irc               ; how neckbeards socialize
+       irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        (write            ; emacs as a word processor (latex + org + markdown)
@@ -160,6 +160,9 @@
        :collab
        ;;floobits          ; peer programming for a price
        ;;impatient-mode    ; show off code over HTTP
+
+       :tools
+       pass
 
        :config
        ;; For literate config users. This will tangle+compile a config.org

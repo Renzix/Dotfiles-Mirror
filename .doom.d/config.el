@@ -182,6 +182,31 @@ Else indent the entire buffer."
         (indent-region (point-min) (point-max))
         (message "Identing buffer")))))
 
+(setq tls-end-of-info
+      (concat
+       "\\("
+       ;; `openssl s_client' regexp.  See ssl/ssl_txt.c lines 219-220.
+       ;; According to apps/s_client.c line 1515 `---' is always the last
+       ;; line that is printed by s_client before the real data.
+       "^    Verify return code: .+\n\\(\\|^    Extended master secret: .+\n\\)---\n\\|"
+       ;; `gnutls' regexp. See src/cli.c lines 721-.
+       "^- Simple Client Mode:\n"
+       "\\(\n\\|"                           ; ignore blank lines
+       ;; According to GnuTLS v2.1.5 src/cli.c lines 640-650 and 705-715
+       ;; in `main' the handshake will start after this message.  If the
+       ;; handshake fails, the programs will abort.
+       "^\\*\\*\\* Starting TLS handshake\n\\)*"
+       "\\)"))
+
+(set-irc-server! "chat.freenode.net"
+                 `(
+                        :tls t
+                        :port 6697
+                        :nick "Renzix"
+                        :sasl-username ,(+pass-get-user "irc/freenode.net")
+                        :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
+                        :channels ("#emacs" "#kisslinux")))
+
 (after! helm
   (setq helm-mode-line-string t))
 
