@@ -134,28 +134,28 @@ necessary.
 `----
 
 
-[gitlab] <https://gitlab.com/Renzix/Dotfiles>
+[gitlab] https://gitlab.com/Renzix/Dotfiles
 
-[github] <https://github.com/Renzix/Dotfiles-Mirror>
+[github] https://github.com/Renzix/Dotfiles-Mirror
 
-[readtheorg] <file:index.html>
+[readtheorg] file:index.html
 
-[plain text] <file:index.txt>
+[plain text] file:index.txt
 
-[markdown] <file:index.md>
+[markdown] file:index.md
 
-[Doom] <https://github.com/hlissner/doom-emacs>
+[Doom] https://github.com/hlissner/doom-emacs
 
-[jamiecollinson] <https://jamiecollinson.com/blog/my-emacs-config/>
+[jamiecollinson] https://jamiecollinson.com/blog/my-emacs-config/
 
 [Buffet]
-<https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org>
+https://github.com/buffet/rice/blob/master/emacs/.emacs.d/config.org
 
-[Sacha Chua] <https://pages.sachachua.com/.emacs.d/Sacha.html>
+[Sacha Chua] https://pages.sachachua.com/.emacs.d/Sacha.html
 
-[Crux] <https://github.com/bbatsov/crux>
+[Crux] https://github.com/bbatsov/crux
 
-[github pages] <https:renzix.github.io/Dotfiles-Mirror>
+[github pages] https:renzix.github.io/Dotfiles-Mirror
 
 
 Plans
@@ -186,7 +186,7 @@ Startup
 
 
 [bug]
-<https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package>
+https://stackoverflow.com/questions/57153556/why-does-emacs-fail-to-install-gnu-elpa-keyring-update-and-some-other-package
 
 init.el
 ~~~~~~~
@@ -225,7 +225,7 @@ Enable local variable check
   `----
 
 
-[init.el] <file:init.el>
+[init.el] file:init.el
 
 
 Configure package sources
@@ -644,7 +644,7 @@ Format Text
   `----
 
 
-[here] <https://www.emacswiki.org/emacs/NoTabs>
+[here] https://www.emacswiki.org/emacs/NoTabs
 
 [default value] See listing 1
 
@@ -929,13 +929,13 @@ Redefined Functions
 
 
 [here]
-<https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/>
+https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 
-[crux] <https://github.com/bbatsov/crux>
+[crux] https://github.com/bbatsov/crux
 
-[this] <https://emacsredux.com/blog/2013/03/26/smarter-open-line/>
+[this] https://emacsredux.com/blog/2013/03/26/smarter-open-line/
 
-[this] <https://emacsredux.com/blog/2013/06/15/open-line-above/>
+[this] https://emacsredux.com/blog/2013/06/15/open-line-above/
 
 
 Core
@@ -997,11 +997,11 @@ evil
   `----
 
 
-[here] <https://github.com/emacs-evil/evil-collection>
+[here] https://github.com/emacs-evil/evil-collection
 
-[evil-magit] <file:config.org::*evil-magit>
+[evil-magit] file:config.org::*evil-magit
 
-[here] <https://github.com/redguardtoo/evil-matchit>
+[here] https://github.com/redguardtoo/evil-matchit
 
 
 god mode
@@ -1135,7 +1135,7 @@ avy
   `----
 
 
-[github] <https://github.com/abo-abo/avy>
+[github] https://github.com/abo-abo/avy
 
 
 Fuzzy Find
@@ -1423,7 +1423,7 @@ Org
   `----
 
 
-[more] <https://orgmode.org/>
+[more] https://orgmode.org/
 
 * Org Exports
 
@@ -1447,9 +1447,9 @@ Org
   `----
 
 
-  [hugo] <https://gohugo.io>
+  [hugo] https://gohugo.io
 
-  [here] <https://ox-hugo.scripter.co>
+  [here] https://ox-hugo.scripter.co
 
 
 * Evil org mode
@@ -1548,13 +1548,13 @@ vterm
   `----
 
 
-[melpa] <https://melpa.org/>
+[melpa] https://melpa.org/
 
-[manually] <https://github.com/akermu/emacs-libvterm>
+[manually] https://github.com/akermu/emacs-libvterm
 
 [Line numbers] See listing 1
 
-[fixed soon] <https://github.com/akermu/emacs-libvterm/pull/129>
+[fixed soon] https://github.com/akermu/emacs-libvterm/pull/129
 
 
 eshell
@@ -1675,21 +1675,19 @@ IRC
   ,----
   | (setq rcirc-default-nick "Renzix"
   |       rcirc-server-alist
-  |       '(("irc.freenode.net" :channels ("#emacs"))
-  |         ("localhost" :channels ("#home")))
-  |       rcirc-authinfo
-  |       '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")
-  |         ("localhost" bitlbee "Renzix" ("Akeyla10!"))))
-  | ;; Include date in time stamp.
-  | (setq rcirc-time-format "%Y-%m-%d %H:%M ")
-  | ;; Keep input line at bottom.                                                                               
-  | (add-hook 'rcirc-mode-hook
-  |           (lambda ()
-  |             (set (make-local-variable 'scroll-conservatively)
-  |                  8192)))
-  | ;; Turn on spell checking.
-  | (add-hook 'rcirc-mode-hook (lambda ()
-  |                              (flyspell-mode 1)))
+  |       '(("irc.freenode.net" :channels ("#emacs")))
+  |         rcirc-authinfo
+  |         '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")))
+  |       ;; Include date in time stamp.
+  |       (setq rcirc-time-format "%Y-%m-%d %H:%M ")
+  |       ;; Keep input line at bottom.                                                                               
+  |       (add-hook 'rcirc-mode-hook
+  |                 (lambda ()
+  |                   (set (make-local-variable 'scroll-conservatively)
+  |                        8192)))
+  |       ;; Turn on spell checking.
+  |       (add-hook 'rcirc-mode-hook (lambda ()
+  |                                    (flyspell-mode 1)))
   `----
 
 
@@ -1876,7 +1874,7 @@ LSP
   `----
 
 
-[alpha] <https://github.com/emacs-lsp/dap-mode>
+[alpha] https://github.com/emacs-lsp/dap-mode
 
 
 JVM
@@ -1966,8 +1964,7 @@ Scripting langs
   `----
 
 
-  [microsofts lsp]
-  <https://github.com/microsoft/language-server-protocol>
+  [microsofts lsp] https://github.com/microsoft/language-server-protocol
 
 
 * rakudo
@@ -2270,7 +2267,7 @@ Rant on keybindings
 
 
 [this]
-<https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/>
+https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 
 
 Global
@@ -2299,7 +2296,6 @@ Emacs State
   |  "C-r" 'revert-buffer
   |  "C-x t" 'my/eshell-toggle
   |  "C-x C-t" 'my/vterm-toggle
-  |  "C-s" 'helm-swoop
   |  "M-s" 'helm-multi-swoop-projectile
   |  "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
   |  "C-o" 'my/smart-open-line
@@ -2322,8 +2318,7 @@ Emacs State
   `----
 
 
-[This is nice if I forget keybinds]
-<http://www.elmindreda.org/emacs.html>
+[This is nice if I forget keybinds] http://www.elmindreda.org/emacs.html
 
 
 Normal/Visual State

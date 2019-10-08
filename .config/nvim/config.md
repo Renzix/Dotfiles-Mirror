@@ -34,12 +34,22 @@
         Plug 'jceb/vim-orgmode'
         Plug 'SirVer/ultisnips'
         Plug 'honza/vim-snippets'
+        Plug 'skywind3000/asyncrun.vim'
+        Plug 'embear/vim-localvimrc'
     call plug#end()
 ```
 
 ## Plugin Configuration 
 
     Now that we have our plugins lets set our options for each plugin
+
+### AsyncRun
+
+    We should allow AsyncRun to auto open a window
+
+```vim
+    let g:asyncrun_open = 20
+```
 
 ### netrw
 
@@ -113,7 +123,13 @@
 ```
 
 # General Options
-    
+
+    Vim leader and localleader
+
+```vim
+    let mapleader=" "
+```
+
     Some better defaults to make vim more usable.
 
 ```vim
@@ -189,13 +205,18 @@
 # Keybindings
 
     Here are my keybindings
+    @TODO(Renzix): I need to find a keybind for s
 
 ```vim
-    " Simple keybinds
-    nnoremap S :cd %:p:h<CR>:Files<CR>
+    " Really useful keybinds that deserve a whole key
+    nnoremap S  :Files<CR>
     nnoremap \| :Buffers<CR>
-    nnoremap \ :Ag<CR>
-    nnoremap ; :Commands<CR>
+    nnoremap \  :Ag<CR>
+    nnoremap ;  :Commands<CR>
+    " Other Keybinds which are very useful
+    nnoremap <leader>`  :call asyncrun#quickfix_toggle(20)<CR>
+    let g:compile_command = "make" " gets overriden by .lvimrc
+    nnoremap <expr> <leader>c ":AsyncRun " . g:compile_command . "\<CR>"
 ```
 
 

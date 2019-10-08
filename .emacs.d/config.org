@@ -1451,21 +1451,19 @@ when necessary.
      #+BEGIN_SRC emacs-lisp
        (setq rcirc-default-nick "Renzix"
              rcirc-server-alist
-             '(("irc.freenode.net" :channels ("#emacs"))
-               ("localhost" :channels ("#home")))
-             rcirc-authinfo
-             '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")
-               ("localhost" bitlbee "Renzix" ("Akeyla10!"))))
-       ;; Include date in time stamp.
-       (setq rcirc-time-format "%Y-%m-%d %H:%M ")
-       ;; Keep input line at bottom.                                                                               
-       (add-hook 'rcirc-mode-hook
-                 (lambda ()
-                   (set (make-local-variable 'scroll-conservatively)
-                        8192)))
-       ;; Turn on spell checking.
-       (add-hook 'rcirc-mode-hook (lambda ()
-                                    (flyspell-mode 1)))
+             '(("irc.freenode.net" :channels ("#emacs")))
+               rcirc-authinfo
+               '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")))
+             ;; Include date in time stamp.
+             (setq rcirc-time-format "%Y-%m-%d %H:%M ")
+             ;; Keep input line at bottom.                                                                               
+             (add-hook 'rcirc-mode-hook
+                       (lambda ()
+                         (set (make-local-variable 'scroll-conservatively)
+                              8192)))
+             ;; Turn on spell checking.
+             (add-hook 'rcirc-mode-hook (lambda ()
+                                          (flyspell-mode 1)))
      #+END_SRC
 
 ** OS related stuff
@@ -2026,7 +2024,6 @@ when necessary.
        "C-r" 'revert-buffer
        "C-x t" 'my/eshell-toggle
        "C-x C-t" 'my/vterm-toggle
-       "C-s" 'helm-swoop
        "M-s" 'helm-multi-swoop-projectile
        "M-j" 'delete-blank-lines ;; @TODO(renzix): Make this also join the previous line if no blank lines?
        "C-o" 'my/smart-open-line

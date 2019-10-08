@@ -1,9 +1,45 @@
+#+TITLE: Emacs config
+#+AUTHOR: Daniel DeBruno (Renzix)
+#+EMAIL: eragon9981@gmail.com
+
+#+DESCRIPTION: My org mode config file
+#+LANGUAGE: en
+#+EXPORT_FILE_NAME: ../docs/index.html
+
+# ReadTheOrg stuff
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+#+OPTIONS: num:nil
+
+#+PROPERTY: header-args :results silent
+
+* My DOOM emacs config!!!
+
+Doom is litterally too good of me not to use it. There are alot of things i
+would like to change to add to it tho.
+Now that Im using doom all I have to do is worry about overriding some of the
+defaults I dont like. If you havent already join the DOOM discord cuz its dope.
+
+** Preferences
+*** Nice Variables
+
+Default to emacs keybinds and keep evil installed so i can learn raw emacs.
+#+NAME: evil
+#+BEGIN_SRC emacs-lisp
 (after! evil
   (setq evil-default-state 'emacs)
   (evil-set-initial-state 'term-mode   'emacs)
   (evil-set-initial-state 'org-mode    'emacs)
   (evil-set-initial-state 'eshell-mode 'emacs))
+#+END_SRC
 
+*** Visual
+**** Themes
+
+Themes r cool so lets do a different one for each day
+
+#+NAME: Theme
+#+BEGIN_SRC emacs-lisp
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
   (cond ((string= "0" renzix-weekday) ;; Sunday
@@ -20,7 +56,14 @@
          (load-theme 'monokai t))
         ((string= "6" renzix-weekday) ;; Saturday
          (load-theme 'doom-one t))))
+#+END_SRC
 
+**** Cursor
+
+I like changing the cursor color based on the current mode i am in.
+
+#+NAME: evil-cursor
+#+BEGIN_SRC emacs-lisp
 (setq evil-insert-state-cursor   '(bar "#FF00FF")
       evil-normal-state-cursor   '(box "#6666F6")
       evil-motion-state-cursor   '(hollow "#87D7FF")
@@ -31,16 +74,44 @@
       evil-emacs-state-cursor    '(hbar "#43DE43"))
 (setq-default cursor-type 'hbar)
 (set-cursor-color "#43DE43")
+#+END_SRC
 
+**** Highlighting
+
+Highlight the current line
+
+#+NAME: highlight-line
+#+BEGIN_SRC emacs-lisp
 (global-hl-line-mode)
+#+END_SRC
 
+The highlight color isnt that bright so lets fix that.
+
+#+NAME: highlight-color
+#+BEGIN_SRC emacs-lisp
 (set-face-attribute 'region nil :background "#07B") ;; blue
+#+END_SRC
 
+**** Relative line Numbers
+
+relative line numbers r lit
+
+#+NAME: line-numbers
+#+BEGIN_SRC emacs-lisp
 (global-display-line-numbers-mode)
 (setq-default display-line-numbers-type 'relative
               display-line-numbers-current-absolute t
               display-line-numbers-width 3
               display-line-numbers-widen t)
+#+END_SRC
+
+*** Nice Functions
+**** File Handling
+
+Why isnt this already a function...
+
+#+NAME: rename-file-and-buffer
+#+BEGIN_SRC emacs-lisp
 
 (defun my/rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
@@ -60,7 +131,15 @@
           (set-buffer-modified-p nil)
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
+#+END_SRC
 
+This is the same problem as the function above. Emacs does not
+close the buffer you have open if you delete the file so you might
+accidently save it. Better to just call this function if the buffer
+is open.
+
+#+NAME: delete-file-and-buffer
+#+BEGIN_SRC emacs-lisp
 (defun my/delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
@@ -72,34 +151,73 @@
           (delete-file filename)
           (message "Deleted file %s" filename)
           (kill-buffer))))))
+#+END_SRC
 
+
+Reads a string directly from a file then returns it as a string
+
+#+NAME: get-string-from-file
+#+BEGIN_SRC emacs-lisp
 (defun my/get-string-from-file (filePath)
   "Return filePath's file content."
   (with-temp-buffer
     (insert-file-contents filePath)
     (buffer-string)))
+#+END_SRC
 
+**** Projects
+
+This first sees if it is in a projectile project. If it isnt then
+it will ask for one then run =projectile-find-file=. If it is then
+it will just run =projectile-find-file=. Just a better default.
+
+#+NAME: helm-projectile-find-file-or-project
+#+BEGIN_SRC emacs-lisp
 (defun my/helm-projectile-find-file-or-project ()
   "Does switch project if not in a project and 'find-file' if in one."
   (interactive)
   (if (projectile-project-p)
       (helm-projectile-find-file)
     (helm-projectile-switch-project)))
+#+END_SRC
 
+This one runs =helm-projectile-find-file= if in a project but
+normal =helm-find-file= if not inside a project.
+
+#+NAME: helm-projectile-find-file-or-find-file
+#+BEGIN_SRC emacs-lisp
 (defun my/helm-projectile-find-file-or-find-file ()
   "Does switch project if not in a project and 'find-file' if in one."
   (interactive)
   (if (projectile-project-p)
       (helm-projectile-find-file)
     (helm-find-files nil)))
+#+END_SRC
 
+This first sees if it is in a projectile project. If it isnt then
+it will ask for one then both of them run =helm-projectile-ag= or
+=helm-projectile-rg= depending on if you are in windows or
+something else. I made this fix because helm-projectile-rg didnt
+work on windows but maybe i should try again later (rg does work
+on windows just not the emacs plugin).
+
+#+NAME: helm-projectile-search-or-project
+#+BEGIN_SRC emacs-lisp
 (defun my/helm-projectile-search-or-project ()
   "Does switch project if not in a project and search all files in said project."
   (interactive)
   (if (projectile-project-p)
       (helm-projectile-ag)
     (helm-projectile-switch-project)))
+#+END_SRC
 
+**** Redefined Functions
+
+This is C-a redefined to go to first nonwhitespace then if pressed
+again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]] and from [[https://github.com/bbatsov/crux][crux]].
+
+#+NAME: move-beginning-of-line
+#+BEGIN_SRC emacs-lisp
 (defun my/move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
@@ -122,7 +240,15 @@
     (move-beginning-of-line 1)
     (when (= orig-point (point))
       (back-to-indentation))))
+#+END_SRC
 
+This is a function close to evil o and O which is pretty useful in
+alot of scenerios. I have 0 idea why this isnt in emacs already. This
+was also mainly stolen from [[https://emacsredux.com/blog/2013/03/26/smarter-open-line/][this]] and [[https://emacsredux.com/blog/2013/06/15/open-line-above/][this]] which was based off of [[https://github.com/bbatsov/crux][crux]] emacs
+extension.
+
+#+NAME: smart-open-line
+#+BEGIN_SRC emacs-lisp
 (defun my/smart-open-line (arg)
   "Insert an empty line after the current line.
       Position the cursor at its beginning, according to the current mode."
@@ -136,7 +262,14 @@
     (progn
       (move-end-of-line nil)
       (newline-and-indent))))
+#+END_SRC
 
+**** Other Functions
+
+I like indentation so lets indent smartly.
+
+#+NAME: smart-indent
+#+BEGIN_SRC emacs-lisp
 (defun my/smart-indent ()
   "If a region is selected indent that.
 If given ARG indent the current line.
@@ -153,13 +286,37 @@ Else indent the entire buffer."
       (progn
         (indent-region (point-min) (point-max))
         (message "Identing buffer")))))
+#+END_SRC
 
+** Packages
+*** Helm
+
+Helm is dope. I want to make it look better as I dont like the "minimal" look
+that doom gives it. Thats only really good for ivy...
+
+#+NAME: helm
+#+BEGIN_SRC emacs-lisp
 (after! helm
   (setq helm-mode-line-string t))
+#+END_SRC
 
+*** whole-line-or-region
+
+Allows me to delete lines easily like dd with C-w
+
+#+NAME: whole-line-or-region
+#+BEGIN_SRC emacs-lisp
 (after! whole-line-or-region
   (whole-line-or-region-global-mode t))
+#+END_SRC
 
+** Keybindings
+*** Global Emacs
+
+Emacs bindings arent half bad.
+
+#+NAME: emacs-keybinds
+#+BEGIN_SRC emacs-lisp
 (map!
  :e "C-x C-k" #'kill-this-buffer
  :e "C-x t"   #'my/eshell-toggle
@@ -178,7 +335,14 @@ Else indent the entire buffer."
    :e "C-\"" #'helm-mini
    :e "M-'"  #'my/helm-projectile-find-file-or-project
    :e "M-\"" #'my/helm-projectile-search-or-project))
+#+END_SRC
 
+*** Global Evil
+
+Evil keybinds are really cool and interesting because I can rebind 1 click keys.
+
+#+NAME: evil-keybinds
+#+BEGIN_SRC emacs-lisp
 (map!
  :nv "g p" 'projectile-command-map
  :nv "g =" 'my/smart-indent
@@ -197,8 +361,16 @@ Else indent the entire buffer."
 (evil-ex-define-cmd "cfg" 'doom/open-private-config)
 (evil-ex-define-cmd "q[uit]" 'delete-window)
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
+#+END_SRC
 
+*** Helm
+
+I actually enjoy the helm defaults so we should use that.
+
+#+NAME: helm-keybinds
+#+BEGIN_SRC emacs-lisp
 (map! (:map helm-map
         "C-i"   #'helm-select-action
         "C-j"   #'helm-execute-persistent-action
         "<tab>" #'helm-select-action ))
+#+END_SRC

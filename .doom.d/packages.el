@@ -4,3 +4,6 @@
 ;; Code
 
 (package! elcord)
+(package! apropospriate-theme)
+(package! monokai-theme)
+(package! whole-line-or-region)
