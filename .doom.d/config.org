@@ -350,38 +350,31 @@ Else indent the entire buffer."
 #+END_SRC
 
 ** Packages
+*** Org
+
+I need to set plantuml path soo lets do that
+
+#+NAME: plantuml-path
+#+BEGIN_SRC emacs-lisp
+(setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+#+END_SRC
+
 *** IRC
 
 Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
-:pass. Note that TLS 1.1 is not working in emacs without that setq
+:pass. Note that for some weird reason this doesnt work on my gentoo install
 
 
 #+NAME: irc
 #+BEGIN_SRC emacs-lisp
-(setq tls-end-of-info
-      (concat
-       "\\("
-       ;; `openssl s_client' regexp.  See ssl/ssl_txt.c lines 219-220.
-       ;; According to apps/s_client.c line 1515 `---' is always the last
-       ;; line that is printed by s_client before the real data.
-       "^    Verify return code: .+\n\\(\\|^    Extended master secret: .+\n\\)---\n\\|"
-       ;; `gnutls' regexp. See src/cli.c lines 721-.
-       "^- Simple Client Mode:\n"
-       "\\(\n\\|"                           ; ignore blank lines
-       ;; According to GnuTLS v2.1.5 src/cli.c lines 640-650 and 705-715
-       ;; in `main' the handshake will start after this message.  If the
-       ;; handshake fails, the programs will abort.
-       "^\\*\\*\\* Starting TLS handshake\n\\)*"
-       "\\)"))
-
 (set-irc-server! "chat.freenode.net"
                  `(
-                        :tls t
-                        :port 6697
-                        :nick "Renzix"
-                        :sasl-username ,(+pass-get-user "irc/freenode.net")
-                        :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
-                        :channels ("#emacs" "#kisslinux")))
+                   :tls t
+                   :port 6697
+                   :nick "Renzix"
+                   :sasl-username ,(+pass-get-user "irc/freenode.net")
+                   :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
+                   :channels ("#emacs" "#kisslinux")))
 #+END_SRC
 
 *** Helm
