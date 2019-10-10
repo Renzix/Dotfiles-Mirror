@@ -180,6 +180,7 @@ Else indent the entire buffer."
  :e "C-x C-t" #'+vterm/here
  :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
+ :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
  :e "C-="     #'my/smart-indent
  :e "C-o"     #'my/smart-open-line
