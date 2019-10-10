@@ -228,7 +228,7 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+    awful.key({ modkey,           }, "?",      hotkeys_popup.show_help,
         {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
         {description = "view previous", group = "tag"}),
@@ -326,8 +326,10 @@ globalkeys = gears.table.join(
         {description = "select previous", group = "layout"}),
 
     -- Other useful keybinds
-    awful.key({ modkey,           }, "c", function () awful.spawn("xclip -o -selection primary | mc | xclip -selection primary") end,
-        {description = "Mixed case of primary selection", group = "clipboard"}),
+    awful.key({ modkey,           }, "s",     function () awful.spawn.with_shell("maim -s | curl -F 'f:1=<-' ix.io | sed 's/$/\.png/' | xclip -selection clipboard") end,
+        {description = "Take a picture", group = "clipboard"}),
+    awful.key({ modkey, "Shift"   }, "s", function () awful.spawn.with_shell("giph -s -t 5 | curl -F 'f:1=<-' ix.io | sed 's/$/\.gif/' | xclip -selection clipboard") end,
+        {description = "Take a 10 second gif", group = "clipboard"}),
 
     awful.key({ modkey, "Control" }, "n",
         function ()
