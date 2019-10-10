@@ -169,63 +169,6 @@ Reads a string directly from a file then returns it as a string
     (buffer-string)))
 #+END_SRC
 
-**** Open Buffer
-
-I like using eshell and vterm but dealing with emacs buffers is
-actually insane. I made a coupld simple functions to switch to a
-vterm/eshell window and then be able to switch back. This makes
-them fullscreen which is hella nice. This is the variable that
-stores the perspective.
-
-#+NAME: my:window-conf
-#+BEGIN_SRC emacs-lisp
-(defvar my/window-conf nil)
-#+END_SRC
-
-Here is the eshell toggle function which uses said variable to
-switch if not already in a eshell buffer fullscreen.
-
-#+NAME: eshell-toggle
-#+BEGIN_SRC emacs-lisp
-(defun my/eshell-toggle (buf-name)
-  "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
-  (interactive (list (buffer-name)))
-  (if (string-equal buf-name "*eshell*")
-      (set-window-configuration my/window-conf)
-    (progn
-      (setq my/window-conf (current-window-configuration))
-      (delete-other-windows)
-      (eshell))))
-#+END_SRC
-
-This is for the next funciton. vterm doesnt automatically switch
-if called and open so i need a helper function.
-
-#+NAME: switch-to-vterm
-#+BEGIN_SRC emacs-lisp
-(defun my/switch-to-vterm ()
-  "Switch to vterm."
-  (if (get-buffer "vterm")
-      (switch-to-buffer "vterm")
-    (vterm)))
-#+END_SRC
-
-Function to switch to a fullscreen terminal and back again without
-losing your current layout.
-
-#+NAME: vterm-toggle
-#+BEGIN_SRC emacs-lisp
-(defun my/vterm-toggle (buf-name)
-  "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
-  (interactive (list (buffer-name)))
-  (if (string-equal buf-name "vterm")
-      (set-window-configuration my:window-conf)
-    (progn
-      (setq my:window-conf (current-window-configuration))
-      (delete-other-windows)
-      (my/switch-to-vterm))))
-#+END_SRC
-
 **** Projects
 
 This first sees if it is in a projectile project. If it isnt then
@@ -398,6 +341,15 @@ Allows me to delete lines easily like dd with C-w
   (whole-line-or-region-global-mode t))
 #+END_SRC
 
+*** elcord
+
+Discord rich presence.
+
+#+NAME: elcord
+#+BEGIN_SRC emacs-lisp
+(after! elcord
+  (elcord-mode t))
+#+END_SRC
 ** Keybindings
 *** Global Emacs
 
@@ -407,8 +359,8 @@ Emacs bindings arent half bad.
 #+BEGIN_SRC emacs-lisp
 (map!
  :e "C-x C-k" #'kill-this-buffer
- :e "C-x t"   #'my/eshell-toggle
- :e "C-x C-t" #'my/vterm-toggle
+ :e "C-x t"   #'+eshell/here
+ :e "C-x C-t" #'+vterm/here
  :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-j"     #'avy-goto-char-2
@@ -417,13 +369,14 @@ Emacs bindings arent half bad.
  :e "C-w"     #'whole-line-or-region-kill-region
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
-   :e "C-;"     #'helm-M-x ;; I dont know if i shoud have this or not
-   :e "C-:"     #'evil-ex
-   :e "M-p"  #'projectile-command-map
-   :e "C-'"  #'helm-find-files
-   :e "C-\"" #'helm-mini
-   :e "M-'"  #'my/helm-projectile-find-file-or-project
-   :e "M-\"" #'my/helm-projectile-search-or-project))
+   :e "C-;"   #'helm-M-x ;; I dont know if i shoud have this or not
+   :e "M-x"   (lambda! (message "use C-; dumbass")) ;; if i bind C-;...
+   :e "C-:"   #'evil-ex
+   :e "M-p"   #'projectile-command-map
+   :e "C-'"   #'helm-find-files
+   :e "C-\""  #'helm-mini
+   :e "M-'"   #'my/helm-projectile-find-file-or-project
+   :e "M-\""  #'my/helm-projectile-search-or-project))
 #+END_SRC
 
 *** Global Evil
@@ -433,18 +386,18 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
 #+NAME: evil-keybinds
 #+BEGIN_SRC emacs-lisp
 (map!
- :nv "g p" 'projectile-command-map
- :nv "g =" 'my/smart-indent
- :nv "``" 'magit-status
- :nv ";;" 'eval-expression
+ :nv "g p"   #'projectile-command-map
+ :nv "g ="   #'my/smart-indent
+ :nv "``"    #'magit-status
+ :nv ";;"    #'eval-expression
  (:map override
-   :nv ";"  'helm-M-x
-   :nv "|"  'helm-mini
-   :nv "s"  'helm-find-files
-   :nv "S"  'my/helm-projectile-find-file-or-project
-   :nv "U"  'undo-tree-visualize
-   :nv "Q"  'save-buffers-kill-terminal
-   :nv "\\" 'my/helm-projectile-search-or-project))
+   :nv ";"   #'helm-M-x
+   :nv "|"   #'helm-mini
+   :nv "s"   #'helm-find-files
+   :nv "S"   #'my/helm-projectile-find-file-or-project
+   :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
+   :nv "Q"   #'save-buffers-kill-terminal
+   :nv "\\"  #'my/helm-projectile-search-or-project))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" 'doom/open-private-config)

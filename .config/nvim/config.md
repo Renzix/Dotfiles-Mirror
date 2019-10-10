@@ -4,7 +4,7 @@
 
 ## Plugins Installation
 
-    First we can bootstrap Plug then we install the plugins. I use alot of plugins cuz im used to emacs
+    First we can bootstrap Plug then we install the plugins. I use alot of plugins cuz im used to emacs  
 
 ```vim
     if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -149,26 +149,21 @@
     set undofile
 ```
 
-    Ctags is cool and I should probably learn how to use them
+    Highlight trailing whitespace and tabs in red. Tabs are also utf8 bullets also lines over 80
 
 ```vim
-    command! MakeTags !ctags -R .
-```
-
-    Highlight trailing whitespace and tabs in red. Tabs are also utf8 bullets
-
-```vim
+    " lines of 80 r red
+    mat ErrorMsg /\%80v./  
+    mat ErrorMsg /\%100v.\+/
     " Highlight trailing whitespace
-    highlight TrailingWhitespace ctermbg=red guibg=red
-    match TrailingWhitespace /\s\+$/
+    mat ErrorMsg /\s\+$/
     " Do the same for tabs
-    highlight TrailingWhitespace ctermbg=red guibg=red
     exec "set listchars=tab:\uBB\uBB"
     set list
-    match TrailingWhitespace /\t/
+    match ErrorMsg /\t/
 ```
 
-    Use spaces instead of tabs
+    Use spaces instead of tabs  
 
 ```vim
     " Spaces instead of tabs
@@ -187,7 +182,7 @@
     Reload the config on save @TODO(Renzix): Fix this so it points to ~/Dotfiles/.config/nvim/config.md
 
 ```vim
-    autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+    autocmd! bufwritepost $HOME/Dotfiles/.config/nvim/config.md source $MYVIMRC
 ```
 
 # Commands
@@ -198,8 +193,8 @@
     " Edit config
     command! Cfg :e~/Dotfiles/.config/nvim/config.md
     " Save as sudo
-    command W w !sudo tee % >/dev/null
-    command R Rooter
+    cmap w!! w !sudo tee > /dev/null %
+    command! R Rooter
 ```
 
 # Keybindings
@@ -209,6 +204,7 @@
 
 ```vim
     " Really useful keybinds that deserve a whole key
+    nnoremap Q  :q<CR>
     nnoremap S  :Files<CR>
     nnoremap \| :Buffers<CR>
     nnoremap \  :Ag<CR>

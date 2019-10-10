@@ -79,34 +79,6 @@
     (insert-file-contents filePath)
     (buffer-string)))
 
-(defvar my/window-conf nil)
-
-(defun my/eshell-toggle (buf-name)
-  "Switch to eshell and save persp.  BUF-NAME is the current buffer name."
-  (interactive (list (buffer-name)))
-  (if (string-equal buf-name "*eshell*")
-      (set-window-configuration my/window-conf)
-    (progn
-      (setq my/window-conf (current-window-configuration))
-      (delete-other-windows)
-      (eshell))))
-
-(defun my/switch-to-vterm ()
-  "Switch to vterm."
-  (if (get-buffer "vterm")
-      (switch-to-buffer "vterm")
-    (vterm)))
-
-(defun my/vterm-toggle (buf-name)
-  "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
-  (interactive (list (buffer-name)))
-  (if (string-equal buf-name "vterm")
-      (set-window-configuration my:window-conf)
-    (progn
-      (setq my:window-conf (current-window-configuration))
-      (delete-other-windows)
-      (my/switch-to-vterm))))
-
 (defun my/helm-projectile-find-file-or-project ()
   "Does switch project if not in a project and 'find-file' if in one."
   (interactive)
@@ -199,10 +171,13 @@ Else indent the entire buffer."
 (after! whole-line-or-region
   (whole-line-or-region-global-mode t))
 
+(after! elcord
+  (elcord-mode t))
+
 (map!
  :e "C-x C-k" #'kill-this-buffer
- :e "C-x t"   #'my/eshell-toggle
- :e "C-x C-t" #'my/vterm-toggle
+ :e "C-x t"   #'+eshell/here
+ :e "C-x C-t" #'+vterm/here
  :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-j"     #'avy-goto-char-2
@@ -211,27 +186,28 @@ Else indent the entire buffer."
  :e "C-w"     #'whole-line-or-region-kill-region
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
-   :e "C-;"     #'helm-M-x ;; I dont know if i shoud have this or not
-   :e "C-:"     #'evil-ex
-   :e "M-p"  #'projectile-command-map
-   :e "C-'"  #'helm-find-files
-   :e "C-\"" #'helm-mini
-   :e "M-'"  #'my/helm-projectile-find-file-or-project
-   :e "M-\"" #'my/helm-projectile-search-or-project))
+   :e "C-;"   #'helm-M-x ;; I dont know if i shoud have this or not
+   :e "M-x"   (lambda! (message "use C-; dumbass")) ;; if i bind C-;...
+   :e "C-:"   #'evil-ex
+   :e "M-p"   #'projectile-command-map
+   :e "C-'"   #'helm-find-files
+   :e "C-\""  #'helm-mini
+   :e "M-'"   #'my/helm-projectile-find-file-or-project
+   :e "M-\""  #'my/helm-projectile-search-or-project))
 
 (map!
- :nv "g p" 'projectile-command-map
- :nv "g =" 'my/smart-indent
- :nv "``" 'magit-status
- :nv ";;" 'eval-expression
+ :nv "g p"   #'projectile-command-map
+ :nv "g ="   #'my/smart-indent
+ :nv "``"    #'magit-status
+ :nv ";;"    #'eval-expression
  (:map override
-   :nv ";"  'helm-M-x
-   :nv "|"  'helm-mini
-   :nv "s"  'helm-find-files
-   :nv "S"  'my/helm-projectile-find-file-or-project
-   :nv "U"  'undo-tree-visualize
-   :nv "Q"  'save-buffers-kill-terminal
-   :nv "\\" 'my/helm-projectile-search-or-project))
+   :nv ";"   #'helm-M-x
+   :nv "|"   #'helm-mini
+   :nv "s"   #'helm-find-files
+   :nv "S"   #'my/helm-projectile-find-file-or-project
+   :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
+   :nv "Q"   #'save-buffers-kill-terminal
+   :nv "\\"  #'my/helm-projectile-search-or-project))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" 'doom/open-private-config)
