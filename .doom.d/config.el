@@ -1,8 +1,8 @@
 (after! evil
-  (setq evil-default-state 'emacs)
-  (evil-set-initial-state 'term-mode   'emacs)
-  (evil-set-initial-state 'org-mode    'emacs)
-  (evil-set-initial-state 'eshell-mode 'emacs))
+  ;;(setq evil-default-state 'emacs)
+  (set-evil-initial-state! 'term-mode   'emacs)
+  (set-evil-initial-state! 'org-mode    'emacs)
+  (set-evil-initial-state! 'eshell-mode 'emacs))
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -194,7 +194,7 @@ Else indent the entire buffer."
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
    :e "M-'"   #'my/helm-projectile-find-file-or-project
-   :e "M-\""  #'my/helm-projectile-search-or-project))
+   :e "M-\""  #'helm-projectile-ag))
 
 (map!
  :nv "g p"   #'projectile-command-map
@@ -208,10 +208,12 @@ Else indent the entire buffer."
    :nv "S"   #'my/helm-projectile-find-file-or-project
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
    :nv "Q"   #'save-buffers-kill-terminal
-   :nv "\\"  #'my/helm-projectile-search-or-project))
+   :nv "\\"  #'helm-projectile-ag))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
-(evil-ex-define-cmd "cfg" 'doom/open-private-config)
+(evil-ex-define-cmd "cfg" (lambda! (progn (find-file "~/Dotfiles/.doom.d/config.org")) (evil-normal-state)))
+(evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
+(evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 

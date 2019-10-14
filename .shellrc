@@ -9,6 +9,7 @@ info() {
     [ -z "$DEBUG" ] ||
         printf "[%s]:$1\n" "$(date +'%D %T')";
     }
+export PATH="$PATH:/home/genzix/.cargo/bin/"
 
 if hash "exa" 2>/dev/null ; then
     info "Exa found"

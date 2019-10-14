@@ -27,14 +27,17 @@ config is apart of my Dotfiles which is on a self host [[https://git.renzix.com/
 ** Preferences
 *** Nice Variables
 
-Default to emacs keybinds and keep evil installed so i can learn raw emacs.
+Default to emacs keybinds and keep evil installed so i can learn raw emacs. I
+think I have used enough raw emacs bindings so I am going to switch back and do
+it for certain modes ie org and terms.
+
 #+NAME: evil
 #+BEGIN_SRC emacs-lisp
 (after! evil
-  (setq evil-default-state 'emacs)
-  (evil-set-initial-state 'term-mode   'emacs)
-  (evil-set-initial-state 'org-mode    'emacs)
-  (evil-set-initial-state 'eshell-mode 'emacs))
+  ;;(setq evil-default-state 'emacs)
+  (set-evil-initial-state! 'term-mode   'emacs)
+  (set-evil-initial-state! 'org-mode    'emacs)
+  (set-evil-initial-state! 'eshell-mode 'emacs))
 #+END_SRC
 
 *** Visual
@@ -203,7 +206,7 @@ it will ask for one then both of them run =helm-projectile-ag= or
 =helm-projectile-rg= depending on if you are in windows or
 something else. I made this fix because helm-projectile-rg didnt
 work on windows but maybe i should try again later (rg does work
-on windows just not the emacs plugin).
+on windows just not the emacs plugin). @TODO(Renzix): This is broken i should fix
 
 #+NAME: helm-projectile-search-or-project
 #+BEGIN_SRC emacs-lisp
@@ -377,7 +380,7 @@ Emacs bindings arent half bad.
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
    :e "M-'"   #'my/helm-projectile-find-file-or-project
-   :e "M-\""  #'my/helm-projectile-search-or-project))
+   :e "M-\""  #'helm-projectile-ag))
 #+END_SRC
 
 *** Global Evil
@@ -398,10 +401,12 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
    :nv "S"   #'my/helm-projectile-find-file-or-project
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
    :nv "Q"   #'save-buffers-kill-terminal
-   :nv "\\"  #'my/helm-projectile-search-or-project))
+   :nv "\\"  #'helm-projectile-ag))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
-(evil-ex-define-cmd "cfg" 'doom/open-private-config)
+(evil-ex-define-cmd "cfg" (lambda! (progn (find-file "~/Dotfiles/.doom.d/config.org")) (evil-normal-state)))
+(evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
+(evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 #+END_SRC

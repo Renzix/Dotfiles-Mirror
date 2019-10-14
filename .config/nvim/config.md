@@ -15,11 +15,6 @@
     
     call plug#begin('~/.local/share/nvim/plugged')
         Plug 'tpope/vim-vividchalk'
-        Plug 'drewtempelmeyer/palenight.vim'
-        Plug 'dracula/vim', { 'as': 'dracula' }
-        Plug 'crusoexia/vim-monokai'
-        Plug 'arcticicestudio/nord-vim'  
-        Plug 'rakr/vim-one'
         Plug 'dense-analysis/ale'
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'airblade/vim-gitgutter'
@@ -28,7 +23,7 @@
         Plug 'tpope/vim-markdown'
         Plug 'plasticboy/vim-markdown'
         Plug 'sheerun/vim-polyglot'
-        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
+        Plug 'junegunn/fzf'
         Plug 'tpope/vim-commentary'
         Plug 'vim-airline/vim-airline'
         Plug 'jceb/vim-orgmode'
@@ -66,24 +61,8 @@
     The colorscheme changes per day.
 
 ```vim
-    let dayofweek = system("date +%w")
-    if dayofweek==0
-        color dracula
-    elseif dayofweek==1
-        set background=dark 
-        color palenight
-    elseif dayofweek==2
-        color vividchalk
-    elseif dayofweek==3
-        color monokai
-    elseif dayofweek==4
-        color nord
-    elseif dayofweek==5
-        color monokai
-    elseif dayofweek==6
-        color one
-        set backgroud=dark
-    endif
+    let dayofweek =  2 " system("date +%w")
+    color vividchalk
 ```
 
 ### Autocompletion
@@ -104,8 +83,8 @@
 
 ### Markdowns
 
-    Markdown doesnt do syntax highlighting by default so we need a plugin for that
-    Make it so folding is disabled in markdown
+    Markdown doesnt do syntax highlighting by default so we need a plugin for
+    that Make it so folding is disabled in markdown
 
 ```vim
     let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'viml']
@@ -136,32 +115,61 @@
     set path+=**
 ```
 
-    Relative Line Numbers are dope and the current line being at 0 is useless so we make that one absolute. Also the line that nvim is currently on being highlighted makes it easier to tell which one you are on.
+    Relative Line Numbers are dope and the current line being at 0 is useless so
+    we make that one absolute. Also the line that nvim is currently on being 
+    highlighted makes it easier to tell which one you are on.
 
 ```vim
     set number relativenumber
     set nu rnu
+    set termguicolors
+    set mouse=a
+    set emoji
+```
+
+    Different color cursor for insert mode!!!
+
+```vim
+    " Enable CursorLine
     set cursorline
+
+    " Default Colors for CursorLine
+    highlight  CursorLine ctermbg=Yellow ctermfg=None
+
+    " Change Color when entering Insert Mode
+    autocmd InsertEnter * highlight  CursorLine ctermbg=Green ctermfg=Red
+
+    " Revert Color to default when leaving Insert Mode
+    autocmd InsertLeave * highlight  CursorLine ctermbg=Yellow ctermfg=None
 ```
 
     Undo's should percist after closing vim so we can add that option
+
 ```vim
     set undofile
+```
+
+    Search thingies!!! defaults to smartcase cuz thats just better and it should
+    show us what changes ex commands will make.
+
+```vim
+    set smartcase ignorecase
+    set inccommand=nosplit
 ```
 
     Highlight trailing whitespace and tabs in red. Tabs are also utf8 bullets also lines over 80
 
 ```vim
-    " lines of 80 r red
-    mat ErrorMsg /\%80v./  
-    mat ErrorMsg /\%100v.\+/
-    " Highlight trailing whitespace
-    mat ErrorMsg /\s\+$/
     " Do the same for tabs
     exec "set listchars=tab:\uBB\uBB"
     set list
     match ErrorMsg /\t/
+    " Highlight trailing whitespace
+    highlight ColorColumn ctermbg=darkred
+    call matchadd('ColorColumn', '\%81v', 100) " Lines at 81 are red
+    call matchadd('ColorColumn', '\%100v.\+', 120) " Lines past 120 are red
 ```
+
 
     Use spaces instead of tabs  
 
