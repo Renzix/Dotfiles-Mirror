@@ -1,8 +1,10 @@
+(setq confirm-kill-emacs nil)
 (after! evil
   ;;(setq evil-default-state 'emacs)
-  (set-evil-initial-state! 'term-mode   'emacs)
-  (set-evil-initial-state! 'org-mode    'emacs)
-  (set-evil-initial-state! 'eshell-mode 'emacs))
+  (set-evil-initial-state! 'term-mode    'emacs)
+  (set-evil-initial-state! 'vterm-mode   'emacs)
+  (set-evil-initial-state! 'org-mode     'emacs)
+  (set-evil-initial-state! 'eshell-mode  'emacs))
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -23,14 +25,13 @@
 
 (setq evil-insert-state-cursor   '(bar "#FF00FF")
       evil-normal-state-cursor   '(box "#6666F6")
-      evil-motion-state-cursor   '(hollow "#87D7FF")
-      evil-replace-state-cursor  '(hollow "#BF2222")
-      evil-operator-state-cursor '(box "#F5F5DC")
+      evil-motion-state-cursor   '(hollow "#FFF500")
+      evil-replace-state-cursor  '(hbar "#BF2222")
+      evil-operator-state-cursor '(box "#FFA500")
       evil-visual-state-cursor   '(hollow "#FFFFFF")
-      evil-god-state-cursor      '(box "#FFFF00")
-      evil-emacs-state-cursor    '(hbar "#43DE43"))
-(setq-default cursor-type 'hbar)
-(set-cursor-color "#43DE43")
+      evil-emacs-state-cursor    '(box "#90EE90"))
+(setq-default cursor-type 'bar)
+(blink-cursor-mode 1)
 
 (global-hl-line-mode)
 
@@ -175,20 +176,24 @@ Else indent the entire buffer."
   (elcord-mode t))
 
 (map!
+ :nve "C-x t"   #'+eshell/here
+ :nve "C-x C-t" #'+vterm/here
+ (:map override
+   :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
+
+(map!
  :e "C-x C-k" #'kill-this-buffer
- :e "C-x t"   #'+eshell/here
- :e "C-x C-t" #'+vterm/here
  :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
+ :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
  :e "C-o"     #'my/smart-open-line
  :e "C-w"     #'whole-line-or-region-kill-region
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
    :e "C-;"   #'helm-M-x ;; I dont know if i shoud have this or not
-   :e "M-x"   (lambda! (message "use C-; dumbass")) ;; if i bind C-;...
    :e "C-:"   #'evil-ex
    :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
@@ -221,3 +226,17 @@ Else indent the entire buffer."
         "C-i"   #'helm-select-action
         "C-j"   #'helm-execute-persistent-action
         "<tab>" #'helm-select-action ))
+
+(map! :map org-mode-map
+      "TAB" #'org/toggle-fold)
+
+(map! :map vterm-mode-map
+      :e "C-a" #'vterm--self-insert
+      :e "C-e" #'vterm--self-insert
+      :e "C-r" #'vterm--self-insert
+      :e "C-s" #'vterm--self-insert
+      :e "C-u" #'vterm--self-insert
+      :e "C-x u" #'vterm--self-insert
+      :e "C-/" #'vterm--self-insert
+      :e "C-y" #'vterm--self-insert
+      :e "M-y" #'vterm--self-insert)

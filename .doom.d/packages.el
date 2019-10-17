@@ -8,3 +8,4 @@
 (package! monokai-theme)
 (package! whole-line-or-region)
 (package! command-log-mode)
+(package! expand-region)

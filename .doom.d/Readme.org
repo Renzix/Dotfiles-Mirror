@@ -1,0 +1,18 @@
+#+TITLE: Goals
+
+With doom i want to make my "Perfect" configuration. Managing emacs by myself is
+actually nuts and there is no reason I cant have "Better defaults". I will keep
+my own config in case doom ever dies or I ever want to switch back. Ideally
+workflow wise I want to be able to use emacs and evil based keybindings. From
+what I have found emacs keybindings are better if I am going to be less
+formatting and coding.
+* [14%] Decent at Emacs
+** [0%] Calc
+*** [ ] Learn what to learn
+** [20%] Org
+*** [X] Literate Config
+*** [ ] Links
+*** [ ] Calendar
+*** [ ] TODO's
+*** [ ] Tables
+** [ ] Learn Kill Buffer

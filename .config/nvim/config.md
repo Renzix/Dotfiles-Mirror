@@ -23,7 +23,7 @@
         Plug 'tpope/vim-markdown'
         Plug 'plasticboy/vim-markdown'
         Plug 'sheerun/vim-polyglot'
-        Plug 'junegunn/fzf'
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         Plug 'tpope/vim-commentary'
         Plug 'vim-airline/vim-airline'
         Plug 'jceb/vim-orgmode'
@@ -181,7 +181,8 @@
     set shiftwidth=4 " size of a ident in spaces
 ```
 
-    Give a little bit of breathing room for the cursor on the bottom. Makes a 3 line "padding" from the bottom.
+    Give a little bit of breathing room for the cursor on the bottom. Makes a 3 line "padding"
+    from the bottom.
 
 ```vim
     set so=3
@@ -208,12 +209,13 @@
 # Keybindings
 
     Here are my keybindings
-    @TODO(Renzix): I need to find a keybind for s
+    @TODO(Renzix): fzf is broken i think???
 
 ```vim
     " Really useful keybinds that deserve a whole key
     nnoremap Q  :q<CR>
-    nnoremap S  :Files<CR>
+    nnoremap S  :Rooter<CR>:Files<CR>
+    nnoremap s  :Files<CR>
     nnoremap \| :Buffers<CR>
     nnoremap \  :Ag<CR>
     nnoremap ;  :Commands<CR>
