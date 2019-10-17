@@ -100,6 +100,16 @@ The highlight color isnt that bright so lets fix that.
 (set-face-attribute 'region nil :background "#07B") ;; blue
 #+END_SRC
 
+Highlights trailing whitespace, spaces before tabs, and characters over line 81
+
+#+NAME: highlight lines over 120
+#+BEGIN_SRC emacs-lisp
+(setq whitespace-style '(trailing lines-tail space-before-tab
+                                  indentation space-after-tab)
+      whitespace-line-column 81)
+(add-hook! prog-mode-hook #'whitespace-mode)
+#+END_SRC
+
 **** Relative line Numbers
 
 relative line numbers r lit

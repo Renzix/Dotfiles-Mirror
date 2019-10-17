@@ -37,6 +37,11 @@
 
 (set-face-attribute 'region nil :background "#07B") ;; blue
 
+(setq whitespace-style '(trailing lines-tail space-before-tab
+                                  indentation space-after-tab)
+      whitespace-line-column 81)
+(add-hook! prog-mode-hook #'whitespace-mode)
+
 (global-display-line-numbers-mode)
 (setq-default display-line-numbers-type 'relative
               display-line-numbers-current-absolute t
