@@ -211,8 +211,6 @@ Else indent the entire buffer."
 (map!
  :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
- :nv "``"    #'magit-status
- :nv ";;"    #'eval-expression
  (:map override
    :nv ";"   #'helm-M-x
    :nv "|"   #'helm-mini
