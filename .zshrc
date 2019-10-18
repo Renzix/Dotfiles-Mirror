@@ -16,7 +16,6 @@ compinit
 # Syntax highlighting
 source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-
 autoload -U colors && colors
 setopt PROMPT_SUBST
 export PROMPT='%(?.$fg[cyan].$fg[yellow])%1d%#%{$reset_color%} '

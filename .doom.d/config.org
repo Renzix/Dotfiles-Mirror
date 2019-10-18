@@ -34,12 +34,13 @@ it for certain modes ie org and terms.
 #+NAME: evil
 #+BEGIN_SRC emacs-lisp
 (setq confirm-kill-emacs nil)
-(after! evil
-  ;;(setq evil-default-state 'emacs)
-  (set-evil-initial-state! 'term-mode    'emacs)
-  (set-evil-initial-state! 'vterm-mode   'emacs)
-  (set-evil-initial-state! 'org-mode     'emacs)
-  (set-evil-initial-state! 'eshell-mode  'emacs))
+(set-evil-initial-state! 'term-mode    'emacs)
+(after! calc
+  (set-evil-initial-state! 'calc-mode    'emacs))
+(after! vterm
+  (set-evil-initial-state! 'vterm-mode   'emacs))
+(set-evil-initial-state! 'org-mode     'emacs)
+(set-evil-initial-state! 'eshell-mode  'emacs)
 #+END_SRC
 
 *** Visual
@@ -100,14 +101,16 @@ The highlight color isnt that bright so lets fix that.
 (set-face-attribute 'region nil :background "#07B") ;; blue
 #+END_SRC
 
-Highlights trailing whitespace, spaces before tabs, and characters over line 81
+Highlights trailing whitespace, spaces before tabs, and characters over
+line 100. Also highlight characters AT 80
 
-#+NAME: highlight lines over 120
+#+NAME: highlight-whitespace
 #+BEGIN_SRC emacs-lisp
 (setq whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
 (add-hook! prog-mode-hook #'whitespace-mode)
+(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2")))
 #+END_SRC
 
 **** Relative line Numbers

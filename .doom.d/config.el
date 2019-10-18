@@ -1,10 +1,11 @@
 (setq confirm-kill-emacs nil)
-(after! evil
-  ;;(setq evil-default-state 'emacs)
-  (set-evil-initial-state! 'term-mode    'emacs)
-  (set-evil-initial-state! 'vterm-mode   'emacs)
-  (set-evil-initial-state! 'org-mode     'emacs)
-  (set-evil-initial-state! 'eshell-mode  'emacs))
+(set-evil-initial-state! 'term-mode    'emacs)
+(after! calc
+  (set-evil-initial-state! 'calc-mode    'emacs))
+(after! vterm
+  (set-evil-initial-state! 'vterm-mode   'emacs))
+(set-evil-initial-state! 'org-mode     'emacs)
+(set-evil-initial-state! 'eshell-mode  'emacs)
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -41,6 +42,7 @@
                                   indentation space-after-tab)
       whitespace-line-column 81)
 (add-hook! prog-mode-hook #'whitespace-mode)
+(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2")))
 
 (global-display-line-numbers-mode)
 (setq-default display-line-numbers-type 'relative
