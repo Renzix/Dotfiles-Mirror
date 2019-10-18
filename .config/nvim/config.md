@@ -208,21 +208,28 @@
 
 # Keybindings
 
-    Here are my keybindings
-    @TODO(Renzix): fzf is broken i think???
+    Here are my keybindings. These ones are "better defaults
 
 ```vim
     " Really useful keybinds that deserve a whole key
-    nnoremap Q  :q<CR>
+    nnoremap Q  @q<CR>
+    vnoremap Q  :norm @q<CR>
     nnoremap S  :Rooter<CR>:Files<CR>
     nnoremap s  :Files<CR>
     nnoremap \| :Buffers<CR>
     nnoremap \  :Ag<CR>
     nnoremap ;  :Commands<CR>
+    nnoremap g=  magg=G`a
+```
+
+    Leader based keybinds
+
+```vim
     " Other Keybinds which are very useful
     nnoremap <leader>`  :call asyncrun#quickfix_toggle(20)<CR>
     let g:compile_command = "make" " gets overriden by .lvimrc
     nnoremap <expr> <leader>c ":AsyncRun " . g:compile_command . "\<CR>"
+    let g:run_command = "make run" " gets overriden by .lvimrc
+    nnoremap <expr> <leader>r ":AsyncRun " . g:run_command . "\<CR>"
+    set pastetoggle=<leader>z
 ```
-
-
