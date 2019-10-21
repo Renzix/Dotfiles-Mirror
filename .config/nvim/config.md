@@ -1,3 +1,5 @@
+@TODO(Renzix): Convert this into all vimscript and use folds instead of markdown
+
 # Plugins
 
     First we can install Plug and some plugins directly from github
@@ -5,6 +7,7 @@
 ## Plugins Installation
 
     First we can bootstrap Plug then we install the plugins. I use alot of plugins cuz im used to emacs  
+
 
 ```vim
     if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -23,14 +26,15 @@
         Plug 'tpope/vim-markdown'
         Plug 'plasticboy/vim-markdown'
         Plug 'sheerun/vim-polyglot'
-        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+        Plug 'junegunn/fzf.vim'
         Plug 'tpope/vim-commentary'
-        Plug 'vim-airline/vim-airline'
         Plug 'jceb/vim-orgmode'
         Plug 'SirVer/ultisnips'
         Plug 'honza/vim-snippets'
         Plug 'skywind3000/asyncrun.vim'
         Plug 'embear/vim-localvimrc'
+        Plug 'chrisbra/SudoEdit.vim'
     call plug#end()
 ```
 
@@ -61,7 +65,6 @@
     The colorscheme changes per day.
 
 ```vim
-    let dayofweek =  2 " system("date +%w")
     color vividchalk
 ```
 
@@ -157,7 +160,8 @@
     set inccommand=nosplit
 ```
 
-    Highlight trailing whitespace and tabs in red. Tabs are also utf8 bullets also lines over 80
+    Highlight trailing whitespace and tabs in red. Tabs are also utf8 bullets 
+    also lines over 80
 
 ```vim
     " Do the same for tabs
@@ -181,14 +185,15 @@
     set shiftwidth=4 " size of a ident in spaces
 ```
 
-    Give a little bit of breathing room for the cursor on the bottom. Makes a 3 line "padding"
-    from the bottom.
+    Give a little bit of breathing room for the cursor on the bottom. Makes a 3
+    line "padding" from the bottom.
 
 ```vim
     set so=3
 ```
 
-    Reload the config on save @TODO(Renzix): Fix this so it points to ~/Dotfiles/.config/nvim/config.md
+    Reload the config on save @TODO(Renzix): Fix this so it doesnt move cursor 
+    back to the top of the file
 
 ```vim
     autocmd! bufwritepost $HOME/Dotfiles/.config/nvim/config.md source $MYVIMRC
@@ -199,11 +204,20 @@
     Here are my EX commands
 
 ```vim
+    function! PromptPass()
+        let curline = getline('.')
+        call inputsave()
+        let name = input('Enter password: ')
+        call inputrestore()
+        call setline('.', curline . ' ' . name)
+    endfunction
+
     " Edit config
     command! Cfg :e~/Dotfiles/.config/nvim/config.md
-    " Save as sudo
-    cmap w!! w !sudo tee > /dev/null %
+    " Save as sudo @TODO(Renzix): Fix this
+    command! W SudoWrite
     command! R Rooter
+    command! H lcd %:p:h
 ```
 
 # Keybindings
@@ -215,21 +229,22 @@
     nnoremap Q  @q<CR>
     vnoremap Q  :norm @q<CR>
     nnoremap S  :Rooter<CR>:Files<CR>
-    nnoremap s  :Files<CR>
+    nnoremap s  :lcd %:p:h<CR>:Files<CR>
     nnoremap \| :Buffers<CR>
     nnoremap \  :Ag<CR>
     nnoremap ;  :Commands<CR>
     nnoremap g=  magg=G`a
 ```
 
-    Leader based keybinds
+    localleader based keybinds which are all based on variables possibly
+    defined in a .lvimrc
 
 ```vim
     " Other Keybinds which are very useful
-    nnoremap <leader>`  :call asyncrun#quickfix_toggle(20)<CR>
+    nnoremap <localleader>`  :call asyncrun#quickfix_toggle(20)<CR>
     let g:compile_command = "make" " gets overriden by .lvimrc
-    nnoremap <expr> <leader>c ":AsyncRun " . g:compile_command . "\<CR>"
+    nnoremap <expr> <localleader>c ":AsyncRun " . g:compile_command . "\<CR>"
     let g:run_command = "make run" " gets overriden by .lvimrc
-    nnoremap <expr> <leader>r ":AsyncRun " . g:run_command . "\<CR>"
+    nnoremap <expr> <localleader>r ":AsyncRun " . g:run_command . "\<CR>"
     set pastetoggle=<leader>z
 ```

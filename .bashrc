@@ -11,3 +11,5 @@ pwdp() {
     export PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
 }
 pwdp
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

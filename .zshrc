@@ -20,4 +20,6 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
-export PROMPT='%(?.$fg[cyan].$fg[yellow])%1d%#%{$reset_color%} '
+export PROMPT='%(?.$fg[cyan].$fg[yellow])%1~%#%{$reset_color%} '
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
