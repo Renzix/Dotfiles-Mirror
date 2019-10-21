@@ -13,7 +13,6 @@
 
 #+PROPERTY: header-args :results silent
 
-* My DOOM emacs config!!!
 
 Doom is litterally too good of me not to use it. There are alot of things i
 would like to change to add to it tho.
@@ -24,8 +23,8 @@ defaults I dont like. If you havent already join the DOOM discord cuz its dope.
 My old config can be found in my Dotfiles under =.emacs.d/config.org=. This
 config is apart of my Dotfiles which is on a self host [[https://git.renzix.com/Renzix/Dotfiles/][gitea]], [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and [[https://github.com/Renzix/Dotfiles-Mirror][github]].
 
-** Preferences
-*** Nice Variables
+* Preferences
+** Nice Variables
 
 Default to emacs keybinds and keep evil installed so i can learn raw emacs. I
 think I have used enough raw emacs bindings so I am going to switch back and do
@@ -43,8 +42,8 @@ it for certain modes ie org and terms.
 (set-evil-initial-state! 'eshell-mode  'emacs)
 #+END_SRC
 
-*** Visual
-**** Themes
+** Visual
+*** Themes
 
 Themes r cool so lets do a different one for each day
 
@@ -68,7 +67,7 @@ Themes r cool so lets do a different one for each day
          (load-theme 'doom-one t))))
 #+END_SRC
 
-**** Cursor
+*** Cursor
 
 I like changing the cursor color based on the current mode i am in.
 
@@ -85,7 +84,7 @@ I like changing the cursor color based on the current mode i am in.
 (blink-cursor-mode 1)
 #+END_SRC
 
-**** Highlighting
+*** Highlighting
 
 Highlight the current line
 
@@ -114,7 +113,7 @@ line 100. Also highlight characters AT 80
 ;;(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2"))) ;; @TODO(Renzix): Make this work as expected
 #+END_SRC
 
-**** Relative line Numbers
+*** Relative line Numbers
 
 relative line numbers r lit
 
@@ -127,8 +126,8 @@ relative line numbers r lit
               display-line-numbers-widen t)
 #+END_SRC
 
-*** Nice Functions
-**** File Handling
+** Nice Functions
+*** File Handling
 
 Why isnt this already a function...
 
@@ -187,7 +186,7 @@ Reads a string directly from a file then returns it as a string
     (buffer-string)))
 #+END_SRC
 
-**** Projects
+*** Projects
 
 This first sees if it is in a projectile project. If it isnt then
 it will ask for one then run =projectile-find-file=. If it is then
@@ -233,7 +232,7 @@ on windows just not the emacs plugin). @TODO(Renzix): This is broken i should fi
     (helm-projectile-switch-project)))
 #+END_SRC
 
-**** Redefined Functions
+*** Redefined Functions
 
 This is C-a redefined to go to first nonwhitespace then if pressed
 again go to actual start of line. Stolen from [[https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][here]] and from [[https://github.com/bbatsov/crux][crux]].
@@ -286,7 +285,7 @@ extension.
       (newline-and-indent))))
 #+END_SRC
 
-**** Other Functions
+*** Other Functions
 
 I like indentation so lets indent smartly.
 
@@ -310,8 +309,8 @@ Else indent the entire buffer."
         (message "Identing buffer")))))
 #+END_SRC
 
-** Packages
-*** Org
+* Packages
+** Org
 
 I need to set plantuml path soo lets do that
 
@@ -320,7 +319,7 @@ I need to set plantuml path soo lets do that
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 #+END_SRC
 
-*** IRC
+** IRC
 
 Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
 :pass. Note that for some weird reason this doesnt work on my gentoo install
@@ -338,7 +337,7 @@ Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
                    :channels ("#emacs" "#kisslinux")))
 #+END_SRC
 
-*** Helm
+** Helm
 
 Helm is dope. I want to make it look better as I dont like the "minimal" look
 that doom gives it. Thats only really good for ivy...
@@ -349,7 +348,7 @@ that doom gives it. Thats only really good for ivy...
   (setq helm-mode-line-string t))
 #+END_SRC
 
-*** whole-line-or-region
+** whole-line-or-region
 
 Allows me to delete lines easily like dd with C-w
 
@@ -359,7 +358,7 @@ Allows me to delete lines easily like dd with C-w
   (whole-line-or-region-global-mode t))
 #+END_SRC
 
-*** elcord
+** elcord
 
 Discord rich presence.
 
@@ -368,8 +367,9 @@ Discord rich presence.
 (after! elcord
   (elcord-mode t))
 #+END_SRC
-** Keybindings
-*** Global
+
+* Keybindings
+** Global
 
 Some global binds for everything
 
@@ -382,7 +382,7 @@ Some global binds for everything
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 #+END_SRC
 
-*** Global Emacs
+** Global Emacs
 
 Emacs bindings arent half bad. Note that DOOM's alt key is M-SPC
 
@@ -409,7 +409,7 @@ Emacs bindings arent half bad. Note that DOOM's alt key is M-SPC
    :e "M-\""  #'helm-projectile-ag))
 #+END_SRC
 
-*** Global Evil
+** Global Evil
 
 Evil keybinds are really cool and interesting because I can rebind 1 click keys.
 
@@ -435,7 +435,7 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 #+END_SRC
 
-*** Helm
+** Helm
 
 I actually enjoy the helm defaults so we should use that.
 
@@ -447,7 +447,7 @@ I actually enjoy the helm defaults so we should use that.
         "<tab>" #'helm-select-action ))
 #+END_SRC
 
-*** Org
+** Org
 
 Org folding is broken in doom because it uses +fold/toggle instead of
 +org/toggle-fold.
@@ -457,7 +457,8 @@ Org folding is broken in doom because it uses +fold/toggle instead of
 (map! :map org-mode-map
       "TAB" #'org/toggle-fold)
 #+END_SRC
-*** vterm
+
+** vterm
 
 vterm should use mostly vterm-self-insert binds
 
