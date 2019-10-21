@@ -38,11 +38,12 @@
 
 (set-face-attribute 'region nil :background "#07B") ;; blue
 
+;; @TODO(Renzix): Make this work in all themes?
 (setq whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
-(add-hook! prog-mode-hook #'whitespace-mode)
-(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2")))
+(global-whitespace-mode)
+;;(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2"))) ;; @TODO(Renzix): Make this work as expected
 
 (global-display-line-numbers-mode)
 (setq-default display-line-numbers-type 'relative

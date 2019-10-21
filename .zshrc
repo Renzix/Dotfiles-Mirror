@@ -13,10 +13,11 @@ zstyle :compinstall filename '/home/archzix/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+# @TODO(Renzix): Make this change based on distro or highlight install
 # Syntax highlighting
-source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
 export PROMPT='%(?.$fg[cyan].$fg[yellow])%1d%#%{$reset_color%} '
-export RPROMPT="%F{yellow}%?%f"

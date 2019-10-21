@@ -106,11 +106,12 @@ line 100. Also highlight characters AT 80
 
 #+NAME: highlight-whitespace
 #+BEGIN_SRC emacs-lisp
+;; @TODO(Renzix): Make this work in all themes?
 (setq whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
-(add-hook! prog-mode-hook #'whitespace-mode)
-(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2")))
+(global-whitespace-mode)
+;;(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2"))) ;; @TODO(Renzix): Make this work as expected
 #+END_SRC
 
 **** Relative line Numbers

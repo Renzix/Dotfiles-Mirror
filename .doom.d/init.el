@@ -178,7 +178,54 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(safe-local-variable-values '((projectile-project-run-cmd . "./build.sh"))))
+ '(ansi-color-names-vector
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(compilation-message-face 'default)
+ '(custom-safe-themes
+   '("0d087b2853473609d9efd2e9fbeac088e89f36718c4a4c89c568dd1b628eae41" "071f5702a5445970105be9456a48423a87b8b9cfa4b1f76d15699b29123fb7d8" "a2286409934b11f2f3b7d89b1eaebb965fd63bc1e0be1c159c02e396afb893c8" "837f2d1e6038d05f29bbcc0dc39dbbc51e5c9a079e8ecd3b6ef09fc0b149ceb1" "e7666261f46e2f4f42fd1f9aa1875bdb81d17cc7a121533cad3e0d724f12faf2" "f2b83b9388b1a57f6286153130ee704243870d40ae9ec931d0a1798a5a916e76" default))
+ '(fci-rule-color "#555556")
+ '(highlight-changes-colors '("#FD5FF0" "#AE81FF"))
+ '(highlight-tail-colors
+   '(("#3C3D37" . 0)
+     ("#679A01" . 20)
+     ("#4BBEAE" . 30)
+     ("#1DB4D0" . 50)
+     ("#9A8F21" . 60)
+     ("#A75B00" . 70)
+     ("#F309DF" . 85)
+     ("#3C3D37" . 100)))
+ '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#fabd2f"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#8ec07c"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#555556"))
+ '(magit-diff-use-overlays nil)
+ '(objed-cursor-color "#fb4934")
+ '(pos-tip-background-color "#FFFACE")
+ '(pos-tip-foreground-color "#272822")
+ '(safe-local-variable-values '((projectile-project-run-cmd . "./build.sh")))
+ '(vc-annotate-background "#282828")
+ '(vc-annotate-color-map
+   (list
+    (cons 20 "#8ec07c")
+    (cons 40 "#b2bf62")
+    (cons 60 "#d5be48")
+    (cons 80 "#fabd2f")
+    (cons 100 "#fba827")
+    (cons 120 "#fc9420")
+    (cons 140 "#fe8019")
+    (cons 160 "#fd6237")
+    (cons 180 "#fb4555")
+    (cons 200 "#fb2874")
+    (cons 220 "#fb335e")
+    (cons 240 "#fa3e49")
+    (cons 260 "#fb4934")
+    (cons 280 "#d14c3c")
+    (cons 300 "#a84f45")
+    (cons 320 "#7e514d")
+    (cons 340 "#555556")
+    (cons 360 "#555556")))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   '(unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
