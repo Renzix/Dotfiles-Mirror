@@ -9,32 +9,30 @@ info() {
     [ -z "$DEBUG" ] ||
         printf "[%s]:$1\n" "$(date +'%D %T')";
     }
-export PATH="$PATH:/home/genzix/.cargo/bin/"
+export PATH="$PATH:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin"
+export GOPATH="$HOME/.go"
 
-if hash "exa" 2>/dev/null ; then
-    info "Exa found"
-    alias ls="exa"
-    alias la="exa -a"
-    alias ll='exa -lhF --color=always --group-directories-first --time-style=full-iso'
-else
-    info "Exa not found"
-    alias l="ls --color=auto -h"
-    alias la="ls -ah"
-    alias ll='ls -lh'
-fi
-
-if hash "nvim" 2>/dev/null ; then
-    info "Neovim found"
-    alias v="neovim"
-else
-    if hash "vim" 2>/dev/null ; then
-        info "Vim found"
-        alias v="vim"
+isAvail() {
+    COMMAND=$2
+    NAME=$1
+    shift; shift;
+    if hash "${COMMAND}" 2>/dev/null; then
+        info "${COMMAND} found making ${NAME} point to ${COMMAND} $@"
+        alias ${NAME}="${COMMAND} $@"
     else
-        info "using vi"
-        alias v="vi"
+        return 1
     fi
-fi
+}
+
+isAvail ls exa
+isAvail la exa -a
+isAvail ll exa -lhF --color=always --group-directories-first --time-style=full-iso
+isAvail cat bat
+isAvail find fd
+isAvail e nvim
+isAvail v nvim
+isAvail vi nvim
+isAvail vim nvim
 
 # Some nice keybindings and aliases
 
