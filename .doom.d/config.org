@@ -186,52 +186,6 @@ Reads a string directly from a file then returns it as a string
     (buffer-string)))
 #+END_SRC
 
-*** Projects
-
-This first sees if it is in a projectile project. If it isnt then
-it will ask for one then run =projectile-find-file=. If it is then
-it will just run =projectile-find-file=. Just a better default.
-
-#+NAME: helm-projectile-find-file-or-project
-#+BEGIN_SRC emacs-lisp
-(defun my/helm-projectile-find-file-or-project ()
-  "Does switch project if not in a project and 'find-file' if in one."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-find-file)
-    (helm-projectile-switch-project)))
-#+END_SRC
-
-This one runs =helm-projectile-find-file= if in a project but
-normal =helm-find-file= if not inside a project.
-
-#+NAME: helm-projectile-find-file-or-find-file
-#+BEGIN_SRC emacs-lisp
-(defun my/helm-projectile-find-file-or-find-file ()
-  "Does switch project if not in a project and 'find-file' if in one."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-find-file)
-    (helm-find-files nil)))
-#+END_SRC
-
-This first sees if it is in a projectile project. If it isnt then
-it will ask for one then both of them run =helm-projectile-ag= or
-=helm-projectile-rg= depending on if you are in windows or
-something else. I made this fix because helm-projectile-rg didnt
-work on windows but maybe i should try again later (rg does work
-on windows just not the emacs plugin). @TODO(Renzix): This is broken i should fix
-
-#+NAME: helm-projectile-search-or-project
-#+BEGIN_SRC emacs-lisp
-(defun my/helm-projectile-search-or-project ()
-  "Does switch project if not in a project and search all files in said project."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-ag)
-    (helm-projectile-switch-project)))
-#+END_SRC
-
 *** Redefined Functions
 
 This is C-a redefined to go to first nonwhitespace then if pressed

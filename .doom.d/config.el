@@ -88,27 +88,6 @@
     (insert-file-contents filePath)
     (buffer-string)))
 
-(defun my/helm-projectile-find-file-or-project ()
-  "Does switch project if not in a project and 'find-file' if in one."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-find-file)
-    (helm-projectile-switch-project)))
-
-(defun my/helm-projectile-find-file-or-find-file ()
-  "Does switch project if not in a project and 'find-file' if in one."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-find-file)
-    (helm-find-files nil)))
-
-(defun my/helm-projectile-search-or-project ()
-  "Does switch project if not in a project and search all files in said project."
-  (interactive)
-  (if (projectile-project-p)
-      (helm-projectile-ag)
-    (helm-projectile-switch-project)))
-
 (defun my/move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
