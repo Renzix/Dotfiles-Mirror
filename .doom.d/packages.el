@@ -9,3 +9,4 @@
 (package! whole-line-or-region)
 (package! command-log-mode)
 (package! expand-region)
+(package! company-tabnine)

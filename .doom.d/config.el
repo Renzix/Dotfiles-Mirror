@@ -142,6 +142,15 @@ Else indent the entire buffer."
         (indent-region (point-min) (point-max))
         (message "Identing buffer")))))
 
+(after! org
+(setq +pretty-code-symbols
+      (org-combine-plists +pretty-code-symbols
+                   '(:pi "π"
+                     :tau "τ")))
+(set-pretty-symbols! 'perl6-mode
+  :pi "pi"
+  :tau "tau"))
+
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
 (set-irc-server! "chat.freenode.net"
@@ -153,6 +162,9 @@ Else indent the entire buffer."
                    :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
                    :channels ("#emacs" "#kisslinux")))
 
+(after! company-mode
+  (add-to-list 'company-backends #'company-tabnine))
+
 (after! helm
   (setq helm-mode-line-string t))
 
@@ -162,6 +174,8 @@ Else indent the entire buffer."
 (after! elcord
   (elcord-mode t))
 
+(setq doom-leader-alt-key "C-c"
+      doom-localleader-alt-key "C-c l")
 (map!
  :nve "C-x t"   #'+eshell/here
  :nve "C-x C-t" #'+vterm/here
@@ -189,6 +203,7 @@ Else indent the entire buffer."
    :e "M-\""  #'helm-projectile-ag))
 
 (map!
+ :nv "Q"     (lambda! (evil-record-macro ?q))
  :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
  (:map override
@@ -197,7 +212,6 @@ Else indent the entire buffer."
    :nv "s"   #'helm-find-files
    :nv "S"   #'my/helm-projectile-find-file-or-project
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "Q"   #'save-buffers-kill-terminal
    :nv "\\"  #'helm-projectile-ag))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
@@ -217,6 +231,10 @@ Else indent the entire buffer."
 
 (map! :map vterm-mode-map
       :e "C-a" #'vterm--self-insert
+      :e "C-h" #'vterm--self-insert
+      :e "C-j" #'vterm--self-insert
+      :e "C-k" #'vterm--self-insert
+      :e "C-l" #'vterm--self-insert
       :e "C-e" #'vterm--self-insert
       :e "C-r" #'vterm--self-insert
       :e "C-s" #'vterm--self-insert

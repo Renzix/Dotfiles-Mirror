@@ -264,6 +264,22 @@ Else indent the entire buffer."
 #+END_SRC
 
 * Packages
+** Pretty Symbols
+
+Here are some of my pretty symbols. alot are gonna be for perl6
+
+#+NAME: pretty-symbols
+#+BEGIN_SRC emacs-lisp
+(after! org
+(setq +pretty-code-symbols
+      (org-combine-plists +pretty-code-symbols
+                   '(:pi "π"
+                     :tau "τ")))
+(set-pretty-symbols! 'perl6-mode
+  :pi "pi"
+  :tau "tau"))
+#+END_SRC
+
 ** Org
 
 I need to set plantuml path soo lets do that
@@ -289,6 +305,16 @@ Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
                    :sasl-username ,(+pass-get-user "irc/freenode.net")
                    :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
                    :channels ("#emacs" "#kisslinux")))
+#+END_SRC
+
+** Company
+
+Trying out company-tabnine for autocompletions via deep learning and github
+
+#+NAME: company-tabnine
+#+BEGIN_SRC emacs-lisp
+(after! company-mode
+  (add-to-list 'company-backends #'company-tabnine))
 #+END_SRC
 
 ** Helm
@@ -325,10 +351,13 @@ Discord rich presence.
 * Keybindings
 ** Global
 
-Some global binds for everything
+Some global binds for everything. Note that alt leader and alt localleader are
+in insert state and emacs state only
 
 #+NAME: keybinds
 #+BEGIN_SRC emacs-lisp
+(setq doom-leader-alt-key "C-c"
+      doom-localleader-alt-key "C-c l")
 (map!
  :nve "C-x t"   #'+eshell/here
  :nve "C-x C-t" #'+vterm/here
@@ -370,6 +399,7 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
 #+NAME: evil-keybinds
 #+BEGIN_SRC emacs-lisp
 (map!
+ :nv "Q"     (lambda! (evil-record-macro ?q))
  :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
  (:map override
@@ -378,7 +408,6 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
    :nv "s"   #'helm-find-files
    :nv "S"   #'my/helm-projectile-find-file-or-project
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "Q"   #'save-buffers-kill-terminal
    :nv "\\"  #'helm-projectile-ag))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
@@ -420,6 +449,10 @@ vterm should use mostly vterm-self-insert binds
 #+BEGIN_SRC emacs-lisp
 (map! :map vterm-mode-map
       :e "C-a" #'vterm--self-insert
+      :e "C-h" #'vterm--self-insert
+      :e "C-j" #'vterm--self-insert
+      :e "C-k" #'vterm--self-insert
+      :e "C-l" #'vterm--self-insert
       :e "C-e" #'vterm--self-insert
       :e "C-r" #'vterm--self-insert
       :e "C-s" #'vterm--self-insert
