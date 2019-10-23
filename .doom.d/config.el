@@ -4,8 +4,9 @@
   (set-evil-initial-state! 'calc-mode    'emacs))
 (after! vterm
   (set-evil-initial-state! 'vterm-mode   'emacs))
-(set-evil-initial-state! 'org-mode     'emacs)
+(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
 (set-evil-initial-state! 'eshell-mode  'emacs)
+(auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -42,7 +43,7 @@
 (setq whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
-(global-whitespace-mode)
+(add-hook! prog-mode-hook #'whitespace-mode)
 ;;(add-hook! prog-mode-hook (lambda () (highlight-regexp ".\{80\}\(.\)" 'hi-aquamarine "\\2"))) ;; @TODO(Renzix): Make this work as expected
 
 (global-display-line-numbers-mode)
@@ -143,13 +144,13 @@ Else indent the entire buffer."
         (message "Identing buffer")))))
 
 (after! org
-(setq +pretty-code-symbols
-      (org-combine-plists +pretty-code-symbols
-                   '(:pi "π"
-                     :tau "τ")))
-(set-pretty-symbols! 'perl6-mode
-  :pi "pi"
-  :tau "tau"))
+  (setq +pretty-code-symbols
+        (org-combine-plists +pretty-code-symbols
+                            '(:pi "π"
+                                  :tau "τ")))
+  (set-pretty-symbols! 'perl6-mode
+    :pi "pi"
+    :tau "tau"))
 
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
@@ -166,7 +167,22 @@ Else indent the entire buffer."
   (add-to-list 'company-backends #'company-tabnine))
 
 (after! helm
-  (setq helm-mode-line-string t))
+  (defvar helm-source-emacs-commands
+    (helm-build-sync-source "Emacs commands"
+      :candidates (lambda ()
+                    (let ((cmds))
+                      (mapatoms
+                       (lambda (elt) (when (commandp elt) (push elt cmds))))
+                      cmds))
+      :coerce #'intern-soft
+      :action #'command-execute)
+    "A simple helm source for Emacs commands.")
+  (setq helm-mode-line-string t)
+  (helm-add-action-to-source "Get Help" (lambda (candidate) (helpful-function candidate)) helm-source-emacs-commands 2))
+(defun my/helm-M-x ()
+  (interactive)
+  "My emacs helm-M-x which also does Get Help so i dont have to C-h f"
+  (helm :sources helm-source-emacs-commands))
 
 (after! whole-line-or-region
   (whole-line-or-region-global-mode t))
@@ -194,7 +210,7 @@ Else indent the entire buffer."
  :e "C-w"     #'whole-line-or-region-kill-region
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
-   :e "C-;"   #'helm-M-x ;; I dont know if i shoud have this or not
+   :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
    :e "C-:"   #'evil-ex
    :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
@@ -207,7 +223,7 @@ Else indent the entire buffer."
  :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
  (:map override
-   :nv ";"   #'helm-M-x
+   :nv ";"   #'my/helm-M-x
    :nv "|"   #'helm-mini
    :nv "s"   #'helm-find-files
    :nv "S"   #'my/helm-projectile-find-file-or-project
