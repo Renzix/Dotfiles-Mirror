@@ -254,16 +254,16 @@ Else indent the entire buffer."
       :e "C-c e" #'org-edit-src-code) ;; @TODO(Renzix): Make this work on C-c '
 
 (map! :map vterm-mode-map
-      :e "C-a" #'vterm--self-insert
-      :e "C-h" #'vterm--self-insert
-      :e "C-j" #'vterm--self-insert
-      :e "C-k" #'vterm--self-insert
-      :e "C-l" #'vterm--self-insert
-      :e "C-e" #'vterm--self-insert
-      :e "C-r" #'vterm--self-insert
-      :e "C-s" #'vterm--self-insert
-      :e "C-u" #'vterm--self-insert
+      :e "C-a"   #'vterm--self-insert
+      :e "C-h"   #'vterm--self-insert
+      :e "C-j"   #'vterm--self-insert
+      :e "C-k"   #'vterm--self-insert
+      :e "C-l"   #'vterm--self-insert
+      :e "C-e"   #'vterm--self-insert
+      :e "C-r"   #'vterm--self-insert
+      :e "C-s"   #'vterm--self-insert
+      :e "C-u"   #'vterm--self-insert
       :e "C-x u" #'vterm--self-insert
-      :e "C-/" #'vterm--self-insert
-      :e "C-y" #'vterm--self-insert
-      :e "M-y" #'vterm--self-insert)
+      :e "C-/"   #'vterm--self-insert
+      :e "C-y"   #'vterm--self-insert
+      :e "M-y"   #'vterm--self-insert)
