@@ -1,7 +1,0 @@
-#!/bin/sh
-sleep 1
-DISPLAY=":0.0"
-HOME=/home/genzix/
-export DISPLAY HOME
-
-setxkbmap -option caps:swapescape
