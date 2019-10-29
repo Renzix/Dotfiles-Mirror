@@ -96,14 +96,17 @@ Highlight the current line
 (global-hl-line-mode)
 #+END_SRC
 
-The highlight color isnt that bright so lets fix that.
+Disable highlighting on marks and show marks globally
 
 #+NAME: highlight-color
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'region nil :background "#07B") ;; blue
+;; (set-face-attribute 'region nil :background "#07B") ;; blue
+(setq show-paren-priority 999)
+(set-face-background 'region nil)
+(global-visible-mark-mode t)
 #+END_SRC
 
-Highlights trailing whitespace, spaces before tabs, and characters over
+Highlights trailing whitespaceb, spaces before tabs, and characters over
 line 100. Also highlight characters AT 80
 
 #+NAME: highlight-whitespace
@@ -283,6 +286,26 @@ Here are some of my pretty symbols. alot are gonna be for perl6
     :tau "tau"))
 #+END_SRC
 
+** lsp
+
+clang defaults to 2 spaces which is stupid and I am having other problems with
+other stuff so I am going to disable it globally.
+
+#+NAME: lsp
+#+BEGIN_SRC emacs-lisp
+(setq lsp-enable-indentation 'nil)
+#+END_SRC
+
+** evil
+
+Default to emacs mode so i can become a god
+
+#+NAME: evil
+#+BEGIN_SRC emacs-lisp
+(after! evil
+  (setq evil-default-state 'emacs))
+#+END_SRC
+
 ** Org
 
 I need to set plantuml path soo lets do that
@@ -296,7 +319,6 @@ I need to set plantuml path soo lets do that
 
 Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
 :pass. Note that for some weird reason this doesnt work on my gentoo install
-
 
 #+NAME: irc
 #+BEGIN_SRC emacs-lisp
@@ -400,7 +422,7 @@ Emacs bindings arent half bad. Note that DOOM's alt key is M-SPC
  :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
  :e "C-o"     #'my/smart-open-line
- :e "C-w"     #'whole-line-or-region-kill-region
+ :e "C-M-u"   #'sp-backward-up-sexp
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
    :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
@@ -408,8 +430,8 @@ Emacs bindings arent half bad. Note that DOOM's alt key is M-SPC
    :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
-   :e "M-'"   #'my/helm-projectile-find-file-or-project
-   :e "M-\""  #'helm-projectile-ag))
+   :e "M-'"   #'+helm/projectile-find-file
+   :e "M-\""  #'+helm/project-search))
 #+END_SRC
 
 ** Global Evil
@@ -426,12 +448,12 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
    :nv ";"   #'my/helm-M-x
    :nv "|"   #'helm-mini
    :nv "s"   #'helm-find-files
-   :nv "S"   #'my/helm-projectile-find-file-or-project
+   :nv "S"   #'+helm/projectile-find-file
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "\\"  #'helm-projectile-ag))
+   :nv "\\"  #'+helm/project-search))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
-(evil-ex-define-cmd "cfg" (lambda! (progn (find-file "~/Dotfiles/.doom.d/config.org")) (evil-normal-state)))
+(evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
@@ -458,7 +480,7 @@ Org folding is broken in doom because it uses +fold/toggle instead of
 #+NAME: org-mode-keybindings
 #+BEGIN_SRC emacs-lisp
 (map! :map org-mode-map
-      "TAB" #'org/toggle-fold)
+      :e "C-c e" #'org-edit-src-code) ;; @TODO(Renzix): Make this work on C-c '
 #+END_SRC
 
 ** vterm

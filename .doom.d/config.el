@@ -37,7 +37,10 @@
 
 (global-hl-line-mode)
 
-(set-face-attribute 'region nil :background "#07B") ;; blue
+;; (set-face-attribute 'region nil :background "#07B") ;; blue
+(setq show-paren-priority 999)
+(set-face-background 'region nil)
+(global-visible-mark-mode t)
 
 ;; @TODO(Renzix): Make this work in all themes?
 (setq whitespace-style '(trailing lines-tail space-before-tab
@@ -152,6 +155,11 @@ Else indent the entire buffer."
     :pi "pi"
     :tau "tau"))
 
+(setq lsp-enable-indentation 'nil)
+
+(after! evil
+  (setq evil-default-state 'emacs))
+
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
 (set-irc-server! "chat.freenode.net"
@@ -207,7 +215,7 @@ Else indent the entire buffer."
  :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
  :e "C-o"     #'my/smart-open-line
- :e "C-w"     #'whole-line-or-region-kill-region
+ :e "C-M-u"   #'sp-backward-up-sexp
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
    :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
@@ -215,8 +223,8 @@ Else indent the entire buffer."
    :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
-   :e "M-'"   #'my/helm-projectile-find-file-or-project
-   :e "M-\""  #'helm-projectile-ag))
+   :e "M-'"   #'+helm/projectile-find-file
+   :e "M-\""  #'+helm/project-search))
 
 (map!
  :nv "Q"     (lambda! (evil-record-macro ?q))
@@ -226,12 +234,12 @@ Else indent the entire buffer."
    :nv ";"   #'my/helm-M-x
    :nv "|"   #'helm-mini
    :nv "s"   #'helm-find-files
-   :nv "S"   #'my/helm-projectile-find-file-or-project
+   :nv "S"   #'+helm/projectile-find-file
    :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "\\"  #'helm-projectile-ag))
+   :nv "\\"  #'+helm/project-search))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
-(evil-ex-define-cmd "cfg" (lambda! (progn (find-file "~/Dotfiles/.doom.d/config.org")) (evil-normal-state)))
+(evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
@@ -243,7 +251,7 @@ Else indent the entire buffer."
         "<tab>" #'helm-select-action ))
 
 (map! :map org-mode-map
-      "TAB" #'org/toggle-fold)
+      :e "C-c e" #'org-edit-src-code) ;; @TODO(Renzix): Make this work on C-c '
 
 (map! :map vterm-mode-map
       :e "C-a" #'vterm--self-insert
