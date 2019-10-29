@@ -35,6 +35,8 @@
         Plug 'skywind3000/asyncrun.vim'
         Plug 'embear/vim-localvimrc'
         Plug 'chrisbra/SudoEdit.vim'
+        Plug 'kana/vim-textobj-user'
+        Plug 'kana/vim-textobj-entire'
     call plug#end()
 ```
 
@@ -47,7 +49,7 @@
     We should allow AsyncRun to auto open a window
 
 ```vim
-    let g:asyncrun_open = 20
+    let g:asyncrun_open = 8
 ```
 
 ### netrw
@@ -110,6 +112,7 @@
 
 ```vim
     let mapleader=" "
+    let maplocalleader=","
 ```
 
     Some better defaults to make vim more usable.
@@ -231,7 +234,7 @@
     nnoremap S  :Rooter<CR>:Files<CR>
     nnoremap s  :lcd %:p:h<CR>:Files<CR>
     nnoremap \| :Buffers<CR>
-    nnoremap \  :Ag<CR>
+    nnoremap \  :Rg<CR>
     nnoremap ;  :Commands<CR>
     nnoremap g=  magg=G`a
 ```
@@ -246,5 +249,4 @@
     nnoremap <expr> <localleader>c ":AsyncRun " . g:compile_command . "\<CR>"
     let g:run_command = "make run" " gets overriden by .lvimrc
     nnoremap <expr> <localleader>r ":AsyncRun " . g:run_command . "\<CR>"
-    set pastetoggle=<leader>z
 ```
