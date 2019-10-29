@@ -7,6 +7,9 @@
 (set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
 (set-evil-initial-state! 'eshell-mode  'emacs)
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
+;; Minibuffers in minibuffers
+(setq enable-recursive-minibuffers t)
+(setq transient-mark-mode nil)
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -212,6 +215,7 @@ Else indent the entire buffer."
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
+ :e "M-y"     #'yank-pop
  :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
  :e "C-o"     #'my/smart-open-line
