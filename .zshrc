@@ -15,8 +15,8 @@ compinit
 # End of lines added by compinstall
 # @TODO(Renzix): Make this change based on distro or highlight install
 # Syntax highlighting
-source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
-# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
+[[ -d /usr/share/zsh/site-contrib/zsh-syntax-highlighting ]] && source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
+[[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
