@@ -9,7 +9,9 @@
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
-(setq transient-mark-mode nil)
+;; Mark stuff
+(setq transient-mark-mode nil
+      set-mark-command-repeat-pop t)
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -149,6 +151,50 @@ Else indent the entire buffer."
         (indent-region (point-min) (point-max))
         (message "Identing buffer")))))
 
+(defun my/select-line (&optional arg allow-extend)
+  "Selects the current line and puts the cursor at the
+start of the line.  A plain C-u puts the cursor at the
+end of the line and any numbers puts the cursor at the
+start and selects multiple lines(positive is down)"
+  (interactive "p\np")
+  (unless arg (setq arg 1))
+  (when (zerop arg)
+    (error "Cannot mark zero lines"))
+  (cond ((and allow-extend
+              (or (and (eq last-command this-command) (mark t))
+                  (and transient-mark-mode mark-active)))
+         (set-mark
+          (save-excursion
+            (goto-char (mark))
+            (forward-line arg)
+            (point))))
+        (t
+         (forward-line arg)
+         (push-mark nil t t)
+         (forward-line (* -1 arg)))))
+
+(defun my/select-word (&optional arg allow-extend)
+  "Selects the current word and puts the cursor at the
+start of the line.  A plain C-u puts the cursor at the
+end of the line and any numbers puts the cursor at the
+start and selects multiple lines(positive is down)"
+  (interactive "p\np")
+  (unless arg (setq arg 1))
+  (when (zerop arg)
+    (error "Cannot mark zero words"))
+  (cond ((and allow-extend
+              (or (and (eq last-command this-command) (mark t))
+                  (and transient-mark-mode mark-active)))
+         (set-mark
+          (save-excursion
+            (goto-char (mark))
+            (forward-word arg)
+            (point))))
+        (t
+         (forward-word arg)
+         (push-mark nil t t)
+         (backward-word arg))))  "Selects the current WORD"
+
 (after! org
   (setq +pretty-code-symbols
         (org-combine-plists +pretty-code-symbols
@@ -164,15 +210,6 @@ Else indent the entire buffer."
   (setq evil-default-state 'emacs))
 
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-
-(set-irc-server! "chat.freenode.net"
-                 `(
-                   :tls t
-                   :port 6697
-                   :nick "Renzix"
-                   :sasl-username ,(+pass-get-user "irc/freenode.net")
-                   :sasl-password (lambda (&rest _) (+pass-get-secret "irc/freenode.net"))
-                   :channels ("#emacs" "#kisslinux")))
 
 (after! company-mode
   (add-to-list 'company-backends #'company-tabnine))
@@ -195,8 +232,17 @@ Else indent the entire buffer."
   "My emacs helm-M-x which also does Get Help so i dont have to C-h f"
   (helm :sources helm-source-emacs-commands))
 
-(after! whole-line-or-region
-  (whole-line-or-region-global-mode t))
+(after! expand-region
+  (setq er/try-expand-list nil)
+  (setq er/try-expand-list
+      (append '(er/mark-method-call
+                er/mark-inside-quotes
+                er/mark-inside-pairs
+                er/mark-comment
+                er/mark-url
+                er/mark-email
+                er/mark-defun)
+              er/try-expand-list)))
 
 (after! elcord
   (elcord-mode t))
@@ -215,6 +261,10 @@ Else indent the entire buffer."
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
+ :e "M-l"     #'my/select-line
+ :e "M-e"     #'my/select-word
+ :e "M-a"     #'er/mark-inside-pairs
+ :e "M-h"     #'mark-defun
  :e "M-y"     #'yank-pop
  :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
@@ -224,7 +274,6 @@ Else indent the entire buffer."
  (:map override
    :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
    :e "C-:"   #'evil-ex
-   :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
    :e "M-'"   #'+helm/projectile-find-file
@@ -232,15 +281,14 @@ Else indent the entire buffer."
 
 (map!
  :nv "Q"     (lambda! (evil-record-macro ?q))
- :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
  (:map override
-   :nv ";"   #'my/helm-M-x
-   :nv "|"   #'helm-mini
-   :nv "s"   #'helm-find-files
-   :nv "S"   #'+helm/projectile-find-file
-   :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "\\"  #'+helm/project-search))
+   :nvm ";"   #'my/helm-M-x
+   :nvm "|"   #'helm-mini
+   :nvm "s"   #'helm-find-files
+   :nvm "S"   #'+helm/projectile-find-file
+   :nv  "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
+   :nvm "\\"  #'+helm/project-search))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))

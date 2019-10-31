@@ -37,7 +37,6 @@ isAvail vim nvim
 # Some nice keybindings and aliases
 
 alias sudo="sudo "
-
 alias e="nvim"
 
 # System Shutdown stuff
@@ -48,8 +47,33 @@ alias sd="sudo shutdown -h now"
 alias gc="git commit"
 alias gp="git push"
 
-#Other
+# Other
 alias ht="htop"
+
+# Helm like fzf
+# @TODO(Renzix): Make this more helmlike and add toggles for input etc, multiple
+# options with tabs and more keybinds. Also make it cancel correctly. Maybe add
+# it into vim.
+
+export FZF_FILES_ALL="false"
+
+alias f=fzf-files
+fzf-files() {
+    mkdir -p /tmp/FZF_FILES
+    SELECT=$( /bin/ls $@ | fzf \
+              --bind "ctrl-h:execute(true > /tmp/FZF_FILES/ALL)+execute(true > /tmp/FZF_FILES/CHANGE)+abort" \
+              --bind "ctrl-s:execute([ -f '/tmp/FZF_FILES/ALL' ] && rm /tmp/FZF_FILES/ALL)+execute(true > /tmp/FZF_FILES/CHANGE)+abort" )
+    ARGS=""
+    [ -f "/tmp/FZF_FILES/ALL" ] && ARGS+="-a"
+    [ -z "$SELECT" ] && [ ! -f "/tmp/FZF_FILES/CHANGE" ] && return 0
+    [ -z "$SELECT" ] && fzf-files $ARGS
+    if [ -d "$SELECT" ]; then
+        cd ${SELECT}
+        fzf-files $ARGS
+    elif [ -f "$SELECT" ]; then
+        $EDITOR ${SELECT}
+    fi
+}
 
 ## im lazy xd ##
 alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
