@@ -45,7 +45,9 @@ things.
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
-(setq transient-mark-mode nil)
+;; Mark stuff
+(setq transient-mark-mode nil
+      set-mark-command-repeat-pop t)
 #+END_SRC
 
 ** Visual
@@ -272,6 +274,56 @@ Else indent the entire buffer."
         (message "Identing buffer")))))
 #+END_SRC
 
+#+NAME: select-line
+#+BEGIN_SRC emacs-lisp
+(defun my/select-line (&optional arg allow-extend)
+  "Selects the current line and puts the cursor at the
+start of the line.  A plain C-u puts the cursor at the
+end of the line and any numbers puts the cursor at the
+start and selects multiple lines(positive is down)"
+  (interactive "p\np")
+  (unless arg (setq arg 1))
+  (when (zerop arg)
+    (error "Cannot mark zero lines"))
+  (cond ((and allow-extend
+              (or (and (eq last-command this-command) (mark t))
+                  (and transient-mark-mode mark-active)))
+         (set-mark
+          (save-excursion
+            (goto-char (mark))
+            (forward-line arg)
+            (point))))
+        (t
+         (forward-line arg)
+         (push-mark nil t t)
+         (forward-line (* -1 arg)))))
+#+END_SRC
+
+#+NAME: select-word
+#+BEGIN_SRC emacs-lisp
+(defun my/select-word (&optional arg allow-extend)
+  "Selects the current word and puts the cursor at the
+start of the line.  A plain C-u puts the cursor at the
+end of the line and any numbers puts the cursor at the
+start and selects multiple lines(positive is down)"
+  (interactive "p\np")
+  (unless arg (setq arg 1))
+  (when (zerop arg)
+    (error "Cannot mark zero words"))
+  (cond ((and allow-extend
+              (or (and (eq last-command this-command) (mark t))
+                  (and transient-mark-mode mark-active)))
+         (set-mark
+          (save-excursion
+            (goto-char (mark))
+            (forward-word arg)
+            (point))))
+        (t
+         (forward-word arg)
+         (push-mark nil t t)
+         (backward-word arg))))  "Selects the current WORD"
+#+END_SRC
+
 * Packages
 ** Pretty Symbols
 
@@ -324,7 +376,7 @@ Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
 :pass. Note that for some weird reason this doesnt work on my gentoo install
 
 #+NAME: irc
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (set-irc-server! "chat.freenode.net"
                  `(
                    :tls t
@@ -373,14 +425,23 @@ helm-M-x which adds a helpful-function action allowing me to get help without
   (helm :sources helm-source-emacs-commands))
 #+END_SRC
 
-** whole-line-or-region
+** expand-region
 
-Allows me to delete lines easily like dd with C-w
+Lets disable expand region word cuz i can just use M-d or other stuff
 
-#+NAME: whole-line-or-region
+#+NAME: expand-region
 #+BEGIN_SRC emacs-lisp
-(after! whole-line-or-region
-  (whole-line-or-region-global-mode t))
+(after! expand-region
+  (setq er/try-expand-list nil)
+  (setq er/try-expand-list
+      (append '(er/mark-method-call
+                er/mark-inside-quotes
+                er/mark-inside-pairs
+                er/mark-comment
+                er/mark-url
+                er/mark-email
+                er/mark-defun)
+              er/try-expand-list)))
 #+END_SRC
 
 ** elcord
@@ -422,6 +483,10 @@ Emacs bindings arent half bad. Note that DOOM's alt key is M-SPC
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
+ :e "M-l"     #'my/select-line
+ :e "M-e"     #'my/select-word
+ :e "M-a"     #'er/mark-inside-pairs
+ :e "M-h"     #'mark-defun
  :e "M-y"     #'yank-pop
  :e "C-\\"    #'er/expand-region
  :e "C-="     #'my/smart-indent
