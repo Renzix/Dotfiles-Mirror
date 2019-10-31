@@ -249,4 +249,6 @@
     nnoremap <expr> <localleader>c ":AsyncRun " . g:compile_command . "\<CR>"
     let g:run_command = "make run" " gets overriden by .lvimrc
     nnoremap <expr> <localleader>r ":AsyncRun " . g:run_command . "\<CR>"
+    nnoremap <expr> <localleader>p ':let @+=@"<CR>'
+    nnoremap <expr> <localleader>P ':let @*=@"<CR>'
 ```

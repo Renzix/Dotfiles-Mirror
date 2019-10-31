@@ -274,7 +274,6 @@ start and selects multiple lines(positive is down)"
  (:map override
    :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
    :e "C-:"   #'evil-ex
-   :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
    :e "M-'"   #'+helm/projectile-find-file
@@ -282,15 +281,14 @@ start and selects multiple lines(positive is down)"
 
 (map!
  :nv "Q"     (lambda! (evil-record-macro ?q))
- :nv "g p"   #'projectile-command-map
  :nv "g ="   #'my/smart-indent
  (:map override
-   :nv ";"   #'my/helm-M-x
-   :nv "|"   #'helm-mini
-   :nv "s"   #'helm-find-files
-   :nv "S"   #'+helm/projectile-find-file
-   :nv "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nv "\\"  #'+helm/project-search))
+   :nvm ";"   #'my/helm-M-x
+   :nvm "|"   #'helm-mini
+   :nvm "s"   #'helm-find-files
+   :nvm "S"   #'+helm/projectile-find-file
+   :nv  "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
+   :nvm "\\"  #'+helm/project-search))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
