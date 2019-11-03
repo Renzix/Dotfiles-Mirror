@@ -250,8 +250,10 @@ start and selects multiple lines(positive is down)"
 (setq doom-leader-alt-key "C-c"
       doom-localleader-alt-key "C-c l")
 (map!
- :nve "C-x t"   #'+eshell/here
- :nve "C-x C-t" #'+vterm/here
+ :nve  "C-x t"   #'+eshell/here
+ :nve  "C-x C-t" #'+vterm/here
+ :nve  "C-x C-d" #'projectile-dired
+ :nvei "C-<tab>" #'+treemacs/toggle
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 
@@ -274,7 +276,6 @@ start and selects multiple lines(positive is down)"
  (:map override
    :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
    :e "C-:"   #'evil-ex
-   :e "M-p"   #'projectile-command-map
    :e "C-'"   #'helm-find-files
    :e "C-\""  #'helm-mini
    :e "M-'"   #'+helm/projectile-find-file
@@ -320,4 +321,5 @@ start and selects multiple lines(positive is down)"
       :e "C-x u" #'vterm--self-insert
       :e "C-/"   #'vterm--self-insert
       :e "C-y"   #'vterm--self-insert
-      :e "M-y"   #'vterm--self-insert)
+      :e "M-y"   #'vterm--self-insert
+      :e "RET"   #'vterm--self-insert)
