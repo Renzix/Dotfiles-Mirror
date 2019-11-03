@@ -7,9 +7,6 @@ cb() {
     echo -e "\033]52;c;$(base64 <<< $input )\a"
 }
 
-pwdp() {
-    export PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
-}
-pwdp
+export PS1='\[\e[$([[ $? = 0 ]] && printf 32 || printf 31);1m\]\W\[\e[m\] '
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
