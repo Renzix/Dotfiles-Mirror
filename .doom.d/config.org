@@ -536,7 +536,7 @@ I actually enjoy the helm defaults so we should use that.
 (map! (:map helm-map
         "C-i"   #'helm-select-action
         "C-j"   #'helm-execute-persistent-action
-        "<tab>" #'helm-select-action ))
+        "<tab>" #'helm-select-action))
 #+END_SRC
 
 ** Org
