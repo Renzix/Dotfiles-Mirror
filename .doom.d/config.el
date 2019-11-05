@@ -302,7 +302,7 @@ start and selects multiple lines(positive is down)"
 (map! (:map helm-map
         "C-i"   #'helm-select-action
         "C-j"   #'helm-execute-persistent-action
-        "<tab>" #'helm-select-action ))
+        "<tab>" #'helm-select-action))
 
 (map! :map org-mode-map
       :e "C-c e" #'org-edit-src-code) ;; @TODO(Renzix): Make this work on C-c '
