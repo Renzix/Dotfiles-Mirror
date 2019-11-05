@@ -253,7 +253,7 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x t"   #'+eshell/here
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
- :nvei "C-<tab>" #'+treemacs/toggle
+ :nvei "C-<tab>"   #'+treemacs/toggle
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 
@@ -294,6 +294,8 @@ start and selects multiple lines(positive is down)"
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "conf[ig]" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
@@ -321,4 +323,6 @@ start and selects multiple lines(positive is down)"
       :e "C-/"   #'vterm--self-insert
       :e "C-y"   #'vterm--self-insert
       :e "M-y"   #'vterm--self-insert
-      :e "RET"   #'vterm--self-insert)
+      :e "RET"   #'vterm--self-insert
+      :e "C-m"   #'vterm--self-insert
+      :e "<return>"   #'vterm--self-insert)

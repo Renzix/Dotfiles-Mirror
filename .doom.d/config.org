@@ -523,6 +523,8 @@ Evil keybinds are really cool and interesting because I can rebind 1 click keys.
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "conf[ig]" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
