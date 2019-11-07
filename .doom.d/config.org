@@ -367,6 +367,7 @@ I need to set plantuml path soo lets do that
 
 #+NAME: plantuml-path
 #+BEGIN_SRC emacs-lisp
+(setq org-directory "~/Nextcloud/Documents")
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 #+END_SRC
 

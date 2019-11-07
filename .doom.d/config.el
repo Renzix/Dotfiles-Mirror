@@ -209,6 +209,7 @@ start and selects multiple lines(positive is down)"
 (after! evil
   (setq evil-default-state 'emacs))
 
+(setq org-directory "~/Nextcloud/Documents")
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
 (after! company-mode
