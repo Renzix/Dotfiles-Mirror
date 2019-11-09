@@ -254,7 +254,10 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x t"   #'+eshell/here
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
- :nvei "C-<tab>" #'+treemacs/toggle
+ :nvei "C-<tab>"   #'+treemacs/toggle
+ (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
+   :localleader
+   :desc "Merge" "m" #'smerge-command-prefix)
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 
@@ -324,4 +327,6 @@ start and selects multiple lines(positive is down)"
       :e "C-/"   #'vterm--self-insert
       :e "C-y"   #'vterm--self-insert
       :e "M-y"   #'vterm--self-insert
-      :e "RET"   #'vterm--self-insert)
+      :e "RET"   #'vterm--self-insert
+      :e "C-m"   #'vterm--self-insert
+      :e "<return>"   #'vterm--self-insert)
