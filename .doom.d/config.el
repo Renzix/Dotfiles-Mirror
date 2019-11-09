@@ -209,6 +209,7 @@ start and selects multiple lines(positive is down)"
 (after! evil
   (setq evil-default-state 'emacs))
 
+(setq org-directory "~/Nextcloud/Documents")
 (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
 (after! company-mode
@@ -294,6 +295,8 @@ start and selects multiple lines(positive is down)"
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
 (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "conf[ig]" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+(evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "q[uit]" 'delete-window)
@@ -302,7 +305,7 @@ start and selects multiple lines(positive is down)"
 (map! (:map helm-map
         "C-i"   #'helm-select-action
         "C-j"   #'helm-execute-persistent-action
-        "<tab>" #'helm-select-action ))
+        "<tab>" #'helm-select-action))
 
 (map! :map org-mode-map
       :e "C-c e" #'org-edit-src-code) ;; @TODO(Renzix): Make this work on C-c '
