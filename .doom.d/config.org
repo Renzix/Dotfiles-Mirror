@@ -367,8 +367,9 @@ I need to set plantuml path soo lets do that
 
 #+NAME: plantuml-path
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/Nextcloud/Documents")
-(setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+(setq org-directory "~/Nextcloud/Documents"
+      org-log-done 'timer
+      org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 #+END_SRC
 
 ** IRC
@@ -435,14 +436,14 @@ Lets disable expand region word cuz i can just use M-d or other stuff
 (after! expand-region
   (setq er/try-expand-list nil)
   (setq er/try-expand-list
-      (append '(er/mark-method-call
-                er/mark-inside-quotes
-                er/mark-inside-pairs
-                er/mark-comment
-                er/mark-url
-                er/mark-email
-                er/mark-defun)
-              er/try-expand-list)))
+        (append '(er/mark-method-call
+                  er/mark-inside-quotes
+                  er/mark-inside-pairs
+                  er/mark-comment
+                  er/mark-url
+                  er/mark-email
+                  er/mark-defun)
+                er/try-expand-list)))
 #+END_SRC
 
 ** elcord

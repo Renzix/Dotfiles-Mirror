@@ -209,8 +209,9 @@ start and selects multiple lines(positive is down)"
 (after! evil
   (setq evil-default-state 'emacs))
 
-(setq org-directory "~/Nextcloud/Documents")
-(setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+(setq org-directory "~/Nextcloud/Documents"
+      org-log-done 'timer
+      org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 
 (after! company-mode
   (add-to-list 'company-backends #'company-tabnine))
@@ -236,14 +237,14 @@ start and selects multiple lines(positive is down)"
 (after! expand-region
   (setq er/try-expand-list nil)
   (setq er/try-expand-list
-      (append '(er/mark-method-call
-                er/mark-inside-quotes
-                er/mark-inside-pairs
-                er/mark-comment
-                er/mark-url
-                er/mark-email
-                er/mark-defun)
-              er/try-expand-list)))
+        (append '(er/mark-method-call
+                  er/mark-inside-quotes
+                  er/mark-inside-pairs
+                  er/mark-comment
+                  er/mark-url
+                  er/mark-email
+                  er/mark-defun)
+                er/try-expand-list)))
 
 (after! elcord
   (elcord-mode t))
