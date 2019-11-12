@@ -257,6 +257,12 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
+<<<<<<< HEAD
+=======
+ (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
+   :localleader
+   :desc "Merge" "m" #'smerge-command-prefix)
+>>>>>>> 9982da3... Added a better keybind for smerge
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 

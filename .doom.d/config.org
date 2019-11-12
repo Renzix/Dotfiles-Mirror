@@ -478,6 +478,9 @@ in insert state and emacs state only
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
+ (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
+   :localleader
+   :desc "Merge" "m" #'smerge-command-prefix)
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 #+END_SRC
