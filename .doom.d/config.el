@@ -248,6 +248,8 @@ start and selects multiple lines(positive is down)"
 (after! elcord
   (elcord-mode t))
 
+(use-package! piper :commands piper)
+
 (setq doom-leader-alt-key "C-c"
       doom-localleader-alt-key "C-c l")
 (map!

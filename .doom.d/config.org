@@ -455,6 +455,14 @@ Discord rich presence.
   (elcord-mode t))
 #+END_SRC
 
+** Piper
+
+New thingy that allows me to do stuff with pipes interactively.
+
+#+BEGIN_SRC emacs-lisp
+(use-package! piper :commands piper)
+#+END_SRC
+
 * Keybindings
 ** Global
 
