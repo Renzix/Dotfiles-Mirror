@@ -1,17 +1,19 @@
 (setq confirm-kill-emacs nil)
-(set-evil-initial-state! 'term-mode    'emacs)
+(set-evil-initial-state!   'term-mode   'emacs)
 (after! calc
-  (set-evil-initial-state! 'calc-mode    'emacs))
+  (set-evil-initial-state! 'calc-mode   'emacs))
 (after! vterm
-  (set-evil-initial-state! 'vterm-mode   'emacs))
-(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
-(set-evil-initial-state! 'eshell-mode  'emacs)
+  (set-evil-initial-state! 'vterm-mode  'emacs))
+(set-evil-initial-state!   'org-mode    'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
+(set-evil-initial-state!   'eshell-mode 'emacs)
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
 ;; Mark stuff
 (setq transient-mark-mode nil
       set-mark-command-repeat-pop t)
+;; Use eww as the default browser cuz its nice
+(setq browse-url-browser-function 'eww-browse-url)
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -303,6 +305,11 @@ start and selects multiple lines(positive is down)"
 (evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
+(evil-ex-define-cmd "blog" (lambda! (find-file "~/Blog/blog.org")))
+(evil-ex-define-cmd "ho[me]" (lambda! (find-file "~/Nextcloud/Documents/Home.org")))
+(evil-ex-define-cmd "wo[rk]" (lambda! (find-file "~/Nextcloud/Documents/Work.org")))
+(evil-ex-define-cmd "sc[hool]" (lambda! (find-file "~/Nextcloud/Documents/School.org")))
+(evil-ex-define-cmd "a[genda]" #'org-agenda)
 (evil-ex-define-cmd "q[uit]" 'delete-window)
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 

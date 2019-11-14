@@ -149,7 +149,7 @@
        :app
        ;;(email +gmail)    ; emacs as an email client
        irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
+       (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        (write            ; emacs as a word processor (latex + org + markdown)
         +write-mode
@@ -177,6 +177,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(elfeed-feeds (quote ("http://www.renzix.com/index.xml")))
  '(safe-local-variable-values (quote ((minor-mode . org-hugo-auto-export)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
