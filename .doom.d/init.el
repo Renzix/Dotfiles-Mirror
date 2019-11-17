@@ -156,6 +156,9 @@
         +wordnut         ; wordnet (wn) search
         +langtool)       ; a proofreader (grammar/style check) for Emacs
 
+       :email
+       notmuch
+
        :collab
        ;;floobits          ; peer programming for a price
        ;;impatient-mode    ; show off code over HTTP
@@ -178,7 +181,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(elfeed-feeds (quote ("http://www.renzix.com/index.xml")))
- '(safe-local-variable-values (quote ((minor-mode . org-hugo-auto-export)))))
+ '(safe-local-variable-values
+   (quote
+    ((eval modify-syntax-entry 43 "'")
+     (eval modify-syntax-entry 36 "'")
+     (eval modify-syntax-entry 126 "'")
+     (minor-mode . org-hugo-auto-export)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

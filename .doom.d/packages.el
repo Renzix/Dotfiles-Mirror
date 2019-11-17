@@ -11,3 +11,4 @@
 (package! visible-mark)
 (package! vimrc-mode)
 (package! piper :recipe (:host gitlab :repo "howardabrams/emacs-piper"))
+(package! guix)
