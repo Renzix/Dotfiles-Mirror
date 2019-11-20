@@ -208,8 +208,18 @@ start and selects multiple lines(positive is down)"
 
 (setq lsp-enable-indentation 'nil)
 
-(after! evil
-  (setq evil-default-state 'emacs))
+;; Enable this for default emacs-state
+;;(after! evil 
+;;  (setq evil-default-state 'emacs))
+
+;; Enable this for default evil stuff
+(set-evil-initial-state! 'term-mode    'emacs)
+(after! calc
+  (set-evil-initial-state! 'calc-mode    'emacs))
+(after! vterm
+  (set-evil-initial-state! 'vterm-mode   'emacs))
+(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
+(set-evil-initial-state! 'eshell-mode  'emacs)
 
 (setq org-directory "~/Nextcloud/Documents"
       org-log-done 'timer
@@ -266,7 +276,6 @@ start and selects multiple lines(positive is down)"
 
 (map!
  :e "C-x C-k" #'kill-this-buffer
- :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
