@@ -1,11 +1,4 @@
 (setq confirm-kill-emacs nil)
-(set-evil-initial-state!   'term-mode   'emacs)
-(after! calc
-  (set-evil-initial-state! 'calc-mode   'emacs))
-(after! vterm
-  (set-evil-initial-state! 'vterm-mode  'emacs))
-(set-evil-initial-state!   'org-mode    'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
-(set-evil-initial-state!   'eshell-mode 'emacs)
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
@@ -31,16 +24,6 @@
          (load-theme 'monokai t))
         ((string= "6" renzix-weekday) ;; Saturday
          (load-theme 'doom-one t))))
-
-(setq evil-insert-state-cursor   '(bar "#FF00FF")
-      evil-normal-state-cursor   '(box "#6666F6")
-      evil-motion-state-cursor   '(hollow "#FFF500")
-      evil-replace-state-cursor  '(hbar "#BF2222")
-      evil-operator-state-cursor '(box "#FFA500")
-      evil-visual-state-cursor   '(hollow "#FFFFFF")
-      evil-emacs-state-cursor    '(box "#90EE90"))
-(setq-default cursor-type 'bar)
-(blink-cursor-mode 1)
 
 (global-hl-line-mode)
 
@@ -220,6 +203,16 @@ start and selects multiple lines(positive is down)"
   (set-evil-initial-state! 'vterm-mode   'emacs))
 (set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
 (set-evil-initial-state! 'eshell-mode  'emacs)
+
+(setq evil-insert-state-cursor   '(bar "#FF00FF")
+      evil-normal-state-cursor   '(box "#6666F6")
+      evil-motion-state-cursor   '(hollow "#FFF500")
+      evil-replace-state-cursor  '(hbar "#BF2222")
+      evil-operator-state-cursor '(box "#FFA500")
+      evil-visual-state-cursor   '(hollow "#FFFFFF")
+      evil-emacs-state-cursor    '(box "#90EE90"))
+(setq-default cursor-type 'bar)
+(blink-cursor-mode 1)
 
 (setq org-directory "~/Nextcloud/Documents"
       org-log-done 'timer
