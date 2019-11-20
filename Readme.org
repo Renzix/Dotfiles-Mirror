@@ -14,7 +14,7 @@ guix/nix configs into submodules.
   - [X] bspwm
   - [ ] herbsluft
   - [ ] dwm (with patches and prob in a seperate repo)
-  - [ ] xmonad 
+  - [ ] xmonad
   - [ ] openbox
   - [X] Awesomewm
   - [ ] fvwm?
