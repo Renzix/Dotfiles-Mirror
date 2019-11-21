@@ -175,25 +175,3 @@
        ;; provides a Spacemacs-inspired keybinding scheme and a smartparens
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-<<<<<<< HEAD
- '(safe-local-variable-values (quote ((minor-mode . org-hugo-auto-export)))))
-=======
- '(elfeed-feeds (quote ("http://www.renzix.com/index.xml")))
- '(safe-local-variable-values
-   (quote
-    ((eval modify-syntax-entry 43 "'")
-     (eval modify-syntax-entry 36 "'")
-     (eval modify-syntax-entry 126 "'")
-     (minor-mode . org-hugo-auto-export)))))
->>>>>>> b6d143812fb8ee0cbf201b830fdfb8ac489541a6
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
