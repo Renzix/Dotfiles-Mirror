@@ -149,12 +149,15 @@
        :app
        ;;(email +gmail)    ; emacs as an email client
        irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
+       (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        (write            ; emacs as a word processor (latex + org + markdown)
         +write-mode
         +wordnut         ; wordnet (wn) search
         +langtool)       ; a proofreader (grammar/style check) for Emacs
+
+       :email
+       notmuch
 
        :collab
        ;;floobits          ; peer programming for a price
@@ -177,7 +180,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+<<<<<<< HEAD
  '(safe-local-variable-values (quote ((minor-mode . org-hugo-auto-export)))))
+=======
+ '(elfeed-feeds (quote ("http://www.renzix.com/index.xml")))
+ '(safe-local-variable-values
+   (quote
+    ((eval modify-syntax-entry 43 "'")
+     (eval modify-syntax-entry 36 "'")
+     (eval modify-syntax-entry 126 "'")
+     (minor-mode . org-hugo-auto-export)))))
+>>>>>>> b6d143812fb8ee0cbf201b830fdfb8ac489541a6
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

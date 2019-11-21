@@ -1,17 +1,12 @@
 (setq confirm-kill-emacs nil)
-(set-evil-initial-state! 'term-mode    'emacs)
-(after! calc
-  (set-evil-initial-state! 'calc-mode    'emacs))
-(after! vterm
-  (set-evil-initial-state! 'vterm-mode   'emacs))
-(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
-(set-evil-initial-state! 'eshell-mode  'emacs)
 (auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
 ;; Mark stuff
 (setq transient-mark-mode nil
       set-mark-command-repeat-pop t)
+;; Use eww as the default browser cuz its nice
+(setq browse-url-browser-function 'eww-browse-url)
 
 (when (display-graphic-p)
   (defvar renzix-weekday (format-time-string "%w"))
@@ -29,16 +24,6 @@
          (load-theme 'monokai t))
         ((string= "6" renzix-weekday) ;; Saturday
          (load-theme 'doom-one t))))
-
-(setq evil-insert-state-cursor   '(bar "#FF00FF")
-      evil-normal-state-cursor   '(box "#6666F6")
-      evil-motion-state-cursor   '(hollow "#FFF500")
-      evil-replace-state-cursor  '(hbar "#BF2222")
-      evil-operator-state-cursor '(box "#FFA500")
-      evil-visual-state-cursor   '(hollow "#FFFFFF")
-      evil-emacs-state-cursor    '(box "#90EE90"))
-(setq-default cursor-type 'bar)
-(blink-cursor-mode 1)
 
 (global-hl-line-mode)
 
@@ -206,8 +191,28 @@ start and selects multiple lines(positive is down)"
 
 (setq lsp-enable-indentation 'nil)
 
-(after! evil
-  (setq evil-default-state 'emacs))
+;; Enable this for default emacs-state
+;;(after! evil 
+;;  (setq evil-default-state 'emacs))
+
+;; Enable this for default evil stuff
+(set-evil-initial-state! 'term-mode    'emacs)
+(after! calc
+  (set-evil-initial-state! 'calc-mode    'emacs))
+(after! vterm
+  (set-evil-initial-state! 'vterm-mode   'emacs))
+(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
+(set-evil-initial-state! 'eshell-mode  'emacs)
+
+(setq evil-insert-state-cursor   '(bar "#FF00FF")
+      evil-normal-state-cursor   '(box "#6666F6")
+      evil-motion-state-cursor   '(hollow "#FFF500")
+      evil-replace-state-cursor  '(hbar "#BF2222")
+      evil-operator-state-cursor '(box "#FFA500")
+      evil-visual-state-cursor   '(hollow "#FFFFFF")
+      evil-emacs-state-cursor    '(box "#90EE90"))
+(setq-default cursor-type 'bar)
+(blink-cursor-mode 1)
 
 (setq org-directory "~/Nextcloud/Documents"
       org-log-done 'timer
@@ -258,18 +263,14 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
-<<<<<<< HEAD
-=======
  (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
    :localleader
    :desc "Merge" "m" #'smerge-command-prefix)
->>>>>>> 9982da3... Added a better keybind for smerge
  (:map override
    :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
 
 (map!
  :e "C-x C-k" #'kill-this-buffer
- :e "C-x g"   #'magit-status
  :e "C-a"     #'my/move-beginning-of-line
  :e "C-e"     #'end-of-line
  :e "C-j"     #'avy-goto-char-2
@@ -308,6 +309,11 @@ start and selects multiple lines(positive is down)"
 (evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
+(evil-ex-define-cmd "blog" (lambda! (find-file "~/Blog/blog.org")))
+(evil-ex-define-cmd "ho[me]" (lambda! (find-file "~/Nextcloud/Documents/Home.org")))
+(evil-ex-define-cmd "wo[rk]" (lambda! (find-file "~/Nextcloud/Documents/Work.org")))
+(evil-ex-define-cmd "sc[hool]" (lambda! (find-file "~/Nextcloud/Documents/School.org")))
+(evil-ex-define-cmd "a[genda]" #'org-agenda)
 (evil-ex-define-cmd "q[uit]" 'delete-window)
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 
