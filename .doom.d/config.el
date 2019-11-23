@@ -219,7 +219,9 @@ start and selects multiple lines(positive is down)"
       org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 ;; Fix broken thing with emacs 27 where cursor is being hidden inside org mode
 (custom-set-faces!
-  '((hl-line solaire-hl-line-face org-indent) :extend t))
+  '((hl-line solaire-hl-line-face org-indent
+     outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
+    :extend t))
 
 (after! company-mode
   (add-to-list 'company-backends #'company-tabnine))
