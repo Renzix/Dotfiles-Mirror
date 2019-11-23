@@ -217,6 +217,9 @@ start and selects multiple lines(positive is down)"
 (setq org-directory "~/Nextcloud/Documents"
       org-log-done 'timer
       org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+;; Fix broken thing with emacs 27 where cursor is being hidden inside org mode
+(custom-set-faces!
+  '((hl-line solaire-hl-line-face org-indent) :extend t))
 
 (after! company-mode
   (add-to-list 'company-backends #'company-tabnine))

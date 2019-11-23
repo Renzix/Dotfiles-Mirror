@@ -376,6 +376,9 @@ I need to set plantuml path soo lets do that
 (setq org-directory "~/Nextcloud/Documents"
       org-log-done 'timer
       org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+;; Fix broken thing with emacs 27 where cursor is being hidden inside org mode
+(custom-set-faces!
+  '((hl-line solaire-hl-line-face org-indent) :extend t))
 #+END_SRC
 
 ** IRC
