@@ -1,6 +1,6 @@
 " My neovim configuration
 " Originally I had it in markdowns but I realized that its probably more vimy
-" to do it in raw vimscript and use folds
+" to do it in raw vimscript and use folds. So here we are.
 
 " Bootstrap Plugins {{{
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -16,8 +16,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-markdown'
-Plug 'plasticboy/vim-markdown'
 Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
@@ -139,9 +137,20 @@ let mapleader=" "
 let maplocalleader=","
 
 " .lvimrc stuff for project management
-nnoremap <expr> <localleader>c ":AsyncRun " . g:compile_command . "\<CR>"
-nnoremap <expr> <localleader>r ":AsyncRun " . g:run_command . "\<CR>"
-nnoremap <localleader>`  :call asyncrun#quickfix_toggle(20)<CR>
+nnoremap <expr> <leader>pc ":AsyncRun " . g:compile_command . "\<CR>"
+nnoremap <expr> <leader>pr ":AsyncRun " . g:run_command . "\<CR>"
+nnoremap <leader>pe :Rooter<CR>:e .lvimrc<CR>
+
+" Git fugitive stuff
+nnoremap <leader>gg :Gstatus<CR>
+nnoremap <leader>gP :Gpush origin<CR>
+nnoremap <expr> <leader>gp ':Gpush '
+nnoremap <leader>gf :Gfetch
+nnoremap <leader>gF :Gpull
+nnoremap <leader>gm :Gmerge
+
+" Local leader (should be short commands no prefix)
+nnoremap <localleader>`  :call asyncrun#quickfix_toggle(16)<CR>
 
 " Changing aroud registers to make copy/pasting easier
 nnoremap <expr> <localleader>p ':let @+=@"<CR>'
