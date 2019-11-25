@@ -12,7 +12,6 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'tpope/vim-vividchalk'
 Plug 'dense-analysis/ale'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-fugitive'
@@ -50,9 +49,10 @@ let g:netrw_liststyle=3 " tree view
 " vividchalk
 color vividchalk
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
+" Ale
+let g:ale_completion_enabled = 1
 
+" lvimrc
 " Default commands which can be overriden by .lvimrc
 let g:compile_command = "make"
 let g:run_command = "make run"
@@ -163,7 +163,6 @@ nnoremap <leader>wc :tabclose<cr>
 
 " Local leader (should be short commands no prefix)
 nnoremap <localleader>`  :call asyncrun#quickfix_toggle(16)<CR>
-iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 
 " Changing aroud registers to make copy/pasting easier
 nnoremap <expr> <localleader>p ':let @+=@"<CR>'
