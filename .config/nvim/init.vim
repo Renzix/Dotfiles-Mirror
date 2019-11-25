@@ -202,5 +202,5 @@ let g:which_key_map.l = {
             \ }
 let g:which_key_map['*'] = 'Copy Primary'
 let g:which_key_map['+'] = 'Copy Clipboard'
-let g:which_key_map['`'] = 'Quickfix'
+let g:which_key_map['`'] = 'Quickfix Buffer'
 " }}}
