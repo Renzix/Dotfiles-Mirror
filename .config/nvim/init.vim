@@ -72,7 +72,8 @@ set number relativenumber
 set undofile
 
 " Search stuff
-set smartcase
+set ignorecase smartcase
+set incsearch hlsearch
 set inccommand=nosplit " show live changes to what the command will do
 
 " Actually use a mouse
@@ -115,7 +116,7 @@ call matchadd('ColorColumn', '\%100v.\+', 120) " Lines past 120 are red
 " Open my config
 command! Cfg :e~/Dotfiles/.config/nvim/init.vim
 " Sudo
-command! W SudoWrite
+command! W w !sudo tee % > /dev/null
 " Change current Directory
 command! R Rooter
 command! D lcd %:p:h
@@ -133,6 +134,8 @@ nnoremap g=  magg=G`a
 " Leader Keybindings {{{
 
 " Leader Key Definition
+" Generally leader is for plugins and localleader is quick commands or if it
+" is filetype based
 let mapleader=" "
 let maplocalleader=","
 
@@ -149,8 +152,18 @@ nnoremap <leader>gf :Gfetch
 nnoremap <leader>gF :Gpull
 nnoremap <leader>gm :Gmerge
 
+" Buffer stuff
+nnoremap <leader>bs :w!<cr>
+nnoremap <leader>bd :bd<cr>
+
+" Window stuff
+nnoremap <leader>wq :q<cr>
+nnoremap <leader>wt :tabnew<cr>
+nnoremap <leader>wc :tabclose<cr>
+
 " Local leader (should be short commands no prefix)
 nnoremap <localleader>`  :call asyncrun#quickfix_toggle(16)<CR>
+iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 
 " Changing aroud registers to make copy/pasting easier
 nnoremap <expr> <localleader>p ':let @+=@"<CR>'
