@@ -27,6 +27,8 @@ Plug 'embear/vim-localvimrc'
 Plug 'chrisbra/SudoEdit.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
+Plug 'liuchengxu/vim-which-key'
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 call plug#end()
 "}}}
 " Plugin config {{{
@@ -134,10 +136,9 @@ nnoremap g=  magg=G`a
 " Leader Keybindings {{{
 
 " Leader Key Definition
-" Generally leader is for plugins and localleader is quick commands or if it
-" is filetype based
-let mapleader=" "
-let maplocalleader=","
+" Generally leader is for prefixes and quick commands plugins and localleader 
+" is for filetype based commands
+let mapleader="\<Space>"
 
 " .lvimrc stuff for project management
 nnoremap <expr> <leader>pc ":AsyncRun " . g:compile_command . "\<CR>"
@@ -148,24 +149,39 @@ nnoremap <leader>pe :Rooter<CR>:e .lvimrc<CR>
 nnoremap <leader>gg :Gstatus<CR>
 nnoremap <leader>gP :Gpush origin<CR>
 nnoremap <expr> <leader>gp ':Gpush '
-nnoremap <leader>gf :Gfetch
-nnoremap <leader>gF :Gpull
-nnoremap <leader>gm :Gmerge
+nnoremap <leader>gf :Gfetch<CR>
+nnoremap <leader>gF :Gpull<CR>
+nnoremap <leader>gm :Gmerge<CR>
+nnoremap <leader>gb :Gbrowse<CR>
 
-" Buffer stuff
-nnoremap <leader>bs :w!<cr>
-nnoremap <leader>bd :bd<cr>
-
-" Window stuff
-nnoremap <leader>wq :q<cr>
-nnoremap <leader>wt :tabnew<cr>
-nnoremap <leader>wc :tabclose<cr>
-
-" Local leader (should be short commands no prefix)
-nnoremap <localleader>`  :call asyncrun#quickfix_toggle(16)<CR>
+" Single letter binds for leader
+nnoremap <leader>`  :call asyncrun#quickfix_toggle(16)<CR>
 
 " Changing aroud registers to make copy/pasting easier
-nnoremap <expr> <localleader>p ':let @+=@"<CR>'
-nnoremap <expr> <localleader>P ':let @*=@"<CR>'
+nnoremap <expr> <leader>+ ':let @+=@"<CR>'
+nnoremap <expr> <leader>* ':let @*=@"<CR>'
 
+" Local leader only file type based commands
+let maplocalleader=','
+
+" }}}
+" whichkey {{{
+" Bind whichkey on leader and localleader keypress
+autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
+nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey ','<CR>
+let g:which_key_map =  {}
+let g:which_key_map.p =  { 
+            \ 'name' : 'project',
+            \ 'c' : 'compile',
+            \ 'r' : 'run',
+            \ 'e' : 'edit lvimrc',
+            \ }
+let g:which_key_map.g = {
+            \ 'name' : 'git',
+            \ 'p' : 'Gpush'
+            \ }
+let g:which_key_map['*'] = 'Copy Primary'
+let g:which_key_map['+'] = 'Copy Clipboard'
+let g:which_key_map['`'] = 'Quickfix'
 " }}}
