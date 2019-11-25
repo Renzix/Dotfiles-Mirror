@@ -64,6 +64,10 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-f>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 
+" Gitgutter
+let g:gitgutter_map_keys = 0 " Disables default mappings
+let g:gitgutter_grep = 'rg'
+
 "}}}
 " Actual config {{{
 
