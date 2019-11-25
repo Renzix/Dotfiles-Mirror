@@ -154,6 +154,13 @@ nnoremap <leader>gF :Gpull<CR>
 nnoremap <leader>gm :Gmerge<CR>
 nnoremap <leader>gb :Gbrowse<CR>
 
+" lsp
+nnoremap <leader>ld :ALEGoToDefinition<CR>
+nnoremap <leader>lt :ALEGoToTypeDefinition<CR>
+nnoremap <leader>lf :ALEFindReferences<CR>
+nnoremap <leader>l= :ALEFix<CR>
+nnoremap <leader>lr :ALERename<CR>
+
 " Single letter binds for leader
 nnoremap <leader>`  :call asyncrun#quickfix_toggle(16)<CR>
 
@@ -180,6 +187,14 @@ let g:which_key_map.p =  {
 let g:which_key_map.g = {
             \ 'name' : 'git',
             \ 'p' : 'Gpush'
+            \ }
+let g:which_key_map.l = {
+            \ 'name' : 'lsp',
+            \ 'd' : 'Goto Defintion',
+            \ 't' : 'Goto Type Defintion',
+            \ 'f' : 'Find Reference',
+            \ '=' : 'Fix',
+            \ 'r' : 'Rename',
             \ }
 let g:which_key_map['*'] = 'Copy Primary'
 let g:which_key_map['+'] = 'Copy Clipboard'
