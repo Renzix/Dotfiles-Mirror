@@ -3,6 +3,7 @@
 " to do it in raw vimscript and use folds. So here we are.
 
 " Bootstrap Plugins {{{
+" TODO(Renzix): Make this work for windows
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -10,25 +11,26 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.local/share/nvim/plugged')
-Plug 'tpope/vim-vividchalk'
-Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
-Plug 'tpope/vim-fugitive'
-Plug 'sheerun/vim-polyglot'
+Plug 'chrisbra/SudoEdit.vim'
+Plug 'dense-analysis/ale'
+Plug 'embear/vim-localvimrc'
+Plug 'honza/vim-snippets'
+Plug 'jceb/vim-orgmode'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-commentary'
-Plug 'jceb/vim-orgmode'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'embear/vim-localvimrc'
-Plug 'chrisbra/SudoEdit.vim'
-Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-user'
 Plug 'liuchengxu/vim-which-key'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'sheerun/vim-polyglot'
+Plug 'SirVer/ultisnips'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-vividchalk'
 call plug#end()
 "}}}
 " Plugin config {{{
@@ -131,15 +133,22 @@ command! W w !sudo tee % > /dev/null
 " Change current Directory
 " }}}
 " Normal and Visual Keybindings {{{
+" Old bind which nobody uses
 nnoremap Q  @q<CR>
 vnoremap Q  :norm @q<CR>
+" Maybe replace this with vim surround
 nnoremap S  :Rooter<CR>:Files<CR>
-nnoremap s  :lcd %:p:h<CR>:Files<CR>
+nnoremap s :e <C-R>=expand("%:p:h") . "/"<CR>
+"nnoremap s  :lcd %:p:h<CR>:Files<CR>
 nnoremap \| :Buffers<CR>
 nnoremap \  :Rg<CR>
+" Changable
 nnoremap ;  :Commands<CR>
+" Prob should just use =ae cuz plugin
 nnoremap g=  magg=G`a
+"should be this by default cuz consistancy
 nnoremap Y y$
+" For some reason vim doesnt bind the alt key for anything???
 nnoremap <M-p> "+p
 vnoremap <M-p> "+p
 nnoremap <M-y> "+y
@@ -154,8 +163,6 @@ nnoremap <M-7> 7gt
 nnoremap <M-8> 8gt
 nnoremap <M-9> 9gt
 nnoremap <M-0> 0gt
-nnoremap <M-s> <C-w>s
-nnoremap <M-v> <C-w>v
 " }}}
 " Leader Keybindings {{{
 
