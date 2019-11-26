@@ -125,7 +125,7 @@ call matchadd('ColorColumn', '\%100v.\+', 120) " Lines past 120 are red
 " }}}
 " Ex Commands {{{
 " Open my config
-command! Cfg :e~/Dotfiles/.config/nvim/init.vim
+command! Cfg :e $MYVIMRC
 " Sudo
 command! W w !sudo tee % > /dev/null
 " Change current Directory
