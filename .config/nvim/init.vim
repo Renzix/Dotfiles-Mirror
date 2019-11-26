@@ -53,6 +53,11 @@ color vividchalk
 
 " Ale
 let g:ale_completion_enabled = 1
+let g:ale_linters = {
+  \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
+  \   'rust': ['cargo', 'rls'],
+  \   'cpp' : ['clangd']
+  \}
 
 " lvimrc
 " Default commands which can be overriden by .lvimrc
