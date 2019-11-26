@@ -129,8 +129,6 @@ command! Cfg :e~/Dotfiles/.config/nvim/init.vim
 " Sudo
 command! W w !sudo tee % > /dev/null
 " Change current Directory
-command! R Rooter
-command! D lcd %:p:h
 " }}}
 " Normal and Visual Keybindings {{{
 nnoremap Q  @q<CR>
@@ -141,6 +139,23 @@ nnoremap \| :Buffers<CR>
 nnoremap \  :Rg<CR>
 nnoremap ;  :Commands<CR>
 nnoremap g=  magg=G`a
+nnoremap Y y$
+nnoremap <M-p> "+p
+vnoremap <M-p> "+p
+nnoremap <M-y> "+y
+vnoremap <M-y> "+y
+nnoremap <M-1> 1gt
+nnoremap <M-2> 2gt
+nnoremap <M-3> 3gt
+nnoremap <M-4> 4gt
+nnoremap <M-5> 5gt
+nnoremap <M-6> 6gt
+nnoremap <M-7> 7gt
+nnoremap <M-8> 8gt
+nnoremap <M-9> 9gt
+nnoremap <M-0> 0gt
+nnoremap <M-s> <C-w>s
+nnoremap <M-v> <C-w>v
 " }}}
 " Leader Keybindings {{{
 
@@ -148,6 +163,10 @@ nnoremap g=  magg=G`a
 " Generally leader is for prefixes and quick commands plugins and localleader 
 " is for filetype based commands
 let mapleader="\<Space>"
+
+" Moving default directory
+nnoremap <leader>. :lcd %:p:h<CR>
+nnoremap <leader>, :Rooter<CR>
 
 " .lvimrc stuff for project management
 nnoremap <expr> <leader>pc ":AsyncRun " . g:compile_command . "\<CR>"
@@ -173,16 +192,13 @@ nnoremap <leader>lr :ALERename<CR>
 " Single letter binds for leader
 nnoremap <leader>`  :call asyncrun#quickfix_toggle(16)<CR>
 
-" Changing aroud registers to make copy/pasting easier
-nnoremap <expr> <leader>+ ':let @+=@"<CR>'
-nnoremap <expr> <leader>* ':let @*=@"<CR>'
-
 " Local leader only file type based commands
 let maplocalleader=','
 
 " }}}
 " whichkey {{{
 " Bind whichkey on leader and localleader keypress
+"
 autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
 nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey ','<CR>
@@ -205,7 +221,7 @@ let g:which_key_map.l = {
             \ '=' : 'Fix',
             \ 'r' : 'Rename',
             \ }
-let g:which_key_map['*'] = 'Copy Primary'
-let g:which_key_map['+'] = 'Copy Clipboard'
 let g:which_key_map['`'] = 'Quickfix Buffer'
+let g:which_key_map['.'] = 'Root Default Directory'
+let g:which_key_map[','] = 'Current Default Directory'
 " }}}
