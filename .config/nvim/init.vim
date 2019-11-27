@@ -18,8 +18,13 @@ Plug 'dense-analysis/ale'
 Plug 'embear/vim-localvimrc'
 Plug 'honza/vim-snippets'
 Plug 'jceb/vim-orgmode'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
+if has('nvim')
+    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/denite.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-user'
 Plug 'liuchengxu/vim-which-key'
@@ -56,10 +61,10 @@ color vividchalk
 " Ale
 let g:ale_completion_enabled = 1
 let g:ale_linters = {
-  \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
-  \   'rust': ['cargo', 'rls'],
-  \   'cpp' : ['clangd']
-  \}
+            \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
+            \   'rust': ['cargo', 'rls'],
+            \   'cpp' : ['clangd']
+            \}
 
 " lvimrc
 " Default commands which can be overriden by .lvimrc
@@ -74,6 +79,25 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 " Gitgutter
 let g:gitgutter_map_keys = 0 " Disables default mappings
 let g:gitgutter_grep = 'rg'
+
+" Denite???
+call denite#custom#option('default', 'prompt', '➤ ')
+call denite#custom#var('grep', 'command', ['rg'])
+autocmd FileType denite call s:denite_settings()
+function! s:denite_settings() abort
+    nnoremap <silent><buffer><expr> <CR>
+                \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> d
+                \ denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p
+                \ denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q
+                \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i
+                \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <Space>
+                \ denite#do_map('toggle_select').'j'
+endfunction
 
 "}}}
 " Actual config {{{
@@ -146,13 +170,11 @@ command! W w !sudo tee % > /dev/null
 nnoremap Q  @q<CR>
 vnoremap Q  :norm @q<CR>
 " Maybe replace this with vim surround
-nnoremap S  :Rooter<CR>:Files<CR>
-nnoremap s :e <C-R>=expand("%:p:h") . "/"<CR>
-"nnoremap s  :lcd %:p:h<CR>:Files<CR>
-nnoremap \| :Buffers<CR>
-nnoremap \  :Rg<CR>
-" Changable
-nnoremap ;  :Commands<CR>
+nnoremap S  :<C-u>DeniteProjectDir file/rec -start-filter -winheight=10 <CR>
+nnoremap s  :<C-u>DeniteBufferDir file/old -start-filter -winheight=10 <CR>
+nnoremap \  :<C-u>DeniteProjectDir grep -stat-filter -winheight=10 <CR>
+nnoremap \| :<C-u>Denite buffer -start-filter -winheight=10 <CR>
+nnoremap ;  :<C-u>Denite command -start-filter -winheight=10 <CR>
 " Prob should just use =ae cuz plugin
 nnoremap g=  magg=G`a
 "should be this by default cuz consistancy
