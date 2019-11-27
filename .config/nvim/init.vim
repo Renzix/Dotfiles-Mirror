@@ -102,6 +102,15 @@ set tabstop=4 " width of hard tabstop
 set softtabstop=0 " makes soft tabs do nothing???
 set shiftwidth=4 " size of a ident in spaces
 
+" Backups
+" as much as humanly possible
+set backup
+if !isdirectory($HOME . "/.saves/vim")
+    call mkdir($HOME . "/.saves/vim", "p", 0700)
+endif
+set backupdir=~/.saves/vim
+set backupcopy=yes
+
 " Allows recursive searching through directories with find and other stuff
 set path+=**
 

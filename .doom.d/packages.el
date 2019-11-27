@@ -3,12 +3,13 @@
 
 ;; Code
 
-(package! elcord)
 (package! apropospriate-theme)
-(package! monokai-theme)
 (package! command-log-mode)
 (package! company-tabnine)
-(package! visible-mark)
-(package! vimrc-mode)
-(package! piper :recipe (:host gitlab :repo "howardabrams/emacs-piper"))
+(package! elcord)
 (package! guix)
+(package! helm-twitch :recipe (:host github :repo "atheriel/helm-twitch"))
+(package! monokai-theme)
+(package! piper :recipe (:host gitlab :repo "howardabrams/emacs-piper"))
+(package! vimrc-mode)
+(package! visible-mark)

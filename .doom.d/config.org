@@ -379,7 +379,7 @@ I need to set plantuml path soo lets do that
 ;; Fix broken thing with emacs 27 where cursor is being hidden inside org mode
 (custom-set-faces!
   '((hl-line solaire-hl-line-face org-indent
-     outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
+             outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
     :extend t))
 #+END_SRC
 
@@ -473,6 +473,17 @@ New thingy that allows me to do stuff with pipes interactively.
 
 #+BEGIN_SRC emacs-lisp
 (use-package! piper :commands piper)
+#+END_SRC
+
+** Helm Twitch
+
+Helm and Twitch integration.
+
+#+BEGIN_SRC emacs-lisp
+(use-package! helm-twitch
+  :commands helm-twitch
+  :init (setq twitch-api-oauth-token "l6orhopentgy2sua4wmw4elzbz6if2"
+              twitch-api-username "therenzix"))
 #+END_SRC
 
 * Keybindings

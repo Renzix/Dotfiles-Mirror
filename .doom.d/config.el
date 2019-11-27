@@ -220,7 +220,7 @@ start and selects multiple lines(positive is down)"
 ;; Fix broken thing with emacs 27 where cursor is being hidden inside org mode
 (custom-set-faces!
   '((hl-line solaire-hl-line-face org-indent
-     outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
+             outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
     :extend t))
 
 (after! company-mode
@@ -260,6 +260,11 @@ start and selects multiple lines(positive is down)"
   (elcord-mode t))
 
 (use-package! piper :commands piper)
+
+(use-package! helm-twitch
+  :commands helm-twitch
+  :init (setq twitch-api-oauth-token "l6orhopentgy2sua4wmw4elzbz6if2"
+              twitch-api-username "therenzix"))
 
 (setq doom-leader-alt-key "C-c"
       doom-localleader-alt-key "C-c l")
