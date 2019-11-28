@@ -171,7 +171,7 @@ nnoremap Q  @q<CR>
 vnoremap Q  :norm @q<CR>
 " Maybe replace this with vim surround
 nnoremap S  :<C-u>DeniteProjectDir file/rec -start-filter -winheight=10 <CR>
-nnoremap s  :<C-u>DeniteBufferDir file/old -start-filter -winheight=10 <CR>
+nnoremap s  :<C-u>DeniteBufferDir file -start-filter -winheight=10 <CR>
 nnoremap \  :<C-u>DeniteProjectDir grep -stat-filter -winheight=10 <CR>
 nnoremap \| :<C-u>Denite buffer -start-filter -winheight=10 <CR>
 nnoremap ;  :<C-u>Denite command -start-filter -winheight=10 <CR>
