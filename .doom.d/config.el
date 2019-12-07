@@ -265,8 +265,6 @@ start and selects multiple lines(positive is down)"
   :commands helm-twitch
   :init (setq twitch-api-oauth-token (string-trim (my/get-string-from-file "~/.config/twitch-oauth"))
               twitch-api-username "therenzix"))
-(use-package erc-twitch
-  :commands erc-twitch-enable)
 
 (setq doom-leader-alt-key "C-c"
       doom-localleader-alt-key "C-c l")

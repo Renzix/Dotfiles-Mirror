@@ -483,8 +483,6 @@ Helm and Twitch integration.
   :commands helm-twitch
   :init (setq twitch-api-oauth-token (string-trim (my/get-string-from-file "~/.config/twitch-oauth"))
               twitch-api-username "therenzix"))
-(use-package erc-twitch
-  :commands erc-twitch-enable)
 #+END_SRC
 
 * Keybindings
