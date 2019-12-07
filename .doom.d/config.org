@@ -35,7 +35,7 @@ things.
 #+NAME: evil
 #+BEGIN_SRC emacs-lisp
 (setq confirm-kill-emacs nil)
-(auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
+(global-auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
 ;; Mark stuff
@@ -162,7 +162,6 @@ is open.
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 #+END_SRC
-
 
 Reads a string directly from a file then returns it as a string
 
@@ -475,15 +474,17 @@ New thingy that allows me to do stuff with pipes interactively.
 (use-package! piper :commands piper)
 #+END_SRC
 
-** Helm Twitch
+** Twitch
 
 Helm and Twitch integration.
 
 #+BEGIN_SRC emacs-lisp
 (use-package! helm-twitch
   :commands helm-twitch
-  :init (setq twitch-api-oauth-token "l6orhopentgy2sua4wmw4elzbz6if2"
+  :init (setq twitch-api-oauth-token (string-trim (my/get-string-from-file "~/.config/twitch-oauth"))
               twitch-api-username "therenzix"))
+(use-package erc-twitch
+  :commands erc-twitch-enable)
 #+END_SRC
 
 * Keybindings

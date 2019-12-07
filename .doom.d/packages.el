@@ -6,6 +6,7 @@
 (package! apropospriate-theme)
 (package! command-log-mode)
 (package! company-tabnine)
+(package! erc-twitch)
 (package! elcord)
 (package! guix)
 (package! helm-twitch :recipe (:host github :repo "atheriel/helm-twitch"))
