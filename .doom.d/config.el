@@ -1,5 +1,5 @@
 (setq confirm-kill-emacs nil)
-(auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
+(global-auto-revert-mode t) ;; @NOTE(Renzix): For working with IDE's or other editors
 ;; Minibuffers in minibuffers
 (setq enable-recursive-minibuffers t)
 ;; Mark stuff
@@ -263,7 +263,7 @@ start and selects multiple lines(positive is down)"
 
 (use-package! helm-twitch
   :commands helm-twitch
-  :init (setq twitch-api-oauth-token "l6orhopentgy2sua4wmw4elzbz6if2"
+  :init (setq twitch-api-oauth-token (string-trim (my/get-string-from-file "~/.config/twitch-oauth"))
               twitch-api-username "therenzix"))
 
 (setq doom-leader-alt-key "C-c"
