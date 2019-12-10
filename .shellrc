@@ -3,6 +3,13 @@
 # Return if not interactive
 [ -z "$PS1" ] && return
 
+# Run screen if available
+if [[ -z "$STY" ]]; then
+    if hash "screen" 2>/dev/null; then
+        TERM="xterm-256color" screen -xRR main-session
+    fi
+fi
+
 # Nice functions
 # DEBUG=t
 info() {

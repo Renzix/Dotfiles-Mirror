@@ -1,0 +1,20 @@
+# Better leader
+escape ^Jj
+# No startup thingy
+startup_message off 
+msgwait 0
+
+screen -t vi
+select 0
+stuff "nvim"
+screen -t sh
+select 1
+
+# ree
+altscreen on
+autodetach on 
+truecolors on
+windowlist string "%4n %h%=%f"
+
+# status bar
+hardstatus alwayslastline "%{= dd}%H %{r}%1` %{w}| %{g}%c %{w}| %{y}%d.%m.%Y %{w}| %{g}%l %{w}| %u  %n%f %t %+Lw%<"

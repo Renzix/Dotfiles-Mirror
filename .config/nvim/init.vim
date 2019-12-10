@@ -15,6 +15,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
 Plug 'chrisbra/SudoEdit.vim'
 Plug 'dense-analysis/ale'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'embear/vim-localvimrc'
 Plug 'honza/vim-snippets'
 Plug 'jceb/vim-orgmode'
@@ -35,7 +36,6 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-vividchalk'
 call plug#end()
 "}}}
 " Plugin config {{{
@@ -55,8 +55,8 @@ let g:netrw_altv=1 " open new things on right
 let g:netrw_liststyle=3 " tree view
 
 
-" vividchalk
-color vividchalk
+" dracula
+color dracula
 
 " Ale
 let g:ale_completion_enabled = 1
@@ -117,7 +117,7 @@ set inccommand=nosplit " show live changes to what the command will do
 set mouse=a
 
 " Gui stuff
-set termguicolors
+" set termguicolors
 set emoji
 
 " Spaces instead of tabs
@@ -139,7 +139,7 @@ set backupcopy=yes
 set path+=**
 
 " cursor line should have different colors
-set cursorline
+" set cursorline
 " Default Colors for CursorLine
 highlight  CursorLine ctermbg=Yellow ctermfg=None
 " Change Color when entering Insert Mode
@@ -156,6 +156,8 @@ match ErrorMsg /\t/
 highlight ColorColumn ctermbg=darkred
 call matchadd('ColorColumn', '\%81v', 100) " Lines at 81 are red
 call matchadd('ColorColumn', '\%100v.\+', 120) " Lines past 120 are red
+" for gnu screen
+set t_Co=256
 
 " }}}
 " Ex Commands {{{
@@ -208,7 +210,7 @@ nnoremap <leader>, :Rooter<CR>
 
 " .lvimrc stuff for project management
 nnoremap <expr> <leader>pc ":AsyncRun " . g:compile_command . "\<CR>"
-nnoremap <expr> <leader>pr ":AsyncRun " . g:run_command . "\<CR>"
+nnoremap <expr> <leader>pR ":AsyncRun " . g:run_command . "\<CR>"
 nnoremap <leader>pe :Rooter<CR>:e .lvimrc<CR>
 
 " Git fugitive stuff
@@ -244,7 +246,7 @@ let g:which_key_map =  {}
 let g:which_key_map.p =  { 
             \ 'name' : 'project',
             \ 'c' : 'compile',
-            \ 'r' : 'run',
+            \ 'R' : 'run',
             \ 'e' : 'edit lvimrc',
             \ }
 let g:which_key_map.g = {
