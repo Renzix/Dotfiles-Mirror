@@ -13,8 +13,7 @@ zstyle :compinstall filename '/home/archzix/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
-# @TODO(Renzix): Make this change based on distro or highlight install
-# Syntax highlighting
+
 [[ -d /usr/share/zsh/site-contrib/zsh-syntax-highlighting ]] && source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
 [[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
 
