@@ -11,10 +11,10 @@ sub MAIN() {
         }
         default { die "Unimplemented Kernel/OS: $_" }
     }
-    log "installing to $*HOMEDIR";
-    install(".emacs.d/init.el");
-    install(".emacs.d/bookmarks");
+    install(".doom.d");
+    install(".config/nvim/init.vim");
     install(".shellrc", ".bashrc", ".zshrc");
+    install(".screenrc");
     log "Finished installing";
 }
 
