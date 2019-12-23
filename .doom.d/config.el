@@ -198,11 +198,15 @@ start and selects multiple lines(positive is down)"
 ;; Enable this for default evil stuff
 (set-evil-initial-state! 'term-mode    'emacs)
 (after! calc
-  (set-evil-initial-state! 'calc-mode    'emacs))
+  (set-evil-initial-state! 'calc-mode  'emacs))
 (after! vterm
-  (set-evil-initial-state! 'vterm-mode   'emacs))
-(set-evil-initial-state! 'org-mode     'emacs) ;; @NOTE(Renzix): This gets overrided if config.org
+  (set-evil-initial-state! 'vterm-mode 'emacs))
+(set-evil-initial-state! 'org-mode     'emacs)
 (set-evil-initial-state! 'eshell-mode  'emacs)
+(set-evil-initial-state! 'matrix-mode  'emacs)
+
+(set-evil-initial-state! 'erc-mode     'emacs)
+(set-evil-initial-state! 'circe-mode   'emacs)
 
 (setq evil-insert-state-cursor   '(bar "#FF00FF")
       evil-normal-state-cursor   '(box "#6666F6")
@@ -222,6 +226,42 @@ start and selects multiple lines(positive is down)"
   '((hl-line solaire-hl-line-face org-indent
              outline-1 outline-2 outline-3 outline-4 outline-5 outline-6 outline-7 outline-8)
     :extend t))
+
+(set-irc-server! "chat.freenode.net"
+                 `(:tls t
+                        :port 6697
+                        :nick "Renzix"
+                        :sasl-username "renzix"
+                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
+                        :channels (:after-auth "#nixhub" "#emacs" "#kisslinux")))
+
+(set-irc-server! "irc.rizon.net"
+                 `(:tls t
+                        :port 6697
+                        :nick "Renzix"
+                        :sasl-username "renzix"
+                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
+                        :channels (:after-auth "#homescreen")))
+(after! circe
+  (require 'circe-chanop)
+  ;; Add some nice commands here - @TODO(Renzix)
+  ;; Other config options
+  (setq lui-time-stamp-position 'right-margin
+        lui-fill-type nil
+        lui-track-bar-behavior 'before-switch-to-buffer
+        lui-flyspell-p t
+        lui-flyspell-alist '((".*" "american")))
+  (defun my-lui-setup ()
+    (setq fringes-outside-margins t
+          right-margin-width 5
+          word-wrap t
+          wrap-prefix "    "))
+  (load "lui-logging" nil t)
+  (enable-lui-logging-globally)
+  (enable-lui-autopaste)
+  (enable-lui-track-bar)
+  (add-hook 'circe-channel-mode-hook 'enable-lui-autopaste)
+  (add-hook 'lui-mode-hook 'my-lui-setup))
 
 (after! company-mode
   (add-to-list 'company-backends #'company-tabnine))
