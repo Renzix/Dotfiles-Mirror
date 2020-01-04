@@ -45,6 +45,8 @@
               display-line-numbers-width 3
               display-line-numbers-widen t)
 
+(setq doom-font (font-spec :family "Fira Code" :weight 'bold :size 14))
+
 (defun my/rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
   (interactive)

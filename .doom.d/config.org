@@ -115,6 +115,12 @@ relative line numbers r lit
               display-line-numbers-widen t)
 #+END_SRC
 
+*** Font
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-font (font-spec :family "Fira Code" :weight 'bold :size 14))
+#+END_SRC
+
 ** Nice Functions
 *** File Handling
 

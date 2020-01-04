@@ -5,7 +5,7 @@
 
 # Environment Vars
 export GOPATH="$HOME/.go"
-export PATH="$PATH:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin"
+export PATH="$PATH:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin:$HOME/Dotfiles/Bin"
 
 # Nice functions
 # DEBUG=t
