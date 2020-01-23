@@ -7,6 +7,10 @@
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin:$HOME/Dotfiles/Bin"
 
+if [ -d "$HOME/.emacs.d/bin" ]; then
+    export PATH="$PATH:$HOME/.emacs.d/bin"
+fi
+
 # Nice functions
 # DEBUG=t
 info() {

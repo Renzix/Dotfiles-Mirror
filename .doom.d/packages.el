@@ -3,6 +3,7 @@
 
 ;; Code
 
+(unpin! t)
 (package! apropospriate-theme)
 (package! command-log-mode)
 (package! company-tabnine)
