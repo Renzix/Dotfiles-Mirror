@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Requires rsync and scp
+# Optionally requires xclip
+set -e
+
+# Defined Variables
+USER="renzix"
+SERVER="fs.renzix.com"
+PORT=2222
+DESTINATION="/usr/share/nginx/files/pb"
+TEMPFILE="$(mktemp -t XXXXX).txt"
+trap "rm -f ${TEMPFILE}" 0 2 3 15
+
+# Parse options
+usage() { printf "Usage: $1 [-f filename] [filecontents]\n" 1>&2; exit 1; }
+[ "$#" -eq 0 ] && usage "No parameters"
+
+while getopts 'f:' OPTION; do
+    case "$OPTION" in
+        f)
+            if [ "${OPTARG}" = "-" ]
+            then
+                cp /dev/stdin "${TEMPFILE}"
+            elif [ -f "${OPTARG}" ]
+            then
+                TEMPFILE="${OPTARG}"
+            else
+                usage "File not found"
+            fi
+            ;;
+        # e) # @TODO(Renzix): Support any extensions
+        #     [ -z "${OPTARG}" ] && usage "No extension"
+        #     mv ${TEMPFILE} "${TEMPFILE}.${OPTARG}"
+        #     TEMPFILE="${TEMPFILE}.${OPTARG}"
+        #     ;;
+        ?)
+        usage "Unknown Option Given"
+        ;;
+    esac
+done
+shift "$((OPTIND -1))"
+[ -n "$*" ] && printf "$*" > ${TEMPFILE}
+
+# Connect to the server and get URL
+rsync -e "ssh -p ${PORT}" --chmod u+rw,g+rw,o+r "${TEMPFILE}" "${USER}@${SERVER}:${DESTINATION}"
+
+URL="https://${SERVER}/pb/${TEMPFILE##*/}"
+if command -v "xclip" > /dev/null 2>&1
+then
+    echo "${URL}" | xclip -selection clipboard
+    echo "${URL}" | xclip -selection primary
+fi
+echo "${URL}"

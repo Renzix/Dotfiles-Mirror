@@ -371,7 +371,8 @@ start and selects multiple lines(positive is down)"
 
 (map! (:map helm-map
         "C-i"   #'helm-select-action
-        "C-j"   #'helm-execute-persistent-action
+        "C-z"   #'helm-execute-persistent-action
+        "<return>"   #'helm-execute-persistent-action
         "<tab>" #'helm-select-action))
 
 (map! :map org-mode-map
@@ -391,6 +392,4 @@ start and selects multiple lines(positive is down)"
       :e "C-/"   #'vterm--self-insert
       :e "C-y"   #'vterm--self-insert
       :e "M-y"   #'vterm--self-insert
-      :e "RET"   #'vterm--self-insert
-      :e "C-m"   #'vterm--self-insert
-      :e "<return>"   #'vterm--self-insert)
+      :e "RET"   #'vterm--self-insert)

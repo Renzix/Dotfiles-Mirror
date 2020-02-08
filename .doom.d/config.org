@@ -614,7 +614,8 @@ I actually enjoy the helm defaults so we should use that.
 #+BEGIN_SRC emacs-lisp
 (map! (:map helm-map
         "C-i"   #'helm-select-action
-        "C-j"   #'helm-execute-persistent-action
+        "C-z"   #'helm-execute-persistent-action
+        "<return>"   #'helm-execute-persistent-action
         "<tab>" #'helm-select-action))
 #+END_SRC
 
@@ -649,7 +650,5 @@ vterm should use mostly vterm-self-insert binds
       :e "C-/"   #'vterm--self-insert
       :e "C-y"   #'vterm--self-insert
       :e "M-y"   #'vterm--self-insert
-      :e "RET"   #'vterm--self-insert
-      :e "C-m"   #'vterm--self-insert
-      :e "<return>"   #'vterm--self-insert)
+      :e "RET"   #'vterm--self-insert)
 #+END_SRC
