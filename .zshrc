@@ -1,8 +1,21 @@
 #!/usr/bin/env zsh
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+
+# History
+export HISTFILE="$HOME/.config/zsh/zsh-history"
+export HISTSIZE=40000
+export SAVEHIST=$HISTSIZE
+setopt hist_ignore_all_dups
+
+if [[ $(wc -l < $HISTFILE) -gt 20000 ]]; then
+	try sed -i 1,10000d $HISTFILE || 
+		{ 
+			TMPFILE = `mktemp`
+			tail -n +4 $HISTFILE > $TMPFILE
+			mv $TMPFILE $HISTFILE
+		}
+fi
+
+
 setopt autocd extendedglob nomatch
 unsetopt appendhistory beep notify
 bindkey -e
