@@ -315,11 +315,11 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x C-t" #'+vterm/here
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
+ (:leader ;; Make this open guix if guixsd???
+   :desc "System Packages" "P" #'helm-system-packages)
  (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
    :localleader
-   :desc "Merge" "m" #'smerge-command-prefix)
- (:map override
-   :nvei "M-x"   (lambda! (message "use C-; or ; dumbass")))) ;; if i bind C-;...
+   :desc "Merge" "m" #'smerge-command-prefix))
 
 (map!
  :e "C-x C-k" #'kill-this-buffer
@@ -345,7 +345,7 @@ start and selects multiple lines(positive is down)"
    :e "M-\""  #'+helm/project-search))
 
 (map!
- :nv "Q"     (lambda! (evil-record-macro ?q))
+ :nv "Q"     (kbd "@q")
  :nv "g ="   #'my/smart-indent
  (:map override
    :nvm ";"   #'my/helm-M-x
@@ -370,9 +370,11 @@ start and selects multiple lines(positive is down)"
 (evil-ex-define-cmd "bd" 'kill-this-buffer)
 
 (map! (:map helm-map
-        "C-i"   #'helm-select-action
-        "C-z"   #'helm-execute-persistent-action
-        "<return>"   #'helm-execute-persistent-action
+        "C-m" #'helm-maybe-exit-minibuffer
+        ;;"<return>" #'helm-maybe-exit-minibuffer
+        "C-j"   #'helm-execute-persistent-action
+        "C-<return>" #'helm-execute-persistent-action
+        "C-i"   #'helm-select-action ;; Terminal Tab
         "<tab>" #'helm-select-action))
 
 (map! :map org-mode-map
