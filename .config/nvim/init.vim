@@ -13,27 +13,22 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
-Plug 'chrisbra/SudoEdit.vim'
 Plug 'dense-analysis/ale'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'embear/vim-localvimrc'
 Plug 'honza/vim-snippets'
 Plug 'jceb/vim-orgmode'
-if has('nvim')
-    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/denite.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-user'
 Plug 'liuchengxu/vim-which-key'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'luochen1990/rainbow'
+Plug 'mbbill/undotree'
 Plug 'sheerun/vim-polyglot'
 Plug 'SirVer/ultisnips'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 call plug#end()
@@ -53,7 +48,7 @@ let g:rooter_resolve_links = 1
 let g:netrw_banner=0 " hide banner
 let g:netrw_altv=1 " open new things on right
 let g:netrw_liststyle=3 " tree view
-
+let g:netrw_winsize = 15
 
 " dracula
 color dracula
@@ -71,6 +66,9 @@ let g:ale_linters = {
 let g:compile_command = "make"
 let g:run_command = "make run"
 
+" Rainbow Parens
+let g:rainbow_active = 1
+
 " Ultisnippets
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-f>"
@@ -80,33 +78,20 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:gitgutter_map_keys = 0 " Disables default mappings
 let g:gitgutter_grep = 'rg'
 
-" Denite???
-call denite#custom#option('default', 'prompt', '➤ ')
-call denite#custom#var('grep', 'command', ['rg'])
-autocmd FileType denite call s:denite_settings()
-function! s:denite_settings() abort
-    nnoremap <silent><buffer><expr> <CR>
-                \ denite#do_map('do_action')
-    nnoremap <silent><buffer><expr> d
-                \ denite#do_map('do_action', 'delete')
-    nnoremap <silent><buffer><expr> p
-                \ denite#do_map('do_action', 'preview')
-    nnoremap <silent><buffer><expr> q
-                \ denite#do_map('quit')
-    nnoremap <silent><buffer><expr> i
-                \ denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> <Space>
-                \ denite#do_map('toggle_select').'j'
-endfunction
 
 "}}}
 " Actual config {{{
+
+" Default to posix shell
+set shell=sh
 
 " Bunch of nice variables to make better defaults
 set foldmethod=marker
 set scrolloff=3
 set number relativenumber
+set undodir="~/.local/share/neovim"
 set undofile
+set undolevels=10000
 
 " Search stuff
 set ignorecase smartcase
@@ -154,10 +139,24 @@ match ErrorMsg /\t/
 
 " Highlight trailing whitespace
 highlight ColorColumn ctermbg=darkred
-call matchadd('ColorColumn', '\%81v', 100) " Lines at 81 are red
+call matchadd('ColorColumn', '\%81v', 100) " Lines at 100 are red
 call matchadd('ColorColumn', '\%100v.\+', 120) " Lines past 120 are red
 " for gnu screen
 set t_Co=256
+
+" }}}
+" Auto Commands {{{
+
+" Save when you lose window focus
+autocmd FocusLost * :wa
+
+augroup vim_files "{{{
+    au!
+
+    " Run :help for word under cursor
+    autocmd filetype vim noremap <buffer> ,h <Esc>:help <C-r><C-w><CR>
+augroup end "}}}
+
 
 " }}}
 " Ex Commands {{{
@@ -171,17 +170,21 @@ command! W w !sudo tee % > /dev/null
 " Old bind which nobody uses
 nnoremap Q  @q<CR>
 vnoremap Q  :norm @q<CR>
+" Better escape
+inoremap jj <Esc>
 " Maybe replace this with vim surround
-nnoremap S  :<C-u>DeniteProjectDir file/rec -start-filter -winheight=10 <CR>
-nnoremap s  :<C-u>DeniteBufferDir file -start-filter -winheight=10 <CR>
-nnoremap \  :<C-u>DeniteProjectDir grep -stat-filter -winheight=10 <CR>
-nnoremap \| :<C-u>Denite buffer -start-filter -winheight=10 <CR>
-nnoremap ;  :<C-u>Denite command -start-filter -winheight=10 <CR>
-" Prob should just use =ae cuz plugin
-nnoremap g=  magg=G`a
+" nnoremap S  :<C-u>DeniteProjectDir file/rec -start-filter -winheight=10 <CR>
+" nnoremap s  :<C-u>DeniteBufferDir file -start-filter -winheight=10 <CR>
+" nnoremap \  :<C-u>DeniteProjectDir grep -stat-filter -winheight=10 <CR>
+" nnoremap \| :<C-u>Denite buffer -start-filter -winheight=10 <CR>
+" nnoremap ;  :<C-u>Denite command -start-filter -winheight=10 <CR>
+nnoremap ; :
 "should be this by default cuz consistancy
 nnoremap Y y$
 " For some reason vim doesnt bind the alt key for anything???
+" Undotree
+nnoremap <M-u> :UndotreeToggle<CR>
+" Clipboard sucks
 nnoremap <M-p> "+p
 vnoremap <M-p> "+p
 nnoremap <M-y> "+y
@@ -208,6 +211,31 @@ let mapleader="\<Space>"
 nnoremap <leader>. :lcd %:p:h<CR>
 nnoremap <leader>, :Rooter<CR>
 
+" Registers
+function! s:CopyRegister()
+    if a:0 > 0
+    endif
+    let sourceReg = nr2char(getchar())
+
+    if sourceReg !~# '\v^[a-z0-9]*'
+        echo "Invalid register given: " . sourceReg
+        return
+    endif
+
+    let destinationReg = nr2char(getchar())
+
+    if destinationReg !~# '\v^[a-z0-9]*'
+        echo "Invalid register given: " . destinationReg
+        return
+    endif
+
+    call setreg(destinationReg, getreg(sourceReg, 1))
+    echo "Replaced register '". destinationReg ."' with contents of register '". sourceReg ."'"
+endfunction
+nnoremap <leader>rc :call <sid>CopyRegister()<CR>
+nnoremap <leader>r* :call <sid>CopyRegister()<CR>"*
+nnoremap <leader>r+ :call <sid>CopyRegister()<CR>"+
+
 " .lvimrc stuff for project management
 nnoremap <expr> <leader>pc ":AsyncRun " . g:compile_command . "\<CR>"
 nnoremap <expr> <leader>pR ":AsyncRun " . g:run_command . "\<CR>"
@@ -229,14 +257,18 @@ nnoremap <leader>lf :ALEFindReferences<CR>
 nnoremap <leader>l= :ALEFix<CR>
 nnoremap <leader>lr :ALERename<CR>
 
+" Open
+nnoremap <leader>op :Lexplore<CR>
+
 " Single letter binds for leader
 nnoremap <leader>`  :call asyncrun#quickfix_toggle(16)<CR>
+nnoremap <leader>e <C-w><C-v><C-l>:e $MYVIMRC<CR>
 
 " Local leader only file type based commands
 let maplocalleader=','
 
 " }}}
-" whichkey {{{
+" Whichkey {{{
 " Bind whichkey on leader and localleader keypress
 "
 autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map')
