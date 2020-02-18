@@ -362,12 +362,9 @@ start and selects multiple lines(positive is down)"
 (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
 (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
 (evil-ex-define-cmd "blog" (lambda! (find-file "~/Blog/blog.org")))
-(evil-ex-define-cmd "ho[me]" (lambda! (find-file "~/Nextcloud/Documents/Home.org")))
-(evil-ex-define-cmd "wo[rk]" (lambda! (find-file "~/Nextcloud/Documents/Work.org")))
-(evil-ex-define-cmd "sc[hool]" (lambda! (find-file "~/Nextcloud/Documents/School.org")))
 (evil-ex-define-cmd "a[genda]" #'org-agenda)
-(evil-ex-define-cmd "q[uit]" 'delete-window)
-(evil-ex-define-cmd "bd" 'kill-this-buffer)
+(evil-ex-define-cmd "q[uit]" #'delete-window)
+(evil-ex-define-cmd "bd" #'kill-this-buffer)
 
 (map! (:map helm-map
         "C-m" #'helm-maybe-exit-minibuffer
