@@ -8,22 +8,23 @@
 ;; Use eww as the default browser cuz its nice
 (setq browse-url-browser-function 'eww-browse-url)
 
-(when (display-graphic-p)
-  (defvar renzix-weekday (format-time-string "%w"))
-  (cond ((string= "0" renzix-weekday) ;; Sunday
-         (load-theme 'doom-dracula t))
-        ((string= "1" renzix-weekday) ;; Monday
-         (load-theme 'doom-opera t))
-        ((string= "2" renzix-weekday) ;; Tuesday
-         (load-theme 'apropospriate-dark t))
-        ((string= "3" renzix-weekday) ;; Wednesday
-         (load-theme 'doom-molokai t))
-        ((string= "4" renzix-weekday) ;; Thursday
-         (load-theme 'doom-nord t))
-        ((string= "5" renzix-weekday) ;; Friday
-         (load-theme 'monokai t))
-        ((string= "6" renzix-weekday) ;; Saturday
-         (load-theme 'doom-one t))))
+(load-theme 'doom-dracula t)
+;; (when (display-graphic-p)
+;;   (defvar renzix-weekday (format-time-string "%w"))
+;;   (cond ((string= "0" renzix-weekday) ;; Sunday
+;;          (load-theme 'doom-dracula t))
+;;         ((string= "1" renzix-weekday) ;; Monday
+;;          (load-theme 'doom-opera t))
+;;         ((string= "2" renzix-weekday) ;; Tuesday
+;;          (load-theme 'apropospriate-dark t))
+;;         ((string= "3" renzix-weekday) ;; Wednesday
+;;          (load-theme 'doom-molokai t))
+;;         ((string= "4" renzix-weekday) ;; Thursday
+;;          (load-theme 'doom-nord t))
+;;         ((string= "5" renzix-weekday) ;; Friday
+;;          (load-theme 'monokai t))
+;;         ((string= "6" renzix-weekday) ;; Saturday
+;;          (load-theme 'doom-one t))))
 
 (global-hl-line-mode)
 
