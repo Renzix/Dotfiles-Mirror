@@ -8,42 +8,49 @@ export GOPATH="$HOME/.go"
 export PATH="$PATH:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin:$HOME/Dotfiles/Bin"
 
 if [ -d "$HOME/.emacs.d/bin" ]; then
-	export PATH="$PATH:$HOME/.emacs.d/bin"
+    export PATH="$PATH:$HOME/.emacs.d/bin"
 fi
 
 # Nice functions
 # DEBUG=t
 info() {
-	[ -z "$DEBUG" ] ||
-		printf "[%s]:$1\n" "$(date +'%D %T')";
-	}
+    [ -z "$DEBUG" ] ||
+        printf "[%s]:$1\n" "$(date +'%D %T')";
+    }
 
 try_alias() {
-	COMMAND=$2
-	NAME=$1
-	shift; shift;
-	if command -v "${COMMAND}" > /dev/null 2>&1; then
-		info "${COMMAND} found making ${NAME} point to ${COMMAND} $@"
-		alias ${NAME}="${COMMAND} $*"
-	else
-		return 1
-	fi
+    COMMAND=$2
+    NAME=$1
+    shift; shift;
+    if command -v "${COMMAND}" > /dev/null 2>&1; then
+        info "${COMMAND} found making ${NAME} point to ${COMMAND} $@"
+        alias ${NAME}="${COMMAND} $*"
+    else
+        return 1
+    fi
 }
 
 try() {
-	if command -v "$1" > /dev/null 2>&1; then
-		info "Found $1 and running it"
-		eval $*
-	else
-		return $?
-	fi
+    if command -v "$1" > /dev/null 2>&1; then
+        info "Found $1 and running it"
+        eval $*
+    else
+        return $?
+    fi
 }
+
+# run tmux if available
+if [ -z "$TMUX" ] ; then
+    if command -v "tmux" > /dev/null 2>&1; then
+        exec tmux new-session -A -s main
+    fi
+fi
 
 # overloading cd to run commands if requirements are reached
 cd() {
-	builtin cd "$@" || return
-	[ -d ".git" ] && try onefetch
-	return 0
+    builtin cd "$@" || return
+    [ -d ".git" ] && try onefetch
+    return 0
 }
 
 rreadlink() ( # Execute the function in a *subshell* to localize variables and the effect of `cd`.
@@ -60,36 +67,36 @@ target=$1 fname= targetDir= CDPATH=
     # in bash, dash, and ksh. In zsh, option POSIX_BUILTINS must be turned on for that
     # to happen.
     { \unalias command; \unset -f command; } >/dev/null 2>&1
-	    [ -n "$ZSH_VERSION" ] && options[POSIX_BUILTINS]=on # make zsh find *builtins* with `command` too.
+        [ -n "$ZSH_VERSION" ] && options[POSIX_BUILTINS]=on # make zsh find *builtins* with `command` too.
 
-	    while :; do # Resolve potential symlinks until the ultimate target is found.
-		    [ -L "$target" ] || [ -e "$target" ] || { command printf '%s\n' "ERROR: '$target' does not exist." >&2; return 1; }
-		    command cd "$(command dirname -- "$target")" # Change to target dir; necessary for correct resolution of target path.
-		    fname=$(command basename -- "$target") # Extract filename.
-		    [ "$fname" = '/' ] && fname='' # !! curiously, `basename /` returns '/'
-		    if [ -L "$fname" ]; then
-			    # Extract [next] target path, which may be defined
-			    # *relative* to the symlink's own directory.
-			    # Note: We parse `ls -l` output to find the symlink target
-			    #       which is the only POSIX-compliant, albeit somewhat fragile, way.
-			    target=$(command ls -l "$fname")
-			    target=${target#* -> }
-			    continue # Resolve [next] symlink target.
-		    fi
-		    break # Ultimate target reached.
-	    done
-	    targetDir=$(command pwd -P) # Get canonical dir. path
-	    # Output the ultimate target's canonical path.
-	    # Note that we manually resolve paths ending in /. and /.. to make sure we have a normalized path.
-	    if [ "$fname" = '.' ]; then
-		    command printf '%s\n' "${targetDir%/}"
-	    elif  [ "$fname" = '..' ]; then
-		    # Caveat: something like /var/.. will resolve to /private (assuming /var@ -> /private/var), i.e. the '..' is applied
-		    # AFTER canonicalization.
-		    command printf '%s\n' "$(command dirname -- "${targetDir}")"
-	    else
-		    command printf '%s\n' "${targetDir%/}/$fname"
-	    fi
+        while :; do # Resolve potential symlinks until the ultimate target is found.
+            [ -L "$target" ] || [ -e "$target" ] || { command printf '%s\n' "ERROR: '$target' does not exist." >&2; return 1; }
+            command cd "$(command dirname -- "$target")" # Change to target dir; necessary for correct resolution of target path.
+            fname=$(command basename -- "$target") # Extract filename.
+            [ "$fname" = '/' ] && fname='' # !! curiously, `basename /` returns '/'
+            if [ -L "$fname" ]; then
+                # Extract [next] target path, which may be defined
+                # *relative* to the symlink's own directory.
+                # Note: We parse `ls -l` output to find the symlink target
+                #       which is the only POSIX-compliant, albeit somewhat fragile, way.
+                target=$(command ls -l "$fname")
+                target=${target#* -> }
+                continue # Resolve [next] symlink target.
+            fi
+            break # Ultimate target reached.
+        done
+        targetDir=$(command pwd -P) # Get canonical dir. path
+        # Output the ultimate target's canonical path.
+        # Note that we manually resolve paths ending in /. and /.. to make sure we have a normalized path.
+        if [ "$fname" = '.' ]; then
+            command printf '%s\n' "${targetDir%/}"
+        elif  [ "$fname" = '..' ]; then
+            # Caveat: something like /var/.. will resolve to /private (assuming /var@ -> /private/var), i.e. the '..' is applied
+            # AFTER canonicalization.
+            command printf '%s\n' "$(command dirname -- "${targetDir}")"
+        else
+            command printf '%s\n' "${targetDir%/}/$fname"
+        fi
     )
 
     try_alias ls exa
@@ -123,16 +130,16 @@ alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
 # note that some of this isnt posix but it is "posix" for
 # the shell specified
 if [ -n "$BASH_VERSION" ]; then 
-	info "Your using bash"
-	dir=$(dirname -- "$(rreadlink "$HOME/.bashrc")")
-	. "${dir}/.bashrc"
+    info "Your using bash"
+    dir=$(dirname -- "$(rreadlink "$HOME/.bashrc")")
+    . "${dir}/.bashrc"
 elif [ -n "$ZSH_VERSION" ]; then
-	info "Your using zsh $0"
-	dir=$(dirname -- "$(rreadlink "$HOME/.zshrc")")
-	. "${dir}/.zshrc"
+    info "Your using zsh $0"
+    dir=$(dirname -- "$(rreadlink "$HOME/.zshrc")")
+    . "${dir}/.zshrc"
 else
-	info "Finish shellrc"
-	export PS1="\$ "
+    info "Finish shellrc"
+    export PS1="\$ "
 fi
 
 export NIX_AUTO_RUN=1
