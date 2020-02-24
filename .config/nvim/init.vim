@@ -13,17 +13,19 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
-Plug 'dense-analysis/ale'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'embear/vim-localvimrc'
 Plug 'honza/vim-snippets'
 Plug 'jceb/vim-orgmode'
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-user'
 Plug 'liuchengxu/vim-which-key'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'luochen1990/rainbow'
 Plug 'mbbill/undotree'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'SirVer/ultisnips'
 Plug 'skywind3000/asyncrun.vim'
@@ -53,13 +55,6 @@ let g:netrw_winsize = 15
 " dracula
 color dracula
 
-" Ale
-let g:ale_completion_enabled = 1
-let g:ale_linters = {
-            \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
-            \   'rust': ['cargo', 'rls'],
-            \   'cpp' : ['clangd']
-            \}
 
 " lvimrc
 " Default commands which can be overriden by .lvimrc
@@ -167,23 +162,24 @@ command! W w !sudo tee % > /dev/null
 " Change current Directory
 " }}}
 " Normal and Visual Keybindings {{{
-" Old bind which nobody uses
-nnoremap Q  @q<CR>
+" I never use . command and ex mode so i rebind them. the dot command is
+" basically a macro so I feel like dealing with a 'default' macro reg would be
+" cool and useful. Might replace Q with something else
+nnoremap .  @q<CR>
+nnoremap Q  qq
 vnoremap Q  :norm @q<CR>
 " Better escape
 inoremap jj <Esc>
+" undo tree
+nnoremap U :UndotreeToggle<CR>
 " Maybe replace this with vim surround
-" nnoremap S  :<C-u>DeniteProjectDir file/rec -start-filter -winheight=10 <CR>
-" nnoremap s  :<C-u>DeniteBufferDir file -start-filter -winheight=10 <CR>
-" nnoremap \  :<C-u>DeniteProjectDir grep -stat-filter -winheight=10 <CR>
-" nnoremap \| :<C-u>Denite buffer -start-filter -winheight=10 <CR>
-" nnoremap ;  :<C-u>Denite command -start-filter -winheight=10 <CR>
-nnoremap ; :
+nnoremap s :Files<CR>
+nnoremap \| :Buffers<CR>
+nnoremap \ :Rg<CR>
+nnoremap ; :Commands<CR>
 "should be this by default cuz consistancy
 nnoremap Y y$
 " For some reason vim doesnt bind the alt key for anything???
-" Undotree
-nnoremap <M-u> :UndotreeToggle<CR>
 " Clipboard sucks
 nnoremap <M-p> "+p
 vnoremap <M-p> "+p
@@ -251,11 +247,11 @@ nnoremap <leader>gm :Gmerge<CR>
 nnoremap <leader>gb :Gbrowse<CR>
 
 " lsp
-nnoremap <leader>ld :ALEGoToDefinition<CR>
-nnoremap <leader>lt :ALEGoToTypeDefinition<CR>
-nnoremap <leader>lf :ALEFindReferences<CR>
-nnoremap <leader>l= :ALEFix<CR>
-nnoremap <leader>lr :ALERename<CR>
+nnoremap <leader>ld <Plug>(coc-definition)
+nnoremap <leader>lt <Plug>(coc-type-definition)
+nnoremap <leader>lf <Plug>(coc-references)
+nnoremap <leader>l= <Plug>(coc-format-selected)
+nnoremap <leader>lr <Plug>(coc-rename)
 
 " Open
 nnoremap <leader>op :Lexplore<CR>
