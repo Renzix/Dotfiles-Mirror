@@ -326,7 +326,7 @@ globalkeys = gears.table.join(
         {description = "select previous", group = "layout"}),
 
     -- Other useful keybinds
-    awful.key({ modkey,           }, "s",     function () awful.spawn.with_shell("maim -s | tee >(xclip -selection clipboard -t image/png) | curl -F 'file=@-' 0x0.st | xclip -selection primary") end,
+    awful.key({ modkey,           }, "s",     function () awful.spawn.with_shell("maim -su | tee >(xclip -selection clipboard -t image/png) | curl -F 'file=@-' 0x0.st | xclip -selection primary") end,
         {description = "Take a picture", group = "clipboard"}),
     awful.key({ modkey, "Shift"   }, "s", function () awful.spawn.with_shell("giph -s -t 10 | curl -F'file=@-' https://0x0.st | sed 's/$/\.gif/' | xclip -selection clipboard") end,
         {description = "Take a 10 second gif", group = "clipboard"}),
