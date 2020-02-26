@@ -32,6 +32,6 @@ compinit
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
-export PROMPT='%(?.$fg[cyan].$fg[yellow])%1~%#%{$reset_color%} '
+PROMPT='%{%(?.$fg[green].$fg[red])%}%1~%  %{$reset_color%}% '
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
