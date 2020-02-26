@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -o posix
+
+[ -z "$1" ] && set -- 5
+
+head() {
+    while IFS= read -r line; do
+        printf '%s\n' "$line"
+        i=$((i+1))
+        [ "$i" = "$1" ] && return
+    done < "$2"
+}
+
+# posix read doesnt have -n need to fix
+trundicate() {
+    while read -n 1 -r letter; do
+        printf '%s' "$letter"
+        i=$((i+1))
+        [ "$i" = "$1" ] && return
+    done < "/dev/stdin"
+}
+
+head 5 /dev/urandom | tr -dc A-Za-z0-9 | trundicate $1
+echo ''
