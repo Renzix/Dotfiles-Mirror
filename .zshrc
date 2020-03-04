@@ -29,6 +29,7 @@ compinit
 
 [[ -d /usr/share/zsh/site-contrib/zsh-syntax-highlighting ]] && source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
 [[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
+[[ -d /usr/share/zsh/site-functions ]] && source /usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh #gentoo
 
 autoload -U colors && colors
 setopt PROMPT_SUBST
