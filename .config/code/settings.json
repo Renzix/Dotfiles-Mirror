@@ -1,0 +1,20 @@
+{
+    "window.menuBarVisibility": "Toggle",
+    "workbench.activityBar.visible": false,
+    "workbench.colorTheme": "Dracula",
+    "workbench.colorCustomizations": {
+        "editorCursor.foreground": "#90ff90"
+    },
+    "editor.cursorStyle": "block",
+    "editor.cursorBlinking": "solid",
+    "editor.lineNumbers": "off",
+    "breadcrumbs.enabled": true,
+    "workbench.statusBar.visible": true,
+    "workbench.editor.showTabs": false,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "editor.minimap.enabled": false,
+    "editor.scrollbar.verticalScrollbarSize": 0,
+    "editor.overviewRulerBorder": false,
+    "python.insidersChannel": "weekly"
+}
