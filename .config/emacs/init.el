@@ -258,15 +258,15 @@
 
 ;; Global
 (global-set-key (kbd "C-j") 'avy-goto-char-2)
-(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 ;; Dealing with lines/words is easier
+(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-k") 'crux-smart-kill-line)
 (global-set-key (kbd "C-o") 'crux-smart-open-line)
 (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
 (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
 (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
-(global-set-key (kbd "M-p") 'move-line-up)
-(global-set-key (kbd "M-n") 'move-line-down)
+(global-set-key (kbd "M-<up>") 'move-line-up)
+(global-set-key (kbd "M-<down>") 'move-line-down)
 (global-set-key (kbd "C-^") 'crux-top-join-line)
 ;; M-w is now 10x better
 (global-set-key [remap kill-ring-save] 'easy-kill)
@@ -281,6 +281,8 @@
                 (lambda (arg char)
                   (interactive "p\ncZap to char: ")
                   (zap-to-char -1 char)))
+;; C-M-y should go back 1 in kill ring because M-- M-y is long
+(global-set-key (kbd "C-M-y") (lambda () (interactive) (yank-pop -1)))
 
 ;; faster way to kill shit
 (global-set-key (kbd "C-x K") 'crux-kill-other-buffers)
