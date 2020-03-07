@@ -30,6 +30,7 @@
 
 (use! 'amx)
 (use! 'avy)
+(use! 'browse-kill-ring)
 (use! 'company)
 (use! 'company-lsp)
 (use! 'crux)
@@ -268,7 +269,9 @@
 (global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
 (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
 (global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "C-c y") 'browse-kill-ring)
 
+;; Projectile
 (global-set-key (kbd "C-c p") 'projectile-command-map)
 (global-set-key (kbd "C-c p s") 'projectile-ripgrep)
 
