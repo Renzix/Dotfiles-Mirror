@@ -44,6 +44,7 @@
 (use! 'git-timemachine)
 (use! 'hl-todo)
 (use! 'ido-completing-read+)
+(use! 'multiple-cursors)
 (use! 'lsp-java)
 (use! 'lsp-mode)
 (use! 'lsp-python-ms)
@@ -57,6 +58,7 @@
 (use! 'vterm)
 (use! 'which-key)
 (use! 'yasnippet)
+(use! 'yasnippet-snippets)
 
 ;;; Config
 
@@ -81,7 +83,6 @@
       nil
     t))
 (advice-add 'window-splittable-p :before-while #'do-not-split-more-than-two-windows)
-
 
 (show-paren-mode 1)
 (global-hl-line-mode)
@@ -123,6 +124,8 @@
 (add-hook 'ido-make-file-list-hook
           (lambda ()
             (define-key ido-file-dir-completion-map (kbd "SPC") 'self-insert-command)))
+
+;; Org mode
 
 (setq-default initial-major-mode 'org-mode
               initial-scratch-message ""
@@ -202,6 +205,9 @@
 (global-hl-todo-mode)
 (delete-selection-mode 1)
 
+;; Multiple Cursors change color for the cursors to light blue
+;;(set-face-attribute 'mc/cursor-face nil :background "#B3E6FF")
+
 ;; Useful Functions
 
 (defun dired-dotfiles-toggle ()
@@ -251,22 +257,42 @@
 ;;; Keybinds
 
 ;; Global
-(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-j") 'avy-goto-char-2)
+(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
+;; Dealing with lines/words is easier
 (global-set-key (kbd "C-k") 'crux-smart-kill-line)
 (global-set-key (kbd "C-o") 'crux-smart-open-line)
 (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
+(global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
+(global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
 (global-set-key (kbd "M-p") 'move-line-up)
 (global-set-key (kbd "M-n") 'move-line-down)
 (global-set-key (kbd "C-^") 'crux-top-join-line)
+;; M-w is now 10x better
 (global-set-key [remap kill-ring-save] 'easy-kill)
 (global-set-key [remap mark-sexp] 'easy-mark)
+;; Multiple Cursor stuff
+(global-set-key (kbd "C->") 'mc/mark-next-like-this-word)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this-word)
+(global-set-key (kbd "C-.") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-,") 'mc/skip-to-previous-like-this)
+;; M-z is forwards so C-z is backwards
+(global-set-key (kbd "C-z")
+                (lambda (arg char)
+                  (interactive "p\ncZap to char: ")
+                  (zap-to-char -1 char)))
 
-(global-set-key (kbd "C-x K") 'crux-kill-all-open-buffers)
+;; faster way to kill shit
+(global-set-key (kbd "C-x K") 'crux-kill-other-buffers)
+;; Nice search cuz I dont have helm or ivy on here
 (global-set-key (kbd "C-x g") 'deadgrep)
-
+;; Move around windows
 (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
 
+;; More multiple cursor stuff
+(global-set-key (kbd "C-c <") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c >") 'mc/edit-lines)
+;; Nice functions that should be default but dont exist for ??? reason
 (global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
 (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
 (global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
@@ -276,13 +302,16 @@
 (global-set-key (kbd "C-c p") 'projectile-command-map)
 (global-set-key (kbd "C-c p s") 'projectile-ripgrep)
 
+;; Magit
 (global-set-key (kbd "C-c g g") 'magit-status)
 (global-set-key (kbd "C-c g t") 'git-timemachine-toggle)
 
 ;; Local
+
 (setq lsp-keymap-prefix (kbd "C-c l"))
 
 (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle)
+;; (define-key mc/keymap (kbd "<return>") nil)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -290,7 +319,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
+   '(browse-kill-ring doom-themes multiple-cursors yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
