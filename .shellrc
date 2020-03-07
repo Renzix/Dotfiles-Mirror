@@ -107,7 +107,7 @@ target=$1 fname= targetDir= CDPATH=
     try_alias find fd
     try_alias vim nvim
     try_alias vi vim
-    try_alias e vi
+    try_alias e $EDITOR
 
 # Some nice keybindings and aliases
 alias sudo="sudo "
