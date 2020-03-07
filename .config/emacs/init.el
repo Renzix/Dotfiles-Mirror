@@ -36,7 +36,7 @@
 (use! 'crux)
 (use! 'dap-mode)
 (use! 'deadgrep)
-(use! 'dracula-theme)
+(use! 'doom-themes)
 (use! 'easy-kill)
 (use! 'expand-region)
 (use! 'flycheck)
@@ -117,7 +117,8 @@
                                       ".mod" ".aux" ".out" ".pyg")
       ido-ignore-extensions t)
 (ido-mode t)
-
+(setq magit-completing-read-function 'magit-ido-completing-read)
+(ido-ubiquitous-mode 1)
 ;; Allows spaces for ido mode
 (add-hook 'ido-make-file-list-hook
           (lambda ()
@@ -183,11 +184,11 @@
           lsp-ui-imenu-enable t
           lsp-ui-sideline-ignore-duplicate t)))
 
+;; Random Packages
 (amx-mode t)
-(load-theme 'dracula t)
+(global-git-gutter-mode +1)
+(load-theme 'doom-dracula t)
 (global-git-gutter-mode t)
-(setq magit-completing-read-function 'magit-ido-completing-read)
-(ido-ubiquitous-mode 1)
 (setq projectile-enable-caching t
       projectile-file-exists-local-cache-expire (* 5 60)
       projectile-file-exists-remote-cache-expire (* 10 60)
