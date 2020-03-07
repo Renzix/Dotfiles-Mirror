@@ -1,0 +1,18 @@
+[
+    
+    {
+        "key": "cmd+v",
+        "command": "clipring.pasteRingItem"
+    },
+    // No backspace on my macbook xd
+    {
+        "key": "alt+d",
+        "command": "deleteWordRight",
+        "when": "textInputFocus && !editorReadonly"
+    },
+    {
+        "key": "alt+delete",
+        "command": "-deleteWordRight",
+        "when": "textInputFocus && !editorReadonly"
+    }
+]
