@@ -48,6 +48,7 @@
 (use! 'lsp-mode)
 (use! 'lsp-python-ms)
 (use! 'lsp-ui)
+(use! 'lua-mode)
 (use! 'magit)
 (use! 'magit-todos)
 (use! 'projectile)
@@ -58,6 +59,9 @@
 (use! 'which-key)
 (use! 'yasnippet)
 (use! 'yasnippet-snippets)
+
+(add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
+(require 'better-registers)
 
 ;;; Config
 
@@ -264,6 +268,8 @@
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
 (global-set-key (kbd "C-^") 'crux-top-join-line)
+(global-set-key (kbd "C-S-<backspace>") 'crux-kill-whole-line)
+
 ;; M-w is now 10x better
 (global-set-key [remap kill-ring-save] 'easy-kill)
 (global-set-key [remap mark-sexp] 'easy-mark)
