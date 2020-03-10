@@ -16,5 +16,11 @@
     "editor.minimap.enabled": false,
     "editor.scrollbar.verticalScrollbarSize": 0,
     "editor.overviewRulerBorder": false,
-    "python.insidersChannel": "weekly"
+    "python.insidersChannel": "weekly",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
 }
