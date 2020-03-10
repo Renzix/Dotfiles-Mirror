@@ -14,5 +14,29 @@
         "key": "alt+delete",
         "command": "-deleteWordRight",
         "when": "textInputFocus && !editorReadonly"
+    },
+    {
+        "key": "alt+c",
+        "command": "git.commitStaged",
+        "when": "activeViewlet == 'workbench.view.scm'"
+    },
+    {
+        "key": "alt+s",
+        "command": "git.stage",
+        "when": "activeViewlet == 'workbench.view.scm'"
+    },
+    {
+        "key": "shift+alt+s",
+        "command": "git.stageAll",
+        "when": "activeViewlet == 'workbench.view.scm'"
+    },
+    {
+        "key": "alt+u",
+        "command": "git.unstage",
+        "when": "activeViewlet == 'workbench.view.scm'"
+    },
+    {
+        "key": "shift+alt+u",
+        "command": "git.unstageAll"
     }
 ]
