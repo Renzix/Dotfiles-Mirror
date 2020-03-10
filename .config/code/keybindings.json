@@ -37,6 +37,7 @@
     },
     {
         "key": "shift+alt+u",
-        "command": "git.unstageAll"
+        "command": "git.unstageAll",
+        "when": "activeViewlet == 'workbench.view.scm'"
     }
 ]
