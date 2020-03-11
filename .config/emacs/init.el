@@ -263,10 +263,19 @@
 (global-set-key (kbd "C-k") 'crux-smart-kill-line)
 (global-set-key (kbd "C-o") 'crux-smart-open-line)
 (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
+(global-set-key (kbd "M-%") 'replace-regexp)
+(global-set-key (kbd "M-m") 'kmacro-keymap)
+(global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
+(global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
 (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
 (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
-(global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
+(global-set-key (kbd "M-<up>") 'move-line-up)
+(global-set-key (kbd "C-S-<down>") 'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "C-S-<up>") (lambda () (interactive)
+                                   (crux-duplicate-current-line-or-region 1)
+                                   (previous-line)
+                                   (scroll-up-line)))
 (global-set-key (kbd "C-^") 'crux-top-join-line)
 (global-set-key (kbd "C-S-<backspace>") 'crux-kill-whole-line)
 
@@ -281,6 +290,11 @@
 ;; C-M-y should go back 1 in kill ring because M-- M-y is long
 (global-set-key (kbd "C-M-y") (lambda () (interactive) (yank-pop -1)))
 
+;; Ibuffer is just better list-buffers and C-x f
+;; to be consistant with ibuffer/switch-buffers
+(global-set-key (kbd "C-x f") 'find-file)
+(global-set-key (kbd "C-x C-f") 'dired-jump)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; faster way to kill shit
 (global-set-key (kbd "C-x K") 'crux-kill-other-buffers)
 ;; Nice search cuz I dont have helm or ivy on here
@@ -291,8 +305,8 @@
 ;; Nice functions that should be default but dont exist for ??? reason
 (global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
 (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
-(global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
+(global-set-key (kbd "C-c v") 'my/vterm-toggle)
 
 ;; Projectile
 (global-set-key (kbd "C-c p") 'projectile-command-map)
