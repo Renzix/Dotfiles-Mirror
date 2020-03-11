@@ -59,6 +59,8 @@
 (use! 'which-key)
 (use! 'yasnippet)
 (use! 'yasnippet-snippets)
+(use! 'perl6-mode)
+(use! 'flycheck-perl6)
 
 (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
 (require 'better-registers)
@@ -207,6 +209,7 @@
 (set-cursor-color "#43DE43")
 (global-hl-todo-mode)
 (delete-selection-mode 1)
+(pcre-mode t)
 
 ;; Useful Functions
 
@@ -328,7 +331,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
+   '(perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
