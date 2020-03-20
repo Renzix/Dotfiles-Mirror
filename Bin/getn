@@ -5,7 +5,7 @@
 
 in=$(cat -)
 n="$1"
-IFS=${2:-\ }
+IFS="${2:- }"
 set -- $in
 eval "s=$"${n}
 printf '%s\n' ${s}
