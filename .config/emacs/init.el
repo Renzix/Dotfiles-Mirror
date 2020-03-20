@@ -325,6 +325,11 @@
 ;; Magit
 (global-set-key (kbd "C-c g g") 'magit-status)
 (global-set-key (kbd "C-c g t") 'git-timemachine-toggle)
+(global-set-key (kbd "C-c g s") 'magit-stage-file)
+(global-set-key (kbd "C-c g u") 'magit-unstage-file)
+(global-set-key (kbd "C-c g c") 'magit-commit)
+(global-set-key (kbd "C-c g p") 'magit-push-current-to-upstream)
+(global-set-key (kbd "C-c g P") 'magit-push-current-to-pushremote)
 
 ;; Local
 
