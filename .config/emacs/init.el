@@ -1,3 +1,7 @@
+;; Welcome to renzix's second emacs config
+;; This one is going to be as vanilla emacs as possible
+
+
 ;;; Garbage Collection for speed
 (setq gc-cons-threshold 10000000)
 ;; Restore after startup
@@ -87,7 +91,8 @@
   (if (and horizontal (> (count-visible-buffers) 1))
       nil
     t))
-(advice-add 'window-splittable-p :before-while #'do-not-split-more-than-two-windows)
+(advice-add 'window-splittable-p
+            :before-while #'do-not-split-more-than-two-windows)
 
 (show-paren-mode 1)
 (global-hl-line-mode)
@@ -195,7 +200,7 @@
 ;; Random Packages
 (amx-mode t)
 (global-git-gutter-mode +1)
-(load-theme 'doom-dracula t)
+(load-theme 'doom-opera t)
 (global-git-gutter-mode t)
 (setq projectile-enable-caching t
       projectile-file-exists-local-cache-expire (* 5 60)
@@ -217,7 +222,8 @@
   "Show/hide dot-files."
   (interactive)
   (when (equal major-mode 'dired-mode)
-    (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
+    ;; if currently showing
+    (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) 
 	(progn 
 	  (set (make-local-variable 'dired-dotfiles-show-p) nil)
 	  (message "h")
@@ -295,13 +301,12 @@
 
 ;; Ibuffer is just better list-buffers and C-x f
 ;; to be consistant with ibuffer/switch-buffers
-(global-set-key (kbd "C-x f") 'find-file)
-(global-set-key (kbd "C-x C-f") 'dired-jump)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-x f") 'dired-jump)
+(global-set-key (kbd "C-x C-f") 'find-file)
+(global-set-key (kbd "C-x b") 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 ;; faster way to kill shit
 (global-set-key (kbd "C-x K") 'crux-kill-other-buffers)
-;; Nice search cuz I dont have helm or ivy on here
-(global-set-key (kbd "C-x g") 'deadgrep)
 ;; Move around windows
 (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
 
@@ -310,6 +315,8 @@
 (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 (global-set-key (kbd "C-c v") 'my/vterm-toggle)
+(global-set-key (kbd "C-c s") 'deadgrep)
+(global-set-key (kbd "C-c c") 'projectile-compile-project)
 
 ;; Projectile
 (global-set-key (kbd "C-c p") 'projectile-command-map)
