@@ -55,6 +55,7 @@
 (use! 'lua-mode)
 (use! 'magit)
 (use! 'magit-todos)
+(use! 'powershell)
 (use! 'projectile)
 (use! 'projectile-ripgrep)
 (use! 'rainbow-delimiters)
@@ -343,7 +344,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
+   '(powershell powershell-mode perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
