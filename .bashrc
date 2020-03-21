@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # Adds thing to clickboard if piped (terminal needs to support os52)
 cb() {
     read -rt .1 input
