@@ -32,6 +32,7 @@
 
 (defalias 'after! 'with-eval-after-load)
 
+(use! '0x0)
 (use! 'amx)
 (use! 'avy)
 (use! 'browse-kill-ring)
@@ -44,6 +45,7 @@
 (use! 'easy-kill)
 (use! 'expand-region)
 (use! 'flycheck)
+(use! 'flycheck-perl6)
 (use! 'git-gutter)
 (use! 'git-timemachine)
 (use! 'hl-todo)
@@ -55,6 +57,7 @@
 (use! 'lua-mode)
 (use! 'magit)
 (use! 'magit-todos)
+(use! 'perl6-mode)
 (use! 'powershell)
 (use! 'projectile)
 (use! 'projectile-ripgrep)
@@ -64,8 +67,6 @@
 (use! 'which-key)
 (use! 'yasnippet)
 (use! 'yasnippet-snippets)
-(use! 'perl6-mode)
-(use! 'flycheck-perl6)
 
 (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
 (require 'better-registers)
@@ -134,7 +135,7 @@
 ;; Allows spaces for ido mode
 (add-hook 'ido-make-file-list-hook
           (lambda ()
-            (define-key ido-file-dir-completion-map (kbd "SPC") 'self-insert-command)))
+            (define-key ido-file-dir-completion-map (kbd "SPC") 'ido-restrict-to-matches)))
 
 ;; Org mode
 
@@ -344,7 +345,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(powershell powershell-mode perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
+   '(0x0 powershell powershell-mode perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
