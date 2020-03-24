@@ -1,7 +1,6 @@
 ;; Welcome to renzix's second emacs config
 ;; This one is going to be as vanilla emacs as possible
 
-
 ;;; Garbage Collection for speed
 (setq gc-cons-threshold 10000000)
 ;; Restore after startup
@@ -36,6 +35,8 @@
 (use! 'amx)
 (use! 'avy)
 (use! 'browse-kill-ring)
+(use! 'command-log-mode)
+(use! 'comment-dwim-2)
 (use! 'company)
 (use! 'company-lsp)
 (use! 'crux)
@@ -43,6 +44,7 @@
 (use! 'deadgrep)
 (use! 'doom-themes)
 (use! 'easy-kill)
+(use! 'emms)
 (use! 'expand-region)
 (use! 'flycheck)
 (use! 'flycheck-perl6)
@@ -269,13 +271,14 @@
 
 ;; Global
 (global-set-key (kbd "C-j") 'avy-goto-char-2)
-;; Dealing with lines/words is easier
+;; Smarter commands which dwim alot more
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-k") 'crux-smart-kill-line)
 (global-set-key (kbd "C-o") 'crux-smart-open-line)
 (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
 (global-set-key (kbd "M-%") 'replace-regexp)
 (global-set-key (kbd "M-m") 'kmacro-keymap)
+(global-set-key (kbd "M-;") 'comment-dwim-2)
 (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
 (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
@@ -339,13 +342,14 @@
 
 (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle)
 
+(put 'dired-find-alternate-file 'disabled nil)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(0x0 powershell powershell-mode perl6-mode flycheck-perl6 browse-kill-ring doom-themes yasnippet-snippets lsp-ui flycheck dap-mode company-lsp company yasnippet which-key vterm use-package rainbow-delimiters projectile-ripgrep magit-todos macrostep lsp-mode ido-completing-read+ git-timemachine git-gutter expand-region exec-path-from-shell evil easy-kill dracula-theme deadgrep crux avy amx))
+   '(command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
@@ -355,4 +359,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'dired-find-alternate-file 'disabled nil)
