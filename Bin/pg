@@ -18,14 +18,14 @@ done
 
 found() {
     [ -z $invert ] && {
-        printf $@
+        printf "$@"
         EXIT_CODE=0
     }
 }
 
 not_found() {
     [ ! -z $invert ] && {
-        printf $@
+        printf "$@"
         EXIT_CODE=0
     }
 }
