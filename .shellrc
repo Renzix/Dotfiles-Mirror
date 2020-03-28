@@ -18,14 +18,14 @@ fi
 info() {
     [ -z "$DEBUG" ] ||
         printf "[%s]:$1\n" "$(date +'%D %T')";
-    }
+}
 
 try_alias() {
     COMMAND=$2
     NAME=$1
     shift; shift;
     if command -v "${COMMAND}" > /dev/null 2>&1; then
-        info "${COMMAND} found making ${NAME} point to ${COMMAND} $@"
+        info "${COMMAND} found making ${NAME} point to ${COMMAND} $*"
         alias ${NAME}="${COMMAND} $*"
     else
         return 1
@@ -35,18 +35,11 @@ try_alias() {
 try() {
     if command -v "$1" > /dev/null 2>&1; then
         info "Found $1 and running it"
-        eval $*
+        eval "$*"
     else
         return $?
     fi
 }
-
-# run tmux if available
-if [ -z "$TMUX" ] ; then
-    if command -v "tmux" > /dev/null 2>&1; then
-        exec tmux new-session -A -s main
-    fi
-fi
 
 # overloading cd to run commands if requirements are reached
 cd() {
@@ -57,7 +50,7 @@ cd() {
 
 rreadlink() ( # Execute the function in a *subshell* to localize variables and the effect of `cd`.
 
-target=$1 fname= targetDir= CDPATH=
+    target=$1 fname='' targetDir='' CDPATH=''
 
     # Try to make the execution environment as predictable as possible:
     # All commands below are invoked via `command`, so we must make sure that `command`
@@ -108,7 +101,7 @@ target=$1 fname= targetDir= CDPATH=
     try_alias find fd
     try_alias vim nvim
     try_alias vi vim
-    try_alias e ${EDITOR:-vi}
+    try_alias e "${EDITOR:-vi}"
 
 # Some nice keybindings and aliases
 alias sudo="sudo "
@@ -116,11 +109,6 @@ alias sudo="sudo "
 # System Shutdown stuff
 alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
-
-# git
-alias gc="git commit"
-alias gp="git push"
-alias gs="git status -vv"
 
 ## im lazy xd ##
 alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
