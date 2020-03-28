@@ -33,6 +33,8 @@
 
 (use! '0x0)
 (use! 'amx)
+(use! 'anzu)
+(use! 'auctex)
 (use! 'avy)
 (use! 'browse-kill-ring)
 (use! 'command-log-mode)
@@ -65,6 +67,7 @@
 (use! 'projectile-ripgrep)
 (use! 'rainbow-delimiters)
 (use! 'rustic)
+(use! 'try)
 (use! 'vterm)
 (use! 'which-key)
 (use! 'yasnippet)
@@ -204,7 +207,7 @@
 ;; Random Packages
 (amx-mode t)
 (global-git-gutter-mode +1)
-(load-theme 'doom-opera t)
+(load-theme 'doom-wilmersdorf t)
 (global-git-gutter-mode t)
 (setq projectile-enable-caching t
       projectile-file-exists-local-cache-expire (* 5 60)
@@ -270,13 +273,14 @@
 ;;; Keybinds
 
 ;; Global
-(global-set-key (kbd "C-j") 'avy-goto-char-2)
+(global-set-key (kbd "M-x") 'amx)
+(global-set-key (kbd "M-X") 'amx-major-mode-commands)
 ;; Smarter commands which dwim alot more
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-k") 'crux-smart-kill-line)
 (global-set-key (kbd "C-o") 'crux-smart-open-line)
 (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
-(global-set-key (kbd "M-%") 'replace-regexp)
+(global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
 (global-set-key (kbd "M-m") 'kmacro-keymap)
 (global-set-key (kbd "M-;") 'comment-dwim-2)
 (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
@@ -285,8 +289,8 @@
 (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
 (global-set-key (kbd "M-<down>") 'move-line-down)
 (global-set-key (kbd "M-<up>") 'move-line-up)
-(global-set-key (kbd "C-S-<down>") 'crux-duplicate-current-line-or-region)
-(global-set-key (kbd "C-S-<up>") (lambda () (interactive)
+(global-set-key (kbd "M-S-<down>") 'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "M-S-<up>") (lambda () (interactive)
                                    (crux-duplicate-current-line-or-region 1)
                                    (previous-line)
                                    (scroll-up-line)))
@@ -310,8 +314,6 @@
 (global-set-key (kbd "C-x C-f") 'find-file)
 (global-set-key (kbd "C-x b") 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
-;; faster way to kill shit
-(global-set-key (kbd "C-x K") 'crux-kill-other-buffers)
 ;; Move around windows
 (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
 
@@ -322,6 +324,10 @@
 (global-set-key (kbd "C-c v") 'my/vterm-toggle)
 (global-set-key (kbd "C-c s") 'deadgrep)
 (global-set-key (kbd "C-c c") 'projectile-compile-project)
+(global-set-key (kbd "C-c t") 'crux-transpose-windows)
+(global-set-key (kbd "C-c k") 'crux-kill-other-buffers)
+(global-set-key (kbd "C-c I") 'crux-find-user-init-file)
+(global-set-key (kbd "C-c o") 'crux-open-with)
 
 ;; Projectile
 (global-set-key (kbd "C-c p") 'projectile-command-map)
@@ -340,7 +346,8 @@
 
 (setq lsp-keymap-prefix (kbd "C-c l"))
 
-(define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle)
+(after! 'dired
+  (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle))
 
 (put 'dired-find-alternate-file 'disabled nil)
 (custom-set-variables
@@ -349,7 +356,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
+   '(try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
