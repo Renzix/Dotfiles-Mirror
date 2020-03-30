@@ -1,5 +1,4 @@
 [
-    
     {
         "key": "cmd+v",
         "command": "clipring.pasteRingItem"
@@ -39,5 +38,25 @@
         "key": "shift+alt+u",
         "command": "git.unstageAll",
         "when": "activeViewlet == 'workbench.view.scm'"
+    },
+    {
+        "key": "ctrl+x ctrl+f",
+        "command": "-extension.advancedOpenFile"
+    },
+    {
+        "key": "cmd+o",
+        "command": "extension.advancedOpenFile"
+    },
+    {
+        "key": "cmd+o",
+        "command": "-workbench.action.files.openFileFolder"
+    },
+    {
+        "key": "ctrl+a",
+        "command": "-cursorLineStart"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "-cursorLineEnd"
     }
 ]
