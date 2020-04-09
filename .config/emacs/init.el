@@ -47,6 +47,8 @@
 (use! 'doom-themes)
 (use! 'easy-kill)
 (use! 'emms)
+(use! 'erc-hl-nicks)
+(use! 'erc-image)
 (use! 'expand-region)
 (use! 'flycheck)
 (use! 'flycheck-perl6)
@@ -188,6 +190,40 @@
     (define-key company-active-map (kbd "<return>") nil)
     (define-key company-active-map (kbd "RET") nil)
     (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)))
+
+(after! 'erc
+  (setq renzix-erc-user-colors '())
+  (defun my-hl-thing ()
+    (put-text-property
+     (beginning-of-thing 'word) (end-of-thing 'word)
+     'font-lock-face `(:foreground ,(erc-hl-nicks-color-for-nick (word-at-point)))))
+  (defun erc-nixhubd-fix ()
+    (when (string-prefix-p "<nixhubd>" (buffer-string))
+      (goto-char (point-min))
+      (delete-char 10)
+      (insert "[")
+      (skip-chars-forward "^:")
+      (delete-char 1)
+      (insert "]")
+      (skip-chars-backward "^[")
+      (forward-char)
+      ;; (unless (member (word-at-point) renzix-erc-user-colors)
+      ;;   (add-to-list renzix-erc-user-colors (word-at-point))
+        ;; (erc-hl-nicks-face-name (word-at-point)))
+      (my-hl-thing)))
+
+  (setq ;; erc-autojoin-channels-alist
+        ;; '(("freenode.net" "#emacs" "#erc" "#nixhub"
+        ;;    "#kisslinux" "#vim" "#neovim" "##linux"
+        ;;   "#gentoo" "#gentoo-chat" "#org-mode" "#bash"))
+        erc-kill-buffer-on-part t
+        erc-kill-server-buffer-on-quit t
+        erc-nick "Renzix"
+        erc-hide-list '("JOIN" "PART" "QUIT")
+        erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+        erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
+                                  "324" "329" "332" "333" "353" "477"))
+  (add-hook 'erc-insert-modify-hook 'erc-nixhubd-fix))
 
 (before! 'lsp
          (progn 
@@ -356,7 +392,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
+   '(erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
@@ -366,3 +402,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)
