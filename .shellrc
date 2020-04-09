@@ -111,8 +111,8 @@ alias rb="sudo reboot"
 alias sd="sudo shutdown -h now"
 
 ## im lazy xd ##
-alias kill-skyrim="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
-alias kill-sse="env WINEPREFIX=~/.local/share/Steam/steamapps/compatdata/489830/pfx wineserver -k"
+alias kill-skyrim="env WINEPREFIX=$HOME/.local/share/Steam/steamapps/compatdata/72850/pfx wineserver -k"
+alias kill-sse="env WINEPREFIX=$HOME/Games/SSE/pfx wineserver -k"
 alias vortex="WINEPREFIX=\"$HOME/Games/vortex\" /home/genzix/.local/share/lutris/runners/wine/tkg-4.0-x86_64/bin/wine /home/genzix/Games/vortex/drive_c/Program\ Files/Black\ Tree\ Gaming\ Ltd/Vortex/Vortex.exe"
 alias kill-vortex="WINEPREFIX=\"$HOME/Games/vortex\" wineserver -k"
 
