@@ -299,7 +299,7 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
         {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey,           }, "i", function () awful.spawn(browser) end,
+    awful.key({ modkey,           }, "w", function () awful.spawn(browser) end,
         {description = "opens your default browser", group = "launcher"}),
     awful.key({ modkey,           }, "e", function () awful.spawn(editor) end,
         {description = "opens your default editor", group = "launcher"}),
@@ -326,10 +326,8 @@ globalkeys = gears.table.join(
         {description = "select previous", group = "layout"}),
 
     -- Other useful keybinds
-    awful.key({ modkey,           }, "s",     function () awful.spawn.with_shell("maim -su | tee >(xclip -selection clipboard -t image/png) | curl -F 'file=@-' 0x0.st | xclip -selection primary") end,
+    awful.key({ modkey, "Shift"   }, "s",     function () awful.spawn.with_shell("maim -su | tee >(xclip -selection clipboard -t image/png) | curl -F 'file=@-' 0x0.st | xclip -selection primary") end,
         {description = "Take a picture", group = "clipboard"}),
-    awful.key({ modkey, "Shift"   }, "s", function () awful.spawn.with_shell("giph -s -t 10 | curl -F'file=@-' https://0x0.st | sed 's/$/\.gif/' | xclip -selection clipboard") end,
-        {description = "Take a 10 second gif", group = "clipboard"}),
 
     awful.key({ modkey, "Control" }, "n",
         function ()
@@ -344,7 +342,7 @@ globalkeys = gears.table.join(
         {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    awful.key({ modkey, "Shift" },            "r",     function () awful.screen.focused().mypromptbox:run() end,
         {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
@@ -358,12 +356,12 @@ globalkeys = gears.table.join(
         end,
         {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
+    awful.key({ modkey }, ";", function() menubar.show() end,
         {description = "show the menubar", group = "launcher"})
 )
 
 clientkeys = gears.table.join(
-    awful.key({ modkey,           }, "f",
+    awful.key({ modkey, "Shift"   }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
             c:raise()
@@ -377,8 +375,6 @@ clientkeys = gears.table.join(
         {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
         {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
-        {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be

@@ -33,6 +33,8 @@
 
 (defalias 'force! 'require)
 
+;; @TODO(Renzix): add key! so i can lazy load?
+
 (get! '0x0)
 (get! 'amx)
 (get! 'anzu)
@@ -43,6 +45,8 @@
 (get! 'comment-dwim-2)
 (get! 'company)
 (get! 'company-lsp)
+(get! 'counsel)
+(get! 'counsel-projectile)
 (get! 'crux)
 (get! 'dap-mode)
 (get! 'doom-themes)
@@ -51,15 +55,13 @@
 (get! 'erc-hl-nicks)
 (get! 'erc-image)
 (get! 'expand-region)
+(get! 'flx)
 (get! 'flycheck)
 (get! 'flycheck-perl6)
 (get! 'git-gutter)
 (get! 'git-timemachine)
 (get! 'hl-todo)
 (get! 'ivy)
-(get! 'counsel-projectile)
-(get! 'flx)
-(get! 'counsel)
 (get! 'lsp-java)
 (get! 'lsp-mode)
 (get! 'lsp-python-ms)
@@ -79,54 +81,6 @@
 (get! 'yasnippet)
 (get! 'yasnippet-snippets)
 
-
-(get! '0x0)
-(get! 'amx)
-(get! 'anzu)
-(get! 'auctex)
-(get! 'avy)
-(get! 'browse-kill-ring)
-(get! 'command-log-mode)
-(get! 'comment-dwim-2)
-(get! 'company)
-(get! 'company-lsp)
-(get! 'crux)
-(get! 'dap-mode)
-(get! 'doom-themes)
-(get! 'easy-kill)
-(get! 'emms)
-(get! 'erc-hl-nicks)
-(get! 'erc-image)
-(get! 'expand-region)
-(get! 'flycheck)
-(get! 'flycheck-perl6)
-(get! 'git-gutter)
-(get! 'git-timemachine)
-(get! 'hl-todo)
-(get! 'ivy)
-(get! 'counsel-projectile)
-(get! 'flx)
-(get! 'counsel)
-(get! 'lsp-java)
-(get! 'lsp-mode)
-(get! 'lsp-python-ms)
-(get! 'lsp-ui)
-(get! 'lua-mode)
-(get! 'magit)
-(get! 'magit-todos)
-(get! 'perl6-mode)
-(get! 'powershell)
-(get! 'projectile)
-(get! 'projectile-ripgrep)
-(get! 'rainbow-delimiters)
-(get! 'rustic)
-(get! 'try)
-(get! 'vterm)
-(get! 'which-key)
-(get! 'yasnippet)
-(get! 'yasnippet-snippets)
-
-;; Now we can enable them
 (force! '0x0)
 (force! 'amx)
 (force! 'anzu)
@@ -136,6 +90,8 @@
 (force! 'comment-dwim-2)
 (force! 'company)
 (force! 'company-lsp)
+(force! 'counsel)
+(force! 'counsel-projectile)
 (force! 'crux)
 (force! 'dap-mode)
 (force! 'doom-themes)
@@ -144,20 +100,14 @@
 (force! 'erc-hl-nicks)
 (force! 'erc-image)
 (force! 'expand-region)
+(force! 'flx)
 (force! 'flycheck)
-(force! 'flycheck-perl6)
 (force! 'git-gutter)
 (force! 'git-timemachine)
 (force! 'hl-todo)
 (force! 'ivy)
-(force! 'counsel-projectile)
-(force! 'flx)
-(force! 'counsel)
-(force! 'lsp-java)
 (force! 'lsp-mode)
-(force! 'lsp-python-ms)
 (force! 'lsp-ui)
-(force! 'lua-mode)
 (force! 'magit)
 (force! 'magit-todos)
 (force! 'perl6-mode)
@@ -167,9 +117,11 @@
 (force! 'rainbow-delimiters)
 (force! 'rustic)
 (force! 'try)
+(force! 'vterm)
 (force! 'which-key)
 (force! 'yasnippet)
 (force! 'yasnippet-snippets)
+;; Now we can enable them
 
 (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
 (require 'better-registers)
@@ -216,6 +168,8 @@
 
 (prefer-coding-system 'utf-8)
 
+(setq-default display-line-numbers 'relative)
+
 ;; Dired
 
 (setq dired-isearch-filenames 'dwim
@@ -236,7 +190,8 @@
   (setq ivy-re-builders-alist '((t . ivy--regex-plus))
         ivy-use-virtual-buffers t
         ivy-initial-inputs-alist nil
-        ivy-use-selectable-prompt t))
+        ivy-use-selectable-prompt t
+        projectile-completion-system 'ivy))
 
 ;; Org mode
 (after! 'org
@@ -446,14 +401,10 @@
 (global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
 ;; (global-set-key (kbd "C-s") 'swiper-isearch-forward) ;; Swiper seems too distracting
 ;; (global-set-key (kbd "C-r") 'swiper-isearch-backward)
-(global-set-key (kbd "M-s") 'counsel-projectile-rg)
-(global-set-key (kbd "M-p") 'counsel-projectile-find-file)
 (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
 (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
 (global-set-key (kbd "M-<down>") 'move-text-down)
 (global-set-key (kbd "M-<up>") 'move-text-up)
-(global-set-key (kbd "M-S-<down>") 'crux-duplicate-current-line-or-region)
-(global-set-key (kbd "M-S-<up>") 'my/crux-duplicate-current-line-or-region-up)
 
 ;; M-w is now 10x better
 (after! 'easy-kill
@@ -470,6 +421,8 @@
 (global-set-key (kbd "C-x f") 'dired-jump)
 (global-set-key (kbd "C-x b") 'ibuffer)
 (after! 'counsel
+  (global-set-key (kbd "s-s") 'counsel-projectile-rg)
+  (global-set-key (kbd "s-f") 'counsel-projectile-find-file)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer))
 
@@ -482,6 +435,8 @@
 
 ;; Crux has alot of nicer defaults
 (after! 'crux
+  (global-set-key (kbd "M-S-<down>") 'crux-duplicate-current-line-or-region)
+  (global-set-key (kbd "M-S-<up>") 'my/crux-duplicate-current-line-or-region-up)
   (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
   (global-set-key (kbd "C-k") 'crux-smart-kill-line)
   (global-set-key (kbd "C-o") 'crux-smart-open-line)
@@ -498,9 +453,8 @@
 
 ;; Projectile
 (after! 'projectile
-  (global-set-key (kbd "C-c c") 'projectile-compile-project)
-  (global-set-key (kbd "C-c p") 'projectile-command-map)
-  (global-set-key (kbd "C-c p s") 'projectile-ripgrep))
+  (global-set-key (kbd "s-c") 'projectile-compile-project)
+  (global-set-key (kbd "s-p") 'projectile-command-map))
 
 ;; Magit
 (after! 'magit
@@ -511,6 +465,11 @@
   (global-set-key (kbd "C-c g c") 'magit-commit)
   (global-set-key (kbd "C-c g p") 'magit-push-current-to-upstream)
   (global-set-key (kbd "C-c g P") 'magit-push-current-to-pushremote))
+
+(after! 'lsp
+  (define-key lsp-mode-map (kbd "s-i") 'lsp-goto-implementation)
+  (define-key lsp-mode-map (kbd "s-t") 'lsp-goto-type-definition)
+  (define-key lsp-mode-map (kbd "s-r") 'lsp-rename))
 
 ;; Local
 
@@ -528,7 +487,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key vterm rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
+   '(vterm erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
