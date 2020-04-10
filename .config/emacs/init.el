@@ -39,7 +39,6 @@
 (get! 'amx)
 (get! 'anzu)
 (get! 'auctex)
-(get! 'avy)
 (get! 'browse-kill-ring)
 (get! 'command-log-mode)
 (get! 'comment-dwim-2)
@@ -76,17 +75,17 @@
 (get! 'rainbow-delimiters)
 (get! 'rustic)
 (get! 'try)
+(get! 'visible-mark)
 (get! 'vterm)
 (get! 'which-key)
 (get! 'yasnippet)
 (get! 'yasnippet-snippets)
 
-(force! '0x0)
+;; Force loads
+;; @TODO(Renzix): remove most of these in favor of lazy loading upon command
 (force! 'amx)
 (force! 'anzu)
-(force! 'avy)
 (force! 'browse-kill-ring)
-(force! 'command-log-mode)
 (force! 'comment-dwim-2)
 (force! 'company)
 (force! 'company-lsp)
@@ -95,8 +94,7 @@
 (force! 'crux)
 (force! 'dap-mode)
 (force! 'doom-themes)
-(force! 'easy-kill)
-(force! 'emms)
+;; (force! 'easy-kill) ;; Dunno whether this or visible mark is better
 (force! 'erc-hl-nicks)
 (force! 'erc-image)
 (force! 'expand-region)
@@ -110,13 +108,10 @@
 (force! 'lsp-ui)
 (force! 'magit)
 (force! 'magit-todos)
-(force! 'perl6-mode)
-(force! 'powershell)
 (force! 'projectile)
 (force! 'projectile-ripgrep)
 (force! 'rainbow-delimiters)
-(force! 'rustic)
-(force! 'try)
+(force! 'visible-mark)
 (force! 'vterm)
 (force! 'which-key)
 (force! 'yasnippet)
@@ -180,6 +175,14 @@
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
+
+;; Not sure whether visible marks or
+;; defalut to single line is better (for stuff like C-w)
+(after! 'visible-mark
+  (transient-mark-mode -1)
+  (global-visible-mark-mode 1)
+  (setq visible-mark-max 2
+        visible-mark-faces `(visible-mark-face1 visible-mark-face2)))
 
 (after! 'ivy
   (ivy-mode 1)
@@ -415,6 +418,9 @@
                 (lambda (arg char)
                   (interactive "p\ncZap to char: ")
                   (zap-to-char -1 char)))
+
+(after! 'expand-region
+  (global-set-key (kbd "C-\\") 'er/expand-region))
 
 ;; Ibuffer is just better list-buffers and C-x f
 ;; to be consistant with ibuffer/switch-buffers
