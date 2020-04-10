@@ -22,7 +22,7 @@
 
 ;; Macros
 
-(defmacro use! (package)
+(defmacro get! (package)
   `(unless (package-installed-p ,package)
      (package-install ,package)))
 
@@ -31,49 +31,145 @@
 
 (defalias 'after! 'with-eval-after-load)
 
-(use! '0x0)
-(use! 'amx)
-(use! 'anzu)
-(use! 'auctex)
-(use! 'avy)
-(use! 'browse-kill-ring)
-(use! 'command-log-mode)
-(use! 'comment-dwim-2)
-(use! 'company)
-(use! 'company-lsp)
-(use! 'crux)
-(use! 'dap-mode)
-(use! 'deadgrep)
-(use! 'doom-themes)
-(use! 'easy-kill)
-(use! 'emms)
-(use! 'erc-hl-nicks)
-(use! 'erc-image)
-(use! 'expand-region)
-(use! 'flycheck)
-(use! 'flycheck-perl6)
-(use! 'git-gutter)
-(use! 'git-timemachine)
-(use! 'hl-todo)
-(use! 'ido-completing-read+)
-(use! 'lsp-java)
-(use! 'lsp-mode)
-(use! 'lsp-python-ms)
-(use! 'lsp-ui)
-(use! 'lua-mode)
-(use! 'magit)
-(use! 'magit-todos)
-(use! 'perl6-mode)
-(use! 'powershell)
-(use! 'projectile)
-(use! 'projectile-ripgrep)
-(use! 'rainbow-delimiters)
-(use! 'rustic)
-(use! 'try)
-(use! 'vterm)
-(use! 'which-key)
-(use! 'yasnippet)
-(use! 'yasnippet-snippets)
+(defalias 'force! 'require)
+
+(get! '0x0)
+(get! 'amx)
+(get! 'anzu)
+(get! 'auctex)
+(get! 'avy)
+(get! 'browse-kill-ring)
+(get! 'command-log-mode)
+(get! 'comment-dwim-2)
+(get! 'company)
+(get! 'company-lsp)
+(get! 'crux)
+(get! 'dap-mode)
+(get! 'doom-themes)
+(get! 'easy-kill)
+(get! 'emms)
+(get! 'erc-hl-nicks)
+(get! 'erc-image)
+(get! 'expand-region)
+(get! 'flycheck)
+(get! 'flycheck-perl6)
+(get! 'git-gutter)
+(get! 'git-timemachine)
+(get! 'hl-todo)
+(get! 'ivy)
+(get! 'counsel-projectile)
+(get! 'flx)
+(get! 'counsel)
+(get! 'lsp-java)
+(get! 'lsp-mode)
+(get! 'lsp-python-ms)
+(get! 'lsp-ui)
+(get! 'lua-mode)
+(get! 'magit)
+(get! 'magit-todos)
+(get! 'perl6-mode)
+(get! 'powershell)
+(get! 'projectile)
+(get! 'projectile-ripgrep)
+(get! 'rainbow-delimiters)
+(get! 'rustic)
+(get! 'try)
+(get! 'vterm)
+(get! 'which-key)
+(get! 'yasnippet)
+(get! 'yasnippet-snippets)
+
+
+(get! '0x0)
+(get! 'amx)
+(get! 'anzu)
+(get! 'auctex)
+(get! 'avy)
+(get! 'browse-kill-ring)
+(get! 'command-log-mode)
+(get! 'comment-dwim-2)
+(get! 'company)
+(get! 'company-lsp)
+(get! 'crux)
+(get! 'dap-mode)
+(get! 'doom-themes)
+(get! 'easy-kill)
+(get! 'emms)
+(get! 'erc-hl-nicks)
+(get! 'erc-image)
+(get! 'expand-region)
+(get! 'flycheck)
+(get! 'flycheck-perl6)
+(get! 'git-gutter)
+(get! 'git-timemachine)
+(get! 'hl-todo)
+(get! 'ivy)
+(get! 'counsel-projectile)
+(get! 'flx)
+(get! 'counsel)
+(get! 'lsp-java)
+(get! 'lsp-mode)
+(get! 'lsp-python-ms)
+(get! 'lsp-ui)
+(get! 'lua-mode)
+(get! 'magit)
+(get! 'magit-todos)
+(get! 'perl6-mode)
+(get! 'powershell)
+(get! 'projectile)
+(get! 'projectile-ripgrep)
+(get! 'rainbow-delimiters)
+(get! 'rustic)
+(get! 'try)
+(get! 'vterm)
+(get! 'which-key)
+(get! 'yasnippet)
+(get! 'yasnippet-snippets)
+
+;; Now we can enable them
+(force! '0x0)
+(force! 'amx)
+(force! 'anzu)
+(force! 'avy)
+(force! 'browse-kill-ring)
+(force! 'command-log-mode)
+(force! 'comment-dwim-2)
+(force! 'company)
+(force! 'company-lsp)
+(force! 'crux)
+(force! 'dap-mode)
+(force! 'doom-themes)
+(force! 'easy-kill)
+(force! 'emms)
+(force! 'erc-hl-nicks)
+(force! 'erc-image)
+(force! 'expand-region)
+(force! 'flycheck)
+(force! 'flycheck-perl6)
+(force! 'git-gutter)
+(force! 'git-timemachine)
+(force! 'hl-todo)
+(force! 'ivy)
+(force! 'counsel-projectile)
+(force! 'flx)
+(force! 'counsel)
+(force! 'lsp-java)
+(force! 'lsp-mode)
+(force! 'lsp-python-ms)
+(force! 'lsp-ui)
+(force! 'lua-mode)
+(force! 'magit)
+(force! 'magit-todos)
+(force! 'perl6-mode)
+(force! 'powershell)
+(force! 'projectile)
+(force! 'projectile-ripgrep)
+(force! 'rainbow-delimiters)
+(force! 'rustic)
+(force! 'try)
+(force! 'which-key)
+(force! 'yasnippet)
+(force! 'yasnippet-snippets)
 
 (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
 (require 'better-registers)
@@ -125,57 +221,51 @@
 (setq dired-isearch-filenames 'dwim
       delete-by-moving-to-trash t)
 
-;; Ido
-(setq ido-enable-flex-matching t
-      ido-everywhere t
-      ido-use-filename-at-point 'guess
-      ido-create-new-buffer 'always
-      ido-file-extensions-order     '(".cc" ".h" ".tex" ".sh" ".org"
-                                      ".el" ".tex" ".png")
-      completion-ignored-extensions '(".o" ".elc" "~" ".bin" ".bak"
-                                      ".obj" ".map" ".a" ".so"
-                                      ".mod" ".aux" ".out" ".pyg")
-      ido-ignore-extensions t)
-(ido-mode t)
-(setq magit-completing-read-function 'magit-ido-completing-read)
-(ido-ubiquitous-mode 1)
-;; Allows spaces for ido mode
-(add-hook 'ido-make-file-list-hook
-          (lambda ()
-            (define-key ido-file-dir-completion-map (kbd "SPC") 'ido-restrict-to-matches)))
-
-;; Org mode
-
-(setq-default initial-major-mode 'org-mode
-              initial-scratch-message ""
-              org-src-tab-acts-natively t
-              org-confirm-babel-evaluate nil
-              org-return-follows-link t)
-(setq org-log-done 'time
-      org-src-window-setup 'current-window
-      org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
-                          (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
-                          (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
-                          (sequence "|" "DONE(d)" "CANCEL(c@)")
-                          (sequence "|" "STUDY(y!)")))
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((org . t)
-   (C . t)
-   (latex . t)
-   (emacs-lisp . t)
-   (sql . t)
-   (shell . t)
-   (python . t)))
-
+;; whitespace
 (require 'whitespace)
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
+(after! 'ivy
+  (ivy-mode 1)
+  (define-key ivy-minibuffer-map (kbd "C-m") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-dispatching-done)
+  (define-key ivy-minibuffer-map (kbd "S-TAB") 'ivy-dispatching-call)
+  (require 'flx)
+  (setq ivy-re-builders-alist '((t . ivy--regex-plus))
+        ivy-use-virtual-buffers t
+        ivy-initial-inputs-alist nil
+        ivy-use-selectable-prompt t))
+
+;; Org mode
+(after! 'org
+  (setq-default initial-major-mode 'org-mode
+                initial-scratch-message ""
+                org-src-tab-acts-natively t
+                org-confirm-babel-evaluate nil
+                org-return-follows-link t)
+  (setq org-log-done 'time
+        org-src-window-setup 'current-window
+        org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
+                            (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
+                            (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
+                            (sequence "|" "DONE(d)" "CANCEL(c@)")
+                            (sequence "|" "STUDY(y!)")))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((org . t)
+     (C . t)
+     (latex . t)
+     (emacs-lisp . t)
+     (sql . t)
+     (shell . t)
+     (python . t))))
+
 ;; Package
 
-(global-flycheck-mode)
+(after! 'flycheck
+  (global-flycheck-mode))
 
 (before! 'company
          (progn
@@ -197,6 +287,8 @@
     (put-text-property
      (beginning-of-thing 'word) (end-of-thing 'word)
      'font-lock-face `(:foreground ,(erc-hl-nicks-color-for-nick (word-at-point)))))
+  ;; @TODO(Renzix): Make this actually work properly. Need to 1. find nick
+  ;; 2. find begining and end of said nick location wise and maybe 3. cache it
   (defun erc-nixhubd-fix ()
     (when (string-prefix-p "<nixhubd>" (buffer-string))
       (goto-char (point-min))
@@ -207,22 +299,18 @@
       (insert "]")
       (skip-chars-backward "^[")
       (forward-char)
-      ;; (unless (member (word-at-point) renzix-erc-user-colors)
-      ;;   (add-to-list renzix-erc-user-colors (word-at-point))
-        ;; (erc-hl-nicks-face-name (word-at-point)))
       (my-hl-thing)))
 
-  (setq ;; erc-autojoin-channels-alist
-        ;; '(("freenode.net" "#emacs" "#erc" "#nixhub"
-        ;;    "#kisslinux" "#vim" "#neovim" "##linux"
-        ;;   "#gentoo" "#gentoo-chat" "#org-mode" "#bash"))
-        erc-kill-buffer-on-part t
-        erc-kill-server-buffer-on-quit t
-        erc-nick "Renzix"
-        erc-hide-list '("JOIN" "PART" "QUIT")
-        erc-lurker-hide-list '("JOIN" "PART" "QUIT")
-        erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
-                                  "324" "329" "332" "333" "353" "477"))
+  (setq erc-autojoin-channels-alist
+        '(("freenode.net" "#emacs" "#erc" "#nixhub" "#kisslinux"
+           "##linux" "#gentoo" "#gentoo-chat" "#org-mode"))
+   erc-kill-buffer-on-part t
+   erc-kill-server-buffer-on-quit t
+   erc-nick "Renzix"
+   erc-hide-list '("JOIN" "PART" "QUIT")
+   erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+   erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
+                             "324" "329" "332" "333" "353" "477"))
   (add-hook 'erc-insert-modify-hook 'erc-nixhubd-fix))
 
 (before! 'lsp
@@ -241,18 +329,32 @@
           lsp-ui-sideline-ignore-duplicate t)))
 
 ;; Random Packages
-(amx-mode t)
-(global-git-gutter-mode +1)
-(load-theme 'doom-wilmersdorf t)
-(global-git-gutter-mode t)
-(setq projectile-enable-caching t
-      projectile-file-exists-local-cache-expire (* 5 60)
-      projectile-file-exists-remote-cache-expire (* 10 60)
-      projectile-sort-order 'recently-active)
-(projectile-mode t)
-(which-key-mode t)
-(yas-global-mode t)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(after! 'amx
+  (amx-mode t))
+
+(after! 'git-gutter
+  (global-git-gutter-mode t))
+
+(after! 'doom-themes
+  (load-theme 'doom-wilmersdorf t))
+
+(after! 'projectile
+  (setq projectile-enable-caching t
+        projectile-file-exists-local-cache-expire (* 5 60)
+        projectile-file-exists-remote-cache-expire (* 10 60)
+        projectile-sort-order 'recently-active)
+  (projectile-mode t))
+
+(after! 'which-key
+  (which-key-mode t))
+
+(after! 'yasnippet
+  (yas-global-mode t))
+
+(after! 'rainbow-delimiters
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+;; @TODO(Renzix): Clean these up
 (setq-default cursor-type 'box)
 (set-cursor-color "#43DE43")
 (global-hl-todo-mode)
@@ -291,92 +393,124 @@
       (delete-other-windows)
       (my/switch-to-vterm))))
 
-(defun move-line-up ()
-  "Move up the current line."
-  (interactive)
-  (transpose-lines 1)
-  (forward-line -2)
-  (indent-according-to-mode))
+(defun move-text-internal (arg)
+  (cond
+   ((and mark-active transient-mark-mode)
+    (if (> (point) (mark))
+        (exchange-point-and-mark))
+    (let ((column (current-column))
+          (text (delete-and-extract-region (point) (mark))))
+      (forward-line arg)
+      (move-to-column column t)
+      (set-mark (point))
+      (insert text)
+      (exchange-point-and-mark)
+      (setq deactivate-mark nil)))
+   (t
+    (beginning-of-line)
+    (when (or (> arg 0) (not (bobp)))
+      (forward-line)
+      (when (or (< arg 0) (not (eobp)))
+        (transpose-lines arg))
+      (forward-line -1)))))
 
-(defun move-line-down ()
-  "Move down the current line."
+(defun move-text-up (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines up."
+  (interactive "*p")
+  (move-text-internal (- arg)))
+
+(defun move-text-down (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines down."
+  (interactive "*p")
+  (move-text-internal arg))
+
+(defun my/crux-duplicate-current-line-or-region-up ()
   (interactive)
-  (forward-line 1)
-  (transpose-lines 1)
-  (forward-line -1)
-  (indent-according-to-mode))
+  (crux-duplicate-current-line-or-region 1)
+  (previous-line)
+  (scroll-up-line))
 
 ;;; Keybinds
 
 ;; Global
-(global-set-key (kbd "M-x") 'amx)
-(global-set-key (kbd "M-X") 'amx-major-mode-commands)
-;; Smarter commands which dwim alot more
-(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
-(global-set-key (kbd "C-k") 'crux-smart-kill-line)
-(global-set-key (kbd "C-o") 'crux-smart-open-line)
-(global-set-key (kbd "M-o") 'crux-smart-open-line-above)
-(global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
+(after! 'amx
+  (global-set-key (kbd "M-x") 'amx))
+
+(after! 'anzu
+  (global-set-key (kbd "M-%") 'anzu-query-replace-regexp))
 (global-set-key (kbd "M-m") 'kmacro-keymap)
 (global-set-key (kbd "M-;") 'comment-dwim-2)
 (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
+;; (global-set-key (kbd "C-s") 'swiper-isearch-forward) ;; Swiper seems too distracting
+;; (global-set-key (kbd "C-r") 'swiper-isearch-backward)
+(global-set-key (kbd "M-s") 'counsel-projectile-rg)
+(global-set-key (kbd "M-p") 'counsel-projectile-find-file)
 (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
 (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
-(global-set-key (kbd "M-<down>") 'move-line-down)
-(global-set-key (kbd "M-<up>") 'move-line-up)
+(global-set-key (kbd "M-<down>") 'move-text-down)
+(global-set-key (kbd "M-<up>") 'move-text-up)
 (global-set-key (kbd "M-S-<down>") 'crux-duplicate-current-line-or-region)
-(global-set-key (kbd "M-S-<up>") (lambda () (interactive)
-                                   (crux-duplicate-current-line-or-region 1)
-                                   (previous-line)
-                                   (scroll-up-line)))
-(global-set-key (kbd "C-^") 'crux-top-join-line)
-(global-set-key (kbd "C-S-<backspace>") 'crux-kill-whole-line)
+(global-set-key (kbd "M-S-<up>") 'my/crux-duplicate-current-line-or-region-up)
 
 ;; M-w is now 10x better
-(global-set-key [remap kill-ring-save] 'easy-kill)
-(global-set-key [remap mark-sexp] 'easy-mark)
+(after! 'easy-kill
+  (global-set-key [remap kill-ring-save] 'easy-kill)
+  (global-set-key [remap mark-sexp] 'easy-mark))
 ;; M-z is forwards so C-z is backwards
 (global-set-key (kbd "C-z")
                 (lambda (arg char)
                   (interactive "p\ncZap to char: ")
                   (zap-to-char -1 char)))
-;; C-M-y should go back 1 in kill ring because M-- M-y is long
-(global-set-key (kbd "C-M-y") (lambda () (interactive) (yank-pop -1)))
 
 ;; Ibuffer is just better list-buffers and C-x f
 ;; to be consistant with ibuffer/switch-buffers
 (global-set-key (kbd "C-x f") 'dired-jump)
-(global-set-key (kbd "C-x C-f") 'find-file)
 (global-set-key (kbd "C-x b") 'ibuffer)
-(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
-;; Move around windows
-(global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
+(after! 'counsel
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer))
 
 ;; Nice functions that should be default but dont exist for ??? reason
-(global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
-(global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
-(global-set-key (kbd "C-c y") 'browse-kill-ring)
-(global-set-key (kbd "C-c v") 'my/vterm-toggle)
-(global-set-key (kbd "C-c s") 'deadgrep)
-(global-set-key (kbd "C-c c") 'projectile-compile-project)
-(global-set-key (kbd "C-c t") 'crux-transpose-windows)
-(global-set-key (kbd "C-c k") 'crux-kill-other-buffers)
-(global-set-key (kbd "C-c I") 'crux-find-user-init-file)
-(global-set-key (kbd "C-c o") 'crux-open-with)
+(after! 'browse-kill-ring
+  (global-set-key (kbd "C-c y") 'browse-kill-ring))
+
+(after! 'vterm
+  (global-set-key (kbd "C-c v") 'my/vterm-toggle))
+
+;; Crux has alot of nicer defaults
+(after! 'crux
+  (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
+  (global-set-key (kbd "C-k") 'crux-smart-kill-line)
+  (global-set-key (kbd "C-o") 'crux-smart-open-line)
+  (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
+  (global-set-key (kbd "C-^") 'crux-top-join-line)
+  (global-set-key (kbd "C-S-<backspace>") 'crux-kill-whole-line)
+  (global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
+  (global-set-key (kbd "C-c I") 'crux-find-user-init-file)
+  (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
+  (global-set-key (kbd "C-c k") 'crux-kill-other-buffers)
+  (global-set-key (kbd "C-c o") 'crux-open-with)
+  (global-set-key (kbd "C-c t") 'crux-transpose-windows))
+  (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
 
 ;; Projectile
-(global-set-key (kbd "C-c p") 'projectile-command-map)
-(global-set-key (kbd "C-c p s") 'projectile-ripgrep)
+(after! 'projectile
+  (global-set-key (kbd "C-c c") 'projectile-compile-project)
+  (global-set-key (kbd "C-c p") 'projectile-command-map)
+  (global-set-key (kbd "C-c p s") 'projectile-ripgrep))
 
 ;; Magit
-(global-set-key (kbd "C-c g g") 'magit-status)
-(global-set-key (kbd "C-c g t") 'git-timemachine-toggle)
-(global-set-key (kbd "C-c g s") 'magit-stage-file)
-(global-set-key (kbd "C-c g u") 'magit-unstage-file)
-(global-set-key (kbd "C-c g c") 'magit-commit)
-(global-set-key (kbd "C-c g p") 'magit-push-current-to-upstream)
-(global-set-key (kbd "C-c g P") 'magit-push-current-to-pushremote)
+(after! 'magit
+  (global-set-key (kbd "C-c g g") 'magit-status)
+  (global-set-key (kbd "C-c g t") 'git-timemachine-toggle)
+  (global-set-key (kbd "C-c g s") 'magit-stage-file)
+  (global-set-key (kbd "C-c g u") 'magit-unstage-file)
+  (global-set-key (kbd "C-c g c") 'magit-commit)
+  (global-set-key (kbd "C-c g p") 'magit-push-current-to-upstream)
+  (global-set-key (kbd "C-c g P") 'magit-push-current-to-pushremote))
 
 ;; Local
 
@@ -386,6 +520,8 @@
   (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle))
 
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -402,4 +538,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'narrow-to-region 'disabled nil)
