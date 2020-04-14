@@ -20,6 +20,8 @@
       '(("elpa"     . 5) ("melpa"        . 10)))
 (package-refresh-contents)
 
+(add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
+
 ;; Macros
 
 (defmacro get! (package)
@@ -49,6 +51,7 @@
 (get! 'crux)
 (get! 'dap-mode)
 (get! 'doom-themes)
+(get! 'doom-modeline)
 (get! 'easy-kill)
 (get! 'emms)
 (get! 'erc-hl-nicks)
@@ -85,6 +88,7 @@
 ;; @TODO(Renzix): remove most of these in favor of lazy loading upon command
 (force! 'amx)
 (force! 'anzu)
+(force! 'better-registers)
 (force! 'browse-kill-ring)
 (force! 'comment-dwim-2)
 (force! 'company)
@@ -94,6 +98,7 @@
 (force! 'crux)
 (force! 'dap-mode)
 (force! 'doom-themes)
+(force! 'doom-modeline)
 ;; (force! 'easy-kill) ;; Dunno whether this or visible mark is better
 (force! 'erc-hl-nicks)
 (force! 'erc-image)
@@ -118,15 +123,13 @@
 (force! 'yasnippet-snippets)
 ;; Now we can enable them
 
-(add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
-(require 'better-registers)
-
 ;;; Config
 
 ;; Sane defaults
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
-      confirm-kill-processes nil)
+      confirm-kill-processes nil
+      browse-url-browser-function 'eww-browse-url)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -146,12 +149,16 @@
 (advice-add 'window-splittable-p
             :before-while #'do-not-split-more-than-two-windows)
 
-(show-paren-mode 1)
 (global-hl-line-mode)
 (setq vc-follow-symlinks t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
+
+;; Parens
+(show-paren-mode 1)
+(electric-pair-mode t)
+(setq electric-pair-preserve-balance nil)
 
 (setq backup-directory-alist `(("." . "~/.saves"))
       backup-by-copying t
@@ -162,8 +169,6 @@
       auto-save-list-file-prefix nil)
 
 (prefer-coding-system 'utf-8)
-
-(setq-default display-line-numbers 'relative)
 
 ;; Dired
 
@@ -181,8 +186,8 @@
 (after! 'visible-mark
   (transient-mark-mode -1)
   (global-visible-mark-mode 1)
-  (setq visible-mark-max 2
-        visible-mark-faces `(visible-mark-face1 visible-mark-face2)))
+  (setq visible-mark-max 1
+        visible-mark-faces `(visible-mark-face1)))
 
 (after! 'ivy
   (ivy-mode 1)
@@ -196,6 +201,11 @@
         ivy-use-selectable-prompt t
         projectile-completion-system 'ivy))
 
+(defun what-face (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+                  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
 ;; Org mode
 (after! 'org
   (setq-default initial-major-mode 'org-mode
@@ -205,11 +215,22 @@
                 org-return-follows-link t)
   (setq org-log-done 'time
         org-src-window-setup 'current-window
-        org-todo-keywords '((sequence "TODO(t)" "SOMEDAY(s)" "NEXT(n)" "|")
-                            (sequence "WORKING(w!)" "BLOCKED(B@)" "|")
-                            (sequence "REPORT(r)" "BUG(b)" "KNOWN(k)" "|" "FIXED(f!)")
-                            (sequence "|" "DONE(d)" "CANCEL(c@)")
-                            (sequence "|" "STUDY(y!)")))
+        org-archive-location "archived.org:: From %s"
+        org-todo-keywords '((sequence "TODO(t)" "HOLD(h@)" "NEXT(n!)"
+                                      "|" "DONE(d!)" "CANCEL(c@)"))
+        org-todo-keyword-faces
+        '(("TODO" . (:foreground "#f0dfdf" :weight bold))
+          ("HOLD" . (:foreground "#d0bf8f" :weight bold))
+          ("NEXT" . (:foreground "#873e23" :weight bold))
+          ("CANCEL" . (:foreground "#7cb8bb" :weight bold))
+          ("DONE" . (:foreground "#583659" :weight bold)))
+        org-capture-templates
+        '(("e" "Emacs" entry
+           (file+headline "~/Documents/agenda/home.org" "Emacs")
+           "* TODO %?\n %i\n %U")
+          ("f" "Fixme" entry
+           (file+headline "~/Documents/agenda/work.org" "Fixme")
+           "* TODO %?\nEntered on %U\n %i\n %a")))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((org . t)
@@ -220,7 +241,8 @@
      (shell . t)
      (python . t))))
 
-;; Package
+(after! 'doom-modeline
+  (doom-modeline-mode 1))
 
 (after! 'flycheck
   (global-flycheck-mode))
@@ -262,14 +284,20 @@
   (setq erc-autojoin-channels-alist
         '(("freenode.net" "#emacs" "#erc" "#nixhub" "#kisslinux"
            "##linux" "#gentoo" "#gentoo-chat" "#org-mode"))
-   erc-kill-buffer-on-part t
-   erc-kill-server-buffer-on-quit t
-   erc-nick "Renzix"
-   erc-hide-list '("JOIN" "PART" "QUIT")
-   erc-lurker-hide-list '("JOIN" "PART" "QUIT")
-   erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
-                             "324" "329" "332" "333" "353" "477"))
+        erc-kill-buffer-on-part t
+        erc-kill-server-buffer-on-quit t
+        erc-nick "Renzix"
+        erc-hide-list '("JOIN" "PART" "QUIT")
+        erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+        erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
+                                  "324" "329" "332" "333" "353" "477"))
   (add-hook 'erc-insert-modify-hook 'erc-nixhubd-fix))
+
+(after! 'erc-image
+  (add-to-list 'erc-modules 'image)
+  (erc-update-modules)
+  (setq erc-image-display-func 'erc-image-insert-inline
+        erc-image-inline-rescale 200))
 
 (before! 'lsp
          (progn 
@@ -294,7 +322,7 @@
   (global-git-gutter-mode t))
 
 (after! 'doom-themes
-  (load-theme 'doom-wilmersdorf t))
+  (load-theme 'doom-one t))
 
 (after! 'projectile
   (setq projectile-enable-caching t
@@ -312,10 +340,19 @@
 (after! 'rainbow-delimiters
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(after! 'hl-todo
+  (global-hl-todo-mode)
+  (setq hl-todo-keyword-faces
+        '(("TODO" . (:foreground "#f0dfdf" :weight bold))
+          ("HOLD" . (:foreground "#d0bf8f" :weight bold))
+          ("NEXT" . (:foreground "#873e23" :weight bold))
+          ("CANCEL" . (:foreground "#7cb8bb" :weight bold))
+          ("DONE" . (:foreground "#583659" :weight bold))
+          ("NOTE" . (:foreground "#41d14a" :weight bold)))))
+
 ;; @TODO(Renzix): Clean these up
 (setq-default cursor-type 'box)
 (set-cursor-color "#43DE43")
-(global-hl-todo-mode)
 (delete-selection-mode 1)
 (pcre-mode t)
 
@@ -426,11 +463,16 @@
 ;; to be consistant with ibuffer/switch-buffers
 (global-set-key (kbd "C-x f") 'dired-jump)
 (global-set-key (kbd "C-x b") 'ibuffer)
+
 (after! 'counsel
-  (global-set-key (kbd "s-s") 'counsel-projectile-rg)
-  (global-set-key (kbd "s-f") 'counsel-projectile-find-file)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer))
+  ;; These two are replacable with counsel-git and counsel-rg
+  (global-set-key (kbd "C-:") 'counsel-projectile-rg)
+  (global-set-key (kbd "C-;") 'counsel-projectile-find-file)
+  ;; TODO temp fix for org mode
+  (global-set-key (kbd "C-'") 'counsel-find-file)
+  (define-key org-mode-map (kbd "C-'") 'counsel-find-file)
+  (global-set-key (kbd "C-\"") 'ivy-switch-buffer)
+  (define-key org-mode-map (kbd "C-") 'ivy-switch-buffer))
 
 ;; Nice functions that should be default but dont exist for ??? reason
 (after! 'browse-kill-ring
@@ -455,12 +497,12 @@
   (global-set-key (kbd "C-c k") 'crux-kill-other-buffers)
   (global-set-key (kbd "C-c o") 'crux-open-with)
   (global-set-key (kbd "C-c t") 'crux-transpose-windows))
-  (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
+(global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
 
 ;; Projectile
 (after! 'projectile
-  (global-set-key (kbd "s-c") 'projectile-compile-project)
-  (global-set-key (kbd "s-p") 'projectile-command-map))
+  (global-set-key (kbd "C-c c") 'projectile-compile-project)
+  (global-set-key (kbd "C-c p") 'projectile-command-map))
 
 ;; Magit
 (after! 'magit
@@ -477,6 +519,11 @@
   (define-key lsp-mode-map (kbd "s-t") 'lsp-goto-type-definition)
   (define-key lsp-mode-map (kbd "s-r") 'lsp-rename))
 
+(after! 'org
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c z") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link))
+
 ;; Local
 
 (setq lsp-keymap-prefix (kbd "C-c l"))
@@ -492,8 +539,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   '("~/Documents/agenda/home.org" "~/Documents/agenda/archived.org" "~/Documents/agenda/work.org" "~/Documents/agenda/emacs.org"))
  '(package-selected-packages
-   '(vterm erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
+   '(doom-modeline electric-parens vterm erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
