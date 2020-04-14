@@ -99,7 +99,7 @@
 (force! 'dap-mode)
 (force! 'doom-themes)
 (force! 'doom-modeline)
-;; (force! 'easy-kill) ;; Dunno whether this or visible mark is better
+(force! 'easy-kill)
 (force! 'erc-hl-nicks)
 (force! 'erc-image)
 (force! 'expand-region)
@@ -184,7 +184,7 @@
 ;; Not sure whether visible marks or
 ;; defalut to single line is better (for stuff like C-w)
 (after! 'visible-mark
-  (transient-mark-mode -1)
+  ;;(transient-mark-mode -1)
   (global-visible-mark-mode 1)
   (setq visible-mark-max 1
         visible-mark-faces `(visible-mark-face1)))
@@ -282,8 +282,8 @@
       (my-hl-thing)))
 
   (setq erc-autojoin-channels-alist
-        '(("freenode.net" "#emacs" "#erc" "#nixhub" "#kisslinux"
-           "##linux" "#gentoo" "#gentoo-chat" "#org-mode"))
+        '(("freenode.net" "#nixhub" "#kisslinux" "#gentoo-chat")
+          ("127.0.0.1"))
         erc-kill-buffer-on-part t
         erc-kill-server-buffer-on-quit t
         erc-nick "Renzix"
