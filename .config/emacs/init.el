@@ -266,6 +266,46 @@
     (define-key company-active-map (kbd "RET") nil)
     (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)))
 
+(after! 'circe
+  (require 'circe-chanop)
+  (setq circe-network-options
+        '(("Freenode"
+           :tls t
+           :nick "Renzix"
+           :sasl-username "Renzix"
+           :sasl-password ,my/irc-password
+           :channels ("#nixhub"))
+          ("Bitlbee"
+           :nick "Renzix"
+           :user "Renzix"
+           :nickserv-password ,my/irc-password)))
+  (setq circe-reduce-lurker-spam t
+        circe-format-say "{nick:-10s}| {body}"
+        circe-format-self-say "{nick:-10s}| {body}"
+        lui-time-stamp-position 'right-margin
+        lui-time-stamp-format "%H:%M"
+        lui-fill-type nil)
+  (require 'lui-autopaste)
+  (add-hook 'circe-channel-mode-hook 'enable-lui-autopaste)
+  (add-hook 'lui-mode-hook 'my-circe-set-margin)
+  (defun my-circe-set-margin ()
+    (setq right-margin-width 5))
+  (add-hook 'lui-mode-hook 'my-lui-setup)
+  (defun my-lui-setup ()
+    (setq
+     fringes-outside-margins t
+     right-margin-width 5
+     word-wrap t
+     wrap-prefix "    "))
+  (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
+  (defun my-circe-prompt ()
+    (lui-set-prompt
+     (concat (propertize (concat (buffer-name) ">")
+                         'face 'circe-prompt-face)
+             " ")))
+  (enable-circe-color-nicks)
+  (enable-circe-display-images))
+
 (after! 'erc
   (setq renzix-erc-user-colors '())
   (defun my-hl-thing ()
