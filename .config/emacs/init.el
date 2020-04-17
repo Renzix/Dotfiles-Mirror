@@ -40,6 +40,7 @@
 (get! '0x0)
 (get! 'amx)
 (get! 'anzu)
+(get! 'avy)
 (get! 'auctex)
 (get! 'browse-kill-ring)
 (get! 'command-log-mode)
@@ -48,14 +49,15 @@
 (get! 'company-lsp)
 (get! 'counsel)
 (get! 'counsel-projectile)
+(get! 'circe)
 (get! 'crux)
 (get! 'dap-mode)
 (get! 'doom-themes)
 (get! 'doom-modeline)
 (get! 'easy-kill)
 (get! 'emms)
-(get! 'erc-hl-nicks)
-(get! 'erc-image)
+;;(get! 'erc-hl-nicks)
+;;(get! 'erc-image)
 (get! 'expand-region)
 (get! 'flx)
 (get! 'flycheck)
@@ -71,6 +73,7 @@
 (get! 'lua-mode)
 (get! 'magit)
 (get! 'magit-todos)
+(get! 'nix-mode)
 (get! 'perl6-mode)
 (get! 'powershell)
 (get! 'projectile)
@@ -88,6 +91,7 @@
 ;; @TODO(Renzix): remove most of these in favor of lazy loading upon command
 (force! 'amx)
 (force! 'anzu)
+(force! 'avy)
 (force! 'better-registers)
 (force! 'browse-kill-ring)
 (force! 'comment-dwim-2)
@@ -96,12 +100,13 @@
 (force! 'counsel)
 (force! 'counsel-projectile)
 (force! 'crux)
+(force! 'circe)
 (force! 'dap-mode)
 (force! 'doom-themes)
 (force! 'doom-modeline)
 (force! 'easy-kill)
-(force! 'erc-hl-nicks)
-(force! 'erc-image)
+;; (force! 'erc-hl-nicks)
+;; (force! 'erc-image)
 (force! 'expand-region)
 (force! 'flx)
 (force! 'flycheck)
@@ -187,7 +192,7 @@
   ;;(transient-mark-mode -1)
   (global-visible-mark-mode 1)
   (setq visible-mark-max 1
-        visible-mark-faces `(visible-mark-face1)))
+        visible-mark-faces `(visible-mark-face2)))
 
 (after! 'ivy
   (ivy-mode 1)
@@ -427,6 +432,10 @@
   (previous-line)
   (scroll-up-line))
 
+(defun my/avy-goto-url ()
+  (interactive)
+  (avy--generic-jump "http" nil nil))
+
 ;;; Keybinds
 
 ;; Global
@@ -435,6 +444,11 @@
 
 (after! 'anzu
   (global-set-key (kbd "M-%") 'anzu-query-replace-regexp))
+
+(after! 'avy
+  (global-set-key (kbd "C-c l") 'my/avy-goto-url))
+
+
 (global-set-key (kbd "M-m") 'kmacro-keymap)
 (global-set-key (kbd "M-;") 'comment-dwim-2)
 (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
@@ -472,7 +486,10 @@
   (global-set-key (kbd "C-'") 'counsel-find-file)
   (define-key org-mode-map (kbd "C-'") 'counsel-find-file)
   (global-set-key (kbd "C-\"") 'ivy-switch-buffer)
-  (define-key org-mode-map (kbd "C-") 'ivy-switch-buffer))
+  (define-key org-mode-map (kbd "C-\"") 'ivy-switch-buffer))
+
+(after! 'circe
+  (define-key circe-mode-map (kbd "C-c u") 'browse-url-emacs))
 
 ;; Nice functions that should be default but dont exist for ??? reason
 (after! 'browse-kill-ring
@@ -522,11 +539,7 @@
 (after! 'org
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c z") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link))
-
-;; Local
-
-(setq lsp-keymap-prefix (kbd "C-c l"))
+  (global-set-key (kbd "C-c s") 'org-store-link))
 
 (after! 'dired
   (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle))
@@ -542,7 +555,7 @@
  '(org-agenda-files
    '("~/Documents/agenda/home.org" "~/Documents/agenda/archived.org" "~/Documents/agenda/work.org" "~/Documents/agenda/emacs.org"))
  '(package-selected-packages
-   '(doom-modeline electric-parens vterm erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
+   '(nix-mode circe doom-modeline electric-parens vterm erc-image erc-hl-nicks try anzu auctex command-log-mode comment-dwim-2 emms yasnippet-snippets which-key rustic rainbow-delimiters projectile-ripgrep powershell perl6-mode md4rd magit-todos lua-mode lsp-ui lsp-python-ms lsp-java ido-completing-read+ git-timemachine git-gutter flycheck-perl6 expand-region easy-kill doom-themes deadgrep dap-mode crux company-lsp browse-kill-ring amx 0x0))
  '(safe-local-variable-values
    '((projectile-project-run-cmd . "./opengl")
      (projectile-project-compilation-cmd . "clang++ -o opengl -lglut -lGLU -lGL -lGLEW main.cpp"))))
