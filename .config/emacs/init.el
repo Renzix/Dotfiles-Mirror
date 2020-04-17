@@ -41,24 +41,24 @@
 (get! '0x0)
 (get! 'amx)
 (get! 'anzu)
-(get! 'avy)
 (get! 'auctex)
+(get! 'avy)
 (get! 'browse-kill-ring)
+(get! 'circe)
 (get! 'command-log-mode)
 (get! 'comment-dwim-2)
 (get! 'company)
 (get! 'company-lsp)
 (get! 'counsel)
 (get! 'counsel-projectile)
-(get! 'circe)
 (get! 'crux)
 (get! 'dap-mode)
-(get! 'doom-themes)
 (get! 'doom-modeline)
+(get! 'doom-themes)
 (get! 'easy-kill)
 (get! 'emms)
-;;(get! 'erc-hl-nicks)
-;;(get! 'erc-image)
+(get! 'erc-hl-nicks)
+(get! 'erc-image)
 (get! 'expand-region)
 (get! 'flx)
 (get! 'flycheck)
@@ -88,26 +88,27 @@
 (get! 'yasnippet)
 (get! 'yasnippet-snippets)
 
-;; Force loads
-;; @TODO(Renzix): remove most of these in favor of lazy loading upon command
+;; These get force loaded
+;; The fewer the better
+
 (force! 'amx)
 (force! 'anzu)
 (force! 'avy)
 (force! 'better-registers)
 (force! 'browse-kill-ring)
+(force! 'circe)
 (force! 'comment-dwim-2)
 (force! 'company)
 (force! 'company-lsp)
 (force! 'counsel)
 (force! 'counsel-projectile)
 (force! 'crux)
-(force! 'circe)
 (force! 'dap-mode)
-(force! 'doom-themes)
 (force! 'doom-modeline)
+(force! 'doom-themes)
 (force! 'easy-kill)
-;; (force! 'erc-hl-nicks)
-;; (force! 'erc-image)
+(force! 'erc-hl-nicks)
+(force! 'erc-image)
 (force! 'expand-region)
 (force! 'flx)
 (force! 'flycheck)
@@ -127,7 +128,6 @@
 (force! 'which-key)
 (force! 'yasnippet)
 (force! 'yasnippet-snippets)
-;; Now we can enable them
 
 ;;; Config
 
@@ -187,8 +187,6 @@
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
-;; Not sure whether visible marks or
-;; defalut to single line is better (for stuff like C-w)
 (after! 'visible-mark
   ;;(transient-mark-mode -1)
   (global-visible-mark-mode 1)
@@ -212,7 +210,7 @@
   (let ((face (or (get-char-property (pos) 'read-face-name)
                   (get-char-property (pos) 'face))))
     (if face (message "Face: %s" face) (message "No face at %d" pos))))
-;; Org mode
+
 (after! 'org
   (setq-default initial-major-mode 'org-mode
                 initial-scratch-message ""
@@ -364,27 +362,11 @@
 (after! 'amx
   (amx-mode t))
 
-(after! 'git-gutter
-  (global-git-gutter-mode t))
-
 (after! 'doom-themes
   (load-theme 'doom-one t))
 
-(after! 'projectile
-  (setq projectile-enable-caching t
-        projectile-file-exists-local-cache-expire (* 5 60)
-        projectile-file-exists-remote-cache-expire (* 10 60)
-        projectile-sort-order 'recently-active)
-  (projectile-mode t))
-
-(after! 'which-key
-  (which-key-mode t))
-
-(after! 'yasnippet
-  (yas-global-mode t))
-
-(after! 'rainbow-delimiters
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+(after! 'git-gutter
+  (global-git-gutter-mode t))
 
 (after! 'hl-todo
   (global-hl-todo-mode)
@@ -395,6 +377,22 @@
           ("CANCEL" . (:foreground "#7cb8bb" :weight bold))
           ("DONE" . (:foreground "#583659" :weight bold))
           ("NOTE" . (:foreground "#41d14a" :weight bold)))))
+
+(after! 'projectile
+  (setq projectile-enable-caching t
+        projectile-file-exists-local-cache-expire (* 5 60)
+        projectile-file-exists-remote-cache-expire (* 10 60)
+        projectile-sort-order 'recently-active)
+  (projectile-mode t))
+
+(after! 'rainbow-delimiters
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(after! 'which-key
+  (which-key-mode t))
+
+(after! 'yasnippet
+  (yas-global-mode t))
 
 ;; @TODO(Renzix): Clean these up
 (setq-default cursor-type 'box)
