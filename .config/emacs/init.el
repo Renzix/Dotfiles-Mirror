@@ -21,6 +21,7 @@
 (package-refresh-contents)
 
 (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
+(load-file "~/.config/passwords.el")
 
 ;; Macros
 

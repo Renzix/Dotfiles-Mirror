@@ -1453,7 +1453,7 @@ when necessary.
              rcirc-server-alist
              '(("irc.freenode.net" :channels ("#emacs")))
                rcirc-authinfo
-               '(("irc.freenode.net" nickserv "Renzix" "Akeyla10!")))
+               '(("irc.freenode.net" nickserv "Renzix" "")))
              ;; Include date in time stamp.
              (setq rcirc-time-format "%Y-%m-%d %H:%M ")
              ;; Keep input line at bottom.                                                                               
