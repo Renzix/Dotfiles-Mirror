@@ -1,0 +1,772 @@
+#+TITLE: Emacs Config
+#+AUTHOR: Daniel DeBruno (Renzix)
+#+EMAIL: eragon9981@gmail.com
+
+#+DESCRIPTION: My org mode config file
+#+LANGUAGE: en
+#+EXPORT_FILE_NAME: ../docs/index.html
+
+# ReadTheOrg stuff
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+#+OPTIONS: num:nil
+
+#+PROPERTY: header-args :results silent :tangle no
+
+* Preface
+
+  My 5th iteration (if you count me trying to make acme in emacs for a
+  week and doom emacs twice) of my config. Going to go full lazy loading
+  and manage my own packages with package.el as opposed to
+  use-package. Huge thanks to Henrik who works on doom, Sacha Chua for
+  emacs news/content, the neovim team and Bram Moolenaar for pushing
+  what it means to be a text editor, Stallman and all the other emacs
+  devs for creating emacs and all the random people I stole and use
+  packages from.
+
+  This config is going to be very doom like with optional evil keybinds
+  as I think there is no single perfect way to edit a text buffer and it
+  depends almost entirely on what you are doing. Some saner defaults 
+
+** Layout
+   
+   The config is going to be seperated into three sections. Below is a
+   noweb source code block which shows the layout.
+
+   #+NAME: layout
+   #+BEGIN_SRC emacs-lisp :noweb yes :tangle yes
+     <<package-functions>>
+     <<package-download>>
+     <<package-force>>
+     <<config-default>>
+     <<config-packages>>
+     <<keybinds>>
+   #+END_SRC
+
+** init.el
+
+   My init.el is included here for documentation. 
+
+* Packages
+** Package Functions
+    
+   Functions which allow me to download/manage packages from melpa.
+
+   #+NAME: package-functions
+   #+BEGIN_SRC emacs-lisp
+     (defmacro download! (package)
+       `(unless (package-installed-p ,package)
+          (package-install ,package)))
+
+     (defmacro before! (package stuff)
+       stuff)
+
+     ;; @TODO(Renzix): Fix this because defalias doesnt work
+     ;;(defmacro after! (package &rest body)
+     ;;  `(with-eval-after-load ,package ,body))
+
+     ;; @TODO(Renzix): Do other stuff maybe???
+     (defmacro force! (package)
+       `(require ,package))
+   #+END_SRC
+
+** Downloading Packages
+
+   List of packages I download
+
+   #+NAME: package-download
+   #+BEGIN_SRC emacs-lisp 
+     (setq package-enable-at-startup nil
+           package-archives
+           '(("elpa"     . "https://elpa.gnu.org/packages/")
+             ("melpa"        . "https://melpa.org/packages/"))
+           package-archive-priorities
+           '(("elpa"     . 5) ("melpa"        . 10)))
+     (package-refresh-contents)
+
+     (download! '0x0)
+     (download! 'amx)
+     (download! 'anzu)
+     (download! 'auctex)
+     (download! 'avy)
+     (download! 'browse-kill-ring)
+     (download! 'circe)
+     (download! 'command-log-mode)
+     (download! 'comment-dwim-2)
+     (download! 'company)
+     (download! 'company-lsp)
+     (download! 'counsel)
+     (download! 'counsel-projectile)
+     (download! 'crux)
+     (download! 'dap-mode)
+     (download! 'doom-modeline)
+     (download! 'doom-themes)
+     (download! 'easy-kill)
+     (download! 'emms)
+     (download! 'erc-hl-nicks)
+     (download! 'erc-image)
+     (download! 'expand-region)
+     (download! 'flx)
+     (download! 'flycheck)
+     (download! 'flycheck-perl6)
+     (download! 'git-gutter)
+     (download! 'git-timemachine)
+     (download! 'hl-todo)
+     (download! 'ivy)
+     (download! 'lsp-java)
+     (download! 'lsp-mode)
+     (download! 'lsp-python-ms)
+     (download! 'lsp-ui)
+     (download! 'lua-mode)
+     (download! 'magit)
+     (download! 'magit-todos)
+     (download! 'nix-mode)
+     (download! 'paredit)
+     (download! 'pcre2el)
+     (download! 'perl6-mode)
+     (download! 'powershell)
+     (download! 'projectile)
+     (download! 'projectile-ripgrep)
+     (download! 'rainbow-delimiters)
+     (download! 'rustic)
+     (download! 'try)
+     (download! 'visible-mark)
+     (download! 'vterm)
+     (download! 'which-key)
+     (download! 'yasnippet)
+     (download! 'yasnippet-snippets)
+
+     (add-to-list 'load-path "~/Dotfiles/.config/emacs/elisp")
+   #+END_SRC
+
+** Force Loading
+
+   These packages are force loaded on startup.
+
+   #+NAME: package-force
+   #+BEGIN_SRC emacs-lisp
+     (force! 'amx)
+     (force! 'anzu)
+     (force! 'avy)
+     ;;(force! 'better-registers)
+     (force! 'browse-kill-ring)
+     (force! 'circe)
+     (force! 'comment-dwim-2)
+     (force! 'company)
+     (force! 'company-lsp)
+     (force! 'counsel)
+     (force! 'counsel-projectile)
+     (force! 'crux)
+     (force! 'dap-mode)
+     (force! 'doom-modeline)
+     (force! 'doom-themes)
+     (force! 'easy-kill)
+     (force! 'erc-hl-nicks)
+     (force! 'erc-image)
+     (force! 'expand-region)
+     (force! 'flx)
+     (force! 'flycheck)
+     (force! 'git-gutter)
+     (force! 'git-timemachine)
+     (force! 'hl-todo)
+     (force! 'ivy)
+     (force! 'lsp-mode)
+     (force! 'lsp-ui)
+     (force! 'magit)
+     (force! 'magit-todos)
+     (force! 'projectile)
+     (force! 'projectile-ripgrep)
+     (force! 'rainbow-delimiters)
+     (force! 'visible-mark)
+     (force! 'vterm)
+     (force! 'which-key)
+     (force! 'yasnippet)
+     (force! 'yasnippet-snippets)
+   #+END_SRC
+
+* Configuration
+** Default Configuration
+   
+   This is a attempt at some saner defaults. Everything here is
+   Vanilla and not apart of a bigger package.
+
+   #+NAME: config-default
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-screen t
+           initial-buffer-choice nil
+           confirm-kill-processes nil
+           browse-url-browser-function 'eww-browse-url)
+
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (scroll-bar-mode -1)
+     ;; Magic that makes only 2 windows spawn max
+     (setq split-width-threshold (- (window-width) 10))
+     (setq split-height-threshold nil)
+     (defun count-visible-buffers (&optional frame)
+       "Count how many buffers are currently being shown.  Defaults to selected FRAME."
+       (length (mapcar #'window-buffer (window-list frame))))
+     (defun do-not-split-more-than-two-windows (window &optional horizontal)
+       "WINDOW HORIZONTAL."
+       (if (and horizontal (> (count-visible-buffers) 1))
+           nil
+         t))
+     (advice-add 'window-splittable-p
+                 :before-while #'do-not-split-more-than-two-windows)
+
+     (global-hl-line-mode)
+     (setq vc-follow-symlinks t)
+     (defalias 'yes-or-no-p 'y-or-n-p)
+     (setq-default indent-tabs-mode nil)
+     (setq tab-width 4)
+
+     ;; Parens
+     (show-paren-mode 1)
+     (electric-pair-mode t)
+     (setq electric-pair-preserve-balance nil)
+
+     (setq backup-directory-alist `(("." . "~/.saves"))
+           backup-by-copying t
+           delete-old-versions t
+           kept-new-versions 10
+           kept-old-versions 10
+           version-control t
+           auto-save-list-file-prefix nil)
+
+     (prefer-coding-system 'utf-8)
+
+     ;; whitespace
+     (require 'whitespace)
+     (setq whitespace-line-column 80) ;; limit line length
+     (setq whitespace-style '(face lines-tail))
+     (add-hook 'prog-mode-hook 'whitespace-mode)
+     (setq-default cursor-type 'box)
+     (set-cursor-color "#43DE43")
+     (delete-selection-mode 1)
+   #+END_SRC
+
+** Useful Functions
+
+   A whole bunch of functions that are either redefinitions or
+   functions that imo should be binded to a key.
+
+   #+NAME: config-functions
+   #+BEGIN_SRC emacs-lisp
+     (defun dired-dotfiles-toggle ()
+       "Show/hide dot-files."
+       (interactive)
+       (when (equal major-mode 'dired-mode)
+         ;; if currently showing
+         (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) 
+             (progn 
+               (set (make-local-variable 'dired-dotfiles-show-p) nil)
+               (message "h")
+               (dired-mark-files-regexp "^\\\.")
+               (dired-do-kill-lines))
+           (progn (revert-buffer) ; otherwise just revert to re-show
+                  (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+
+     (defun my/switch-to-vterm ()
+       "Switch to vterm."
+       (if (get-buffer "vterm")
+           (switch-to-buffer "vterm")
+         (vterm)))
+
+     (defun my/vterm-toggle (buf-name)
+       "Switch to vterm and save persp.  BUF-NAME is the current buffer name."
+       (interactive (list (buffer-name)))
+       (if (string-equal buf-name "vterm")
+           (set-window-configuration my:window-conf)
+         (progn
+           (setq my:window-conf (current-window-configuration))
+           (delete-other-windows)
+           (my/switch-to-vterm))))
+
+     (defun move-text-internal (arg)
+       (cond
+        ((and mark-active transient-mark-mode)
+         (if (> (point) (mark))
+             (exchange-point-and-mark))
+         (let ((column (current-column))
+               (text (delete-and-extract-region (point) (mark))))
+           (forward-line arg)
+           (move-to-column column t)
+           (set-mark (point))
+           (insert text)
+           (exchange-point-and-mark)
+           (setq deactivate-mark nil)))
+        (t
+         (beginning-of-line)
+         (when (or (> arg 0) (not (bobp)))
+           (forward-line)
+           (when (or (< arg 0) (not (eobp)))
+             (transpose-lines arg))
+           (forward-line -1)))))
+
+     (defun move-text-up (arg)
+       "Move region (transient-mark-mode active) or current line
+       arg lines up."
+       (interactive "*p")
+       (move-text-internal (- arg)))
+
+     (defun move-text-down (arg)
+       "Move region (transient-mark-mode active) or current line
+       arg lines down."
+       (interactive "*p")
+       (move-text-internal arg))
+
+     (defun my/crux-duplicate-current-line-or-region-up ()
+       (interactive)
+       (crux-duplicate-current-line-or-region 1)
+       (previous-line)
+       (scroll-up-line))
+
+     (defun my/avy-goto-url ()
+       (interactive)
+       (avy--generic-jump "http" nil nil))
+   #+END_SRC
+
+** Package Configuration
+*** Exported
+    #+NAME: config-packages
+    #+BEGIN_SRC emacs-lisp :noweb yes
+      <<config-amx>>
+      <<config-company>>
+      <<config-ivy>>
+      <<config-yasnippet>>
+
+      <<config-org>>
+      <<config-circe>>
+
+      <<config-doom-themes>>
+      <<config-doom-modeline>>
+      <<config-git-gutter>>
+      <<config-hl-todo>>
+      <<config-visual-mark>>
+      <<config-which-key>>
+      <<config-rainbow-delimiters>>
+
+      <<config-lsp>>
+      <<config-projectile>>
+      <<config-pcre2el>>
+      <<config-flycheck>>
+    #+END_SRC
+*** Completion
+**** Amx
+     
+     Basically a better M-x.
+
+     #+NAME: config-amx
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'amx
+         (amx-mode t))
+     #+END_SRC
+
+**** Company
+     
+     For autocompletion with a bunch of nice stuff
+
+     #+NAME: config-company
+     #+BEGIN_SRC emacs-lisp
+       (before! 'company
+                (progn
+                  (add-hook 'prog-mode-hook 'company-mode)))
+
+       (with-eval-after-load 'company
+         (progn
+           (setq company-minimum-prefix-length 1
+                 company-idle-delay 0.1) ;; default is 0.2
+           (require 'company-lsp)
+           (add-to-list 'company-backends 'company-lsp)
+           (define-key company-active-map (kbd "<return>") nil)
+           (define-key company-active-map (kbd "RET") nil)
+           (define-key company-active-map (kbd "C-SPC") 'company-complete-selection)))
+     #+END_SRC
+
+**** Ivy
+
+     @TODO docs
+
+     #+NAME: config-ivy
+     #+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'ivy
+  (ivy-mode 1)
+  (define-key ivy-minibuffer-map (kbd "C-m") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-dispatching-done)
+  (define-key ivy-minibuffer-map (kbd "S-TAB") 'ivy-dispatching-call)
+  (require 'flx)
+  (setq ivy-re-builders-alist '((t . ivy--regex-plus))
+        ivy-use-virtual-buffers t
+        ivy-initial-inputs-alist nil
+        ivy-use-selectable-prompt t
+        projectile-completion-system 'ivy))
+     #+END_SRC
+
+**** Helm
+
+     @TODO(Renzix): Make me
+
+**** ido/icomplete
+     
+     @TODO(Renzix): Make me
+
+**** Yasnippet
+
+     Snippets which lets me define my own easily and use others.
+
+     #+NAME: config-yasnippet
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'yasnippet
+         (yas-global-mode t))
+     #+END_SRC
+
+*** Major Modes
+**** Org
+
+    @TODO docs
+
+    #+NAME: config-org
+    #+BEGIN_SRC emacs-lisp 
+      (defun what-face (pos)
+        (interactive "d")
+        (let ((face (or (get-char-property (pos) 'read-face-name)
+                        (get-char-property (pos) 'face))))
+          (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
+      (with-eval-after-load 'org
+        (setq-default initial-major-mode 'org-mode
+                      initial-scratch-message ""
+                      org-src-tab-acts-natively t
+                      org-confirm-babel-evaluate nil
+                      org-return-follows-link t)
+        (setq org-log-done 'time
+              org-src-window-setup 'current-window
+              org-archive-location "archived.org:: From %s"
+              org-todo-keywords '((sequence "TODO(t)" "HOLD(h@)" "NEXT(n!)"
+                                            "|" "DONE(d!)" "CANCEL(c@)"))
+              org-todo-keyword-faces
+              '(("TODO" . (:foreground "#f0dfdf" :weight bold))
+                ("HOLD" . (:foreground "#d0bf8f" :weight bold))
+                ("NEXT" . (:foreground "#873e23" :weight bold))
+                ("CANCEL" . (:foreground "#7cb8bb" :weight bold))
+                ("DONE" . (:foreground "#583659" :weight bold)))
+              org-capture-templates
+              '(("e" "Emacs" entry
+                 (file+headline "~/Documents/agenda/home.org" "Emacs")
+                 "* TODO %?\n %i\n %U")
+                ("f" "Fixme" entry
+                 (file+headline "~/Documents/agenda/work.org" "Fixme")
+                 "* TODO %?\nEntered on %U\n %i\n %a")))
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '((org . t)
+           (C . t)
+           (latex . t)
+           (emacs-lisp . t)
+           (sql . t)
+           (shell . t)
+           (python . t))))
+    #+END_SRC
+**** Circe
+
+     Probably the best irc client for emacs although they all are
+     really good.
+
+     #+NAME: config-circe
+     #+BEGIN_SRC emacs-lisp 
+       (load-file "~/.config/passwords.el")
+       (with-eval-after-load 'circe
+         (require 'circe-chanop)
+         (setq circe-network-options
+               '(("Freenode"
+                  :tls t
+                  :nick "Renzix"
+                  :sasl-username "Renzix"
+                  :sasl-password ,my/irc-password
+                  :channels ("#nixhub"))
+                 ("Bitlbee"
+                  :nick "Renzix"
+                  :user "Renzix"
+                  :nickserv-password ,my/irc-password)))
+         (setq circe-reduce-lurker-spam t
+               circe-format-say "{nick:-10s}| {body}"
+               circe-format-self-say "{nick:-10s}| {body}"
+               lui-time-stamp-position 'right-margin
+               lui-time-stamp-format "%H:%M"
+               lui-fill-type nil)
+         (require 'lui-autopaste)
+         (add-hook 'circe-channel-mode-hook 'enable-lui-autopaste)
+         (add-hook 'lui-mode-hook 'my-circe-set-margin)
+         (defun my-circe-set-margin ()
+           (setq right-margin-width 5))
+         (add-hook 'lui-mode-hook 'my-lui-setup)
+         (defun my-lui-setup ()
+           (setq
+            fringes-outside-margins t
+            right-margin-width 5
+            word-wrap t
+            wrap-prefix "    "))
+         (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
+         (defun my-circe-prompt ()
+           (lui-set-prompt
+            (concat (propertize (concat (buffer-name) ">")
+                                'face 'circe-prompt-face)
+                    " ")))
+         (enable-circe-color-nicks)
+         (enable-circe-display-images))
+     #+END_SRC
+*** Misc
+**** lsp
+     
+     Gives ide like features in multiple text editors.
+
+     #+NAME: config-lsp
+     #+BEGIN_SRC emacs-lisp
+       (before! 'lsp
+                (progn 
+                  (add-hook 'prog-mode-hook 'lsp)
+                  (add-hook 'lsp-mode-hook 'company-mode)
+                  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+                  (add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)))
+
+       (with-eval-after-load 'lsp
+         (progn
+           (setq lsp-ui-sideline-enable t
+                 lsp-ui-doc-enable t
+                 lsp-ui-flycheck-enable t
+                 lsp-ui-imenu-enable t
+                 lsp-ui-sideline-ignore-duplicate t)))
+
+     #+END_SRC
+
+**** Projectile
+
+     Allows me to do alot of stuff with the project.
+
+     #+NAME: config-projectile
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'projectile
+         (setq projectile-enable-caching t
+               projectile-file-exists-local-cache-expire (* 5 60)
+               projectile-file-exists-remote-cache-expire (* 10 60)
+               projectile-sort-order 'recently-active)
+         (projectile-mode t))
+     #+END_SRC
+
+**** Pcre2el
+
+     Lets me do pcre regex instead of the god awful default emacs
+     regex.
+
+     #+NAME: config-pcre2el
+     #+BEGIN_SRC emacs-lisp
+       (before! 'pcre2el
+                (pcre-mode t))
+     #+END_SRC
+
+**** Flycheck
+
+     Spellcheck for multiple major modes.
+
+     #+NAME: config-flycheck
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'flycheck
+         (global-flycheck-mode))
+     #+END_SRC
+
+*** Visual
+**** Doom Theming
+
+     Normal modeline is a luttle cluttered so I just change it.
+
+     #+NAME: config-doom-modeline
+     #+BEGIN_SRC emacs-lisp    
+       (with-eval-after-load 'doom-modeline
+         (doom-modeline-mode 1))
+     #+END_SRC
+
+     Nearly all the doom-themes are top tier so lets install those.
+
+     #+NAME: config-doom-themes
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'doom-themes
+         (load-theme 'doom-one t))
+     #+END_SRC
+
+**** Git Gutter
+     
+     Shows git commit diffs in side bar. Also lets you bind some keys
+     which is nice.
+
+     #+NAME: config-git-gutter
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'git-gutter
+         (global-git-gutter-mode t))
+     #+END_SRC
+
+**** Hl Todo
+
+     Highlighting TODO like words is rly nice.
+
+     #+NAME: config-hl-todo
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'hl-todo
+         (global-hl-todo-mode)
+         (setq hl-todo-keyword-faces
+               '(("TODO" . (:foreground "#f0dfdf" :weight bold))
+                 ("HOLD" . (:foreground "#d0bf8f" :weight bold))
+                 ("NEXT" . (:foreground "#873e23" :weight bold))
+                 ("CANCEL" . (:foreground "#7cb8bb" :weight bold))
+                 ("DONE" . (:foreground "#583659" :weight bold))
+                 ("NOTE" . (:foreground "#41d14a" :weight bold)))))
+     #+END_SRC
+
+**** Visible Mark
+    
+     @TODO(Renzix): docs
+
+     #+NAME: config-visible-mark
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'visible-mark
+         ;;(transient-mark-mode -1)
+         (global-visible-mark-mode 1)
+         (setq visible-mark-max 1
+               visible-mark-faces `(visible-mark-face2)))
+     #+END_SRC
+
+**** Which Key
+
+     Shows keybinds of prefix keys. Very useful to learn or if you
+     forget what the entire bind is.
+
+     #+NAME: config-which-key
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'which-key
+         (which-key-mode t))
+     #+END_SRC
+
+**** Rainbow Delimiters
+
+     Makes parens easier to read by coloring them different colors.
+
+     #+NAME: config-rainbow-delimiters
+     #+BEGIN_SRC emacs-lisp
+       (with-eval-after-load 'rainbow-delimiters
+         (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+     #+END_SRC
+* Keybinds
+
+  @TODO(Renzix): I need to sort these and possibly make a macro like
+  dooms map!.
+
+  #+NAME: keybinds
+  #+BEGIN_SRC emacs-lisp
+    (with-eval-after-load 'amx
+      (global-set-key (kbd "M-x") 'amx))
+
+    (with-eval-after-load 'anzu
+      (global-set-key (kbd "M-%") 'anzu-query-replace-regexp))
+
+    (with-eval-after-load 'avy
+      (global-set-key (kbd "C-c l") 'my/avy-goto-url))
+
+
+    (global-set-key (kbd "M-m") 'kmacro-keymap)
+    (global-set-key (kbd "M-;") 'comment-dwim-2)
+    (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
+    (global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
+    ;; (global-set-key (kbd "C-s") 'swiper-isearch-forward) ;; Swiper seems too distracting
+    ;; (global-set-key (kbd "C-r") 'swiper-isearch-backward)
+    (global-set-key (kbd "M-<left>") (lambda () (interactive) (transpose-words -1)))
+    (global-set-key (kbd "M-<right>") (lambda () (interactive) (transpose-words 1)))
+    (global-set-key (kbd "M-<down>") 'move-text-down)
+    (global-set-key (kbd "M-<up>") 'move-text-up)
+
+    ;; M-w is now 10x better
+    (with-eval-after-load 'easy-kill
+      (global-set-key [remap kill-ring-save] 'easy-kill)
+      (global-set-key [remap mark-sexp] 'easy-mark))
+    ;; M-z is forwards so C-z is backwards
+    (global-set-key (kbd "C-z")
+                    (lambda (arg char)
+                      (interactive "p\ncZap to char: ")
+                      (zap-to-char -1 char)))
+
+    (with-eval-after-load 'expand-region
+      (global-set-key (kbd "C-\\") 'er/expand-region))
+
+    ;; Ibuffer is just better list-buffers and C-x f
+    ;; to be consistant with ibuffer/switch-buffers
+    (global-set-key (kbd "C-x f") 'dired-jump)
+    (global-set-key (kbd "C-x b") 'ibuffer)
+
+    (with-eval-after-load 'counsel
+      ;; These two are replacable with counsel-git and counsel-rg
+      (global-set-key (kbd "C-:") 'counsel-projectile-rg)
+      (global-set-key (kbd "C-;") 'counsel-projectile-find-file)
+      ;; TODO temp fix for org mode
+      (global-set-key (kbd "C-'") 'counsel-find-file)
+      (define-key org-mode-map (kbd "C-'") 'counsel-find-file)
+      (global-set-key (kbd "C-\"") 'ivy-switch-buffer)
+      (define-key org-mode-map (kbd "C-\"") 'ivy-switch-buffer))
+
+    (with-eval-after-load 'circe
+      (define-key circe-mode-map (kbd "C-c u") 'browse-url-emacs))
+
+    ;; Nice functions that should be default but dont exist for ??? reason
+    (with-eval-after-load 'browse-kill-ring
+      (global-set-key (kbd "C-c y") 'browse-kill-ring))
+
+    (with-eval-after-load 'vterm
+      (global-set-key (kbd "C-c v") 'my/vterm-toggle))
+
+    ;; Crux has alot of nicer defaults
+    (with-eval-after-load 'crux
+      (global-set-key (kbd "M-S-<down>") 'crux-duplicate-current-line-or-region)
+      (global-set-key (kbd "M-S-<up>") 'my/crux-duplicate-current-line-or-region-up)
+      (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
+      (global-set-key (kbd "C-k") 'crux-smart-kill-line)
+      (global-set-key (kbd "C-o") 'crux-smart-open-line)
+      (global-set-key (kbd "M-o") 'crux-smart-open-line-above)
+      (global-set-key (kbd "C-^") 'crux-top-join-line)
+      (global-set-key (kbd "C-S-<backspace>") 'crux-kill-whole-line)
+      (global-set-key (kbd "C-c D") 'crux-delete-file-and-buffer)
+      (global-set-key (kbd "C-c R") 'crux-rename-file-and-buffer)
+      (global-set-key (kbd "C-c k") 'crux-kill-other-buffers)
+      (global-set-key (kbd "C-c o") 'crux-open-with)
+      (global-set-key (kbd "C-c t") 'crux-transpose-windows))
+    (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
+
+    ;; Projectile
+    (with-eval-after-load 'projectile
+      (global-set-key (kbd "C-c c") 'projectile-compile-project)
+      (global-set-key (kbd "C-c p") 'projectile-command-map))
+
+    ;; Magit
+    (with-eval-after-load 'magit
+      (global-set-key (kbd "C-c g g") 'magit-status)
+      (global-set-key (kbd "C-c g t") 'git-timemachine-toggle)
+      (global-set-key (kbd "C-c g s") 'magit-stage-file)
+      (global-set-key (kbd "C-c g u") 'magit-unstage-file)
+      (global-set-key (kbd "C-c g c") 'magit-commit)
+      (global-set-key (kbd "C-c g p") 'magit-push-current-to-upstream)
+      (global-set-key (kbd "C-c g P") 'magit-push-current-to-pushremote))
+
+    (with-eval-after-load 'lsp
+      (define-key lsp-mode-map (kbd "s-i") 'lsp-goto-implementation)
+      (define-key lsp-mode-map (kbd "s-t") 'lsp-goto-type-definition)
+      (define-key lsp-mode-map (kbd "s-r") 'lsp-rename))
+
+    (with-eval-after-load 'org
+      (global-set-key (kbd "C-c a") 'org-agenda)
+      (global-set-key (kbd "C-c z") 'org-capture)
+      (global-set-key (kbd "C-c s") 'org-store-link))
+
+    (with-eval-after-load 'dired
+      (define-key dired-mode-map (kbd ".") 'dired-dotfiles-toggle))
+  #+END_SRC
+
+
+** Evil Based
+
+   @TODO(Renzix): Add these

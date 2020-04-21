@@ -33,6 +33,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'Renzix/vim-replace'
 call plug#end()
 "}}}
 " Plugin config {{{

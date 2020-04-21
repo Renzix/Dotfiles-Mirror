@@ -50,7 +50,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- This is used later as the default terminal and editor to run.
 terminal = "st"
 editor = "emacs"
-browser = "firefox-nightly"
+browser = "firefox-bin"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.

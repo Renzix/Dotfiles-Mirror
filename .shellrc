@@ -132,4 +132,5 @@ else
     export PS1="\$ "
 fi
 
+[ -n $GUIX_PROFILE ] && . "$GUIX_PROFILE/etc/profile"
 export NIX_AUTO_RUN=1
