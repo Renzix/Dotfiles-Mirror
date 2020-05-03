@@ -27,6 +27,7 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+[[ -d /usr/share/zsh/site-functions ]] && source /usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh
 [[ -d /usr/share/zsh/site-contrib/zsh-syntax-highlighting ]] && source /usr/share/zsh/site-contrib/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Gentoo
 [[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Arch
 [[ -d /usr/local/share/zsh-syntax-highlighting ]] && source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # MacOS
