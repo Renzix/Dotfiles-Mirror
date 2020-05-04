@@ -8,7 +8,7 @@
 ;; Use eww as the default browser cuz its nice
 (setq browse-url-browser-function 'eww-browse-url)
 
-(load-theme 'doom-dracula t)
+(load-theme 'doom-rouge t)
 ;; (when (display-graphic-p)
 ;;   (defvar renzix-weekday (format-time-string "%w"))
 ;;   (cond ((string= "0" renzix-weekday) ;; Sunday
@@ -183,6 +183,11 @@ start and selects multiple lines(positive is down)"
          (push-mark nil t t)
          (backward-word arg))))  "Selects the current WORD"
 
+(defun my/avy-goto-url ()
+  "Goto url with avy. Accepts http, https and file currently. "
+  (interactive)
+  (avy--generic-jump "https?s://\\|file://" nil nil))
+
 (after! org
   (setq +pretty-code-symbols
         (org-combine-plists +pretty-code-symbols
@@ -232,19 +237,17 @@ start and selects multiple lines(positive is down)"
 
 (set-irc-server! "chat.freenode.net"
                  `(:tls t
-                        :port 6697
-                        :nick "Renzix"
-                        :sasl-username "renzix"
-                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
-                        :channels (:after-auth "#nixhub" "#emacs" "#kisslinux")))
+                   :port 6697
+                   :nick "Renzix"
+                   :sasl-username "renzix"
+                   :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
+                   :channels (:after-auth "#nixhub" "#emacs" "#kisslinux")))
 
-(set-irc-server! "irc.rizon.net"
-                 `(:tls t
-                        :port 6697
-                        :nick "Renzix"
-                        :sasl-username "renzix"
-                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
-                        :channels (:after-auth "#homescreen")))
+(set-irc-server! "127.0.0.1"
+                 `(
+                   :port 6667
+                   :nick "Renzix"
+                   :nickserv-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))))
 (after! circe
   (require 'circe-chanop)
   ;; Add some nice commands here - @TODO(Renzix)
@@ -317,7 +320,8 @@ start and selects multiple lines(positive is down)"
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
  (:leader ;; Make this open guix if guixsd???
-   :desc "System Packages" "P" #'helm-system-packages)
+   :desc "System Packages" "P" #'helm-system-packages
+   :desc "Open Link" "o l" #'my/avy-goto-url)
  (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
    :localleader
    :desc "Merge" "m" #'smerge-command-prefix))

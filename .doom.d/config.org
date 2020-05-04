@@ -6,7 +6,7 @@
 #+LANGUAGE: en
 #+EXPORT_FILE_NAME: ../docs/index.html
 
-# ReadTheOrg stuff
+# ReadTheOrg
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 #+OPTIONS: num:nil
@@ -20,8 +20,8 @@ would like to change to add to it tho.
 
 Now that Im using doom all I have to do is worry about overriding some of the
 defaults I dont like. If you havent already join the DOOM discord cuz its dope.
-My old config can be found in my Dotfiles under =.emacs.d/config.org=. This
-config is apart of my Dotfiles which is on a self host [[https://git.renzix.com/Renzix/Dotfiles/][gitea]], [[https://gitlab.com/Renzix/Dotfiles][gitlab]] and [[https://github.com/Renzix/Dotfiles-Mirror][github]].
+My old config can be found in my Dotfiles under =.config/emacs/config.org= and
+my super old config is =.emacs.d/config.org=.
 
 * Preferences
 ** Nice Settings
@@ -52,7 +52,7 @@ Themes r cool so lets do a different one for each day
 
 #+NAME: Theme
 #+BEGIN_SRC emacs-lisp
-(load-theme 'doom-dracula t)
+(load-theme 'doom-rouge t)
 ;; (when (display-graphic-p)
 ;;   (defvar renzix-weekday (format-time-string "%w"))
 ;;   (cond ((string= "0" renzix-weekday) ;; Sunday
@@ -308,6 +308,16 @@ start and selects multiple lines(positive is down)"
          (backward-word arg))))  "Selects the current WORD"
 #+END_SRC
 
+Goes to a url with avy so I can open/goto it
+
+#+NAME: my/avy-goto-url
+#+BEGIN_SRC emacs-lisp
+(defun my/avy-goto-url ()
+  "Goto url with avy. Accepts http, https and file currently. "
+  (interactive)
+  (avy--generic-jump "https?s://\\|file://" nil nil))
+#+END_SRC
+
 * Packages
 ** Pretty Symbols
 
@@ -402,19 +412,17 @@ Doom uses circe. rcirc is also pretty nice also Im just gonna config this with
 #+BEGIN_SRC emacs-lisp
 (set-irc-server! "chat.freenode.net"
                  `(:tls t
-                        :port 6697
-                        :nick "Renzix"
-                        :sasl-username "renzix"
-                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
-                        :channels (:after-auth "#nixhub" "#emacs" "#kisslinux")))
+                   :port 6697
+                   :nick "Renzix"
+                   :sasl-username "renzix"
+                   :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
+                   :channels (:after-auth "#nixhub" "#emacs" "#kisslinux")))
 
-(set-irc-server! "irc.rizon.net"
-                 `(:tls t
-                        :port 6697
-                        :nick "Renzix"
-                        :sasl-username "renzix"
-                        :sasl-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))
-                        :channels (:after-auth "#homescreen")))
+(set-irc-server! "127.0.0.1"
+                 `(
+                   :port 6667
+                   :nick "Renzix"
+                   :nickserv-password ,(string-trim (my/get-string-from-file "~/.config/freenode-pass"))))
 (after! circe
   (require 'circe-chanop)
   ;; Add some nice commands here - @TODO(Renzix)
@@ -539,7 +547,8 @@ in insert state and emacs state only
  :nve  "C-x C-d" #'projectile-dired
  :nvei "C-<tab>"   #'+treemacs/toggle
  (:leader ;; Make this open guix if guixsd???
-   :desc "System Packages" "P" #'helm-system-packages)
+   :desc "System Packages" "P" #'helm-system-packages
+   :desc "Open Link" "o l" #'my/avy-goto-url)
  (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
    :localleader
    :desc "Merge" "m" #'smerge-command-prefix))
