@@ -49,7 +49,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "st"
-editor = "emacs"
+editor = "/opt/emacs-native-comp/bin/emacs"
 browser = "firefox-bin"
 
 -- Default modkey.
@@ -257,16 +257,16 @@ globalkeys = gears.table.join(
         {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
         {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey,           }, "]", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey,           }, "o", function () awful.screen.focus_relative(-1) end,
         {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey,           }, "[", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey,           }, "n", function () awful.screen.focus_relative( 1) end,
         {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey, "Shift"   }, "]",
+    awful.key({ modkey, "Shift"   }, "o",
         function ()
             client.focus:move_to_screen(awful.screen.focus_relative(1))
         end,
         {description = "Move window to the next screen", group = "screen"}),
-    awful.key({ modkey, "Shift"   }, "[",
+    awful.key({ modkey, "Shift"   }, "n",
         function ()
             client.focus:move_to_screen(awful.screen.focus_relative(-1))
         end,
@@ -373,15 +373,6 @@ clientkeys = gears.table.join(
         {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
         {description = "move to master", group = "client"}),
-    awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
-        {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"}),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized

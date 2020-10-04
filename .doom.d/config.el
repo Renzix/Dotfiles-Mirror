@@ -6,7 +6,9 @@
 (setq transient-mark-mode nil
       set-mark-command-repeat-pop t)
 ;; Use eww as the default browser cuz its nice
-(setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-browser-function 'eww-browse-url
+      search-whitespace-regexp ".*"
+      isearch-lax-whitespace t)
 
 (load-theme 'doom-rouge t)
 ;; (when (display-graphic-p)
@@ -312,19 +314,42 @@ start and selects multiple lines(positive is down)"
   :init (setq twitch-api-oauth-token (string-trim (my/get-string-from-file "~/.config/twitch-oauth"))
               twitch-api-username "therenzix"))
 
+(after! notmuch
+  (setq notmuch-poll-script "getmail"
+        +notmuch-sync-backend 'mbsync
+        +notmuch-mail-folder "~/.mail"))
+
+(use-package! boon
+  :config
+  (boon-mode)
+  (require 'boon-colemak))
+
+(map!
+  "C-x C-c" 'save-buffers-kill-emacs
+  (:map boon-command-map
+   "p" #'projectile-command-map
+   "f" #'isearch-forward
+   "w" #'boon-qsearch-next
+   "F" #'isearch-backward
+   "W" #'boon-qsearch-previous
+   "h" #'helm-find-files
+   "H" #'helm-mini
+   "/" #'undo)
+  (:map projectile-command-map
+   "s" #'helm-projectile-rg))
+
 (setq doom-leader-alt-key "C-c"
       doom-localleader-alt-key "C-c l")
 (map!
  :nve  "C-x t"   #'+eshell/here
  :nve  "C-x C-t" #'+vterm/here
- :nve  "C-x C-d" #'projectile-dired
- :nvei "C-<tab>"   #'+treemacs/toggle
+ :nvei "C-<tab>" #'+treemacs/toggle
  (:leader ;; Make this open guix if guixsd???
-   :desc "System Packages" "P" #'helm-system-packages
-   :desc "Open Link" "o l" #'my/avy-goto-url)
+  :desc "System Packages" "P" #'helm-system-packages
+  :desc "Open Link" "o l" #'my/avy-goto-url)
  (:map smerge-mode-map ;; cuz C-c ^ is awful C-c l m is much better
-   :localleader
-   :desc "Merge" "m" #'smerge-command-prefix))
+  :localleader
+  :desc "Merge" "m" #'smerge-command-prefix))
 
 (map!
  :e "C-x C-k" #'kill-this-buffer
@@ -342,34 +367,35 @@ start and selects multiple lines(positive is down)"
  :e "C-M-u"   #'sp-backward-up-sexp
  :e "C-u"     #'universal-argument ;; Doom rebinds this idk why
  (:map override
-   :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
-   :e "C-:"   #'evil-ex
-   :e "C-'"   #'helm-find-files
-   :e "C-\""  #'helm-mini
-   :e "M-'"   #'+helm/projectile-find-file
-   :e "M-\""  #'+helm/project-search))
+  :e "C-;"   #'my/helm-M-x ;; I dont know if i shoud have this or not
+  :e "C-:"   #'evil-ex
+  :e "C-'"   #'helm-find-files
+  :e "C-\""  #'helm-mini
+  :e "M-'"   #'+helm/projectile-find-file
+  :e "M-\""  #'+helm/project-search))
 
 (map!
  :nv "Q"     (kbd "@q")
  :nv "g ="   #'my/smart-indent
  (:map override
-   :nvm ";"   #'my/helm-M-x
-   :nvm "|"   #'helm-mini
-   :nvm "s"   #'helm-find-files
-   :nvm "S"   #'+helm/projectile-find-file
-   :nv  "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
-   :nvm "\\"  #'+helm/project-search))
+  :nvm ";"   #'my/helm-M-x
+  :nvm "|"   #'helm-mini
+  :nvm "s"   #'helm-find-files
+  :nvm "S"   #'+helm/projectile-find-file
+  :nv  "U"   #'undo-tree-visualize ;; in vi U is undo line changes so you can undo the undo
+  :nvm "\\"  #'+helm/project-search))
 ;; @NOTE(Renzix) that I made these from evil functions to emacs function
 ;; for more compatibility and to make sure it works as expected.
-(evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
-(evil-ex-define-cmd "conf[ig]" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
-(evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
-(evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
-(evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
-(evil-ex-define-cmd "blog" (lambda! (find-file "~/Blog/blog.org")))
-(evil-ex-define-cmd "a[genda]" #'org-agenda)
-(evil-ex-define-cmd "q[uit]" #'delete-window)
-(evil-ex-define-cmd "bd" #'kill-this-buffer)
+(after! evil
+  (evil-ex-define-cmd "cfg" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+  (evil-ex-define-cmd "conf[ig]" (lambda! (find-file "~/Dotfiles/.doom.d/config.org")))
+  (evil-ex-define-cmd "pkg" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
+  (evil-ex-define-cmd "pack[age]" (lambda! (find-file "~/Dotfiles/.doom.d/packages.el")))
+  (evil-ex-define-cmd "init" (lambda! (find-file "~/Dotfiles/.doom.d/init.el")))
+  (evil-ex-define-cmd "blog" (lambda! (find-file "~/Blog/blog.org")))
+  (evil-ex-define-cmd "a[genda]" #'org-agenda)
+  (evil-ex-define-cmd "q[uit]" #'delete-window)
+  (evil-ex-define-cmd "bd" #'kill-this-buffer))
 
 (map! (:map helm-map
         "C-m" #'helm-maybe-exit-minibuffer

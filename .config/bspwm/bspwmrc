@@ -1,40 +1,34 @@
 #!/bin/bash
-sxhkd -c /home/genzix/.config/sxhkd/sxhkdrc_bspwm &
+sxhkd -c /home/genzix/Dotfiles/.config/sxhkd/sxhkdrc_ergodox &
 
 #VARS
 export BSPWMC=".config/bspwm"
 
 #monitor stuff
-bspc monitor DP-2 -d I II III
-bspc monitor DVI-D-0 -d IV V VI
-bspc monitor DP-5 -d VII VIII IX
+bspc monitor DVI-D-0 -d w f p
+bspc monitor DP-4 -d r s t
+bspc monitor DP-3 -d x c d
 
 #bspc rules
 bspc config click_to_focus true
 
-#DE like stuff
-/usr/lib/xfce4/notifyd/xfce4-notifyd &
-#xfce4-panel -d &
-tint2 -c $HOME/.config/tint2/testing1 &
-tint2 -c $HOME/.config/tint2/testing2 &
-
 bspc rule -a Thunar state=floating
+bspc rule -a Emacs-28.0.50 state=tiled
 bspc rule -a Emacs state=tiled
-bspc rule -a Google-chrome state=tiled
-bspc rule -a Rudditor state=floating
+bspc rule -a albert_hack state=floating border=off
+bspc rule -a albert border=off state=floating center=true, sticky=on
 
-feh --bg-max ${BSPWMC}/wallpaper.png &
+feh --bg-max ${XDG_CONFIG_HOME}/wallpaper.png
 
 # Keybindings
-setxkbmap -option caps:swapescape #Switch caps and escape
-
-#multiple programs that i might not use cuz BLOAT or im lazy
-#ibus-daemon -drx &
-compton -b
-redshift-gtk &
+# setxkbmap -option caps:swapescape #Switch caps and escape
 
 #cuz fk optimum routers
 #wpa_gui -t &
 
 #for java
 wmname LG3D
+
+albert & disown
+
+xset r rate 280 40

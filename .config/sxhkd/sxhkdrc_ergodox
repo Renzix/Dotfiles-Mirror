@@ -1,0 +1,61 @@
+### Apps ###
+
+# Terminal
+super + Return
+    st
+
+# Editor
+super + m
+    emacs
+
+# Web Browser
+super + h
+    chromium
+XF86HomePage
+    chromium
+
+# File manager
+XF86Explorer
+    krusader
+super + v
+    krusader
+
+### Functionality ###
+
+# search
+#super + @space
+#    rofi -show run
+XF86Search
+    st -c albert_hack -g 0x0 -e albert toggle
+
+# Audio
+XF86AudioRaiseVolume
+    amixer -D pulse sset Master 5%+
+
+XF86AudioLowerVolume
+    amixer -D pulse sset Master 5%-
+
+XF86AudioMute
+    $HOME/Dotfiles/.config/sxhkd/ca.sh
+
+### Windows ###
+
+# Focus Window
+super + {_,shift +}{n,e,i,o}
+    bspc node -{f,s} {west,south,north,east}
+
+# Focus Desktop
+super + {_,shift +}{w,f,p,r,s,t,x,c,d}
+    bspc {desktop -f,node -d} {w,f,p,r,s,t,x,c,d}
+
+# Close/Kill
+super + {_,shift +}k
+    bspc node -{c,k}
+
+# Reload sxhkdrc
+super + shift + z
+    pkill -USR1 -x sxhkd
+
+# Exit bspwm
+super + shift + q
+    bspc quit

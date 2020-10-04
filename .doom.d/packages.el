@@ -5,6 +5,7 @@
 
 (unpin! t)
 (package! apropospriate-theme)
+(package! boon)
 (package! command-log-mode)
 (package! company-tabnine)
 (package! elcord)
@@ -15,3 +16,4 @@
 (package! piper :recipe (:host gitlab :repo "howardabrams/emacs-piper"))
 (package! vimrc-mode)
 (package! visible-mark)
+(package! sunrise-comander :recipe (:host github :repo "sunrise-commander/sunrise-commander"))

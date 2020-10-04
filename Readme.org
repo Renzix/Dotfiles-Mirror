@@ -7,13 +7,13 @@ guix/nix configs into submodules.
   - [ ] micro config
   - [X] Emacs config
   - [X] Doom Emacs config
-  - [ ] Minimal Emacs (no plugins)
-  - [ ] Minimal Vim (no plugins)
+  - [X] Minimal Emacs (no plugins)
+  - [X] Minimal Vim (no plugins)
 - [-] Window Manager configs
   - [X] stumpwm
   - [X] bspwm
   - [ ] herbsluft
-  - [ ] dwm (with patches and prob in a seperate repo)
+  - [ ] dwm (submodule)
   - [ ] xmonad
   - [ ] openbox
   - [X] Awesomewm
@@ -29,4 +29,3 @@ guix/nix configs into submodules.
   - [ ] NixOS config (submodule)
   - [ ] GuixSD config (submodule)
   - [ ] Bin folder with actually useful scripts
-  - [ ] Installer (perl6)

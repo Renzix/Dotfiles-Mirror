@@ -42,7 +42,9 @@ things.
 (setq transient-mark-mode nil
       set-mark-command-repeat-pop t)
 ;; Use eww as the default browser cuz its nice
-(setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-browser-function 'eww-browse-url
+      search-whitespace-regexp ".*"
+      isearch-lax-whitespace t)
 #+END_SRC
 
 ** Visual
@@ -541,7 +543,36 @@ Email client for emacs. Uses isync to get email
         +notmuch-sync-backend 'mbsync
         +notmuch-mail-folder "~/.mail"))
 #+END_SRC
+
+** Boon
+
+#+NAME: boon
+#+BEGIN_SRC emacs-lisp
+(use-package! boon
+  :config
+  (boon-mode)
+  (require 'boon-colemak))
+#+END_SRC
+
 * Keybindings
+** Boon
+
+#+BEGIN_SRC emacs-lisp
+(map!
+  "C-x C-c" 'save-buffers-kill-emacs
+  (:map boon-command-map
+   "p" #'projectile-command-map
+   "f" #'isearch-forward
+   "w" #'boon-qsearch-next
+   "F" #'isearch-backward
+   "W" #'boon-qsearch-previous
+   "h" #'helm-find-files
+   "H" #'helm-mini
+   "/" #'undo)
+  (:map projectile-command-map
+   "s" #'helm-projectile-rg))
+
+#+END_SRC
 ** Global
 
 Some global binds for everything. Note that alt leader and alt localleader are
@@ -554,8 +585,7 @@ in insert state and emacs state only
 (map!
  :nve  "C-x t"   #'+eshell/here
  :nve  "C-x C-t" #'+vterm/here
- :nve  "C-x C-d" #'projectile-dired
- :nvei "C-<tab>"   #'+treemacs/toggle
+ :nvei "C-<tab>" #'+treemacs/toggle
  (:leader ;; Make this open guix if guixsd???
   :desc "System Packages" "P" #'helm-system-packages
   :desc "Open Link" "o l" #'my/avy-goto-url)
