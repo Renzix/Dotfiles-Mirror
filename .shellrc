@@ -5,7 +5,8 @@
 
 # Environment Vars
 export GOPATH="$HOME/.go"
-export PATH="$PATH:$HOME/usr/local/bin:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin:$HOME/Dotfiles/Bin"
+export PATH="$PATH:$HOME/usr/local/bin:$HOME/.cargo/bin/:$HOME/.local/bin:$HOME/.go/bin:$HOME/Share/Projects/Dotfiles/Bin"
+export GPG_TTY=$(tty) # Dumb bug which fucks gpg keys
 [ -d "/usr/local/homebrew" ] && PATH="$PATH:/usr/local/homebrew/bin"
 export XDG_CONFIG_HOME="$HOME/.config"
 

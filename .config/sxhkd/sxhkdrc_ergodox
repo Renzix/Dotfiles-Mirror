@@ -10,9 +10,7 @@ super + m
 
 # Web Browser
 super + h
-    chromium
-XF86HomePage
-    chromium
+    microsoft-edge-dev
 
 # File manager
 XF86Explorer

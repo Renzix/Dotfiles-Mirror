@@ -5,9 +5,11 @@ sxhkd -c /home/genzix/Dotfiles/.config/sxhkd/sxhkdrc_ergodox &
 export BSPWMC=".config/bspwm"
 
 #monitor stuff
+xrandr --output DP-2 --right-of DVI-D-0 --auto
+xrandr --output DP-5 --right-of DP-2 --auto
 bspc monitor DVI-D-0 -d w f p
-bspc monitor DP-4 -d r s t
-bspc monitor DP-3 -d x c d
+bspc monitor DP-5 -d r s t
+bspc monitor DP-2 -d x c d
 
 #bspc rules
 bspc config click_to_focus true
@@ -18,7 +20,8 @@ bspc rule -a Emacs state=tiled
 bspc rule -a albert_hack state=floating border=off
 bspc rule -a albert border=off state=floating center=true, sticky=on
 
-feh --bg-max ${XDG_CONFIG_HOME}/wallpaper.png
+nitrogen --restore
+# feh --bg-max ${XDG_CONFIG_HOME}/wallpaper.png
 
 # Keybindings
 # setxkbmap -option caps:swapescape #Switch caps and escape
