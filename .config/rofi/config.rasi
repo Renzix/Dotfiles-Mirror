@@ -1,0 +1,7 @@
+configuration {
+	modi: "window,drun,ssh,combi,run";
+	theme: "/usr/share/rofi/themes/Arc-Red.rasi";
+	font: "hack 16";
+	icon-theme: "Papirus";
+}
+@import "/usr/share/rofi/themes/Arc-Red.rasi"

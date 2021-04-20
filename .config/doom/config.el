@@ -7,10 +7,14 @@
 (setq whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
+(setq doom-font (font-spec :family "Fira Code" :size 12)
+      doom-variable-pitch-font (font-spec :family "Fira Code") ; inherits `doom-font''s :size
+      doom-unicode-font (font-spec :family "Fira Code" :size 12)
+      doom-big-font (font-spec :family "Fira Code" :size 19))
 (add-hook! prog-mode-hook #'whitespace-mode)
 (global-undo-tree-mode t)
 
-(load-theme 'doom-nord t)
+(load-theme 'doom-tomorrow-night t)
 
 (defun my/forward-char-no-newline ()
   (interactive)
@@ -196,6 +200,7 @@ sequence."
   (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
   (define-key ivy-minibuffer-map (kbd "C-n") #'ivy-next-line)
   (define-key ivy-minibuffer-map (kbd "C-t") #'ivy-previous-line))
+(setq org-log-done 'time)
 
 (after! ryo-modal
   (define-globalized-minor-mode my-global-ryo-mode ryo-modal-mode
