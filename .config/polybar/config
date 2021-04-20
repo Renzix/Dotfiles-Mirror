@@ -27,7 +27,7 @@ alert                = #e5e9f0
 non                  = #e5e9f0
 
 [bar/bar1]
-width = 20%
+width = 13.5%
 height =65
 offset-x = 3%
 offset-y = 4%
@@ -55,8 +55,9 @@ font-1 = Font Awesome 5 Free:style=Solid:pixelsize=18;3
 font-2 = Font Awesome 5 Brand:pixelsize=18;3
 font-0 = Fira Code:style=normal:size=13;2
 override-redirect = true
+wm-restack = bspwm
 
-modules-left    = power_menu notification volume time
+modules-left    = power_menu notification volume
 
 [bar/bar2]
 width = 12.3%
@@ -103,6 +104,38 @@ override-redirect = true
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+[bar/bar3]
+width = 7%
+height = 65
+offset-x = 90%
+offset-y = 4%
+radius = 30
+fixed-center = false
+bottom = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = ${colors.background-alt}
+
+border-size = 0
+border-color = ${colors.background}
+
+padding-left = 3
+padding-right = 3
+
+module-margin-left = 2
+module-margin-right = 2
+
+font-1 = Font Awesome 5 Free:style=Solid:pixelsize=14;3
+font-0 = Fira Code:style=normal:size=13;2
+
+override-redirect = true
+wm-restack = bspwm
+
+modules-right = time
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
@@ -121,7 +154,7 @@ interval = 1
 
 format = <label>
 format-background = ${colors.background}
-format-padding = 0
+format-padding = 3
 
 date = %{F#fff}%X%{F-}
 time-alt = %{F#fff}%x%{F-}
@@ -178,7 +211,7 @@ content = "  "
 content-padding = 0
 content-foreground = #f2d724
 click-left = dunstctl set-paused toggle
-click-right = notify-send "Hello there!!!"
+click-right = notify-send "HELLO"
 
 [module/eww]
 type = custom/text
