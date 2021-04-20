@@ -27,7 +27,7 @@ alert                = #e5e9f0
 non                  = #e5e9f0
 
 [bar/bar1]
-width = 13.5%
+width = 20%
 height =65
 offset-x = 3%
 offset-y = 4%
@@ -56,7 +56,7 @@ font-2 = Font Awesome 5 Brand:pixelsize=18;3
 font-0 = Fira Code:style=normal:size=13;2
 override-redirect = true
 
-modules-left    = power_menu notification volume
+modules-left    = power_menu notification volume time
 
 [bar/bar2]
 width = 12.3%
@@ -117,14 +117,14 @@ format-padding = 4
 
 [module/time]
 type = internal/date
-interval = 60
+interval = 1
 
 format = <label>
-format-background = #a3be8c
-format-padding = 1
+format-background = ${colors.background}
+format-padding = 0
 
-date = %{F#282A36}󰥔 %H:%M%{F-}
-time-alt = %{F#282A36}󰃭 %a, %b %d%{F-}
+date = %{F#fff}%X%{F-}
+time-alt = %{F#fff}%x%{F-}
 
 label = %date%%time%
 
@@ -177,8 +177,8 @@ type = custom/text
 content = "  "
 content-padding = 0
 content-foreground = #f2d724
-click-left = sh rofi_notif_center.sh
-click-right = sh rofi_notif_center.sh
+click-left = dunstctl set-paused toggle
+click-right = notify-send "Hello there!!!"
 
 [module/eww]
 type = custom/text
