@@ -28,12 +28,12 @@ non                  = #e5e9f0
 
 [bar/bar1]
 width = 13.5%
-height =65
+height = 65
 offset-x = 3%
 offset-y = 4%
 radius = 30
 fixed-center = true
-bottom = false
+bottom = true
 enable-ipc = true
 
 background = ${colors.background}
@@ -57,12 +57,12 @@ font-0 = Fira Code:style=normal:size=13;2
 override-redirect = true
 wm-restack = bspwm
 
-modules-left    = power_menu notification volume
+modules-left    = search notification volume
 
 [bar/bar2]
-width = 12.3%
+width = ${env:WIDTH:}
 height = 65
-offset-x = 85%
+offset-x = ${env:OFFSET:}
 offset-y = 4%
 radius = 30
 fixed-center = true
@@ -105,13 +105,13 @@ cursor-click = pointer
 cursor-scroll = ns-resize
 
 [bar/bar3]
-width = 7%
+width = 12%
 height = 65
-offset-x = 90%
+offset-x = 85%
 offset-y = 4%
 radius = 30
-fixed-center = false
-bottom = false
+fixed-center = true
+bottom = true
 
 background = ${colors.background}
 foreground = ${colors.foreground}
@@ -134,7 +134,7 @@ font-0 = Fira Code:style=normal:size=13;2
 override-redirect = true
 wm-restack = bspwm
 
-modules-right = time
+modules-right = time power_menu
 
 [module/xwindow]
 type = internal/xwindow
@@ -154,7 +154,7 @@ interval = 1
 
 format = <label>
 format-background = ${colors.background}
-format-padding = 3
+format-padding = 0
 
 date = %{F#fff}%X%{F-}
 time-alt = %{F#fff}%x%{F-}
@@ -190,7 +190,7 @@ label-occupied-foreground = ${color.fg}
 
 [module/power_menu]
 type = custom/text
-content = "   "
+content = "  "
 content-padding = 0
 content-foreground = #5eb4e6
 click-left = sh power-menu.sh
@@ -210,8 +210,8 @@ type = custom/text
 content = "  "
 content-padding = 0
 content-foreground = #f2d724
-click-left = dunstctl set-paused toggle
-click-right = notify-send "HELLO"
+click-left = notify-send "Disabling Notifications" && sleep 1 && notify-send "DUNST_COMMAND_PAUSE"
+click-right = notify-send "DUNST_COMMAND_RESUME" && notify-send "Enabling Notifications"
 
 [module/eww]
 type = custom/text
@@ -350,6 +350,12 @@ time-alt  = %A, %d %B %Y
 format-prefix = 
 label = " %time%"
 
+[module/search]
+type = custom/text
+content = "  "
+content-foreground = #00FF00
+click-right = ~/.config/polybar/scripts/search.sh run
+click-left  = ~/.config/polybar/scripts/search.sh drun
 
 [settings]
 screenchange-reload = true
