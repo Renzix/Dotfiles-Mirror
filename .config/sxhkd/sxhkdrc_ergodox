@@ -2,7 +2,7 @@
 
 # Terminal
 super + Return
-    st
+    st -e zsh
 
 # Editor
 super + m
@@ -10,7 +10,7 @@ super + m
 
 # Web Browser
 super + h
-    microsoft-edge-dev
+      brave-bin
 
 # File manager
 XF86Explorer
@@ -18,13 +18,18 @@ XF86Explorer
 super + v
     krusader
 
+super + g
+    maim -s | tee "Local/Media/ScreenShots/$(date +%s).png" | xclip -selection clipboard -t image/png
+
 ### Functionality ###
 
 # search
-#super + @space
-#    rofi -show run
+super + @space
+    rofi -show run
 XF86Search
-    st -c albert_hack -g 0x0 -e albert toggle
+    rofi -show-icons -show drun
+shift + XF86Search
+    xdotool type "$(CM_LAUNCHER=rofi CM_OUTPUT_CLIP=1 clipmenu)"
 
 # Audio
 XF86AudioRaiseVolume
@@ -45,6 +50,9 @@ super + {_,shift +}{n,e,i,o}
 # Focus Desktop
 super + {_,shift +}{w,f,p,r,s,t,x,c,d}
     bspc {desktop -f,node -d} {w,f,p,r,s,t,x,c,d}
+
+super + {l,u,y,;}
+    bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # Close/Kill
 super + {_,shift +}k
