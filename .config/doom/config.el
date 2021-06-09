@@ -3,17 +3,19 @@
       confirm-kill-emacs nil
       browse-url-browser-function 'eww-browse-url
       search-whitespace-regexp ".*"
-      isearch-lax-whitespace t)
-(setq whitespace-style '(trailing lines-tail space-before-tab
+      isearch-lax-whitespace t
+      scroll-margin 3
+      whitespace-style '(trailing lines-tail space-before-tab
                                   indentation space-after-tab)
       whitespace-line-column 81)
+
+(add-hook! prog-mode-hook #'whitespace-mode)
+(global-undo-tree-mode t)
+
 (setq doom-font (font-spec :family "Fira Code" :size 12)
       doom-variable-pitch-font (font-spec :family "Fira Code") ; inherits `doom-font''s :size
       doom-unicode-font (font-spec :family "Fira Code" :size 12)
       doom-big-font (font-spec :family "Fira Code" :size 19))
-(add-hook! prog-mode-hook #'whitespace-mode)
-(global-undo-tree-mode t)
-
 (load-theme 'doom-tomorrow-night t)
 
 (defun my/forward-char-no-newline ()
@@ -201,6 +203,9 @@ sequence."
   (define-key ivy-minibuffer-map (kbd "C-n") #'ivy-next-line)
   (define-key ivy-minibuffer-map (kbd "C-t") #'ivy-previous-line))
 (setq org-log-done 'time)
+
+(after! dap-mode
+  (require 'dap-gdb-lldb))
 
 (after! ryo-modal
   (define-globalized-minor-mode my-global-ryo-mode ryo-modal-mode

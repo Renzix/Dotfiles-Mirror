@@ -55,3 +55,4 @@
 (package! sunrise-commander
   :recipe (:host github :repo "Renzix/sunrise-commander"))
 (package! key-chord)
+(package! dap-mode)

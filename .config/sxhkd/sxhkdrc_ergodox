@@ -10,7 +10,7 @@ super + m
 
 # Web Browser
 super + h
-      brave-bin
+      microsoft-edge-dev
 
 # File manager
 XF86Explorer
